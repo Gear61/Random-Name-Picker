@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Student Picker</string>
+
+    <!-- Common -->
+    <string name="plus">+</string>
+
+    <!-- Student Lists-->
+    <string name="student_lists">Student Lists</string>
+    <string name="list_name">List Name</string>
+</resources>
