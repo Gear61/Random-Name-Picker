@@ -97,12 +97,25 @@ public class StudentsAdapter extends BaseAdapter
 
         holder.itemName.setText(content.get(position));
         final int _position = position;
+        final View _v = v;
         holder.delete.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
+            public void onClick(final View view)
             {
-                removeStudent(_position);
+                // Disable clicking of the -, so they don't spam it
+                view.setEnabled(false);
+                // Make item fade out smoothly as opposed to just vanishing
+                _v.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
+                {
+                    public void run()
+                    {
+                        removeStudent(_position);
+                        _v.setAlpha(1);
+                        // Re-enable it after the row disappears
+                        view.setEnabled(true);
+                    }
+                });
             }
         });
 

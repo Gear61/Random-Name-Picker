@@ -104,6 +104,7 @@ public class StudentListsAdapter extends BaseAdapter
 
         holder.itemName.setText(content.get(position));
         final int _position = position;
+        final View _v = v;
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -120,8 +121,20 @@ public class StudentListsAdapter extends BaseAdapter
                         {
                             public void onClick(DialogInterface dialog, int id)
                             {
-                                removeList(_position);
                                 dialog.dismiss();
+                                // Disable clicking item they're removing, so they don't spam it
+                                _v.setEnabled(false);
+                                // Make item fade out smoothly as opposed to just vanishing
+                                _v.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
+                                {
+                                    public void run()
+                                    {
+                                        removeList(_position);
+                                        _v.setAlpha(1);
+                                        // Re-enable it after the row disappears
+                                        _v.setEnabled(true);
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener()

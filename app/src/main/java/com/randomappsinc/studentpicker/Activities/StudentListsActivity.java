@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.randomappsinc.studentpicker.Adapters.StudentListChoicesAdapter;
 import com.randomappsinc.studentpicker.Adapters.StudentListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
@@ -78,7 +78,7 @@ public class StudentListsActivity extends ActionBarActivity
         studentLists.setOnItemClickListener(studentListListener);
     }
 
-    // Student list clicked
+    // Student list item clicked
     AdapterView.OnItemClickListener studentListListener = new AdapterView.OnItemClickListener()
     {
         @Override
@@ -90,10 +90,8 @@ public class StudentListsActivity extends ActionBarActivity
             alertDialogBuilder.setView(convertView);
             final String listName = studentListsAdapter.getItem(position);
             ListView studentListChoices = (ListView) convertView.findViewById(R.id.listView1);
-            String[] items = { "Choose students from \"" + listName + "\"",
-                               "Add/remove students from \"" + listName + "\""};
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, items);
-            studentListChoices.setAdapter(adapter);
+            final StudentListChoicesAdapter choicesAdapter = new StudentListChoicesAdapter(context, listName);
+            studentListChoices.setAdapter(choicesAdapter);
             final AlertDialog studentListDialog = alertDialogBuilder.show();
             studentListChoices.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
@@ -101,7 +99,7 @@ public class StudentListsActivity extends ActionBarActivity
                 public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id)
                 {
                     studentListDialog.dismiss();
-                    String action = adapter.getItem(position);
+                    String action = choicesAdapter.getItem(position);
                     if (action.startsWith("Choose"))
                     {
                         Intent intent = new Intent(context, StudentChoosingActivity.class);

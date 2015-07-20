@@ -6,12 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -26,10 +27,10 @@ public class StudentChoosingAdapter extends BaseAdapter
     private List<String> initialStudents;
     private List<String> content;
     private TextView noContent;
-    private String listName;
     private DataSource dataSource;
+    private ListView listView;
 
-    public StudentChoosingAdapter(Context context, TextView noContent, String listName)
+    public StudentChoosingAdapter(Context context, TextView noContent, String listName, ListView listView)
     {
         this.context = context;
         this.dataSource = new DataSource(context);
@@ -37,7 +38,7 @@ public class StudentChoosingAdapter extends BaseAdapter
         this.content = this.dataSource.getAllStudents(listName);
         this.noContent = noContent;
         setNoContent(true);
-        this.listName = listName;
+        this.listView = listView;
     }
 
     public void setNoContent(boolean firstTime)
@@ -53,12 +54,25 @@ public class StudentChoosingAdapter extends BaseAdapter
     public String chooseStudentAtRandom(boolean withReplacement)
     {
         Random randomGenerator = new Random();
-        int randomInt = randomGenerator.nextInt(getCount());
+        final int randomInt = randomGenerator.nextInt(getCount());
         String randomStudent = content.get(randomInt);
         // If without replacement, remove the student
         if (!withReplacement)
         {
-            removeStudent(randomInt);
+            final View view = Utils.getViewByPosition(randomInt, listView);
+            // Disable clicking of the -, so they don't spam it
+            view.setEnabled(false);
+            // Make item fade out smoothly as opposed to just vanishing
+            view.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
+            {
+                public void run()
+                {
+                    removeStudent(randomInt);
+                    view.setAlpha(1);
+                    // Re-enable it after the row disappears
+                    view.setEnabled(true);
+                }
+            });
         }
         return randomStudent;
     }
