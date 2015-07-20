@@ -18,8 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.EditStudentListActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:name=".Activities.EditStudentListActivity">
         </activity>
         <activity
             android:name=".Activities.StudentChoosingActivity">
