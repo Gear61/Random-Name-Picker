@@ -3,7 +3,4 @@
 
     <!-- Common -->
     <string name="plus">+</string>
-
-    <!-- Student Lists-->
-    <string name="list_name">List Name</string>
 </resources>
