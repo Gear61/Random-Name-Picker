@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,13 +48,27 @@ public class StudentListsActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         context = this;
+
         setContentView(R.layout.lists_with_add_content);
         setTitle(STUDENT_LISTS);
 
         studentLists = (ListView) findViewById(R.id.content_list);
         newListInput = (EditText) findViewById(R.id.item_name);
         newListInput.setHint(LIST_NAME);
+        newListInput.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    hideKeyboard();
+                }
+                return false;
+            }
+        });
         noContent = (TextView) findViewById(R.id.no_content);
         noContent.setText(NO_STUDENT_LISTS);
 
@@ -62,6 +78,7 @@ public class StudentListsActivity extends ActionBarActivity
         studentLists.setOnItemClickListener(studentListListener);
     }
 
+    // Student list clicked
     AdapterView.OnItemClickListener studentListListener = new AdapterView.OnItemClickListener()
     {
         @Override

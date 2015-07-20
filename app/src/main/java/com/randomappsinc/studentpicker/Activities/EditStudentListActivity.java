@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -45,7 +47,13 @@ public class EditStudentListActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         context = this;
+        // Make DONE button close keyboard
+        InputMethodManager inputManager = (InputMethodManager)
+                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.toggleSoftInput(0, 0);
+
         Intent intent = getIntent();
         listName = intent.getStringExtra(StudentListsActivity.LIST_NAME_KEY);
         setTitle("Editing: " + listName);
@@ -53,6 +61,19 @@ public class EditStudentListActivity extends ActionBarActivity
         students = (ListView) findViewById(R.id.content_list);
         newStudentInput = (EditText) findViewById(R.id.item_name);
         newStudentInput.setHint(STUDENT_NAME);
+        newStudentInput.setOnEditorActionListener(new EditText.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    hideKeyboard();
+                }
+                return false;
+            }
+        });
+
         noContent = (TextView) findViewById(R.id.no_content);
         noContent.setText(NO_STUDENTS);
 
@@ -88,6 +109,7 @@ public class EditStudentListActivity extends ActionBarActivity
         int id = item.getItemId();
         if (id == android.R.id.home)
         {
+            hideKeyboard();
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);

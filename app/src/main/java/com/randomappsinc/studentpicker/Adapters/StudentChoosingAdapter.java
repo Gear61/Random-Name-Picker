@@ -13,6 +13,7 @@ import com.randomappsinc.studentpicker.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -32,7 +33,8 @@ public class StudentChoosingAdapter extends BaseAdapter
     {
         this.context = context;
         this.dataSource = new DataSource(context);
-        content = new ArrayList<>();
+        this.initialStudents = this.dataSource.getAllStudents(listName);
+        this.content = this.dataSource.getAllStudents(listName);
         this.noContent = noContent;
         setNoContent(true);
         this.listName = listName;
@@ -48,6 +50,18 @@ public class StudentChoosingAdapter extends BaseAdapter
         noContent.setVisibility(viewVisibility);
     }
 
+    public String chooseStudentAtRandom(boolean withReplacement)
+    {
+        Random randomGenerator = new Random();
+        int randomInt = randomGenerator.nextInt(getCount());
+        String randomStudent = content.get(randomInt);
+        // If without replacement, remove the student
+        if (!withReplacement)
+        {
+            removeStudent(randomInt);
+        }
+        return randomStudent;
+    }
 
     public void removeStudent(int index)
     {
@@ -60,6 +74,7 @@ public class StudentChoosingAdapter extends BaseAdapter
     {
         content.clear();
         content.addAll(initialStudents);
+        setNoContent(true);
         notifyDataSetChanged();
     }
 
