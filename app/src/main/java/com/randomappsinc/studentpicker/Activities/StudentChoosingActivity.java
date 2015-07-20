@@ -50,7 +50,7 @@ public class StudentChoosingActivity extends ActionBarActivity
         noContent.setText(NO_STUDENTS);
         withReplacement = (CheckBox) findViewById(R.id.with_replacement);
 
-        studentChoosingAdapter = new StudentChoosingAdapter(context, noContent, listName);
+        studentChoosingAdapter = new StudentChoosingAdapter(context, noContent, listName, students);
         students.setAdapter(studentChoosingAdapter);
     }
 
