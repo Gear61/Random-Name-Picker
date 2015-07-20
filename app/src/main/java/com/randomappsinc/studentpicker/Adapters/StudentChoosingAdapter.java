@@ -118,6 +118,7 @@ public class StudentChoosingAdapter extends BaseAdapter
         }
 
         holder.itemName.setText(content.get(position));
+        holder.delete.setVisibility(View.GONE);
 
         return v;
     }
