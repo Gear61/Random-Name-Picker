@@ -3,13 +3,14 @@
     package="com.randomappsinc.studentpicker" >
 
     <application
+        android:name="com.randomappsinc.studentpicker.Misc.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".StudentListsActivity"
-            android:label="@string/student_lists" >
+            android:name=".Activities.StudentListsActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

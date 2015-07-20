@@ -5,6 +5,5 @@
     <string name="plus">+</string>
 
     <!-- Student Lists-->
-    <string name="student_lists">Student Lists</string>
     <string name="list_name">List Name</string>
 </resources>
