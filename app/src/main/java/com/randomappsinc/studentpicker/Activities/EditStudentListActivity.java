@@ -62,16 +62,15 @@ public class EditStudentListActivity extends ActionBarActivity
 
     public void addItem(View view)
     {
-        hideKeyboard();
-        String newList = newStudentInput.getText().toString().trim();
+        String newStudent = newStudentInput.getText().toString().trim();
         newStudentInput.setText("");
-        if (newList.isEmpty())
+        if (newStudent.isEmpty())
         {
             Toast.makeText(context, EMPTY_STUDENT_NAME_MESSAGE, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            studentsAdapter.addItem(newList);
+            studentsAdapter.addStudent(newStudent);
         }
     }
 
@@ -94,4 +93,3 @@ public class EditStudentListActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 }
-

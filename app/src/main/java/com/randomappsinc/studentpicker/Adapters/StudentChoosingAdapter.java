@@ -11,49 +11,56 @@ import android.widget.TextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class StudentsAdapter extends BaseAdapter
+public class StudentChoosingAdapter extends BaseAdapter
 {
+    public static final String OUT_OF_STUDENTS = "You have ran out of students to call on.";
+
     private Context context;
+    private List<String> initialStudents;
     private List<String> content;
     private TextView noContent;
     private String listName;
     private DataSource dataSource;
 
-    public StudentsAdapter(Context context, TextView noContent, String listName)
+    public StudentChoosingAdapter(Context context, TextView noContent, String listName)
     {
         this.context = context;
         this.dataSource = new DataSource(context);
-        this.content = dataSource.getAllStudents(listName);
+        content = new ArrayList<>();
         this.noContent = noContent;
-        setNoContent();
+        setNoContent(true);
         this.listName = listName;
     }
 
-    public void setNoContent()
+    public void setNoContent(boolean firstTime)
     {
+        if (!firstTime)
+        {
+            noContent.setText(OUT_OF_STUDENTS);
+        }
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addStudent(String name)
-    {
-        dataSource.addStudent(name, listName);
-        content.add(name);
-        setNoContent();
-        notifyDataSetChanged();
-    }
 
     public void removeStudent(int index)
     {
-        dataSource.removeStudent(content.get(index), listName);
         content.remove(index);
         notifyDataSetChanged();
-        setNoContent();
+        setNoContent(false);
+    }
+
+    public void resetStudents()
+    {
+        content.clear();
+        content.addAll(initialStudents);
+        notifyDataSetChanged();
     }
 
     public int getCount()
@@ -96,15 +103,6 @@ public class StudentsAdapter extends BaseAdapter
         }
 
         holder.itemName.setText(content.get(position));
-        final int _position = position;
-        holder.delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                removeStudent(_position);
-            }
-        });
 
         return v;
     }

@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
 
@@ -27,14 +28,16 @@ public class StudentListsAdapter extends BaseAdapter
     private Context context;
     private List<String> content;
     private TextView noContent;
+    private DataSource dataSource;
 
     public StudentListsAdapter(Context context, TextView noContent)
     {
         this.context = context;
-        content = new ArrayList<>();
-        content.addAll(PreferencesManager.get().getStudentLists());
+        this.content = new ArrayList<>();
+        this.content.addAll(PreferencesManager.get().getStudentLists());
         this.noContent = noContent;
         setNoContent();
+        this.dataSource = new DataSource(context);
     }
 
     public void setNoContent()
@@ -43,7 +46,7 @@ public class StudentListsAdapter extends BaseAdapter
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addItem(String itemName)
+    public void addList(String itemName)
     {
         content.add(itemName);
         setNoContent();
@@ -51,8 +54,9 @@ public class StudentListsAdapter extends BaseAdapter
         notifyDataSetChanged();
     }
 
-    public void removeItem(int index)
+    public void removeList(int index)
     {
+        dataSource.deleteList(content.get(index));
         content.remove(index);
         PreferencesManager.get().setStudentsList(new HashSet<>(content));
         notifyDataSetChanged();
@@ -116,7 +120,7 @@ public class StudentListsAdapter extends BaseAdapter
                         {
                             public void onClick(DialogInterface dialog, int id)
                             {
-                                removeItem(_position);
+                                removeList(_position);
                                 dialog.dismiss();
                             }
                         })

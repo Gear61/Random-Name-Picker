@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.randomappsinc.studentpicker.Activities.StudentChoosingActivity">
+
+    <item android:id="@+id/reset"
+          android:title="@string/reset_list"
+          android:icon="@mipmap/reset"
+          app:showAsAction="always" />
+</menu>

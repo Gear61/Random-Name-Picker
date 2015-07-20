@@ -3,4 +3,9 @@
 
     <!-- Common -->
     <string name="plus">+</string>
+
+    <!-- Student Choosing -->
+    <string name="reset_list">Reset List</string>
+    <string name="choose">Choose</string>
+    <string name="with_replacement">With Replacement</string>
 </resources>

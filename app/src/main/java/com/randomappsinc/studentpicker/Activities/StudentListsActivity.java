@@ -87,7 +87,7 @@ public class StudentListsActivity extends ActionBarActivity
                     String action = adapter.getItem(position);
                     if (action.startsWith("Choose"))
                     {
-                        Intent intent = new Intent(context, EditStudentListActivity.class);
+                        Intent intent = new Intent(context, StudentChoosingActivity.class);
                         intent.putExtra(LIST_NAME_KEY, listName);
                         startActivity(intent);
                     }
@@ -120,7 +120,7 @@ public class StudentListsActivity extends ActionBarActivity
         }
         else
         {
-            studentListsAdapter.addItem(newList);
+            studentListsAdapter.addList(newList);
         }
     }
 
