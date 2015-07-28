@@ -136,6 +136,9 @@ public class StudentListsActivity extends ActionBarActivity
         else
         {
             studentListsAdapter.addList(newList);
+            Intent intent = new Intent(context, EditStudentListActivity.class);
+            intent.putExtra(LIST_NAME_KEY, newList);
+            startActivity(intent);
         }
     }
 

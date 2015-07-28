@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +74,7 @@ public class EditStudentListActivity extends ActionBarActivity
                 return false;
             }
         });
+        newStudentInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         noContent = (TextView) findViewById(R.id.no_content);
         noContent.setText(NO_STUDENTS);
