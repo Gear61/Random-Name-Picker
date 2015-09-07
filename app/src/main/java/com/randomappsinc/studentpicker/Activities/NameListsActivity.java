@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
 
 public class NameListsActivity extends AppCompatActivity
 {
@@ -98,50 +101,46 @@ public class NameListsActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-    holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-                alertDialogBuilder.setTitle(CONFIRM_DELETION);
-                alertDialogBuilder
-                        .setMessage("Are you sure that you want to delete the name list \""
-                                + content.get(_position) + "\"?")
-                                // Back button cancel dialog
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+    @OnItemLongClick(R.id.content_list)
+    public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, final long id)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(CONFIRM_DELETION);
+        alertDialogBuilder
+                .setMessage("Are you sure that you want to delete the name list \""
+                        + nameListsAdapter.getItem(position) + "\"?")
+                        // Back button cancel dialog
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.dismiss();
+                        // Disable clicking item they're removing, so they don't spam it
+                        view.setEnabled(false);
+                        // Make item fade out smoothly as opposed to just vanishing
+                        view.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
                         {
-                            public void onClick(DialogInterface dialog, int id)
+                            public void run()
                             {
-                                dialog.dismiss();
-                                // Disable clicking item they're removing, so they don't spam it
-                                _v.setEnabled(false);
-                                // Make item fade out smoothly as opposed to just vanishing
-                                _v.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
-                                {
-                                    public void run()
-                                    {
-                                        removeList(_position);
-                                        _v.setAlpha(1);
-                                        // Re-enable it after the row disappears
-                                        _v.setEnabled(true);
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.cancel();
+                                nameListsAdapter.removeList(position);
+                                view.setAlpha(1);
+                                // Re-enable it after the row disappears
+                                view.setEnabled(true);
                             }
                         });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
-            }
-        });
-     */
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
+        return true;
+    }
 }
