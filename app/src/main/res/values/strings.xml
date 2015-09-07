@@ -8,4 +8,8 @@
     <string name="reset_list">Reset List</string>
     <string name="choose">Choose</string>
     <string name="with_replacement">With Replacement</string>
+    <string name="title_activity_durdle">durdle</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
