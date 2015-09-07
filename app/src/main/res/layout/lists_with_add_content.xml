@@ -16,6 +16,7 @@
     <EditText
         android:id="@+id/item_name"
         android:singleLine="true"
+        android:imeOptions="actionDone"
         android:layout_toLeftOf="@+id/add_item"
         android:layout_alignBottom="@id/add_item"
         android:layout_width="match_parent"

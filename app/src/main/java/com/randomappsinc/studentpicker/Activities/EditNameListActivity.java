@@ -3,13 +3,11 @@ package com.randomappsinc.studentpicker.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,7 +20,7 @@ import com.randomappsinc.studentpicker.R;
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class EditNameListActivity extends ActionBarActivity
+public class EditNameListActivity extends AppCompatActivity
 {
     public static final String EMPTY_NAME_MESSAGE = "Names cannot be blank.";
     public static final String NO_NAMES = "You currently do not have any names in this list.";
@@ -35,19 +33,11 @@ public class EditNameListActivity extends ActionBarActivity
     private TextView noContent;
     private String listName;
 
-    public void hideKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(newStudentInput.getWindowToken(), 0);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = this;
         // Make DONE button close keyboard
@@ -62,18 +52,6 @@ public class EditNameListActivity extends ActionBarActivity
         students = (ListView) findViewById(R.id.content_list);
         newStudentInput = (EditText) findViewById(R.id.item_name);
         newStudentInput.setHint(NAME_HINT);
-        newStudentInput.setOnEditorActionListener(new EditText.OnEditorActionListener()
-        {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-            {
-                if (actionId == EditorInfo.IME_ACTION_DONE)
-                {
-                    hideKeyboard();
-                }
-                return false;
-            }
-        });
         newStudentInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         noContent = (TextView) findViewById(R.id.no_content);
@@ -108,12 +86,6 @@ public class EditNameListActivity extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        int id = item.getItemId();
-        if (id == android.R.id.home)
-        {
-            hideKeyboard();
-            onBackPressed();
-        }
         return super.onOptionsItemSelected(item);
     }
 }
