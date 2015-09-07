@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class StudentListsAdapter extends BaseAdapter
+public class NameListsAdapter extends BaseAdapter
 {
     public static final String CONFIRM_DELETION = "Confirm Deletion";
 
@@ -30,7 +30,7 @@ public class StudentListsAdapter extends BaseAdapter
     private TextView noContent;
     private DataSource dataSource;
 
-    public StudentListsAdapter(Context context, TextView noContent)
+    public NameListsAdapter(Context context, TextView noContent)
     {
         this.context = context;
         this.content = new ArrayList<>();
@@ -113,7 +113,7 @@ public class StudentListsAdapter extends BaseAdapter
                         context);
                 alertDialogBuilder.setTitle(CONFIRM_DELETION);
                 alertDialogBuilder
-                        .setMessage("Are you sure that you want to delete the student list \""
+                        .setMessage("Are you sure that you want to delete the name list \""
                                 + content.get(_position) + "\"?")
                                 // Back button cancel dialog
                         .setCancelable(true)

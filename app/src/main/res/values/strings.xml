@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Student Picker</string>
+    <string name="app_name">Random Name Picker</string>
 
     <!-- Common -->
     <string name="plus">+</string>

@@ -6,54 +6,90 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class StudentsAdapter extends BaseAdapter
+public class NameChoosingAdapter extends BaseAdapter
 {
+    public static final String OUT_OF_STUDENTS = "You have ran out of students to call on.";
+
     private Context context;
+    private List<String> initialStudents;
     private List<String> content;
     private TextView noContent;
-    private String listName;
     private DataSource dataSource;
+    private ListView listView;
 
-    public StudentsAdapter(Context context, TextView noContent, String listName)
+    public NameChoosingAdapter(Context context, TextView noContent, String listName, ListView listView)
     {
         this.context = context;
         this.dataSource = new DataSource(context);
-        this.content = dataSource.getAllStudents(listName);
+        this.initialStudents = this.dataSource.getAllNamesInList(listName);
+        this.content = this.dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
-        setNoContent();
-        this.listName = listName;
+        setNoContent(true);
+        this.listView = listView;
     }
 
-    public void setNoContent()
+    public void setNoContent(boolean firstTime)
     {
+        if (!firstTime)
+        {
+            noContent.setText(OUT_OF_STUDENTS);
+        }
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addStudent(String name)
+    public String chooseStudentAtRandom(boolean withReplacement)
     {
-        dataSource.addStudent(name, listName);
-        content.add(name);
-        setNoContent();
-        notifyDataSetChanged();
+        Random randomGenerator = new Random();
+        final int randomInt = randomGenerator.nextInt(getCount());
+        String randomStudent = content.get(randomInt);
+        // If without replacement, remove the student
+        if (!withReplacement)
+        {
+            final View view = Utils.getViewByPosition(randomInt, listView);
+            // Disable clicking of the -, so they don't spam it
+            view.setEnabled(false);
+            // Make item fade out smoothly as opposed to just vanishing
+            view.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
+            {
+                public void run()
+                {
+                    removeStudent(randomInt);
+                    view.setAlpha(1);
+                    // Re-enable it after the row disappears
+                    view.setEnabled(true);
+                }
+            });
+        }
+        return randomStudent;
     }
 
     public void removeStudent(int index)
     {
-        dataSource.removeStudent(content.get(index), listName);
         content.remove(index);
         notifyDataSetChanged();
-        setNoContent();
+        setNoContent(false);
+    }
+
+    public void resetStudents()
+    {
+        content.clear();
+        content.addAll(initialStudents);
+        setNoContent(true);
+        notifyDataSetChanged();
     }
 
     public int getCount()
@@ -96,28 +132,7 @@ public class StudentsAdapter extends BaseAdapter
         }
 
         holder.itemName.setText(content.get(position));
-        final int _position = position;
-        final View _v = v;
-        holder.delete.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(final View view)
-            {
-                // Disable clicking of the -, so they don't spam it
-                view.setEnabled(false);
-                // Make item fade out smoothly as opposed to just vanishing
-                _v.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
-                {
-                    public void run()
-                    {
-                        removeStudent(_position);
-                        _v.setAlpha(1);
-                        // Re-enable it after the row disappears
-                        view.setEnabled(true);
-                    }
-                });
-            }
-        });
+        holder.delete.setVisibility(View.GONE);
 
         return v;
     }

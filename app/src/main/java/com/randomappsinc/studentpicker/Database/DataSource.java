@@ -36,7 +36,7 @@ public class DataSource
         dbHelper.close();
     }
 
-    public List<String> getAllStudents(String listName)
+    public List<String> getAllNamesInList(String listName)
     {
         List<String> students = new ArrayList<>();
         open();
@@ -54,20 +54,20 @@ public class DataSource
         return students;
     }
 
-    public void addStudent (String studentName, String listName)
+    public void addName(String name, String listName)
     {
         open();
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
-        values.put(MySQLiteHelper.COLUMN_STUDENT_NAME, studentName);
+        values.put(MySQLiteHelper.COLUMN_STUDENT_NAME, name);
         database.insert(MySQLiteHelper.STUDENTS_TABLE_NAME, null, values);
         close();
     }
 
-    public void removeStudent (String studentName, String listName)
+    public void removeName(String name, String listName)
     {
         open();
-        String whereArgs[] = {studentName, listName};
+        String whereArgs[] = {name, listName};
         database.delete(MySQLiteHelper.STUDENTS_TABLE_NAME, MySQLiteHelper.COLUMN_STUDENT_NAME + " = ? AND " +
                         MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();

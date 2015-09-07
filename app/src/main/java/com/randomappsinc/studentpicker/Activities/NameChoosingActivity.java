@@ -14,22 +14,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.randomappsinc.studentpicker.Adapters.StudentChoosingAdapter;
+import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
 
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class StudentChoosingActivity extends ActionBarActivity
+public class NameChoosingActivity extends ActionBarActivity
 {
-    public static final String NO_STUDENTS = "You currently do not have any students in this list. " +
+    public static final String NO_NAMES = "You currently do not have any names in this list. " +
             "Why are you even here?";
-    public static final String NO_CHOICES = "There aren't any students to choose from.";
-    public static final String CHOSEN_STUDENT_DIALOG_TITLE = "And the (un)lucky winner is...";
+    public static final String NO_CHOICES = "There aren't any names to choose from.";
+    public static final String CHOSEN_NAME_DIALOG_TITLE = "And the (un)lucky winner is...";
 
     private Context context;
     private ListView students;
-    private StudentChoosingAdapter studentChoosingAdapter;
+    private NameChoosingAdapter nameChoosingAdapter;
     private TextView noContent;
     private CheckBox withReplacement;
     private String listName;
@@ -42,30 +42,30 @@ public class StudentChoosingActivity extends ActionBarActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = this;
         Intent intent = getIntent();
-        listName = intent.getStringExtra(StudentListsActivity.LIST_NAME_KEY);
+        listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
         setTitle("List: " + listName);
 
         students = (ListView) findViewById(R.id.students_list);
         noContent = (TextView) findViewById(R.id.no_content);
-        noContent.setText(NO_STUDENTS);
+        noContent.setText(NO_NAMES);
         withReplacement = (CheckBox) findViewById(R.id.with_replacement);
 
-        studentChoosingAdapter = new StudentChoosingAdapter(context, noContent, listName, students);
-        students.setAdapter(studentChoosingAdapter);
+        nameChoosingAdapter = new NameChoosingAdapter(context, noContent, listName, students);
+        students.setAdapter(nameChoosingAdapter);
     }
 
     public void choose(View view)
     {
-        if (studentChoosingAdapter.getCount() == 0)
+        if (nameChoosingAdapter.getCount() == 0)
         {
             Toast.makeText(context, NO_CHOICES, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            final String randomStudent = studentChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
+            final String randomStudent = nameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     context);
-            alertDialogBuilder.setTitle(CHOSEN_STUDENT_DIALOG_TITLE);
+            alertDialogBuilder.setTitle(CHOSEN_NAME_DIALOG_TITLE);
             alertDialogBuilder
                     .setMessage(randomStudent)
                             // Back button cancel dialog
@@ -87,7 +87,7 @@ public class StudentChoosingActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.student_choosing_menu, menu);
+        getMenuInflater().inflate(R.menu.name_choosing_menu, menu);
         return true;
     }
 
@@ -101,7 +101,7 @@ public class StudentChoosingActivity extends ActionBarActivity
         }
         else if (id == R.id.reset)
         {
-            studentChoosingAdapter.resetStudents();
+            nameChoosingAdapter.resetStudents();
         }
         return super.onOptionsItemSelected(item);
     }

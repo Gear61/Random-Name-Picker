@@ -16,22 +16,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.randomappsinc.studentpicker.Adapters.StudentsAdapter;
+import com.randomappsinc.studentpicker.Adapters.NamesAdapter;
 import com.randomappsinc.studentpicker.R;
 
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class EditStudentListActivity extends ActionBarActivity
+public class EditNameListActivity extends ActionBarActivity
 {
-    public static final String EMPTY_STUDENT_NAME_MESSAGE = "Student names cannot be blank.";
-    public static final String NO_STUDENTS = "You currently do not have any students in this list.";
-    public static final String STUDENT_NAME = "Student Name";
+    public static final String EMPTY_NAME_MESSAGE = "Names cannot be blank.";
+    public static final String NO_NAMES = "You currently do not have any names in this list.";
+    public static final String NAME_HINT = "Name";
 
     private Context context;
     private ListView students;
     private EditText newStudentInput;
-    private StudentsAdapter studentsAdapter;
+    private NamesAdapter namesAdapter;
     private TextView noContent;
     private String listName;
 
@@ -56,12 +56,12 @@ public class EditStudentListActivity extends ActionBarActivity
         inputManager.toggleSoftInput(0, 0);
 
         Intent intent = getIntent();
-        listName = intent.getStringExtra(StudentListsActivity.LIST_NAME_KEY);
+        listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
         setTitle("Editing: " + listName);
 
         students = (ListView) findViewById(R.id.content_list);
         newStudentInput = (EditText) findViewById(R.id.item_name);
-        newStudentInput.setHint(STUDENT_NAME);
+        newStudentInput.setHint(NAME_HINT);
         newStudentInput.setOnEditorActionListener(new EditText.OnEditorActionListener()
         {
             @Override
@@ -77,10 +77,10 @@ public class EditStudentListActivity extends ActionBarActivity
         newStudentInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         noContent = (TextView) findViewById(R.id.no_content);
-        noContent.setText(NO_STUDENTS);
+        noContent.setText(NO_NAMES);
 
-        studentsAdapter = new StudentsAdapter(context, noContent, listName);
-        students.setAdapter(studentsAdapter);
+        namesAdapter = new NamesAdapter(context, noContent, listName);
+        students.setAdapter(namesAdapter);
     }
 
     public void addItem(View view)
@@ -89,11 +89,11 @@ public class EditStudentListActivity extends ActionBarActivity
         newStudentInput.setText("");
         if (newStudent.isEmpty())
         {
-            Toast.makeText(context, EMPTY_STUDENT_NAME_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, EMPTY_NAME_MESSAGE, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            studentsAdapter.addStudent(newStudent);
+            namesAdapter.addStudent(newStudent);
         }
     }
 
