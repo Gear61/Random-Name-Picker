@@ -19,22 +19,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.randomappsinc.studentpicker.Adapters.StudentListChoicesAdapter;
-import com.randomappsinc.studentpicker.Adapters.StudentListsAdapter;
+import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
 
-public class StudentListsActivity extends ActionBarActivity
+public class NameListsActivity extends ActionBarActivity
 {
-    public static final String EMPTY_STUDENT_LIST_MESSAGE = "Student list names cannot be blank.";
-    public static final String NO_STUDENT_LISTS = "You currently do not have any student lists.";
+    public static final String EMPTY_NAME_LIST_MESSAGE = "Name list names cannot be blank.";
+    public static final String NO_NAME_LISTS = "You currently do not have any name lists.";
     public static final String LIST_NAME_KEY = "listName";
-    public static final String STUDENT_LISTS = "Student Lists";
+    public static final String NAME_LISTS = "Name Lists";
     public static final String LIST_NAME = "List Name";
 
     private Context context;
     private ListView studentLists;
     private EditText newListInput;
-    private StudentListsAdapter studentListsAdapter;
+    private NameListsAdapter nameListsAdapter;
     private TextView noContent;
 
     public void hideKeyboard()
@@ -52,7 +52,7 @@ public class StudentListsActivity extends ActionBarActivity
         context = this;
 
         setContentView(R.layout.lists_with_add_content);
-        setTitle(STUDENT_LISTS);
+        setTitle(NAME_LISTS);
 
         studentLists = (ListView) findViewById(R.id.content_list);
         newListInput = (EditText) findViewById(R.id.item_name);
@@ -70,10 +70,10 @@ public class StudentListsActivity extends ActionBarActivity
             }
         });
         noContent = (TextView) findViewById(R.id.no_content);
-        noContent.setText(NO_STUDENT_LISTS);
+        noContent.setText(NO_NAME_LISTS);
 
-        studentListsAdapter = new StudentListsAdapter(context, noContent);
-        studentLists.setAdapter(studentListsAdapter);
+        nameListsAdapter = new NameListsAdapter(context, noContent);
+        studentLists.setAdapter(nameListsAdapter);
 
         studentLists.setOnItemClickListener(studentListListener);
     }
@@ -88,7 +88,7 @@ public class StudentListsActivity extends ActionBarActivity
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View convertView = inflater.inflate(R.layout.list_with_dividers, null);
             alertDialogBuilder.setView(convertView);
-            final String listName = studentListsAdapter.getItem(position);
+            final String listName = nameListsAdapter.getItem(position);
             ListView studentListChoices = (ListView) convertView.findViewById(R.id.listView1);
             final StudentListChoicesAdapter choicesAdapter = new StudentListChoicesAdapter(context, listName);
             studentListChoices.setAdapter(choicesAdapter);
@@ -102,13 +102,13 @@ public class StudentListsActivity extends ActionBarActivity
                     String action = choicesAdapter.getItem(position);
                     if (action.startsWith("Choose"))
                     {
-                        Intent intent = new Intent(context, StudentChoosingActivity.class);
+                        Intent intent = new Intent(context, NameChoosingActivity.class);
                         intent.putExtra(LIST_NAME_KEY, listName);
                         startActivity(intent);
                     }
                     else if (action.startsWith("Add/remove"))
                     {
-                        Intent intent = new Intent(context, EditStudentListActivity.class);
+                        Intent intent = new Intent(context, EditNameListActivity.class);
                         intent.putExtra(LIST_NAME_KEY, listName);
                         startActivity(intent);
                     }
@@ -126,17 +126,17 @@ public class StudentListsActivity extends ActionBarActivity
         newListInput.setText("");
         if (newList.isEmpty())
         {
-            Toast.makeText(context, EMPTY_STUDENT_LIST_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, EMPTY_NAME_LIST_MESSAGE, Toast.LENGTH_SHORT).show();
         }
         else if (PreferencesManager.get().getStudentLists().contains(newList))
         {
-            Toast.makeText(context, "You already have a student list named \"" + newList + "\".",
+            Toast.makeText(context, "You already have a name list named \"" + newList + "\".",
                     Toast.LENGTH_LONG).show();
         }
         else
         {
-            studentListsAdapter.addList(newList);
-            Intent intent = new Intent(context, EditStudentListActivity.class);
+            nameListsAdapter.addList(newList);
+            Intent intent = new Intent(context, EditNameListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
             startActivity(intent);
         }
