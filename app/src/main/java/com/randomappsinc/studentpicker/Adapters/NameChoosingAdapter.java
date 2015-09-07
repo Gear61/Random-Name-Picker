@@ -16,12 +16,15 @@ import com.randomappsinc.studentpicker.R;
 import java.util.List;
 import java.util.Random;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by alexanderchiou on 7/19/15.
  */
 public class NameChoosingAdapter extends BaseAdapter
 {
-    public static final String OUT_OF_STUDENTS = "You have ran out of students to call on.";
+    public static final String OUT_OF_NAMES = "You have ran out of names to choose from.";
 
     private Context context;
     private List<String> initialStudents;
@@ -45,7 +48,7 @@ public class NameChoosingAdapter extends BaseAdapter
     {
         if (!firstTime)
         {
-            noContent.setText(OUT_OF_STUDENTS);
+            noContent.setText(OUT_OF_NAMES);
         }
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
@@ -108,32 +111,34 @@ public class NameChoosingAdapter extends BaseAdapter
 
     public static class ViewHolder
     {
-        public TextView itemName;
-        public ImageView delete;
+        @Bind(R.id.name) TextView itemName;
+        @Bind(R.id.delete) ImageView delete;
+
+        public ViewHolder(View view)
+        {
+            ButterKnife.bind(this, view);
+        }
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(int position, View view, ViewGroup parent)
     {
-        View v = convertView;
         final ViewHolder holder;
-        if (v == null)
+        if (view == null)
         {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.list_item, parent, false);
-            holder = new ViewHolder();
-            holder.itemName = (TextView) v.findViewById(R.id.item_name);
-            holder.delete = (ImageView) v.findViewById(R.id.delete);
-            v.setTag(holder);
+            view = vi.inflate(R.layout.names_list_item, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
         }
         else
         {
-            holder = (ViewHolder) v.getTag();
+            holder = (ViewHolder) view.getTag();
         }
 
         holder.itemName.setText(content.get(position));
         holder.delete.setVisibility(View.GONE);
 
-        return v;
+        return view;
     }
 }

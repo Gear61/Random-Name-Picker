@@ -4,12 +4,10 @@
     <!-- Common -->
     <string name="plus">+</string>
 
-    <!-- Student Choosing -->
+    <!-- Name Choosing -->
     <string name="reset_list">Reset List</string>
     <string name="choose">Choose</string>
     <string name="with_replacement">With Replacement</string>
-    <string name="title_activity_durdle">durdle</string>
+    <string name="no_names">You currently do not have any names in this list. Why are you even here?</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 </resources>

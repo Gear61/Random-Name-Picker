@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,57 +16,52 @@ import android.widget.Toast;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by alexanderchiou on 7/19/15.
  */
 public class NameChoosingActivity extends AppCompatActivity
 {
-    public static final String NO_NAMES = "You currently do not have any names in this list. " +
-            "Why are you even here?";
     public static final String NO_CHOICES = "There aren't any names to choose from.";
     public static final String CHOSEN_NAME_DIALOG_TITLE = "And the (un)lucky winner is...";
 
-    private Context context;
-    private ListView students;
-    private NameChoosingAdapter nameChoosingAdapter;
-    private TextView noContent;
-    private CheckBox withReplacement;
-    private String listName;
+    @Bind(R.id.no_content) TextView noContent;
+    @Bind(R.id.with_replacement) CheckBox withReplacement;
+    @Bind(R.id.names_list) ListView namesList;
+
+    private NameChoosingAdapter NameChoosingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.name_choosing);
-        context = this;
+        ButterKnife.bind(this);
         Intent intent = getIntent();
-        listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
+        String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
         setTitle("List: " + listName);
 
-        students = (ListView) findViewById(R.id.students_list);
-        noContent = (TextView) findViewById(R.id.no_content);
-        noContent.setText(NO_NAMES);
-        withReplacement = (CheckBox) findViewById(R.id.with_replacement);
-
-        nameChoosingAdapter = new NameChoosingAdapter(context, noContent, listName, students);
-        students.setAdapter(nameChoosingAdapter);
+        NameChoosingAdapter = new NameChoosingAdapter(this, noContent, listName, namesList);
+        namesList.setAdapter(NameChoosingAdapter);
     }
 
+    @OnClick(R.id.choose)
     public void choose(View view)
     {
-        if (nameChoosingAdapter.getCount() == 0)
+        if (NameChoosingAdapter.getCount() == 0)
         {
-            Toast.makeText(context, NO_CHOICES, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, NO_CHOICES, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            final String randomStudent = nameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    context);
+            final String randomStudent = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setTitle(CHOSEN_NAME_DIALOG_TITLE);
             alertDialogBuilder
                     .setMessage(randomStudent)
-                            // Back button cancel dialog
                     .setCancelable(true)
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener()
                     {
@@ -95,7 +89,7 @@ public class NameChoosingActivity extends AppCompatActivity
     {
         if (item.getItemId() == R.id.reset)
         {
-            nameChoosingAdapter.resetStudents();
+            NameChoosingAdapter.resetStudents();
         }
         return super.onOptionsItemSelected(item);
     }
