@@ -1,40 +1,38 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".StudentListsActivity">
+    tools:context=".NameChoosingActivity">
 
     <Button
         android:id="@+id/choose"
-        android:onClick="choose"
         android:text="@string/choose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <CheckBox
         android:id="@+id/with_replacement"
-        android:layout_below="@id/choose"
         android:text="@string/with_replacement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/no_content"
-        android:layout_below="@id/with_replacement"
-        android:layout_centerHorizontal="true"
+        android:text="@string/no_names"
         android:gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:visibility="gone"
         android:textSize="28sp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <ListView
-        android:id="@+id/students_list"
-        android:layout_below="@+id/no_content"
+        android:id="@+id/names_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

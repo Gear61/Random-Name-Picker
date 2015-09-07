@@ -6,15 +6,15 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/edit"
+        android:id="@+id/delete"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/edit"
+        android:src="@mipmap/minus"
         android:layout_width="45dp"
         android:layout_height="45dp"/>
-
+    
     <TextView
-        android:id="@+id/list_name"
+        android:id="@+id/name"
         android:layout_centerVertical="true"
         android:textSize="28sp"
         android:layout_toLeftOf="@+id/delete"

@@ -1,8 +1,7 @@
 package com.randomappsinc.studentpicker.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.randomappsinc.studentpicker.Activities.EditNameListActivity;
+import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
@@ -18,13 +19,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by alexanderchiou on 7/19/15.
  */
 public class NameListsAdapter extends BaseAdapter
 {
-    public static final String CONFIRM_DELETION = "Confirm Deletion";
-
     private Context context;
     private List<String> content;
     private TextView noContent;
@@ -79,77 +81,42 @@ public class NameListsAdapter extends BaseAdapter
 
     public static class ViewHolder
     {
-        public TextView itemName;
-        public ImageView delete;
+        @Bind(R.id.list_name) TextView listName;
+        @Bind(R.id.edit) ImageView edit;
+
+        public ViewHolder(View view)
+        {
+            ButterKnife.bind(this, view);
+        }
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(final int position, View view, ViewGroup parent)
     {
-        View v = convertView;
         final ViewHolder holder;
-        if (v == null)
+        if (view == null)
         {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.list_item, parent, false);
-            holder = new ViewHolder();
-            holder.itemName = (TextView) v.findViewById(R.id.item_name);
-            holder.delete = (ImageView) v.findViewById(R.id.delete);
-            v.setTag(holder);
+            view = vi.inflate(R.layout.list_item, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
         }
         else
         {
-            holder = (ViewHolder) v.getTag();
+            holder = (ViewHolder) view.getTag();
         }
 
-        holder.itemName.setText(content.get(position));
-        final int _position = position;
-        final View _v = v;
-        holder.delete.setOnClickListener(new View.OnClickListener() {
+        holder.listName.setText(content.get(position));
+        holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-                alertDialogBuilder.setTitle(CONFIRM_DELETION);
-                alertDialogBuilder
-                        .setMessage("Are you sure that you want to delete the name list \""
-                                + content.get(_position) + "\"?")
-                                // Back button cancel dialog
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.dismiss();
-                                // Disable clicking item they're removing, so they don't spam it
-                                _v.setEnabled(false);
-                                // Make item fade out smoothly as opposed to just vanishing
-                                _v.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
-                                {
-                                    public void run()
-                                    {
-                                        removeList(_position);
-                                        _v.setAlpha(1);
-                                        // Re-enable it after the row disappears
-                                        _v.setEnabled(true);
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+                Intent intent = new Intent(context, EditNameListActivity.class);
+                intent.putExtra(NameListsActivity.LIST_NAME_KEY, getItem(position));
+                context.startActivity(intent);
             }
         });
 
-        return v;
+        return view;
     }
 }

@@ -7,14 +7,13 @@
 
     <Button
         android:id="@+id/add_item"
-        android:onClick="addItem"
         android:text="@string/plus"
         android:layout_alignParentRight="true"
         android:layout_width="45dp"
         android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/item_name"
+        android:id="@+id/item_name_input"
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:layout_toLeftOf="@+id/add_item"
@@ -24,7 +23,7 @@
 
     <TextView
         android:id="@+id/no_content"
-        android:layout_below="@id/item_name"
+        android:layout_below="@id/item_name_input"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginTop="15dp"
