@@ -39,6 +39,7 @@ public class EditNameListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
@@ -72,14 +73,18 @@ public class EditNameListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.blank_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        if (item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

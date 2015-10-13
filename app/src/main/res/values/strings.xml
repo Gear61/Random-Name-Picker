@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Random Name Picker</string>
+    <string name="settings">Settings</string>
 
     <!-- Common -->
     <string name="plus">+</string>
@@ -9,6 +10,7 @@
     <string name="choose">Choose</string>
     <string name="with_replacement">With Replacement</string>
     <string name="no_names">You currently do not have any names in this list. Why are you even here?</string>
+    <string name="name_chosen">And the lucky winner is&#8230;</string>
 
     <!-- Font Awesome icons -->
     <string name="edit_icon">fa-edit</string>
