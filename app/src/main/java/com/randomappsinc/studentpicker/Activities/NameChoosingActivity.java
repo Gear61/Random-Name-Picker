@@ -29,6 +29,7 @@ public class NameChoosingActivity extends AppCompatActivity
     @Bind(R.id.with_replacement) CheckBox withReplacement;
     @Bind(R.id.names_list) ListView namesList;
     @BindString(R.string.name_chosen) String nameChosen;
+    @BindString(R.string.list) String list;
 
     private NameChoosingAdapter NameChoosingAdapter;
 
@@ -41,7 +42,7 @@ public class NameChoosingActivity extends AppCompatActivity
         ButterKnife.bind(this);
         Intent intent = getIntent();
         String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
-        setTitle("List: " + listName);
+        setTitle(list + " "+ listName);
 
         NameChoosingAdapter = new NameChoosingAdapter(this, noContent, listName, namesList);
         namesList.setAdapter(NameChoosingAdapter);

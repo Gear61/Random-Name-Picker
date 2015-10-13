@@ -1,11 +1,24 @@
 <resources>
     <string name="app_name">Random Name Picker</string>
     <string name="settings">Settings</string>
+    <string name="name_lists_label">Name Lists</string>
+    <string name="no_lists_message">You currently do not have any name lists.</string>
+    <string name="add_list_hint">List name</string>
+    <string name="confirm_deletion_title">Confirm list deletion</string>
+    <string name="confirm_deletion_message">Are you sure you want to delete the name list</string>
+    <string name="blank_list_name">List names cannot be blank.</string>
+    <string name="list_duplicate">You already have a name list named</string>
+
+    <string name="editing">Editing:</string>
+    <string name="blank_name">Names cannot be blank.</string>
+    <string name="empty_list">You currently do not have any names in this list.</string>
+    <string name="name_hint">Name</string>
 
     <!-- Common -->
     <string name="plus">+</string>
 
     <!-- Name Choosing -->
+    <string name="list">List:</string>
     <string name="reset_list">Reset List</string>
     <string name="choose">Choose</string>
     <string name="with_replacement">With Replacement</string>

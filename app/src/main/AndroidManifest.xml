@@ -33,7 +33,7 @@
         </activity>
         <activity
             android:label="@string/about_me_label"
-            android:name=".Activities.AboutMeActivity"
+            android:name=".Activities.Abou"
             android:configChanges="orientation|screenSize">
         </activity>
     </application>
