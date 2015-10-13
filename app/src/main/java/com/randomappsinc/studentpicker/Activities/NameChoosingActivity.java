@@ -1,7 +1,5 @@
 package com.randomappsinc.studentpicker.Activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
 
@@ -28,7 +27,7 @@ public class NameChoosingActivity extends AppCompatActivity
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.with_replacement) CheckBox withReplacement;
     @Bind(R.id.names_list) ListView namesList;
-    @BindString(R.string.name_chosen) String nameChosen;
+    @BindString(R.string.name_chosen) String nameChosenTitle;
     @BindString(R.string.list) String list;
 
     private NameChoosingAdapter NameChoosingAdapter;
@@ -53,22 +52,12 @@ public class NameChoosingActivity extends AppCompatActivity
     {
         if (NameChoosingAdapter.getCount() != 0)
         {
-            final String randomStudent = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(nameChosen);
-            alertDialogBuilder
-                    .setMessage(randomStudent)
-                    .setCancelable(true)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                        {
-                            dialog.dismiss();
-                        }
-                    });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.setCanceledOnTouchOutside(true);
-            alertDialog.show();
+            String chosenName = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
+            new MaterialDialog.Builder(this)
+                    .title(nameChosenTitle)
+                    .content(chosenName)
+                    .positiveText(android.R.string.yes)
+                    .show();
         }
     }
 
