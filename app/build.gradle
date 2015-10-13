@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
 }
 
 dependencies {
@@ -26,4 +29,7 @@ dependencies {
     compile 'com.beardedhen:androidbootstrap:1.2.3'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.android.support:design:23.0.1'
+    compile('com.afollestad.material-dialogs:core:0.8.3.0@aar') {
+        transitive = true
+    }
 }

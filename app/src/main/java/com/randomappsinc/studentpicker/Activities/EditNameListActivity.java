@@ -2,6 +2,8 @@ package com.randomappsinc.studentpicker.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.Menu;
@@ -10,12 +12,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.randomappsinc.studentpicker.Adapters.NamesAdapter;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -24,13 +27,15 @@ import butterknife.OnClick;
  */
 public class EditNameListActivity extends AppCompatActivity
 {
-    public static final String EMPTY_NAME_MESSAGE = "Names cannot be blank.";
-    public static final String NO_NAMES = "You currently do not have any names in this list.";
-    public static final String NAME_HINT = "Name";
-
     @Bind(R.id.item_name_input) EditText newStudentInput;
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.content_list) ListView namesList;
+    @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
+
+    @BindString(R.string.blank_name) String blankName;
+    @BindString(R.string.empty_list) String emptyList;
+    @BindString(R.string.name_hint) String nameHint;
+    @BindString(R.string.editing) String editing;
 
     private NamesAdapter NamesAdapter;
 
@@ -44,12 +49,12 @@ public class EditNameListActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
-        setTitle("Editing: " + listName);
+        setTitle(editing + " " + listName);
 
-        newStudentInput.setHint(NAME_HINT);
+        newStudentInput.setHint(nameHint);
         newStudentInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
-        noContent.setText(NO_NAMES);
+        noContent.setText(emptyList);
 
         NamesAdapter = new NamesAdapter(this, noContent, listName);
         namesList.setAdapter(NamesAdapter);
@@ -62,7 +67,7 @@ public class EditNameListActivity extends AppCompatActivity
         newStudentInput.setText("");
         if (newStudent.isEmpty())
         {
-            Toast.makeText(this, EMPTY_NAME_MESSAGE, Toast.LENGTH_SHORT).show();
+            Snackbar.make(parent, blankName, Snackbar.LENGTH_LONG).show();
         }
         else
         {
@@ -82,6 +87,7 @@ public class EditNameListActivity extends AppCompatActivity
     {
         if (item.getItemId() == android.R.id.home)
         {
+            Utils.hideKeyboard(this);
             finish();
             return true;
         }

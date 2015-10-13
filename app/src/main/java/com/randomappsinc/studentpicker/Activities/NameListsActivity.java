@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,13 +14,14 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -26,16 +29,20 @@ import butterknife.OnItemLongClick;
 
 public class NameListsActivity extends AppCompatActivity
 {
-    public static final String CONFIRM_DELETION = "Confirm Deletion";
-    public static final String EMPTY_NAME_LIST_MESSAGE = "List names cannot be blank.";
-    public static final String NO_NAME_LISTS = "You currently do not have any name lists.";
     public static final String LIST_NAME_KEY = "listName";
-    public static final String NAME_LISTS = "Name Lists";
-    public static final String LIST_NAME = "List Name";
 
     @Bind(R.id.item_name_input) EditText newListInput;
     @Bind(R.id.content_list) ListView lists;
     @Bind(R.id.no_content) TextView noContent;
+    @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
+
+    @BindString(R.string.name_lists_label) String label;
+    @BindString(R.string.no_lists_message) String noListsMessage;
+    @BindString(R.string.add_list_hint) String addListHint;
+    @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
+    @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
+    @BindString(R.string.blank_list_name) String blankListName;
+    @BindString(R.string.list_duplicate) String listDuplicate;
 
     private NameListsAdapter nameListsAdapter;
 
@@ -45,10 +52,10 @@ public class NameListsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
         ButterKnife.bind(this);
-        setTitle(NAME_LISTS);
 
-        newListInput.setHint(LIST_NAME);
-        noContent.setText(NO_NAME_LISTS);
+        setTitle(label);
+        newListInput.setHint(addListHint);
+        noContent.setText(noListsMessage);
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
@@ -71,15 +78,15 @@ public class NameListsActivity extends AppCompatActivity
         newListInput.setText("");
         if (newList.isEmpty())
         {
-            Toast.makeText(this, EMPTY_NAME_LIST_MESSAGE, Toast.LENGTH_SHORT).show();
+            Snackbar.make(parent, blankListName, Snackbar.LENGTH_LONG).show();
         }
         else if (PreferencesManager.get().getStudentLists().contains(newList))
         {
-            Toast.makeText(this, "You already have a name list named \"" + newList + "\".",
-                    Toast.LENGTH_LONG).show();
+            Snackbar.make(parent, listDuplicate + " \"" + newList + "\".", Snackbar.LENGTH_LONG).show();
         }
         else
         {
+            Utils.hideKeyboard(this);
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, EditNameListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
@@ -91,9 +98,9 @@ public class NameListsActivity extends AppCompatActivity
     public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, final long id)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(CONFIRM_DELETION);
+        alertDialogBuilder.setTitle(confirmDeletionTitle);
         alertDialogBuilder
-                .setMessage("Are you sure that you want to delete the name list \""
+                .setMessage(confirmDeletionMessage + " \""
                         + nameListsAdapter.getItem(position) + "\"?")
                         // Back button cancel dialog
                 .setCancelable(true)

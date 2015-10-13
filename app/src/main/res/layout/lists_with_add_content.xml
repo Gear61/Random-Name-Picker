@@ -1,42 +1,46 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    tools:context=".StudentListsActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/add_item"
-        android:text="@string/plus"
-        android:layout_alignParentRight="true"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/item_name_input"
-        android:singleLine="true"
-        android:imeOptions="actionDone"
-        android:layout_toLeftOf="@+id/add_item"
-        android:layout_alignBottom="@id/add_item"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/no_content"
-        android:layout_below="@id/item_name_input"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        android:textSize="28sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/add_item"
+            android:text="@string/plus"
+            android:layout_alignParentRight="true"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"/>
 
-    <ListView
-        android:id="@+id/content_list"
-        android:layout_below="@+id/no_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        <EditText
+            android:id="@+id/item_name_input"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:layout_toLeftOf="@+id/add_item"
+            android:layout_alignBottom="@id/add_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/no_content"
+            android:layout_below="@id/item_name_input"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:visibility="gone"
+            android:textSize="28sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ListView
+            android:id="@+id/content_list"
+            android:layout_below="@+id/no_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
