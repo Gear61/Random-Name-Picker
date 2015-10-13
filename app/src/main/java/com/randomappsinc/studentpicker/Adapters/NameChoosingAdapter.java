@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -112,7 +111,6 @@ public class NameChoosingAdapter extends BaseAdapter
     public static class ViewHolder
     {
         @Bind(R.id.name) TextView itemName;
-        @Bind(R.id.delete) ImageView delete;
 
         public ViewHolder(View view)
         {
@@ -137,7 +135,6 @@ public class NameChoosingAdapter extends BaseAdapter
         }
 
         holder.itemName.setText(content.get(position));
-        holder.delete.setVisibility(View.GONE);
 
         return view;
     }

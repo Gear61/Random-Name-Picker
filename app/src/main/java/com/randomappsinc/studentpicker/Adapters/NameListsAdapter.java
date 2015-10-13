@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.randomappsinc.studentpicker.Activities.EditNameListActivity;
 import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
@@ -81,8 +81,8 @@ public class NameListsAdapter extends BaseAdapter
 
     public static class ViewHolder
     {
-        @Bind(R.id.list_name) TextView listName;
-        @Bind(R.id.edit) ImageView edit;
+        @Bind(R.id.item_name) TextView listName;
+        @Bind(R.id.action_icon) FontAwesomeText edit;
 
         public ViewHolder(View view)
         {
@@ -97,8 +97,9 @@ public class NameListsAdapter extends BaseAdapter
         if (view == null)
         {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.list_item, parent, false);
+            view = vi.inflate(R.layout.list_item_with_action, parent, false);
             holder = new ViewHolder(view);
+            holder.edit.setIcon(context.getString(R.string.edit_icon));
             view.setTag(holder);
         }
         else
