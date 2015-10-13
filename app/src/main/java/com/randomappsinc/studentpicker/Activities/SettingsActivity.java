@@ -67,7 +67,8 @@ public class SettingsActivity extends AppCompatActivity
                 }
                 break;
             case 2:
-                return;
+                intent = new Intent(this, AboutMeActivity.class);
+                break;
             case 3:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
@@ -84,9 +85,10 @@ public class SettingsActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch(item.getItemId())
+        {
             case android.R.id.home:
-                onBackPressed();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

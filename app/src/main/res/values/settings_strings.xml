@@ -19,5 +19,4 @@
     <string name="rate_icon">fa-thumbs-up</string>
     <string name="info_icon">fa-info-circle</string>
     <string name="github_icon">fa-github</string>
-    <string name="linkedin_icon">fa-linkedin-square</string>
 </resources>
