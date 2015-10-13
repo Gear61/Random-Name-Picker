@@ -1,9 +1,8 @@
 package com.randomappsinc.studentpicker.Activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
@@ -97,17 +98,14 @@ public class NameListsActivity extends AppCompatActivity
     @OnItemLongClick(R.id.content_list)
     public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, final long id)
     {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(confirmDeletionTitle);
-        alertDialogBuilder
-                .setMessage(confirmDeletionMessage + " \""
-                        + nameListsAdapter.getItem(position) + "\"?")
-                        // Back button cancel dialog
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int id)
-                    {
+        new MaterialDialog.Builder(this)
+                .title(confirmDeletionTitle)
+                .content(confirmDeletionMessage + " \"" + nameListsAdapter.getItem(position) + "\"?")
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
                         // Disable clicking item they're removing, so they don't spam it
                         view.setEnabled(false);
@@ -124,16 +122,7 @@ public class NameListsActivity extends AppCompatActivity
                         });
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+                .show();
         return true;
     }
 
