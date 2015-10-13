@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="15dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/profile_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/profile_picture"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF000000"/>
+
+        <TextView
+            android:textSize="18sp"
+            android:text="@string/about_me_summary"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textSize="24sp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            xmlns:fontawesometext="http://schemas.android.com/apk/res-auto"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/linkedin"
+                    android:text="@string/linkedin"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"/>
+
+                <com.beardedhen.androidbootstrap.FontAwesomeText
+                    android:id="@+id/linkedin_icon"
+                    android:layout_toLeftOf="@+id/linkedin"
+                    fontawesometext:fa_icon="@string/linkedin_icon"
+                    android:gravity="center"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
+                    android:textColor="@color/linkedin_blue"
+                    android:textSize="22sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/github"
+                    android:text="@string/github"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"/>
+
+                <com.beardedhen.androidbootstrap.FontAwesomeText
+                    android:id="@+id/github_icon"
+                    android:layout_toLeftOf="@+id/github"
+                    fontawesometext:fa_icon="@string/github_icon"
+                    android:gravity="center"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

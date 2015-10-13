@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="dark_grey">#696969</color>
+    <color name="linkedin_blue">#007bb5</color>
+    <color name="black">#000000</color>
 </resources>
