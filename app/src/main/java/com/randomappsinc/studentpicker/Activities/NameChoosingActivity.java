@@ -11,12 +11,12 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -25,12 +25,10 @@ import butterknife.OnClick;
  */
 public class NameChoosingActivity extends AppCompatActivity
 {
-    public static final String NO_CHOICES = "There aren't any names to choose from.";
-    public static final String CHOSEN_NAME_DIALOG_TITLE = "And the (un)lucky winner is...";
-
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.with_replacement) CheckBox withReplacement;
     @Bind(R.id.names_list) ListView namesList;
+    @BindString(R.string.name_chosen) String nameChosen;
 
     private NameChoosingAdapter NameChoosingAdapter;
 
@@ -39,6 +37,7 @@ public class NameChoosingActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.name_choosing);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
         Intent intent = getIntent();
         String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
@@ -51,15 +50,11 @@ public class NameChoosingActivity extends AppCompatActivity
     @OnClick(R.id.choose)
     public void choose(View view)
     {
-        if (NameChoosingAdapter.getCount() == 0)
-        {
-            Toast.makeText(this, NO_CHOICES, Toast.LENGTH_SHORT).show();
-        }
-        else
+        if (NameChoosingAdapter.getCount() != 0)
         {
             final String randomStudent = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(CHOSEN_NAME_DIALOG_TITLE);
+            alertDialogBuilder.setTitle(nameChosen);
             alertDialogBuilder
                     .setMessage(randomStudent)
                     .setCancelable(true)
@@ -79,7 +74,7 @@ public class NameChoosingActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the blank_menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.name_choosing_menu, menu);
         return true;
     }
@@ -90,6 +85,11 @@ public class NameChoosingActivity extends AppCompatActivity
         if (item.getItemId() == R.id.reset)
         {
             NameChoosingAdapter.resetStudents();
+        }
+        else if (item.getItemId() == android.R.id.home)
+        {
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
