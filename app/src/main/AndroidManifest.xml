@@ -9,21 +9,23 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Activities.NameListsActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.EditNameListActivity" >
+        <activity android:name=".Activities.EditNameListActivity"
+            android:configChanges="orientation|screenSize">
             android:parentActivityName=".Activities.NameListsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.randomappsinc.studentpicker.Activities.NameListsActivity" />
         </activity>
-        <activity android:name=".Activities.NameChoosingActivity" >
+        <activity android:name=".Activities.NameChoosingActivity"
+            android:configChanges="orientation|screenSize">
             android:parentActivityName=".Activities.NameListsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

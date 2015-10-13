@@ -10,4 +10,7 @@
     <string name="with_replacement">With Replacement</string>
     <string name="no_names">You currently do not have any names in this list. Why are you even here?</string>
 
+    <!-- Font Awesome icons -->
+    <string name="edit_icon">fa-edit</string>
+    <string name="delete_icon">fa-minus-circle</string>
 </resources>
