@@ -29,6 +29,7 @@
 
         <TextView
             android:layout_marginTop="10dp"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:layout_gravity="center_horizontal"
             android:text="@string/connect"
@@ -37,7 +38,7 @@
 
         <LinearLayout
             xmlns:fontawesometext="http://schemas.android.com/apk/res-auto"
-            android:layout_marginTop="10dp"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -47,27 +48,40 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/linkedin"
-                    android:text="@string/linkedin"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"/>
+                    card_view:cardBackgroundColor="@color/white"
+                    card_view:cardCornerRadius="3dp"
+                    card_view:cardElevation="5dp"
+                    android:layout_centerHorizontal="true">
 
-                <com.beardedhen.androidbootstrap.FontAwesomeText
-                    android:id="@+id/linkedin_icon"
-                    android:layout_toLeftOf="@+id/linkedin"
-                    fontawesometext:fa_icon="@string/linkedin_icon"
-                    android:gravity="center"
-                    android:layout_width="25sp"
-                    android:layout_height="25sp"
-                    android:textColor="@color/linkedin_blue"
-                    android:textSize="22sp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_centerVertical="true"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.beardedhen.androidbootstrap.FontAwesomeText
+                            fontawesometext:fa_icon="@string/linkedin_icon"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/linkedin_blue"
+                            android:textSize="22sp"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_marginLeft="5dp"
+                            android:text="@string/linkedin"
+                            android:textSize="18sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </RelativeLayout>
 
             <RelativeLayout
@@ -75,27 +89,40 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/github"
-                    android:text="@string/github"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"/>
+                    card_view:cardBackgroundColor="@color/white"
+                    card_view:cardCornerRadius="3dp"
+                    card_view:cardElevation="5dp"
+                    android:layout_centerHorizontal="true">
 
-                <com.beardedhen.androidbootstrap.FontAwesomeText
-                    android:id="@+id/github_icon"
-                    android:layout_toLeftOf="@+id/github"
-                    fontawesometext:fa_icon="@string/github_icon"
-                    android:gravity="center"
-                    android:layout_width="25sp"
-                    android:layout_height="25sp"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_centerVertical="true"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.beardedhen.androidbootstrap.FontAwesomeText
+                            fontawesometext:fa_icon="@string/github_icon"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="22sp"
+                            android:layout_gravity="center_vertical"/>
+
+                        <TextView
+                            android:layout_marginLeft="5dp"
+                            android:text="@string/github"
+                            android:textSize="18sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -29,13 +29,13 @@ public class AboutMeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @OnClick({R.id.linkedin, R.id.linkedin_icon})
+    @OnClick(R.id.linkedin)
     public void openLinkedIn(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(LINKEDIN_URL));
         startActivity(intent);
     }
 
-    @OnClick({R.id.github, R.id.github_icon})
+    @OnClick(R.id.github)
     public void openGitHub(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL));
         startActivity(intent);
