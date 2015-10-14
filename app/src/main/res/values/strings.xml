@@ -15,7 +15,7 @@
     <string name="name_hint">Name</string>
 
     <!-- Common -->
-    <string name="plus">+</string>
+    <string name="add_description">Add item</string>
 
     <!-- Name Choosing -->
     <string name="list">List:</string>
