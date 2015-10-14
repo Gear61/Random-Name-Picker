@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
+import com.rey.material.widget.CheckBox;
 
 import butterknife.Bind;
 import butterknife.BindString;
