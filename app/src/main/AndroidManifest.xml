@@ -33,9 +33,8 @@
         </activity>
         <activity
             android:label="@string/about_me_label"
-            android:name=".Activities.Abou"
+            android:name=".Activities.AboutMeActivity"
             android:configChanges="orientation|screenSize">
         </activity>
     </application>
-
 </manifest>
