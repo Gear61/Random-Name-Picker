@@ -8,10 +8,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp">
+        android:padding="10dp">
 
         <FrameLayout
             android:paddingBottom="10dp"
@@ -37,11 +34,11 @@
 
             <EditText
                 android:id="@+id/item_name_input"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="6dp"
                 android:textSize="22dp"
                 android:background="@android:color/transparent"
                 android:layout_gravity="bottom"
-                android:layout_marginRight="50dp"
+                android:layout_marginRight="53dp"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:layout_width="match_parent"
@@ -49,11 +46,11 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="1dp"
                 android:layout_height="2dp"
                 android:layout_gravity="bottom"
                 android:background="@color/black"
-                android:layout_marginRight="50dp">
+                android:layout_marginRight="53dp">
             </View>
         </FrameLayout>
 
