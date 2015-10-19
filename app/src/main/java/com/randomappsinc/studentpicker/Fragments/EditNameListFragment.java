@@ -17,12 +17,14 @@ import android.widget.TextView;
 import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Adapters.NamesAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
+import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -64,15 +66,16 @@ public class EditNameListFragment extends Fragment
     @OnClick(R.id.add_item)
     public void addItem(View view)
     {
-        String newStudent = newNameInput.getText().toString().trim();
+        String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
-        if (newStudent.isEmpty())
+        if (newName.isEmpty())
         {
             Snackbar.make(parent, blankName, Snackbar.LENGTH_LONG).show();
         }
         else
         {
-            NamesAdapter.addStudent(newStudent);
+            NamesAdapter.addStudent(newName);
+            EventBus.getDefault().post(new EditListEvent(EditListEvent.ADD, newName));
         }
     }
 

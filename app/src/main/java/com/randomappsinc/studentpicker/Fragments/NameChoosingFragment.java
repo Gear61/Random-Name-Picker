@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
+import com.randomappsinc.studentpicker.Misc.Utils;
+import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 import com.rey.material.widget.CheckBox;
 
@@ -21,6 +23,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -32,12 +35,13 @@ public class NameChoosingFragment extends Fragment
     @Bind(R.id.names_list) ListView namesList;
     @BindString(R.string.name_chosen) String nameChosenTitle;
 
-    private NameChoosingAdapter NameChoosingAdapter;
+    private NameChoosingAdapter nameChoosingAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -46,17 +50,17 @@ public class NameChoosingFragment extends Fragment
         ButterKnife.bind(this, rootView);
         Bundle bundle = getArguments();
         String listName = bundle.getString(NameListsActivity.LIST_NAME_KEY, "");
-        NameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName, namesList);
-        namesList.setAdapter(NameChoosingAdapter);
+        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName, namesList);
+        namesList.setAdapter(nameChoosingAdapter);
         return rootView;
     }
 
     @OnClick(R.id.choose)
     public void choose(View view)
     {
-        if (NameChoosingAdapter.getCount() != 0)
+        if (nameChoosingAdapter.getCount() != 0)
         {
-            String chosenName = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
+            String chosenName = nameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
             new MaterialDialog.Builder(getActivity())
                     .title(nameChosenTitle)
                     .content(chosenName)
@@ -72,7 +76,17 @@ public class NameChoosingFragment extends Fragment
         // If this fragment is becoming visible
         if (isVisibleToUser)
         {
+            Utils.hideKeyboard(getActivity());
             getActivity().invalidateOptionsMenu();
+        }
+    }
+
+    public void onEvent(EditListEvent event) {
+        if (event.getEventType().equals(EditListEvent.ADD)) {
+            nameChoosingAdapter.addName(event.getName());
+        }
+        else if (event.getEventType().equals(EditListEvent.REMOVE)) {
+            nameChoosingAdapter.removeName(event.getName());
         }
     }
 
@@ -80,6 +94,7 @@ public class NameChoosingFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -93,7 +108,7 @@ public class NameChoosingFragment extends Fragment
     {
         if (item.getItemId() == R.id.reset)
         {
-            NameChoosingAdapter.resetStudents();
+            nameChoosingAdapter.resetStudents();
         }
         else if (item.getItemId() == android.R.id.home)
         {

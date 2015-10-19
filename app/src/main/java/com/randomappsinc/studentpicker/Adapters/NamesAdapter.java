@@ -9,12 +9,14 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -85,7 +87,7 @@ public class NamesAdapter extends BaseAdapter
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(int position, View view, ViewGroup parent)
+    public View getView(final int position, View view, ViewGroup parent)
     {
         final ViewHolder holder;
         if (view == null)
@@ -102,13 +104,13 @@ public class NamesAdapter extends BaseAdapter
         }
 
         holder.name.setText(content.get(position));
-        final int _position = position;
         final View _v = view;
         holder.delete.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(final View view)
             {
+                EventBus.getDefault().post(new EditListEvent(EditListEvent.REMOVE, getItem(position)));
                 // Disable clicking of the -, so they don't spam it
                 view.setEnabled(false);
                 // Make item fade out smoothly as opposed to just vanishing
@@ -116,7 +118,7 @@ public class NamesAdapter extends BaseAdapter
                 {
                     public void run()
                     {
-                        removeStudent(_position);
+                        removeStudent(position);
                         _v.setAlpha(1);
                         // Re-enable it after the row disappears
                         view.setEnabled(true);
@@ -124,7 +126,6 @@ public class NamesAdapter extends BaseAdapter
                 });
             }
         });
-
         return view;
     }
 }
