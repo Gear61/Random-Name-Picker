@@ -31,7 +31,6 @@
 
     <TextView
         android:id="@+id/no_content"
-        android:text="@string/no_names"
         android:gravity="center_horizontal"
         android:layout_marginTop="15dp"
         android:visibility="gone"
