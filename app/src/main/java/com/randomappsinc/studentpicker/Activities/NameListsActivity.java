@@ -66,6 +66,7 @@ public class NameListsActivity extends AppCompatActivity
     @OnItemClick(R.id.content_list)
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id)
     {
+        Utils.hideKeyboard(this);
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
         intent.putExtra(LIST_NAME_KEY, listName);

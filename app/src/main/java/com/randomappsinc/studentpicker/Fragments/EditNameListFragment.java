@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,6 +54,7 @@ public class EditNameListFragment extends Fragment
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         ButterKnife.bind(this, rootView);
         newNameInput.setHint(nameHint);
+        newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         Bundle bundle = getArguments();
         String listName = bundle.getString(NameListsActivity.LIST_NAME_KEY, "");
