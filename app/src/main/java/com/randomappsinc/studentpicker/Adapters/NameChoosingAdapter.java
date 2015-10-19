@@ -44,6 +44,27 @@ public class NameChoosingAdapter extends BaseAdapter
         this.listView = listView;
     }
 
+    public void addName(String name)
+    {
+        content.add(name);
+        notifyDataSetChanged();
+        setNoContent(true);
+    }
+
+    public void removeName(String name)
+    {
+        for (int i = 0; i < content.size(); i++)
+        {
+            if (content.get(i).equals(name))
+            {
+                content.remove(i);
+                notifyDataSetChanged();
+                setNoContent(true);
+                return;
+            }
+        }
+    }
+
     public void setNoContent(boolean firstTime)
     {
         if (!firstTime)
