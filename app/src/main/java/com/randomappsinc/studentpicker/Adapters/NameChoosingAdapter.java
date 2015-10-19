@@ -23,7 +23,8 @@ import butterknife.ButterKnife;
  */
 public class NameChoosingAdapter extends BaseAdapter
 {
-    public static String OUT_OF_NAMES;
+    private String outOfNames;
+    private String noNames;
 
     private Context context;
     private String listName;
@@ -34,7 +35,8 @@ public class NameChoosingAdapter extends BaseAdapter
 
     public NameChoosingAdapter(Context context, TextView noContent, String listName, ListView listView)
     {
-        OUT_OF_NAMES = context.getString(R.string.out_of_names);
+        this.outOfNames = context.getString(R.string.out_of_names);
+        this.noNames = context.getString(R.string.no_names);
         this.context = context;
         this.listName = listName;
         this.dataSource = new DataSource(context);
@@ -65,17 +67,19 @@ public class NameChoosingAdapter extends BaseAdapter
         }
     }
 
-    public void setNoContent(boolean firstTime)
+    public void setNoContent(boolean toggleNoContent)
     {
-        if (!firstTime)
-        {
-            noContent.setText(OUT_OF_NAMES);
+        if (!toggleNoContent) {
+            noContent.setText(outOfNames);
+        }
+        else if (dataSource.getAllNamesInList(listName).isEmpty()) {
+            noContent.setText(noNames);
         }
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
     }
 
-    public String chooseStudentAtRandom(boolean withReplacement)
+    public String chooseNameAtRandom(boolean withReplacement)
     {
         Random randomGenerator = new Random();
         final int randomInt = randomGenerator.nextInt(getCount());
@@ -91,7 +95,7 @@ public class NameChoosingAdapter extends BaseAdapter
             {
                 public void run()
                 {
-                    removeStudent(randomInt);
+                    removeNameAtPosition(randomInt);
                     view.setAlpha(1);
                     // Re-enable it after the row disappears
                     view.setEnabled(true);
@@ -101,7 +105,7 @@ public class NameChoosingAdapter extends BaseAdapter
         return randomStudent;
     }
 
-    public void removeStudent(int index)
+    public void removeNameAtPosition(int index)
     {
         content.remove(index);
         notifyDataSetChanged();

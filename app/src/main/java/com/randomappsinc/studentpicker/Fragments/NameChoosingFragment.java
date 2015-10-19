@@ -60,7 +60,7 @@ public class NameChoosingFragment extends Fragment
     {
         if (nameChoosingAdapter.getCount() != 0)
         {
-            String chosenName = nameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
+            String chosenName = nameChoosingAdapter.chooseNameAtRandom(withReplacement.isChecked());
             new MaterialDialog.Builder(getActivity())
                     .title(nameChosenTitle)
                     .content(chosenName)
