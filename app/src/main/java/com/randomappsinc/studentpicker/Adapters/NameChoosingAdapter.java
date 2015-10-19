@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
  */
 public class NameChoosingAdapter extends BaseAdapter
 {
-    public static final String OUT_OF_NAMES = "You have ran out of names to choose from.";
+    public static String OUT_OF_NAMES;
 
     private Context context;
-    private List<String> initialStudents;
+    private String listName;
     private List<String> content;
     private TextView noContent;
     private DataSource dataSource;
@@ -34,10 +34,11 @@ public class NameChoosingAdapter extends BaseAdapter
 
     public NameChoosingAdapter(Context context, TextView noContent, String listName, ListView listView)
     {
+        OUT_OF_NAMES = context.getString(R.string.out_of_names);
         this.context = context;
+        this.listName = listName;
         this.dataSource = new DataSource(context);
-        this.initialStudents = this.dataSource.getAllNamesInList(listName);
-        this.content = this.dataSource.getAllNamesInList(listName);
+        this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
         setNoContent(true);
         this.listView = listView;
@@ -89,7 +90,7 @@ public class NameChoosingAdapter extends BaseAdapter
     public void resetStudents()
     {
         content.clear();
-        content.addAll(initialStudents);
+        content.addAll(this.dataSource.getAllNamesInList(listName));
         setNoContent(true);
         notifyDataSetChanged();
     }
@@ -133,9 +134,7 @@ public class NameChoosingAdapter extends BaseAdapter
         {
             holder = (ViewHolder) view.getTag();
         }
-
         holder.itemName.setText(content.get(position));
-
         return view;
     }
 }

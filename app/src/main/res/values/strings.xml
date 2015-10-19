@@ -26,10 +26,10 @@
     <string name="reset_list">Reset List</string>
     <string name="choose">Choose</string>
     <string name="with_replacement">With Replacement</string>
-    <string name="no_names">You currently do not have any names in this list. Why are you even here?</string>
+    <string name="no_names">You currently do not have any names in this list.</string>
     <string name="name_chosen">And the lucky winner is&#8230;</string>
+    <string name="out_of_names">You have ran out of names to choose from.</string>
 
     <!-- Font Awesome icons -->
-    <string name="edit_icon">fa-edit</string>
     <string name="delete_icon">fa-minus-circle</string>
 </resources>
