@@ -1,16 +1,12 @@
 package com.randomappsinc.studentpicker.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.FontAwesomeText;
-import com.randomappsinc.studentpicker.Activities.EditNameListActivity;
-import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
@@ -81,8 +77,7 @@ public class NameListsAdapter extends BaseAdapter
 
     public static class ViewHolder
     {
-        @Bind(R.id.item_name) TextView listName;
-        @Bind(R.id.action_icon) FontAwesomeText edit;
+        @Bind(R.id.name) TextView listName;
 
         public ViewHolder(View view)
         {
@@ -97,27 +92,15 @@ public class NameListsAdapter extends BaseAdapter
         if (view == null)
         {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.list_item_with_action, parent, false);
+            view = vi.inflate(R.layout.names_list_item, parent, false);
             holder = new ViewHolder(view);
-            holder.edit.setIcon(context.getString(R.string.edit_icon));
             view.setTag(holder);
         }
         else
         {
             holder = (ViewHolder) view.getTag();
         }
-
         holder.listName.setText(content.get(position));
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(context, EditNameListActivity.class);
-                intent.putExtra(NameListsActivity.LIST_NAME_KEY, getItem(position));
-                context.startActivity(intent);
-            }
-        });
-
         return view;
     }
 }

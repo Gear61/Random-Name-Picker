@@ -19,14 +19,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.EditNameListActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
-        <activity
-            android:name=".Activities.NameChoosingActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
-        <activity
             android:label="@string/settings"
             android:name=".Activities.SettingsActivity"
             android:configChanges="orientation|screenSize">
@@ -34,6 +26,10 @@
         <activity
             android:label="@string/about_me_label"
             android:name=".Activities.AboutMeActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
+        <activity
+            android:name=".Activities.ListActivity"
             android:configChanges="orientation|screenSize">
         </activity>
     </application>

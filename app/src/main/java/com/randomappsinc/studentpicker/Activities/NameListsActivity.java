@@ -66,7 +66,7 @@ public class NameListsActivity extends AppCompatActivity
     @OnItemClick(R.id.content_list)
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id)
     {
-        Intent intent = new Intent(this, NameChoosingActivity.class);
+        Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
         intent.putExtra(LIST_NAME_KEY, listName);
         startActivity(intent);
@@ -89,7 +89,7 @@ public class NameListsActivity extends AppCompatActivity
         {
             Utils.hideKeyboard(this);
             nameListsAdapter.addList(newList);
-            Intent intent = new Intent(this, EditNameListActivity.class);
+            Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
             startActivity(intent);
         }
