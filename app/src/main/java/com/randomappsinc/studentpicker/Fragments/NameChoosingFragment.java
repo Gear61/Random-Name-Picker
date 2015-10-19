@@ -1,15 +1,18 @@
-package com.randomappsinc.studentpicker.Activities;
+package com.randomappsinc.studentpicker.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.R;
 import com.rey.material.widget.CheckBox;
@@ -20,31 +23,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by alexanderchiou on 7/19/15.
+ * Created by alexanderchiou on 10/18/15.
  */
-public class NameChoosingActivity extends AppCompatActivity
+public class NameChoosingFragment extends Fragment
 {
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.with_replacement) CheckBox withReplacement;
     @Bind(R.id.names_list) ListView namesList;
     @BindString(R.string.name_chosen) String nameChosenTitle;
-    @BindString(R.string.list) String list;
 
     private NameChoosingAdapter NameChoosingAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.name_choosing);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ButterKnife.bind(this);
-        Intent intent = getIntent();
-        String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
-        setTitle(list + " "+ listName);
+        setHasOptionsMenu(true);
+    }
 
-        NameChoosingAdapter = new NameChoosingAdapter(this, noContent, listName, namesList);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.name_choosing, container, false);
+        ButterKnife.bind(this, rootView);
+        Bundle bundle = getArguments();
+        String listName = bundle.getString(NameListsActivity.LIST_NAME_KEY, "");
+        NameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName, namesList);
         namesList.setAdapter(NameChoosingAdapter);
+        return rootView;
     }
 
     @OnClick(R.id.choose)
@@ -53,7 +57,7 @@ public class NameChoosingActivity extends AppCompatActivity
         if (NameChoosingAdapter.getCount() != 0)
         {
             String chosenName = NameChoosingAdapter.chooseStudentAtRandom(withReplacement.isChecked());
-            new MaterialDialog.Builder(this)
+            new MaterialDialog.Builder(getActivity())
                     .title(nameChosenTitle)
                     .content(chosenName)
                     .positiveText(android.R.string.yes)
@@ -62,11 +66,26 @@ public class NameChoosingActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the blank_menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.name_choosing_menu, menu);
-        return true;
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // If this fragment is becoming visible
+        if (isVisibleToUser)
+        {
+            getActivity().invalidateOptionsMenu();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.name_choosing_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -78,7 +97,7 @@ public class NameChoosingActivity extends AppCompatActivity
         }
         else if (item.getItemId() == android.R.id.home)
         {
-            finish();
+            getActivity().finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
