@@ -25,7 +25,6 @@ public class NameChoosingAdapter extends BaseAdapter
 {
     private String outOfNames;
     private String noNames;
-
     private Context context;
     private String listName;
     private List<String> content;
@@ -42,7 +41,7 @@ public class NameChoosingAdapter extends BaseAdapter
         this.dataSource = new DataSource(context);
         this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
-        setNoContent(true);
+        setNoContent();
         this.listView = listView;
     }
 
@@ -50,7 +49,7 @@ public class NameChoosingAdapter extends BaseAdapter
     {
         content.add(name);
         notifyDataSetChanged();
-        setNoContent(true);
+        setNoContent();
     }
 
     public void removeName(String name)
@@ -61,19 +60,19 @@ public class NameChoosingAdapter extends BaseAdapter
             {
                 content.remove(i);
                 notifyDataSetChanged();
-                setNoContent(true);
-                return;
+                break;
             }
         }
+        setNoContent();
     }
 
-    public void setNoContent(boolean toggleNoContent)
+    public void setNoContent()
     {
-        if (!toggleNoContent) {
-            noContent.setText(outOfNames);
-        }
-        else if (dataSource.getAllNamesInList(listName).isEmpty()) {
+        if (dataSource.getAllNamesInList(listName).isEmpty()) {
             noContent.setText(noNames);
+        }
+        else {
+            noContent.setText(outOfNames);
         }
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
@@ -109,14 +108,14 @@ public class NameChoosingAdapter extends BaseAdapter
     {
         content.remove(index);
         notifyDataSetChanged();
-        setNoContent(false);
+        setNoContent();
     }
 
     public void resetStudents()
     {
         content.clear();
         content.addAll(this.dataSource.getAllNamesInList(listName));
-        setNoContent(true);
+        setNoContent();
         notifyDataSetChanged();
     }
 
