@@ -55,7 +55,6 @@ public class NamesAdapter extends BaseAdapter
 
     public void removeStudent(int index)
     {
-        dataSource.removeName(content.get(index), listName);
         content.remove(index);
         notifyDataSetChanged();
         setNoContent();
@@ -110,6 +109,7 @@ public class NamesAdapter extends BaseAdapter
             @Override
             public void onClick(final View view)
             {
+                dataSource.removeName(content.get(position), listName);
                 EventBus.getDefault().post(new EditListEvent(EditListEvent.REMOVE, getItem(position)));
                 // Disable clicking of the -, so they don't spam it
                 view.setEnabled(false);
