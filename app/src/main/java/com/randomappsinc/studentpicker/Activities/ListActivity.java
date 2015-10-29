@@ -36,6 +36,7 @@ public class ListActivity extends AppCompatActivity
 
         ListTabsAdapter profileTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);
         mViewPager.setAdapter(profileTabsAdapter);
+        mSlidingTabLayout.setCustomTabView(R.layout.custom_tab, R.id.tab_name);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 

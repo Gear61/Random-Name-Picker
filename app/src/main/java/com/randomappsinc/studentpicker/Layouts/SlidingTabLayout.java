@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import com.randomappsinc.studentpicker.R;
+
 /**
  * Created by alexanderchiou on 10/18/15.
  */
@@ -149,6 +151,10 @@ public class SlidingTabLayout extends HorizontalScrollView
     protected TextView createDefaultTabView(Context context) {
 
         TextView textView = new TextView(context);
+        return convertTextView(textView, context, false);
+    }
+
+    private TextView convertTextView(TextView textView, Context context, boolean custom) {
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -159,7 +165,7 @@ public class SlidingTabLayout extends HorizontalScrollView
         display.getSize(size);
         textView.setWidth(size.x / numTabs);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && !custom) {
             // If we're running on Honeycomb or newer, then we can use the Theme's
             // selectableItemBackground to ensure that the View has a pressed state
             TypedValue outValue = new TypedValue();
@@ -192,6 +198,7 @@ public class SlidingTabLayout extends HorizontalScrollView
                 tabView = LayoutInflater.from(getContext()).inflate(mTabViewLayoutId, mTabStrip,
                         false);
                 tabTitleView = (TextView) tabView.findViewById(mTabViewTextViewId);
+                tabTitleView = convertTextView(tabTitleView, getContext(), true);
             }
 
             if (tabView == null) {
@@ -287,11 +294,12 @@ public class SlidingTabLayout extends HorizontalScrollView
     private class TabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
-                if (v == mTabStrip.getChildAt(i)) {
-                    mViewPager.setCurrentItem(i);
-                    return;
-                }
+            String tabName = ((TextView) v.findViewById(R.id.tab_name)).getText().toString();
+            if (tabName.equals(getContext().getString(R.string.choose))) {
+                mViewPager.setCurrentItem(0);
+            }
+            else if (tabName.equals(getContext().getString(R.string.edit))) {
+                mViewPager.setCurrentItem(1);
             }
         }
     }
