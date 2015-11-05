@@ -38,7 +38,7 @@ public class EditNameListFragment extends Fragment
     @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
 
     @BindString(R.string.blank_name) String blankName;
-    @BindString(R.string.empty_list) String emptyList;
+    @BindString(R.string.no_names) String emptyList;
     @BindString(R.string.name_hint) String nameHint;
 
     private NamesAdapter NamesAdapter;

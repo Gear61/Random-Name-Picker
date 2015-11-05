@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.FontAwesomeText;
+import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
@@ -77,7 +77,7 @@ public class NamesAdapter extends BaseAdapter
     public static class ViewHolder
     {
         @Bind(R.id.item_name) TextView name;
-        @Bind(R.id.action_icon) FontAwesomeText delete;
+        @Bind(R.id.action_icon) IconTextView delete;
 
         public ViewHolder(View view)
         {
@@ -94,7 +94,7 @@ public class NamesAdapter extends BaseAdapter
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.list_item_with_action, parent, false);
             holder = new ViewHolder(view);
-            holder.delete.setIcon(context.getString(R.string.delete_icon));
+            holder.delete.setText(context.getString(R.string.delete_icon));
             view.setTag(holder);
         }
         else

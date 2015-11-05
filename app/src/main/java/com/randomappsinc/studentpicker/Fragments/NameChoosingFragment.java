@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.NameListsActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
@@ -100,18 +102,20 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
+        menu.findItem(R.id.reset).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_rotate_right)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == R.id.reset)
-        {
+        if (item.getItemId() == R.id.reset) {
             nameChoosingAdapter.resetStudents();
         }
-        else if (item.getItemId() == android.R.id.home)
-        {
+        else if (item.getItemId() == android.R.id.home) {
             getActivity().finish();
             return true;
         }

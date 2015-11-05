@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
@@ -132,6 +134,10 @@ public class NameListsActivity extends AppCompatActivity
     {
         // Inflate the blank_menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_menu, menu);
+        menu.findItem(R.id.settings).setIcon(
+                new IconDrawable(this, FontAwesomeIcons.fa_gear)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         return true;
     }
 
