@@ -59,19 +59,15 @@ public class SettingsAdapter extends BaseAdapter
 
         if (tabName.equals(context.getString(R.string.send_feedback)))
         {
-            holder.itemIcon.setIcon(context.getString(R.string.email_icon));
+            holder.itemIcon.setText(context.getString(R.string.email_icon));
         }
         else if (tabName.equals(context.getString(R.string.rate_this_app)))
         {
-            holder.itemIcon.setIcon(context.getString(R.string.rate_icon));
-        }
-        else if (tabName.equals(context.getString(R.string.about_the_developer)))
-        {
-            holder.itemIcon.setIcon(context.getString(R.string.info_icon));
+            holder.itemIcon.setText(context.getString(R.string.rate_icon));
         }
         else if (tabName.equals(context.getString(R.string.source_code)))
         {
-            holder.itemIcon.setIcon(context.getString(R.string.github_icon));
+            holder.itemIcon.setText(context.getString(R.string.github_icon));
         }
         return view;
     }

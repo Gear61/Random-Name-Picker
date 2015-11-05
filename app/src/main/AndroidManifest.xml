@@ -24,11 +24,6 @@
             android:configChanges="orientation|screenSize">
         </activity>
         <activity
-            android:label="@string/about_me_label"
-            android:name=".Activities.AboutMeActivity"
-            android:configChanges="orientation|screenSize">
-        </activity>
-        <activity
             android:name=".Activities.ListActivity"
             android:configChanges="orientation|screenSize">
         </activity>

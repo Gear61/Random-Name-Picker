@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.beardedhen.androidbootstrap.FontAwesomeText
+        <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/action_icon"
             android:textColor="@color/dark_grey"
             android:layout_alignParentRight="true"

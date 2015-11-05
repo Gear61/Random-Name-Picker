@@ -67,9 +67,6 @@ public class SettingsActivity extends AppCompatActivity
                 }
                 break;
             case 2:
-                intent = new Intent(this, AboutMeActivity.class);
-                break;
-            case 3:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }

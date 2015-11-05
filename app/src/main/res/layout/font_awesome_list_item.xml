@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.beardedhen.androidbootstrap.FontAwesomeText
+        <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/item_icon"
             android:gravity="center"
             android:layout_marginLeft="10dp"
