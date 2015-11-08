@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.randomappsinc.studentpicker.Activities.NameListsActivity;
+import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Fragments.EditNameListFragment;
 import com.randomappsinc.studentpicker.Fragments.NameChoosingFragment;
 import com.randomappsinc.studentpicker.R;
@@ -34,7 +34,7 @@ public class ListTabsAdapter extends FragmentPagerAdapter
     @Override
     public Fragment getItem(int position) {
         Bundle bundle = new Bundle();
-        bundle.putString(NameListsActivity.LIST_NAME_KEY, listName);
+        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
         switch (position) {
             case 0:
                 NameChoosingFragment nameChoosingFragment = new NameChoosingFragment();

@@ -29,8 +29,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 
-public class NameListsActivity extends StandardActivity
-{
+public class MainActivity extends StandardActivity {
     public static final String LIST_NAME_KEY = "listName";
 
     @Bind(R.id.item_name_input) EditText newListInput;
@@ -49,8 +48,7 @@ public class NameListsActivity extends StandardActivity
     private NameListsAdapter nameListsAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
         ButterKnife.bind(this);
@@ -61,6 +59,15 @@ public class NameListsActivity extends StandardActivity
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
+
+        if (PreferencesManager.get().getFirstTimeUser()) {
+            PreferencesManager.get().setFirstTimeUser(false);
+            new MaterialDialog.Builder(this)
+                    .title(R.string.welcome)
+                    .content(R.string.ask_for_help)
+                    .positiveText(android.R.string.yes)
+                    .show();
+        }
     }
 
 

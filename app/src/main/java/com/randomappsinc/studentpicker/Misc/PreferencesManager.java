@@ -15,11 +15,11 @@ import java.util.Set;
  */
 public class PreferencesManager
 {
-    private Context context;
     private SharedPreferences prefs;
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
     private static final String STUDENT_LISTS_KEY = "com.randomappsinc.studentpicker.studentLists";
+    private static final String FIRST_TIME_KEY = "firstTime";
     private static PreferencesManager instance;
 
     public static PreferencesManager get()
@@ -42,7 +42,7 @@ public class PreferencesManager
 
     private PreferencesManager()
     {
-        this.context = Application.get().getApplicationContext();
+        Context context = Application.get().getApplicationContext();
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
@@ -53,7 +53,18 @@ public class PreferencesManager
 
     public void setStudentsList(Set<String> studentLists)
     {
-        prefs.edit().putStringSet(STUDENT_LISTS_KEY, studentLists).commit();
+        prefs.edit().remove(STUDENT_LISTS_KEY).apply();
+        prefs.edit().putStringSet(STUDENT_LISTS_KEY, studentLists).apply();
+    }
+
+    public boolean getFirstTimeUser()
+    {
+        return prefs.getBoolean(FIRST_TIME_KEY, true);
+    }
+
+    public void setFirstTimeUser(boolean firstTimeUser)
+    {
+        prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 }
 

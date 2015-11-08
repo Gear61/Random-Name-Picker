@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.randomappsinc.studentpicker.Activities.NameListsActivity;
+import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NamesAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
@@ -57,7 +57,7 @@ public class EditNameListFragment extends Fragment
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         Bundle bundle = getArguments();
-        String listName = bundle.getString(NameListsActivity.LIST_NAME_KEY, "");
+        String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(emptyList);
 
         NamesAdapter = new NamesAdapter(getActivity(), noContent, listName);
