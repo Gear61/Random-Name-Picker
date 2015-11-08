@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -23,7 +21,7 @@ import butterknife.OnItemClick;
 /**
  * Created by alexanderchiou on 10/13/15.
  */
-public class SettingsActivity extends AppCompatActivity
+public class SettingsActivity extends StandardActivity
 {
     public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
@@ -78,17 +76,5 @@ public class SettingsActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.blank_menu, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

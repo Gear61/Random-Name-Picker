@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 
 import com.randomappsinc.studentpicker.Adapters.ListTabsAdapter;
 import com.randomappsinc.studentpicker.Layouts.SlidingTabLayout;
@@ -17,7 +16,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class ListActivity extends AppCompatActivity
+public class ListActivity extends StandardActivity
 {
     @Bind(R.id.viewpager) ViewPager mViewPager;
     @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
