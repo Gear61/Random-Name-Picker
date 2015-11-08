@@ -30,7 +30,7 @@ public class ListActivity extends StandardActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        String listName = intent.getStringExtra(NameListsActivity.LIST_NAME_KEY);
+        String listName = intent.getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(list + " " + listName);
 
         ListTabsAdapter profileTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);

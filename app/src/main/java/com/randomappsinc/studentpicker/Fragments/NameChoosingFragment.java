@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.randomappsinc.studentpicker.Activities.NameListsActivity;
+import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
@@ -51,7 +51,7 @@ public class NameChoosingFragment extends Fragment
         View rootView = inflater.inflate(R.layout.name_choosing, container, false);
         ButterKnife.bind(this, rootView);
         Bundle bundle = getArguments();
-        String listName = bundle.getString(NameListsActivity.LIST_NAME_KEY, "");
+        String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName, namesList);
         namesList.setAdapter(nameChoosingAdapter);
         return rootView;
