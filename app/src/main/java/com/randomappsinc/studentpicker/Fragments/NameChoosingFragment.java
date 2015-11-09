@@ -86,7 +86,14 @@ public class NameChoosingFragment extends Fragment {
             numNamesChosen = 1;
         }
         else {
-            numNamesChosen = Integer.parseInt(settingsHolder.numChosen.getText().toString());
+            int userNumNames = Integer.parseInt(settingsHolder.numChosen.getText().toString());
+            if (userNumNames == 0) {
+                settingsHolder.numChosen.setText("1");
+                numNamesChosen = 1;
+            }
+            else {
+                numNamesChosen = userNumNames;
+            }
         }
         settingsHolder.numChosen.clearFocus();
     }
