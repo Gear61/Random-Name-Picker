@@ -1,46 +1,44 @@
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="match_parent">
 
-    <com.rey.material.widget.Button
-        android:id="@+id/choose"
-        android:background="@drawable/custom_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/choose"
-        app:rd_rippleType="touch"
-        app:rd_backgroundAnimDuration="0"
-        app:rd_backgroundColor="@android:color/transparent"
-        app:rd_maxRippleRadius="match_view"
-        app:rd_rippleAnimDuration="150"
-        app:rd_enable="true"/>
-
-    <com.rey.material.widget.CheckBox
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_marginTop="5dp"
-        android:id="@+id/with_replacement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="@string/with_replacement"
-        app:cbd_animDuration="100"/>
-
-    <TextView
-        android:id="@+id/no_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        android:textSize="28sp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-    <ListView
-        android:id="@+id/names_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
-</LinearLayout>
+        <com.rey.material.widget.Button
+            android:id="@+id/choose"
+            android:background="@drawable/custom_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose"
+            app:rd_rippleType="touch"
+            app:rd_backgroundAnimDuration="0"
+            app:rd_backgroundColor="@android:color/transparent"
+            app:rd_maxRippleRadius="match_view"
+            app:rd_rippleAnimDuration="150"
+            app:rd_enable="true"/>
+
+        <TextView
+            android:id="@+id/no_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:visibility="gone"
+            android:textSize="28sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ListView
+            android:id="@+id/names_list"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
