@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,8 +21,8 @@ import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
+import com.randomappsinc.studentpicker.Models.NameChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
-import com.rey.material.widget.CheckBox;
 
 import java.util.List;
 
@@ -35,10 +35,11 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class NameChoosingFragment extends Fragment
-{
+public class NameChoosingFragment extends Fragment {
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.names_list) ListView namesList;
+    @Bind(R.id.coordinator_layout) View parent;
+
     @BindString(R.string.name_chosen) String nameChosenTitle;
     @BindString(R.string.names_chosen) String namesChosenTitle;
 
@@ -46,6 +47,7 @@ public class NameChoosingFragment extends Fragment
     private boolean withReplacement;
     private int numNamesChosen;
     private MaterialDialog settingsDialog;
+    private NameChoosingSettingsViewHolder settingsHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,17 +65,29 @@ public class NameChoosingFragment extends Fragment
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         applySettings();
+                        Snackbar.make(parent, R.string.settings_applied, Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        revertSettings();
                     }
                 })
                 .build();
+        settingsHolder = new NameChoosingSettingsViewHolder(settingsDialog.getCustomView());
     }
 
     public void applySettings() {
-        View rootView = settingsDialog.getCustomView();
-        CheckBox withReplacement = (CheckBox) rootView.findViewById(R.id.with_replacement);
-        this.withReplacement = withReplacement.isChecked();
-        EditText numNamesChosen = (EditText) rootView.findViewById(R.id.num_people_chosen);
-        this.numNamesChosen = Integer.parseInt(numNamesChosen.getText().toString());
+        this.withReplacement = settingsHolder.withReplacement.isChecked();
+        this.numNamesChosen = Integer.parseInt(settingsHolder.numChosen.getText().toString());
+        settingsHolder.numChosen.clearFocus();
+    }
+
+    public void revertSettings() {
+        settingsHolder.withReplacement.setChecked(withReplacement);
+        settingsHolder.numChosen.setText(String.valueOf(numNamesChosen));
+        settingsHolder.numChosen.clearFocus();
     }
 
     @Override
