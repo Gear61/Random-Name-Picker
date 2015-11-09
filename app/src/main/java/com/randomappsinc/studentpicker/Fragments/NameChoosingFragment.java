@@ -79,8 +79,15 @@ public class NameChoosingFragment extends Fragment {
     }
 
     public void applySettings() {
-        this.withReplacement = settingsHolder.withReplacement.isChecked();
-        this.numNamesChosen = Integer.parseInt(settingsHolder.numChosen.getText().toString());
+        withReplacement = settingsHolder.withReplacement.isChecked();
+        String numChosenText = settingsHolder.numChosen.getText().toString();
+        if (numChosenText.isEmpty()) {
+            settingsHolder.numChosen.setText("1");
+            numNamesChosen = 1;
+        }
+        else {
+            numNamesChosen = Integer.parseInt(settingsHolder.numChosen.getText().toString());
+        }
         settingsHolder.numChosen.clearFocus();
     }
 
