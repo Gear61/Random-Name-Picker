@@ -5,15 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,9 +28,8 @@ public class NameChoosingAdapter extends BaseAdapter
     private List<String> content;
     private TextView noContent;
     private DataSource dataSource;
-    private ListView listView;
 
-    public NameChoosingAdapter(Context context, TextView noContent, String listName, ListView listView)
+    public NameChoosingAdapter(Context context, TextView noContent, String listName)
     {
         this.outOfNames = context.getString(R.string.out_of_names);
         this.noNames = context.getString(R.string.no_names);
@@ -42,7 +39,6 @@ public class NameChoosingAdapter extends BaseAdapter
         this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
         setNoContent();
-        this.listView = listView;
     }
 
     public void addName(String name)
@@ -78,35 +74,28 @@ public class NameChoosingAdapter extends BaseAdapter
         noContent.setVisibility(viewVisibility);
     }
 
-    public String chooseNameAtRandom(boolean withReplacement)
-    {
-        Random randomGenerator = new Random();
-        final int randomInt = randomGenerator.nextInt(getCount());
-        String randomStudent = content.get(randomInt);
-        // If without replacement, remove the student
-        if (!withReplacement)
-        {
-            final View view = Utils.getViewByPosition(randomInt, listView);
-            // Disable clicking of the -, so they don't spam it
-            view.setEnabled(false);
-            // Make item fade out smoothly as opposed to just vanishing
-            view.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
-            {
-                public void run()
-                {
-                    removeNameAtPosition(randomInt);
-                    view.setAlpha(1);
-                    // Re-enable it after the row disappears
-                    view.setEnabled(true);
-                }
-            });
+    public String chooseNamesAtRandom(List<Integer> indexes, boolean withReplacement) {
+        StringBuilder chosenNames = new StringBuilder();
+        for (int i = 0; i < indexes.size(); i++) {
+            if (i != 0) {
+                chosenNames.append("\n");
+            }
+            chosenNames.append(content.get(indexes.get(i)));
         }
-        return randomStudent;
+        // If without replacement, remove the names
+        if (!withReplacement) {
+            removeNamesAtPositions(indexes);
+        }
+        return chosenNames.toString();
     }
 
-    public void removeNameAtPosition(int index)
+    public void removeNamesAtPositions(List<Integer> indexes)
     {
-        content.remove(index);
+        Collections.sort(indexes);
+        Collections.reverse(indexes);
+        for (int index : indexes) {
+            content.remove(index);
+        }
         notifyDataSetChanged();
         setNoContent();
     }

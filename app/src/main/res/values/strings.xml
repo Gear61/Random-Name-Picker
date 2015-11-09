@@ -15,19 +15,12 @@
 
     <!-- Common -->
     <string name="add_description">Add item</string>
+    <string name="list">List:</string>
+    <string name="choose">Choose</string>
     <array name="list_options">
         <item>@string/choose</item>
         <item>@string/edit</item>
     </array>
-
-    <!-- Name Choosing -->
-    <string name="list">List:</string>
-    <string name="reset_list">Reset List</string>
-    <string name="choose">Choose</string>
-    <string name="with_replacement">With Replacement</string>
-    <string name="no_names">You currently do not have any names in this list.</string>
-    <string name="name_chosen">And the lucky winner is&#8230;</string>
-    <string name="out_of_names">No names remain.</string>
 
     <!-- Font Awesome icons -->
     <string name="delete_icon">{fa-minus-circle}</string>

@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,9 +9,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -20,6 +23,8 @@ import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 import com.rey.material.widget.CheckBox;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -33,17 +38,42 @@ import de.greenrobot.event.EventBus;
 public class NameChoosingFragment extends Fragment
 {
     @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.with_replacement) CheckBox withReplacement;
     @Bind(R.id.names_list) ListView namesList;
     @BindString(R.string.name_chosen) String nameChosenTitle;
+    @BindString(R.string.names_chosen) String namesChosenTitle;
 
     private NameChoosingAdapter nameChoosingAdapter;
+    private boolean withReplacement;
+    private int numNamesChosen;
+    private MaterialDialog settingsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
+        this.withReplacement = false;
+        this.numNamesChosen = 1;
+        settingsDialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.name_choosing_settings)
+                .customView(R.layout.name_choosing_settings, true)
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        applySettings();
+                    }
+                })
+                .build();
+    }
+
+    public void applySettings() {
+        View rootView = settingsDialog.getCustomView();
+        CheckBox withReplacement = (CheckBox) rootView.findViewById(R.id.with_replacement);
+        this.withReplacement = withReplacement.isChecked();
+        EditText numNamesChosen = (EditText) rootView.findViewById(R.id.num_people_chosen);
+        this.numNamesChosen = Integer.parseInt(numNamesChosen.getText().toString());
     }
 
     @Override
@@ -52,7 +82,7 @@ public class NameChoosingFragment extends Fragment
         ButterKnife.bind(this, rootView);
         Bundle bundle = getArguments();
         String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName, namesList);
+        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName);
         namesList.setAdapter(nameChoosingAdapter);
         return rootView;
     }
@@ -62,10 +92,12 @@ public class NameChoosingFragment extends Fragment
     {
         if (nameChoosingAdapter.getCount() != 0)
         {
-            String chosenName = nameChoosingAdapter.chooseNameAtRandom(withReplacement.isChecked());
+            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesChosen, nameChoosingAdapter.getCount() - 1);
+            String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
+            String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             new MaterialDialog.Builder(getActivity())
-                    .title(nameChosenTitle)
-                    .content(chosenName)
+                    .title(title)
+                    .content(chosenNames)
                     .positiveText(android.R.string.yes)
                     .show();
         }
@@ -102,6 +134,10 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
+        menu.findItem(R.id.settings).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         menu.findItem(R.id.reset).setIcon(
                 new IconDrawable(getActivity(), FontAwesomeIcons.fa_rotate_right)
                         .colorRes(R.color.white)
@@ -112,12 +148,17 @@ public class NameChoosingFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == R.id.reset) {
-            nameChoosingAdapter.resetStudents();
-        }
-        else if (item.getItemId() == android.R.id.home) {
-            getActivity().finish();
-            return true;
+        switch (item.getItemId())
+        {
+            case R.id.settings:
+                settingsDialog.show();
+                return true;
+            case R.id.reset:
+                nameChoosingAdapter.resetStudents();
+                return true;
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

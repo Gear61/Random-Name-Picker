@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.rey.material.widget.CheckBox
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/with_replacement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/with_replacement"
+        android:textSize="14dp"
+        app:cbd_animDuration="100"/>
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_people_chosen"
+            android:textSize="14dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/num_people_chosen"
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:gravity="right"
+            android:inputType="number"
+            android:padding="3dp"
+            android:background="@drawable/text_input_border"
+            android:text="@string/default_num_names_chosen"
+            android:textSize="14dp"
+            android:maxLength="2"/>
+    </LinearLayout>
+</LinearLayout>

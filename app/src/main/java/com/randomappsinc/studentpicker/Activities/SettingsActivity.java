@@ -21,8 +21,7 @@ import butterknife.OnItemClick;
 /**
  * Created by alexanderchiou on 10/13/15.
  */
-public class SettingsActivity extends StandardActivity
-{
+public class SettingsActivity extends StandardActivity {
     public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
