@@ -9,6 +9,7 @@
     <string name="out_of_names">No names remain.</string>
 
     <string name="name_choosing_settings">Name Choosing Settings</string>
-    <string name="num_people_chosen"># of names chosen:&#160;</string>
+    <string name="num_people_chosen"># of names chosen:</string>
     <string name="default_num_names_chosen">1</string>
+    <string name="settings_applied">Your settings have been applied.</string>
 </resources>
