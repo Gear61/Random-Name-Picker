@@ -22,7 +22,8 @@
             app:rd_backgroundAnimDuration="0"
             app:rd_backgroundColor="@android:color/transparent"
             app:rd_maxRippleRadius="match_view"
-            app:rd_rippleAnimDuration="150"
+            app:rd_rippleAnimDuration="@integer/default_anim_length"
+            app:rd_delayClick="untilRelease"
             app:rd_enable="true"/>
 
         <TextView
