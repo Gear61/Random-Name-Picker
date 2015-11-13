@@ -45,20 +45,18 @@ public class SettingsActivity extends StandardActivity {
     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id)
     {
         Intent intent = null;
-        switch (position)
-        {
+        switch (position) {
             case 0:
                 String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
-                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
-                sendIntent.setData(mailUri);
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
+                sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
             case 1:
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
-                if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0))
-                {
+                if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
                     Snackbar.make(parent, playStoreError, Snackbar.LENGTH_LONG).show();
                     return;
                 }
@@ -67,6 +65,7 @@ public class SettingsActivity extends StandardActivity {
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 

@@ -64,6 +64,7 @@ public class NameChoosingFragment extends Fragment {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Utils.hideKeyboard(getActivity());
                         applySettings();
                         Snackbar.make(parent, R.string.settings_applied, Snackbar.LENGTH_SHORT).show();
                     }

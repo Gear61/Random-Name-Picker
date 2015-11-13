@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:singleLine="true"
-            android:gravity="right"
+            android:gravity="center"
             android:inputType="number"
             android:layout_marginLeft="5dp"
             android:paddingTop="3dp"
