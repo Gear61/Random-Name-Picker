@@ -81,20 +81,16 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnClick(R.id.add_item)
-    public void addItem(View view)
-    {
+    public void addItem(View view) {
         String newList = newListInput.getText().toString().trim();
         newListInput.setText("");
-        if (newList.isEmpty())
-        {
+        if (newList.isEmpty()) {
             Snackbar.make(parent, blankListName, Snackbar.LENGTH_LONG).show();
         }
-        else if (PreferencesManager.get().getStudentLists().contains(newList))
-        {
+        else if (PreferencesManager.get().getStudentLists().contains(newList)) {
             Snackbar.make(parent, listDuplicate + " \"" + newList + "\".", Snackbar.LENGTH_LONG).show();
         }
-        else
-        {
+        else {
             Utils.hideKeyboard(this);
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
@@ -104,7 +100,7 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnItemLongClick(R.id.content_list)
-    public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, final long id)
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id)
     {
         new MaterialDialog.Builder(this)
                 .title(confirmDeletionTitle)
@@ -114,20 +110,7 @@ public class MainActivity extends StandardActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                        // Disable clicking item they're removing, so they don't spam it
-                        view.setEnabled(false);
-                        // Make item fade out smoothly as opposed to just vanishing
-                        view.animate().setDuration(250).alpha(0).withEndAction(new Runnable()
-                        {
-                            public void run()
-                            {
-                                nameListsAdapter.removeList(position);
-                                view.setAlpha(1);
-                                // Re-enable it after the row disappears
-                                view.setEnabled(true);
-                            }
-                        });
+                        nameListsAdapter.removeList(position);
                     }
                 })
                 .show();

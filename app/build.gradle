@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 230
         versionName "2.3.0"

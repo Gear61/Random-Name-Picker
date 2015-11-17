@@ -21,15 +21,13 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class NameListsAdapter extends BaseAdapter
-{
+public class NameListsAdapter extends BaseAdapter {
     private Context context;
     private List<String> content;
     private TextView noContent;
     private DataSource dataSource;
 
-    public NameListsAdapter(Context context, TextView noContent)
-    {
+    public NameListsAdapter(Context context, TextView noContent) {
         this.context = context;
         this.content = new ArrayList<>();
         this.content.addAll(PreferencesManager.get().getStudentLists());
@@ -38,22 +36,19 @@ public class NameListsAdapter extends BaseAdapter
         this.dataSource = new DataSource(context);
     }
 
-    public void setNoContent()
-    {
+    public void setNoContent() {
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addList(String itemName)
-    {
+    public void addList(String itemName) {
         content.add(itemName);
         setNoContent();
         PreferencesManager.get().setStudentsList(new HashSet<>(content));
         notifyDataSetChanged();
     }
 
-    public void removeList(int index)
-    {
+    public void removeList(int index) {
         dataSource.deleteList(content.get(index));
         content.remove(index);
         PreferencesManager.get().setStudentsList(new HashSet<>(content));
@@ -75,10 +70,8 @@ public class NameListsAdapter extends BaseAdapter
         return position;
     }
 
-    public static class ViewHolder
-    {
+    public static class ViewHolder {
         @Bind(R.id.name) TextView listName;
-
         public ViewHolder(View view)
         {
             ButterKnife.bind(this, view);
@@ -86,18 +79,16 @@ public class NameListsAdapter extends BaseAdapter
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(final int position, View view, ViewGroup parent)
+    public View getView(int position, View view, ViewGroup parent)
     {
-        final ViewHolder holder;
-        if (view == null)
-        {
+        ViewHolder holder;
+        if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.names_list_item, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
-        else
-        {
+        else {
             holder = (ViewHolder) view.getTag();
         }
         holder.listName.setText(content.get(position));

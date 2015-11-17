@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Activities.MainActivity;
-import com.randomappsinc.studentpicker.Adapters.NamesAdapter;
+import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
@@ -41,7 +41,7 @@ public class EditNameListFragment extends Fragment
     @BindString(R.string.no_names) String emptyList;
     @BindString(R.string.name_hint) String nameHint;
 
-    private NamesAdapter NamesAdapter;
+    private EditNameListAdapter EditNameListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,8 @@ public class EditNameListFragment extends Fragment
         String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(emptyList);
 
-        NamesAdapter = new NamesAdapter(getActivity(), noContent, listName);
-        namesList.setAdapter(NamesAdapter);
+        EditNameListAdapter = new EditNameListAdapter(getActivity(), noContent, listName);
+        namesList.setAdapter(EditNameListAdapter);
         return rootView;
     }
 
@@ -76,7 +76,7 @@ public class EditNameListFragment extends Fragment
         }
         else
         {
-            NamesAdapter.addStudent(newName);
+            EditNameListAdapter.addStudent(newName);
             EventBus.getDefault().post(new EditListEvent(EditListEvent.ADD, newName));
         }
     }
