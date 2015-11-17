@@ -7,15 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
+import com.randomappsinc.studentpicker.Models.NameViewHolder;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -70,28 +68,17 @@ public class EditNameListAdapter extends BaseAdapter
         return position;
     }
 
-    public static class ViewHolder {
-        @Bind(R.id.item_name) TextView name;
-        @Bind(R.id.action_icon) IconTextView delete;
-
-        public ViewHolder(View view)
-        {
-            ButterKnife.bind(this, view);
-        }
-    }
-
     // Renders the ListView item that the user has scrolled to or is about to scroll to
     public View getView(final int position, View view, ViewGroup parent) {
-        ViewHolder holder;
+        NameViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.list_item_with_action, parent, false);
-            holder = new ViewHolder(view);
-            holder.delete.setText(context.getString(R.string.delete_icon));
+            view = vi.inflate(R.layout.person_name_cell, parent, false);
+            holder = new NameViewHolder(view);
             view.setTag(holder);
         }
         else {
-            holder = (ViewHolder) view.getTag();
+            holder = (NameViewHolder) view.getTag();
         }
 
         holder.name.setText(content.get(position));
