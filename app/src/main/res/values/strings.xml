@@ -15,12 +15,15 @@
 
     <!-- Common -->
     <string name="add_description">Add item</string>
-    <string name="list">List:</string>
+    <string name="list">List:&#160;</string>
     <string name="choose">Choose</string>
     <array name="list_options">
         <item>@string/choose</item>
         <item>@string/edit</item>
     </array>
+    <string name="rename_list">Rename list</string>
+    <string name="delete_list">Delete list</string>
+    <string name="options_for">Options for:&#160;</string>
 
     <!-- Font Awesome icons -->
     <string name="delete_icon">{fa-minus-circle}</string>
