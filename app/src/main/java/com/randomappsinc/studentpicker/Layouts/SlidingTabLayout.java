@@ -21,8 +21,9 @@ import com.randomappsinc.studentpicker.R;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class SlidingTabLayout extends HorizontalScrollView
-{
+public class SlidingTabLayout extends HorizontalScrollView {
+    private static final int NUM_TABS = 2;
+
     /**
      * Allows complete control over the colors drawn in the tab layout. Set with
      * {@link #setCustomTabColorizer(TabColorizer)}.
@@ -138,12 +139,6 @@ public class SlidingTabLayout extends HorizontalScrollView
         }
     }
 
-    private int numTabs = 2;
-
-    public void setNumTabs(int numTabs) {
-        this.numTabs = numTabs;
-    }
-
     /**
      * Create a default view to be used for tabs. This is called if a custom tab view is not set via
      * {@link #setCustomTabView(int, int)}.
@@ -163,7 +158,7 @@ public class SlidingTabLayout extends HorizontalScrollView
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        textView.setWidth(size.x / numTabs);
+        textView.setWidth(size.x / NUM_TABS);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && !custom) {
             // If we're running on Honeycomb or newer, then we can use the Theme's
