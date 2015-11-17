@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
@@ -100,21 +103,55 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnItemLongClick(R.id.content_list)
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id)
-    {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        String title = getString(R.string.options_for) + nameListsAdapter.getItem(position);
+
+        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
+        IconDrawable editIcon = new IconDrawable(this, FontAwesomeIcons.fa_edit).colorRes(R.color.dark_grey);
+        IconDrawable deleteIcon = new IconDrawable(this, FontAwesomeIcons.fa_remove).colorRes(R.color.dark_grey);
+
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.rename_list)
+                .icon(editIcon).iconPaddingDp(5)
+                .backgroundColor(Color.WHITE)
+                .build());
+        adapter.add(new MaterialSimpleListItem.Builder(this)
+                .content(R.string.delete_list)
+                .icon(deleteIcon).iconPaddingDp(5)
+                .backgroundColor(Color.WHITE)
+                .build());
+
+        new MaterialDialog.Builder(this)
+                .title(title)
+                .adapter(adapter, new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                        dialog.dismiss();
+                        MaterialSimpleListItem item = adapter.getItem(which);
+                        if (item.getContent().equals(getString(R.string.rename_list))) {
+
+                        } else {
+                            showDeleteDialog(position);
+                        }
+                    }
+                })
+                .show();
+        return true;
+    }
+
+    public void showDeleteDialog(final int listPosition) {
         new MaterialDialog.Builder(this)
                 .title(confirmDeletionTitle)
-                .content(confirmDeletionMessage + " \"" + nameListsAdapter.getItem(position) + "\"?")
+                .content(confirmDeletionMessage + " \"" + nameListsAdapter.getItem(listPosition) + "\"?")
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.no)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        nameListsAdapter.removeList(position);
+                        nameListsAdapter.removeList(listPosition);
                     }
                 })
                 .show();
-        return true;
     }
 
     @Override
