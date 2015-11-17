@@ -8,19 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Models.NameViewHolder;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class NameChoosingAdapter extends BaseAdapter
-{
+public class NameChoosingAdapter extends BaseAdapter {
     private String outOfNames;
     private String noNames;
     private Context context;
@@ -29,8 +26,7 @@ public class NameChoosingAdapter extends BaseAdapter
     private TextView noContent;
     private DataSource dataSource;
 
-    public NameChoosingAdapter(Context context, TextView noContent, String listName)
-    {
+    public NameChoosingAdapter(Context context, TextView noContent, String listName) {
         this.outOfNames = context.getString(R.string.out_of_names);
         this.noNames = context.getString(R.string.no_names);
         this.context = context;
@@ -41,19 +37,15 @@ public class NameChoosingAdapter extends BaseAdapter
         setNoContent();
     }
 
-    public void addName(String name)
-    {
+    public void addName(String name) {
         content.add(name);
         notifyDataSetChanged();
         setNoContent();
     }
 
-    public void removeName(String name)
-    {
-        for (int i = 0; i < content.size(); i++)
-        {
-            if (content.get(i).equals(name))
-            {
+    public void removeName(String name) {
+        for (int i = 0; i < content.size(); i++) {
+            if (content.get(i).equals(name)) {
                 content.remove(i);
                 notifyDataSetChanged();
                 break;
@@ -62,8 +54,7 @@ public class NameChoosingAdapter extends BaseAdapter
         setNoContent();
     }
 
-    public void setNoContent()
-    {
+    public void setNoContent() {
         if (dataSource.getAllNamesInList(listName).isEmpty()) {
             noContent.setText(noNames);
         }
@@ -89,8 +80,7 @@ public class NameChoosingAdapter extends BaseAdapter
         return chosenNames.toString();
     }
 
-    public void removeNamesAtPositions(List<Integer> indexes)
-    {
+    public void removeNamesAtPositions(List<Integer> indexes) {
         Collections.sort(indexes);
         Collections.reverse(indexes);
         for (int index : indexes) {
@@ -100,8 +90,13 @@ public class NameChoosingAdapter extends BaseAdapter
         setNoContent();
     }
 
-    public void resetStudents()
-    {
+    public void removeNameAtPosition(int position) {
+        content.remove(position);
+        notifyDataSetChanged();
+        setNoContent();
+    }
+
+    public void resetStudents() {
         content.clear();
         content.addAll(this.dataSource.getAllNamesInList(listName));
         setNoContent();
@@ -122,32 +117,25 @@ public class NameChoosingAdapter extends BaseAdapter
         return position;
     }
 
-    public static class ViewHolder
-    {
-        @Bind(R.id.name) TextView itemName;
-
-        public ViewHolder(View view)
-        {
-            ButterKnife.bind(this, view);
-        }
-    }
-
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(int position, View view, ViewGroup parent)
-    {
-        final ViewHolder holder;
-        if (view == null)
-        {
+    public View getView(final int position, View view, ViewGroup parent) {
+        final NameViewHolder holder;
+        if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.names_list_item, parent, false);
-            holder = new ViewHolder(view);
+            view = vi.inflate(R.layout.person_name_cell, parent, false);
+            holder = new NameViewHolder(view);
             view.setTag(holder);
         }
-        else
-        {
-            holder = (ViewHolder) view.getTag();
+        else {
+            holder = (NameViewHolder) view.getTag();
         }
-        holder.itemName.setText(content.get(position));
+        holder.name.setText(content.get(position));
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                removeNameAtPosition(position);
+            }
+        });
         return view;
     }
 }

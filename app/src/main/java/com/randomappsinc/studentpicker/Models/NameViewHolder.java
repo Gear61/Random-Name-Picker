@@ -10,13 +10,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by alexanderchiou on 10/13/15.
+ * Created by alexanderchiou on 11/16/15.
  */
-public class FontAwesomeViewHolder {
-    @Bind(R.id.item_icon) public IconTextView itemIcon;
-    @Bind(R.id.person_name) public TextView itemName;
+public class NameViewHolder {
+    @Bind(R.id.person_name) public TextView name;
+    @Bind(R.id.delete_icon) public IconTextView delete;
 
-    public FontAwesomeViewHolder(View view) {
+    public NameViewHolder(View view) {
         ButterKnife.bind(this, view);
     }
 }
