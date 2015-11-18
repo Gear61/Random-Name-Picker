@@ -36,17 +36,15 @@ public class DataSource
         dbHelper.close();
     }
 
-    public List<String> getAllNamesInList(String listName)
-    {
+    public List<String> getAllNamesInList(String listName) {
         List<String> students = new ArrayList<>();
         open();
-        String[] columns = {MySQLiteHelper.COLUMN_STUDENT_NAME};
+        String[] columns = {MySQLiteHelper.COLUMN_PERSON_NAME};
         String selection = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
         String[] selectionArgs = {listName};
-        Cursor cursor = database.query(MySQLiteHelper.STUDENTS_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, columns, selection,
                 selectionArgs, null, null, null);
-        while (cursor.moveToNext())
-        {
+        while (cursor.moveToNext()) {
             students.add(cursor.getString(0));
         }
         cursor.close();
@@ -54,30 +52,37 @@ public class DataSource
         return students;
     }
 
-    public void addName(String name, String listName)
-    {
+    public void addName(String name, String listName) {
         open();
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
-        values.put(MySQLiteHelper.COLUMN_STUDENT_NAME, name);
-        database.insert(MySQLiteHelper.STUDENTS_TABLE_NAME, null, values);
+        values.put(MySQLiteHelper.COLUMN_PERSON_NAME, name);
+        database.insert(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, null, values);
         close();
     }
 
-    public void removeName(String name, String listName)
-    {
+    public void removeName(String name, String listName) {
         open();
         String whereArgs[] = {name, listName};
-        database.delete(MySQLiteHelper.STUDENTS_TABLE_NAME, MySQLiteHelper.COLUMN_STUDENT_NAME + " = ? AND " +
-                        MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
+        database.delete(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, MySQLiteHelper.COLUMN_PERSON_NAME + " = ? AND " +
+                MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();
     }
 
-    public void deleteList(String listName)
-    {
+    public void deleteList(String listName) {
         open();
         String whereArgs[] = {listName};
-        database.delete(MySQLiteHelper.STUDENTS_TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
+        database.delete(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
+        close();
+    }
+
+    public void renameList(String oldListName, String newListName) {
+        open();
+        ContentValues newValues = new ContentValues();
+        newValues.put(MySQLiteHelper.COLUMN_LIST_NAME, newListName);
+        String[] whereArgs = new String[]{oldListName};
+        String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + "=?";
+        database.update(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
         close();
     }
 }

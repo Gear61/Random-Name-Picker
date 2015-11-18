@@ -23,8 +23,7 @@ public class ListActivity extends StandardActivity
     @BindString(R.string.list) String list;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

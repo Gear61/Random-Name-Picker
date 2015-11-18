@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
 /**
@@ -19,6 +20,7 @@ public class StandardActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
+        Utils.hideKeyboard(this);
         super.finish();
         overridePendingTransition(R.anim.slide_right_out, R.anim.slide_right_in);
     }
