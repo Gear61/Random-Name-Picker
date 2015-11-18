@@ -12,7 +12,6 @@ import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -30,7 +29,7 @@ public class NameListsAdapter extends BaseAdapter {
     public NameListsAdapter(Context context, TextView noContent) {
         this.context = context;
         this.content = new ArrayList<>();
-        this.content.addAll(PreferencesManager.get().getStudentLists());
+        this.content.addAll(PreferencesManager.get().getNameLists());
         this.noContent = noContent;
         setNoContent();
         this.dataSource = new DataSource(context);
@@ -44,16 +43,24 @@ public class NameListsAdapter extends BaseAdapter {
     public void addList(String itemName) {
         content.add(itemName);
         setNoContent();
-        PreferencesManager.get().setStudentsList(new HashSet<>(content));
+        PreferencesManager.get().addNameList(itemName);
         notifyDataSetChanged();
     }
 
     public void removeList(int index) {
         dataSource.deleteList(content.get(index));
+        PreferencesManager.get().removeNameList(content.get(index));
         content.remove(index);
-        PreferencesManager.get().setStudentsList(new HashSet<>(content));
         notifyDataSetChanged();
         setNoContent();
+    }
+
+    public void renameList(int index, String newListName) {
+        String oldListName = content.get(index);
+        dataSource.renameList(oldListName, newListName);
+        PreferencesManager.get().renameList(oldListName, newListName);
+        content.set(index, newListName);
+        notifyDataSetChanged();
     }
 
     public int getCount()
@@ -79,8 +86,7 @@ public class NameListsAdapter extends BaseAdapter {
     }
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
-    public View getView(int position, View view, ViewGroup parent)
-    {
+    public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

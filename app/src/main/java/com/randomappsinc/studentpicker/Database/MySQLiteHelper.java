@@ -11,21 +11,21 @@ import android.util.Log;
 public class MySQLiteHelper extends SQLiteOpenHelper
 {
     // Table name
-    public static final String STUDENTS_TABLE_NAME = "Students";
+    public static final String PERSON_NAMES_TABLE_NAME = "Students";
 
     // COLUMNS
     public static final String COLUMN_LIST_NAME = "list_name";
-    public static final String COLUMN_STUDENT_NAME = "student_name";
+    public static final String COLUMN_PERSON_NAME = "student_name";
 
     // Some random things fed to a super's method
     private static final String DATABASE_NAME = "studentpicker.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statements
-    static final String STUDENTS_CREATE = "CREATE TABLE IF NOT EXISTS " + STUDENTS_TABLE_NAME + "(" + COLUMN_LIST_NAME
-            + " TEXT, " + COLUMN_STUDENT_NAME + " TEXT);";
+    static final String STUDENTS_CREATE = "CREATE TABLE IF NOT EXISTS " + PERSON_NAMES_TABLE_NAME + "(" + COLUMN_LIST_NAME
+            + " TEXT, " + COLUMN_PERSON_NAME + " TEXT);";
 
-    static final String DATABASE_DROP = "DROP TABLE " + STUDENTS_TABLE_NAME;
+    static final String DATABASE_DROP = "DROP TABLE " + PERSON_NAMES_TABLE_NAME;
 
     public MySQLiteHelper(Context context)
     {

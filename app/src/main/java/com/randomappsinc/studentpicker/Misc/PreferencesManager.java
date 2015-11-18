@@ -22,39 +22,53 @@ public class PreferencesManager
     private static final String FIRST_TIME_KEY = "firstTime";
     private static PreferencesManager instance;
 
-    public static PreferencesManager get()
-    {
-        if (instance == null)
-        {
+    public static PreferencesManager get() {
+        if (instance == null) {
             instance = getSync();
         }
         return instance;
     }
 
-    private static synchronized PreferencesManager getSync()
-    {
-        if (instance == null)
-        {
+    private static synchronized PreferencesManager getSync() {
+        if (instance == null) {
             instance = new PreferencesManager();
         }
         return instance;
     }
 
-    private PreferencesManager()
-    {
+    private PreferencesManager() {
         Context context = Application.get().getApplicationContext();
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
-    public Set<String> getStudentLists()
-    {
+    public Set<String> getNameLists() {
         return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<String>());
     }
 
-    public void setStudentsList(Set<String> studentLists)
-    {
+    private void setNameLists(Set<String> studentLists) {
         prefs.edit().remove(STUDENT_LISTS_KEY).apply();
         prefs.edit().putStringSet(STUDENT_LISTS_KEY, studentLists).apply();
+    }
+
+    public void addNameList(String newList) {
+        Set<String> currentLists = getNameLists();
+        currentLists.add(newList);
+        setNameLists(currentLists);
+    }
+
+    public void removeNameList(String newList) {
+        Set<String> currentLists = getNameLists();
+        currentLists.remove(newList);
+        setNameLists(currentLists);
+    }
+
+    public void renameList(String oldName, String newName) {
+        removeNameList(oldName);
+        addNameList(newName);
+    }
+
+    public boolean doesListExist(String listName) {
+        return getNameLists().contains(listName);
     }
 
     public boolean getFirstTimeUser()
@@ -62,8 +76,7 @@ public class PreferencesManager
         return prefs.getBoolean(FIRST_TIME_KEY, true);
     }
 
-    public void setFirstTimeUser(boolean firstTimeUser)
-    {
+    public void setFirstTimeUser(boolean firstTimeUser) {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 }

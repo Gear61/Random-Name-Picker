@@ -1,8 +1,10 @@
 package com.randomappsinc.studentpicker.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -47,14 +49,17 @@ public class MainActivity extends StandardActivity {
     @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
     @BindString(R.string.blank_list_name) String blankListName;
     @BindString(R.string.list_duplicate) String listDuplicate;
+    @BindString(R.string.new_list_name) String newListName;
 
     private NameListsAdapter nameListsAdapter;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lists_with_add_content);
         ButterKnife.bind(this);
+        this.activity = this;
 
         setTitle(label);
         newListInput.setHint(addListHint);
@@ -90,7 +95,7 @@ public class MainActivity extends StandardActivity {
         if (newList.isEmpty()) {
             Snackbar.make(parent, blankListName, Snackbar.LENGTH_LONG).show();
         }
-        else if (PreferencesManager.get().getStudentLists().contains(newList)) {
+        else if (PreferencesManager.get().getNameLists().contains(newList)) {
             Snackbar.make(parent, listDuplicate + " \"" + newList + "\".", Snackbar.LENGTH_LONG).show();
         }
         else {
@@ -129,7 +134,7 @@ public class MainActivity extends StandardActivity {
                         dialog.dismiss();
                         MaterialSimpleListItem item = adapter.getItem(which);
                         if (item.getContent().equals(getString(R.string.rename_list))) {
-
+                            showRenameDialog(position);
                         } else {
                             showDeleteDialog(position);
                         }
@@ -139,7 +144,43 @@ public class MainActivity extends StandardActivity {
         return true;
     }
 
-    public void showDeleteDialog(final int listPosition) {
+    public void showRenameDialog(final int listPosition) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.rename_list)
+                .input(newListName, "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
+                                PreferencesManager.get().doesListExist(input.toString()));
+                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
+                    }
+                })
+                .alwaysCallInputCallback()
+                .negativeText(android.R.string.no)
+                .onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        jankyCloseKeyboard();
+                        if (which == DialogAction.POSITIVE) {
+                            String newListName = dialog.getInputEditText().getText().toString();
+                            nameListsAdapter.renameList(listPosition, newListName);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void jankyCloseKeyboard() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.hideKeyboard(activity);
+            }
+        }, 200);
+    }
+
+    private void showDeleteDialog(final int listPosition) {
         new MaterialDialog.Builder(this)
                 .title(confirmDeletionTitle)
                 .content(confirmDeletionMessage + " \"" + nameListsAdapter.getItem(listPosition) + "\"?")

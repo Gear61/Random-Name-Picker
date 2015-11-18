@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
@@ -107,9 +106,7 @@ public class EditNameListFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == android.R.id.home)
-        {
-            Utils.hideKeyboard(getActivity());
+        if (item.getItemId() == android.R.id.home) {
             getActivity().finish();
             return true;
         }

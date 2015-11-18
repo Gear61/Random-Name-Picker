@@ -117,10 +117,8 @@ public class NameChoosingFragment extends Fragment {
     }
 
     @OnClick(R.id.choose)
-    public void choose(View view)
-    {
-        if (nameChoosingAdapter.getCount() != 0)
-        {
+    public void choose(View view) {
+        if (nameChoosingAdapter.getCount() != 0) {
             List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesChosen, nameChoosingAdapter.getCount() - 1);
             String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;

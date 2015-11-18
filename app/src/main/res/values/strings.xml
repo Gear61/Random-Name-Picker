@@ -22,6 +22,7 @@
         <item>@string/edit</item>
     </array>
     <string name="rename_list">Rename list</string>
+    <string name="new_list_name">New list name</string>
     <string name="delete_list">Delete list</string>
     <string name="options_for">Options for:&#160;</string>
 
