@@ -3,7 +3,6 @@ package com.randomappsinc.studentpicker.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -23,6 +22,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
@@ -204,21 +204,22 @@ public class MainActivity extends StandardActivity {
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        Intent intent = new Intent();
-        intent.setType("file/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(this, FilePickerActivity.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Uri selectedTextFile = data.getData();
-            if (!selectedTextFile.toString().endsWith(".txt")) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+            if (!filePath.endsWith(".txt")) {
                 Utils.showSnackbar(parent, getString(R.string.invalid_file));
+                System.out.println("NARNIA: " + filePath);
             }
             else {
                 Intent intent = new Intent(this, ImportFileActivity.class);
-                intent.putExtra(ImportFileActivity.FILE_PATH_KEY, selectedTextFile.toString());
+                intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
                 startActivity(intent);
             }
         }
