@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.Activities;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,10 +8,6 @@ import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Scanner;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -39,14 +34,10 @@ public class ImportFileActivity extends StandardActivity {
 
         String filePath = getIntent().getStringExtra(FILE_PATH_KEY);
         listName.setText(Utils.getFileName(filePath));
-        Uri textFilePath = Uri.parse(filePath);
         try {
-            InputStream stream = getContentResolver().openInputStream(textFilePath);
-            Scanner scanner = new java.util.Scanner(stream).useDelimiter("\\A");
-            String fileContents = scanner.hasNext() ? scanner.next() : "";
-            names.setText(fileContents);
+            names.setText(Utils.getStringFromFile(filePath));
         }
-        catch (FileNotFoundException e) {
+        catch (Exception e) {
             Utils.showSnackbar(parent, getString(R.string.load_file_fail));
         }
     }
