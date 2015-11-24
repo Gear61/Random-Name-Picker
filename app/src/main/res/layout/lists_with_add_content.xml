@@ -1,6 +1,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/coordinator_layout"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,15 +21,16 @@
                 android:layout_gravity="right|bottom"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                card_view:cardBackgroundColor="@color/light_gray"
+                card_view:contentPadding="5dp"
+                card_view:cardBackgroundColor="@color/app_teal"
                 card_view:cardCornerRadius="3dp"
                 card_view:cardElevation="2dp">
 
                 <ImageView
+                    android:id="@+id/plus_icon"
                     android:contentDescription="@string/add_description"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/plus"/>
+                    android:layout_height="match_parent"/>
             </android.support.v7.widget.CardView>
 
             <EditText
@@ -49,7 +50,7 @@
                 android:layout_marginBottom="1dp"
                 android:layout_height="2dp"
                 android:layout_gravity="bottom"
-                android:background="@color/black"
+                android:background="@color/app_teal"
                 android:layout_marginRight="53dp">
             </View>
         </FrameLayout>

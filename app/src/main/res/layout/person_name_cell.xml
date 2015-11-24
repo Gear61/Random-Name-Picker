@@ -2,6 +2,7 @@
 <com.balysv.materialripple.MaterialRippleLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:mrl_rippleColor="@color/app_teal"
     app:mrl_rippleInAdapter="true"
     app:mrl_rippleDuration="250"
     android:padding="5dp"

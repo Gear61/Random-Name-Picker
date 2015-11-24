@@ -6,13 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,11 +39,9 @@ public class MainActivity extends StandardActivity {
     @Bind(R.id.item_name_input) EditText newListInput;
     @Bind(R.id.content_list) ListView lists;
     @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
+    @Bind(R.id.parent) View parent;
+    @Bind(R.id.plus_icon) ImageView plus;
 
-    @BindString(R.string.name_lists_label) String label;
-    @BindString(R.string.no_lists_message) String noListsMessage;
-    @BindString(R.string.add_list_hint) String addListHint;
     @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
     @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
     @BindString(R.string.blank_list_name) String blankListName;
@@ -61,9 +58,10 @@ public class MainActivity extends StandardActivity {
         ButterKnife.bind(this);
         this.activity = this;
 
-        setTitle(label);
-        newListInput.setHint(addListHint);
-        noContent.setText(noListsMessage);
+        setTitle(R.string.name_lists_label);
+        newListInput.setHint(R.string.add_list_hint);
+        noContent.setText(R.string.no_lists_message);
+        plus.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
@@ -93,13 +91,13 @@ public class MainActivity extends StandardActivity {
         String newList = newListInput.getText().toString().trim();
         newListInput.setText("");
         if (newList.isEmpty()) {
-            Snackbar.make(parent, blankListName, Snackbar.LENGTH_LONG).show();
+            Utils.showSnackbar(parent, getString(R.string.blank_list_name));
         }
         else if (PreferencesManager.get().getNameLists().contains(newList)) {
-            Snackbar.make(parent, listDuplicate + " \"" + newList + "\".", Snackbar.LENGTH_LONG).show();
+            String dupeMessage = listDuplicate + " \"" + newList + "\".";
+            Utils.showSnackbar(parent, dupeMessage);
         }
         else {
-            Utils.hideKeyboard(this);
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);

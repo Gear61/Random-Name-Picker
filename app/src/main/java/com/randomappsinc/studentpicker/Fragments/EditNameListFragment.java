@@ -1,8 +1,6 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -12,16 +10,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -29,16 +30,12 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class EditNameListFragment extends Fragment
-{
+public class EditNameListFragment extends Fragment {
     @Bind(R.id.item_name_input) EditText newNameInput;
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.content_list) ListView namesList;
-    @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
-
-    @BindString(R.string.blank_name) String blankName;
-    @BindString(R.string.no_names) String emptyList;
-    @BindString(R.string.name_hint) String nameHint;
+    @Bind(R.id.parent) View parent;
+    @Bind(R.id.plus_icon) ImageView plus;
 
     private EditNameListAdapter EditNameListAdapter;
 
@@ -52,12 +49,13 @@ public class EditNameListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         ButterKnife.bind(this, rootView);
-        newNameInput.setHint(nameHint);
+        newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        plus.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_plus).colorRes(R.color.white));
 
         Bundle bundle = getArguments();
         String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
-        noContent.setText(emptyList);
+        noContent.setText(R.string.no_names);
 
         EditNameListAdapter = new EditNameListAdapter(getActivity(), noContent, listName);
         namesList.setAdapter(EditNameListAdapter);
@@ -65,16 +63,13 @@ public class EditNameListFragment extends Fragment
     }
 
     @OnClick(R.id.add_item)
-    public void addItem(View view)
-    {
+    public void addItem(View view) {
         String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
-        if (newName.isEmpty())
-        {
-            Snackbar.make(parent, blankName, Snackbar.LENGTH_LONG).show();
+        if (newName.isEmpty()) {
+            Utils.showSnackbar(parent, getString(R.string.blank_name));
         }
-        else
-        {
+        else {
             EditNameListAdapter.addStudent(newName);
             EventBus.getDefault().post(new EditListEvent(EditListEvent.ADD, newName));
         }
@@ -83,10 +78,8 @@ public class EditNameListFragment extends Fragment
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         // If this fragment is becoming visible
-        if (isVisibleToUser)
-        {
+        if (isVisibleToUser) {
             getActivity().invalidateOptionsMenu();
         }
     }
