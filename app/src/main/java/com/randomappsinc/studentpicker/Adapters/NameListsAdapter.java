@@ -35,6 +35,12 @@ public class NameListsAdapter extends BaseAdapter {
         this.dataSource = new DataSource(context);
     }
 
+    public void refreshList() {
+        this.content.clear();
+        this.content.addAll(PreferencesManager.get().getNameLists());
+        notifyDataSetChanged();
+    }
+
     public void setNoContent() {
         int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);

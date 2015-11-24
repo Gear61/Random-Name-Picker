@@ -20,7 +20,7 @@
             android:layout_marginLeft="10dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:textColor="@color/dark_grey"
+            android:textColor="@color/dark_gray"
             android:textSize="22sp"
             android:layout_gravity="center_vertical"/>
 
@@ -31,7 +31,7 @@
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:textColor="@color/dark_grey"
+            android:textColor="@color/dark_gray"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
