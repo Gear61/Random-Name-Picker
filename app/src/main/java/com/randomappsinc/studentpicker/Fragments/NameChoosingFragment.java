@@ -2,7 +2,6 @@ package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,7 +65,7 @@ public class NameChoosingFragment extends Fragment {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         Utils.hideKeyboard(getActivity());
                         applySettings();
-                        Snackbar.make(parent, R.string.settings_applied, Snackbar.LENGTH_SHORT).show();
+                        Utils.showSnackbar(parent, getString(R.string.settings_applied));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -173,10 +172,8 @@ public class NameChoosingFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.settings:
                 settingsDialog.show();
                 return true;
