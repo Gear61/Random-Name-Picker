@@ -38,6 +38,7 @@ public class NameListsAdapter extends BaseAdapter {
     public void refreshList() {
         this.content.clear();
         this.content.addAll(PreferencesManager.get().getNameLists());
+        setNoContent();
         notifyDataSetChanged();
     }
 
