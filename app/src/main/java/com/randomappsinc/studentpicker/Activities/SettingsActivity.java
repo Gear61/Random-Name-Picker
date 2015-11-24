@@ -25,7 +25,7 @@ public class SettingsActivity extends StandardActivity {
     public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
-    @Bind(R.id.coordinator_layout) CoordinatorLayout parent;
+    @Bind(R.id.parent) CoordinatorLayout parent;
     @Bind(R.id.settings_options) ListView settingsOptions;
     @BindString(R.string.play_store_error) String playStoreError;
     @BindString(R.string.feedback_subject) String feedbackSubject;

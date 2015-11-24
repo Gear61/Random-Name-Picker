@@ -1,6 +1,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/coordinator_layout"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,17 +14,9 @@
 
         <com.rey.material.widget.Button
             android:id="@+id/choose"
-            android:background="@drawable/custom_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/choose"
-            app:rd_rippleType="touch"
-            app:rd_backgroundAnimDuration="0"
-            app:rd_backgroundColor="@android:color/transparent"
-            app:rd_maxRippleRadius="match_view"
-            app:rd_rippleAnimDuration="@integer/shorter_anim_length"
-            app:rd_delayClick="untilRelease"
-            app:rd_enable="true"/>
+            style="@style/ripple_button_style"
+            app:rd_style="@style/button_ripple_attributes" />
 
         <TextView
             android:id="@+id/no_content"

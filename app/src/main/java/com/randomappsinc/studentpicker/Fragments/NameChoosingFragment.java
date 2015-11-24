@@ -38,7 +38,7 @@ import de.greenrobot.event.EventBus;
 public class NameChoosingFragment extends Fragment {
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.names_list) ListView namesList;
-    @Bind(R.id.coordinator_layout) View parent;
+    @Bind(R.id.parent) View parent;
 
     @BindString(R.string.name_chosen) String nameChosenTitle;
     @BindString(R.string.names_chosen) String namesChosenTitle;

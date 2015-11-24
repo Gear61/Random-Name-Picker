@@ -14,6 +14,7 @@ import com.randomappsinc.studentpicker.R;
 public class StandardActivity extends AppCompatActivity {
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
+        Utils.hideKeyboard(this);
         super.startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
     }
