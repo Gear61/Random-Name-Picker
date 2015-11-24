@@ -70,4 +70,10 @@ public class Utils {
         tv.setTextColor(Color.WHITE);
         snackbar.show();
     }
+
+    public static String getFileName(String filePath) {
+        String[] pieces = filePath.split("/");
+        String fileName = pieces[pieces.length - 1];
+        return fileName.replace(".txt", "");
+    }
 }

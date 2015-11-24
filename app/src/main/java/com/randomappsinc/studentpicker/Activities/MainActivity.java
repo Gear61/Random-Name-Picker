@@ -3,9 +3,11 @@ package com.randomappsinc.studentpicker.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,12 +41,12 @@ public class MainActivity extends StandardActivity {
     @Bind(R.id.item_name_input) EditText newListInput;
     @Bind(R.id.content_list) ListView lists;
     @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.parent) View parent;
+    @Bind(R.id.coordinator_layout) View parent;
     @Bind(R.id.plus_icon) ImageView plus;
+    @Bind(R.id.import_text_file) FloatingActionButton importFile;
 
     @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
     @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
-    @BindString(R.string.blank_list_name) String blankListName;
     @BindString(R.string.list_duplicate) String listDuplicate;
     @BindString(R.string.new_list_name) String newListName;
 
@@ -54,7 +56,7 @@ public class MainActivity extends StandardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lists_with_add_content);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         this.activity = this;
 
@@ -62,6 +64,7 @@ public class MainActivity extends StandardActivity {
         newListInput.setHint(R.string.add_list_hint);
         noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
+        importFile.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_upload).colorRes(R.color.white));
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
@@ -74,6 +77,12 @@ public class MainActivity extends StandardActivity {
                     .positiveText(android.R.string.yes)
                     .show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        nameListsAdapter.refreshList();
     }
 
     @OnItemClick(R.id.content_list)
@@ -110,8 +119,8 @@ public class MainActivity extends StandardActivity {
         String title = getString(R.string.options_for) + nameListsAdapter.getItem(position);
 
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
-        IconDrawable editIcon = new IconDrawable(this, FontAwesomeIcons.fa_edit).colorRes(R.color.dark_grey);
-        IconDrawable deleteIcon = new IconDrawable(this, FontAwesomeIcons.fa_remove).colorRes(R.color.dark_grey);
+        IconDrawable editIcon = new IconDrawable(this, FontAwesomeIcons.fa_edit).colorRes(R.color.dark_gray);
+        IconDrawable deleteIcon = new IconDrawable(this, FontAwesomeIcons.fa_remove).colorRes(R.color.dark_gray);
 
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.rename_list)
@@ -191,6 +200,28 @@ public class MainActivity extends StandardActivity {
                     }
                 })
                 .show();
+    }
+
+    @OnClick(R.id.import_text_file)
+    public void importTextFile() {
+        Intent intent = new Intent();
+        intent.setType("file/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Uri selectedTextFile = data.getData();
+            if (!selectedTextFile.toString().endsWith(".txt")) {
+                Utils.showSnackbar(parent, getString(R.string.invalid_file));
+            }
+            else {
+                Intent intent = new Intent(this, ImportFileActivity.class);
+                intent.putExtra(ImportFileActivity.FILE_PATH_KEY, selectedTextFile.toString());
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

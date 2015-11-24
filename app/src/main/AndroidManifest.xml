@@ -27,5 +27,11 @@
             android:name=".Activities.ListActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+        <activity
+            android:label="@string/import_name_list"
+            android:windowSoftInputMode="adjustResize"
+            android:name=".Activities.ImportFileActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>
