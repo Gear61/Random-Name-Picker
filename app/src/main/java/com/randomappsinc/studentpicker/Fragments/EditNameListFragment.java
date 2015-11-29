@@ -9,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +18,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
+import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
@@ -31,7 +32,7 @@ import de.greenrobot.event.EventBus;
  * Created by alexanderchiou on 10/18/15.
  */
 public class EditNameListFragment extends Fragment {
-    @Bind(R.id.item_name_input) EditText newNameInput;
+    @Bind(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.content_list) ListView namesList;
     @Bind(R.id.parent) View parent;
@@ -51,6 +52,7 @@ public class EditNameListFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_plus).colorRes(R.color.white));
 
         Bundle bundle = getArguments();
@@ -97,8 +99,7 @@ public class EditNameListFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             getActivity().finish();
             return true;

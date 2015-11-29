@@ -1,6 +1,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parent"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,48 +12,40 @@
         android:padding="10dp">
 
         <FrameLayout
-            android:paddingBottom="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp">
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/add_item"
-                android:layout_gravity="right|bottom"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
                 card_view:contentPadding="5dp"
+                card_view:cardUseCompatPadding="true"
                 card_view:cardBackgroundColor="@color/app_teal"
                 card_view:cardCornerRadius="3dp"
                 card_view:cardElevation="2dp">
 
                 <ImageView
                     android:id="@+id/plus_icon"
-                    android:contentDescription="@string/add_description"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
             </android.support.v7.widget.CardView>
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/item_name_input"
-                android:layout_marginBottom="6dp"
-                android:textSize="22dp"
-                android:background="@android:color/transparent"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="53dp"
+                android:completionThreshold="1"
+                android:padding="8dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/dark_gray"
+                android:textSize="18dp"
+                android:background="@drawable/add_item_border"
+                android:layout_marginRight="55dp"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_marginBottom="1dp"
-                android:layout_height="2dp"
-                android:layout_gravity="bottom"
-                android:background="@color/app_teal"
-                android:layout_marginRight="53dp">
-            </View>
+                android:layout_height="44dp"/>
         </FrameLayout>
 
         <TextView
