@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.Layouts;
+package com.randomappsinc.studentpicker.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.randomappsinc.studentpicker.Adapters.ListTabsAdapter;
-import com.randomappsinc.studentpicker.Layouts.SlidingTabLayout;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Views.SlidingTabLayout;
 
 import butterknife.Bind;
 import butterknife.BindString;

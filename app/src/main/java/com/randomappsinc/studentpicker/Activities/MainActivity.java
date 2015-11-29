@@ -215,7 +215,6 @@ public class MainActivity extends StandardActivity {
             String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             if (!filePath.endsWith(".txt")) {
                 Utils.showSnackbar(parent, getString(R.string.invalid_file));
-                System.out.println("NARNIA: " + filePath);
             }
             else {
                 Intent intent = new Intent(this, ImportFileActivity.class);

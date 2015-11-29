@@ -11,28 +11,26 @@
 
     <LinearLayout
         android:orientation="horizontal"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/item_icon"
+            android:id="@+id/settings_icon"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:textColor="@color/dark_gray"
-            android:textSize="22sp"
+            android:textSize="22dp"
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:id="@+id/person_name"
+            android:id="@+id/settings_option"
+            android:textSize="18dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:textColor="@color/dark_gray"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
 </com.balysv.materialripple.MaterialRippleLayout>

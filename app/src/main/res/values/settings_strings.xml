@@ -16,4 +16,9 @@
     <string name="email_icon">{fa-envelope}</string>
     <string name="rate_icon">{fa-thumbs-up}</string>
     <string name="github_icon">{fa-github}</string>
+    <array name="settings_icons">
+        <item>@string/email_icon</item>
+        <item>@string/rate_icon</item>
+        <item>@string/github_icon</item>
+    </array>
 </resources>

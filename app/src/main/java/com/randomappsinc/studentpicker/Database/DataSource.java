@@ -12,32 +12,28 @@ import java.util.List;
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class DataSource
-{
+public class DataSource {
     // Database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
 
     // Constructor
-    public DataSource(Context context)
-    {
+    public DataSource(Context context) {
         dbHelper = new MySQLiteHelper(context);
     }
 
     // Open connection to database
-    public void open() throws SQLException
-    {
+    public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
     // Terminate connection to database
-    public void close()
-    {
+    public void close() {
         dbHelper.close();
     }
 
     public List<String> getAllNamesInList(String listName) {
-        List<String> students = new ArrayList<>();
+        List<String> names = new ArrayList<>();
         open();
         String[] columns = {MySQLiteHelper.COLUMN_PERSON_NAME};
         String selection = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
@@ -45,11 +41,11 @@ public class DataSource
         Cursor cursor = database.query(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, columns, selection,
                 selectionArgs, null, null, null);
         while (cursor.moveToNext()) {
-            students.add(cursor.getString(0));
+            names.add(cursor.getString(0));
         }
         cursor.close();
         close();
-        return students;
+        return names;
     }
 
     public void addName(String name, String listName) {
@@ -84,5 +80,20 @@ public class DataSource
         String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + "=?";
         database.update(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
         close();
+    }
+
+    public List<String> getMatchingNames(String prefix) {
+        List<String> matchingNames = new ArrayList<>();
+        open();
+        Cursor cursor = database.rawQuery("SELECT DISTINCT " + MySQLiteHelper.COLUMN_PERSON_NAME +
+                " FROM " + MySQLiteHelper.PERSON_NAMES_TABLE_NAME + " WHERE " +
+                MySQLiteHelper.COLUMN_PERSON_NAME + " like ? COLLATE NOCASE " +
+                "ORDER BY " + MySQLiteHelper.COLUMN_PERSON_NAME + " ASC", new String[] {prefix + "%"});
+        while (cursor.moveToNext()) {
+            matchingNames.add(cursor.getString(0));
+        }
+        cursor.close();
+        close();
+        return matchingNames;
     }
 }
