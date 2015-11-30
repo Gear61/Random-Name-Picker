@@ -35,7 +35,7 @@ public class ImportFileActivity extends StandardActivity {
         String filePath = getIntent().getStringExtra(FILE_PATH_KEY);
         listName.setText(Utils.getFileName(filePath));
         try {
-            names.setText(Utils.getStringFromFile(filePath));
+            names.setText(Utils.getNamesFromFile(filePath));
         }
         catch (Exception e) {
             Utils.showSnackbar(parent, getString(R.string.load_file_fail));
