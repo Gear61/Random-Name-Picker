@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.R;
@@ -24,19 +23,6 @@ import java.util.List;
  * Created by alexanderchiou on 7/20/15.
  */
 public class Utils {
-    public static View getViewByPosition(int pos, ListView listView) {
-        final int firstListItemPosition = listView.getFirstVisiblePosition();
-        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
-
-        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-            return listView.getAdapter().getView(pos, null, listView);
-        }
-        else {
-            final int childIndex = pos - firstListItemPosition;
-            return listView.getChildAt(childIndex);
-        }
-    }
-
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         // Find the currently focused view, so we can grab the correct window token from it.
@@ -93,11 +79,19 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String getStringFromFile (String filePath) throws Exception{
-        File fl = new File(filePath);
-        FileInputStream fin = new FileInputStream(fl);
-        String ret = convertStreamToString(fin);
-        fin.close();
-        return ret;
+    public static String getNamesFromFile(String filePath) throws Exception {
+        File file = new File(filePath);
+        FileInputStream fileInputStream = new FileInputStream(file);
+        String contents = convertStreamToString(fileInputStream);
+        String[] allNames = contents.split("\\r?\\n");
+        StringBuilder namesString = new StringBuilder();
+        for (int i = 0; i < allNames.length; i++) {
+            if (i != 0) {
+                namesString.append("\n");
+            }
+            namesString.append(allNames[i]);
+        }
+        fileInputStream.close();
+        return namesString.toString();
     }
 }
