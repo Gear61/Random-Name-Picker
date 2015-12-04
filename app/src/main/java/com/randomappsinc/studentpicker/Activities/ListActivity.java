@@ -20,7 +20,6 @@ public class ListActivity extends StandardActivity
 {
     @Bind(R.id.viewpager) ViewPager mViewPager;
     @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
-    @BindString(R.string.list) String list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class ListActivity extends StandardActivity
         ButterKnife.bind(this);
         Intent intent = getIntent();
         String listName = intent.getStringExtra(MainActivity.LIST_NAME_KEY);
-        setTitle(list + listName);
+        setTitle(listName);
 
         ListTabsAdapter profileTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);
         mViewPager.setAdapter(profileTabsAdapter);

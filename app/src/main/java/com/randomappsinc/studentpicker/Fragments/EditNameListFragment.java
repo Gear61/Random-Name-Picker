@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
+import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
@@ -39,6 +41,8 @@ public class EditNameListFragment extends Fragment {
     @Bind(R.id.plus_icon) ImageView plus;
 
     private EditNameListAdapter EditNameListAdapter;
+    private DataSource dataSource;
+    private String listName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,13 +54,15 @@ public class EditNameListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         ButterKnife.bind(this, rootView);
+        dataSource = new DataSource(getActivity());
+
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_plus).colorRes(R.color.white));
 
         Bundle bundle = getArguments();
-        String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
+        listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
         EditNameListAdapter = new EditNameListAdapter(getActivity(), noContent, listName);
@@ -94,15 +100,37 @@ public class EditNameListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.blank_menu, menu);
+        inflater.inflate(R.menu.edit_name_list_menu, menu);
+        menu.findItem(R.id.import_names).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_upload)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            getActivity().finish();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.import_names:
+                String[] importCandidates = dataSource.getAllNameLists(listName);
+                if (importCandidates.length == 0) {
+                    Utils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
+                }
+                else {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.choose_list_to_import)
+                            .items(dataSource.getAllNameLists(listName))
+                            .itemsCallback(new MaterialDialog.ListCallback() {
+                                @Override
+                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                }
+                            })
+                            .show();
+                }
+                return true;
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
