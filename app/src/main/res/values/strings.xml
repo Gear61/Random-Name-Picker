@@ -9,13 +9,8 @@
     <string name="blank_list_name">List names cannot be blank.</string>
     <string name="list_duplicate">You already have a name list named</string>
 
-    <string name="edit">Edit</string>
-    <string name="blank_name">Names cannot be blank.</string>
-    <string name="name_hint">Name</string>
-
     <!-- Common -->
     <string name="add_description">Add item</string>
-    <string name="list">List:&#160;</string>
     <string name="choose">Choose</string>
     <array name="list_options">
         <item>@string/choose</item>

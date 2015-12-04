@@ -96,4 +96,19 @@ public class DataSource {
         close();
         return matchingNames;
     }
+
+    public String[] getAllNameLists(String currentList) {
+        List<String> names = new ArrayList<>();
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
+        Cursor cursor = database.query(true, MySQLiteHelper.PERSON_NAMES_TABLE_NAME, columns, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            if (!cursor.getString(0).equals(currentList)) {
+                names.add(cursor.getString(0));
+            }
+        }
+        cursor.close();
+        close();
+        return names.toArray(new String[names.size()]);
+    }
 }
