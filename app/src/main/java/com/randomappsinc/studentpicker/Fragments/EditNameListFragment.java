@@ -124,6 +124,7 @@ public class EditNameListFragment extends Fragment {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                     adapter.importNamesFromList(text.toString());
+                                    Utils.showSnackbar(parent, getString(R.string.names_successfully_imported));
                                     return true;
                                 }
                             })
