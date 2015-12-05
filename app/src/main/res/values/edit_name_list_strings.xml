@@ -6,4 +6,5 @@
     <string name="import_names_from_list">Import names from another list</string>
     <string name="choose_list_to_import">Choose list to import names from</string>
     <string name="no_name_lists_to_import">You do not have any lists to import names from.</string>
+    <string name="names_successfully_imported">Names successfully imported.</string>
 </resources>
