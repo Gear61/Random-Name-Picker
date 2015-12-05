@@ -111,4 +111,11 @@ public class DataSource {
         close();
         return names.toArray(new String[names.size()]);
     }
+
+    public void importNamesIntoList(String receivingList, String givingList) {
+        List<String> namesToImport = getAllNamesInList(givingList);
+        for (String name : namesToImport) {
+            addName(name, receivingList);
+        }
+    }
 }
