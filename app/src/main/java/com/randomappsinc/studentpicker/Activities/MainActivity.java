@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
@@ -167,7 +166,6 @@ public class MainActivity extends StandardActivity {
                 .onAny(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        jankyCloseKeyboard();
                         if (which == DialogAction.POSITIVE) {
                             String newListName = dialog.getInputEditText().getText().toString();
                             nameListsAdapter.renameList(listPosition, newListName);
@@ -175,16 +173,6 @@ public class MainActivity extends StandardActivity {
                     }
                 })
                 .show();
-    }
-
-    private void jankyCloseKeyboard() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Utils.hideKeyboard(activity);
-            }
-        }, 200);
     }
 
     private void showDeleteDialog(final int listPosition) {
