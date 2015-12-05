@@ -40,7 +40,7 @@ public class EditNameListFragment extends Fragment {
     @Bind(R.id.parent) View parent;
     @Bind(R.id.plus_icon) ImageView plus;
 
-    private EditNameListAdapter EditNameListAdapter;
+    private EditNameListAdapter adapter;
     private DataSource dataSource;
     private String listName;
 
@@ -65,8 +65,8 @@ public class EditNameListFragment extends Fragment {
         listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        EditNameListAdapter = new EditNameListAdapter(getActivity(), noContent, listName);
-        namesList.setAdapter(EditNameListAdapter);
+        adapter = new EditNameListAdapter(getActivity(), noContent, listName);
+        namesList.setAdapter(adapter);
         return rootView;
     }
 
@@ -78,7 +78,7 @@ public class EditNameListFragment extends Fragment {
             Utils.showSnackbar(parent, getString(R.string.blank_name));
         }
         else {
-            EditNameListAdapter.addStudent(newName);
+            adapter.addName(newName);
             EventBus.getDefault().post(new EditListEvent(EditListEvent.ADD, newName));
         }
     }
@@ -119,12 +119,16 @@ public class EditNameListFragment extends Fragment {
                 else {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.choose_list_to_import)
-                            .items(dataSource.getAllNameLists(listName))
-                            .itemsCallback(new MaterialDialog.ListCallback() {
+                            .items(importCandidates)
+                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                                 @Override
-                                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                    adapter.importNamesFromList(text.toString());
+                                    return true;
                                 }
                             })
+                            .negativeText(android.R.string.no)
+                            .positiveText(R.string.choose)
                             .show();
                 }
                 return true;

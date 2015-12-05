@@ -19,8 +19,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by alexanderchiou on 7/19/15.
  */
-public class EditNameListAdapter extends BaseAdapter
-{
+public class EditNameListAdapter extends BaseAdapter {
     private Context context;
     private List<String> content;
     private TextView noContent;
@@ -41,17 +40,24 @@ public class EditNameListAdapter extends BaseAdapter
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addStudent(String name) {
+    public void addName(String name) {
         dataSource.addName(name, listName);
         content.add(name);
         setNoContent();
         notifyDataSetChanged();
     }
 
-    public void removeStudent(int index) {
+    public void removeName(int index) {
         content.remove(index);
         notifyDataSetChanged();
         setNoContent();
+    }
+
+    public void importNamesFromList(String listToAbsorb) {
+        dataSource.importNamesIntoList(listName, listToAbsorb);
+        content = dataSource.getAllNamesInList(listName);
+        setNoContent();
+        notifyDataSetChanged();
     }
 
     public int getCount()
@@ -87,7 +93,7 @@ public class EditNameListAdapter extends BaseAdapter
             public void onClick(final View view) {
                 dataSource.removeName(content.get(position), listName);
                 EventBus.getDefault().post(new EditListEvent(EditListEvent.REMOVE, getItem(position)));
-                removeStudent(position);
+                removeName(position);
             }
         });
         return view;

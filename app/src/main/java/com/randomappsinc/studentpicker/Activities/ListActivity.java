@@ -10,7 +10,6 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Views.SlidingTabLayout;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 
 /**
