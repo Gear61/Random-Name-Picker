@@ -15,8 +15,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class ListActivity extends StandardActivity
-{
+public class ListActivity extends StandardActivity {
     @Bind(R.id.viewpager) ViewPager mViewPager;
     @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
 
