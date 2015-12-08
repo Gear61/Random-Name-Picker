@@ -33,8 +33,8 @@
     <string name="decline_tutorial">No, I\'m good</string>
 
     <string name="got_it">GOT IT</string>
-    <string name="add_name_list_explanation">To create a new name list, type its name into the input bar on the left and click this plus button.
-        After that, it will appear below along with any other name lists you already have.
+    <string name="add_name_list_explanation">To create a new name list, type its name into the bar on the left and click this button.
+        After that, it will appear below.
         Click on any name list to open its edit list/choose names page.
     </string>
     <string name="import_explanation">This app can import name lists quickly and seamlessly from .txt files on your device
