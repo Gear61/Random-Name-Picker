@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +32,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
+import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class MainActivity extends StandardActivity {
     public static final String LIST_NAME_KEY = "listName";
@@ -41,6 +43,7 @@ public class MainActivity extends StandardActivity {
     @Bind(R.id.content_list) ListView lists;
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.coordinator_layout) View parent;
+    @Bind(R.id.add_item) View addItem;
     @Bind(R.id.plus_icon) ImageView plus;
     @Bind(R.id.import_text_file) FloatingActionButton importFile;
 
@@ -50,14 +53,12 @@ public class MainActivity extends StandardActivity {
     @BindString(R.string.new_list_name) String newListName;
 
     private NameListsAdapter nameListsAdapter;
-    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        this.activity = this;
 
         setTitle(R.string.name_lists_label);
         newListInput.setHint(R.string.add_list_hint);
@@ -71,11 +72,58 @@ public class MainActivity extends StandardActivity {
         if (PreferencesManager.get().getFirstTimeUser()) {
             PreferencesManager.get().setFirstTimeUser(false);
             new MaterialDialog.Builder(this)
-                    .title(R.string.welcome)
-                    .content(R.string.ask_for_help)
-                    .positiveText(android.R.string.yes)
+                    .title(R.string.view_tutorial)
+                    .content(R.string.tutorial_prompt)
+                    .positiveText(R.string.accept_tutorial)
+                    .negativeText(R.string.decline_tutorial)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            showTutorial(true);
+                        }
+                    })
                     .show();
         }
+    }
+
+    public void showTutorial(final boolean firstTime) {
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
+        MaterialShowcaseView addListExplanation = new MaterialShowcaseView.Builder(this)
+                .setTarget(addItem)
+                .setDismissText(R.string.got_it)
+                .setContentText(R.string.add_name_list_explanation)
+                .setUseAutoRadius(false)
+                .setRadius(Utils.getDpInPixels(40))
+                .build();
+        sequence.addSequenceItem(addListExplanation);
+
+        MaterialShowcaseView importFileExplanation = new MaterialShowcaseView.Builder(this)
+                .setTarget(importFile)
+                .setDismissText(R.string.got_it)
+                .setContentText(R.string.import_explanation)
+                .setListener(new IShowcaseListener() {
+                    @Override
+                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
+                    }
+
+                    @Override
+                    public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
+                        if (firstTime) {
+                            showWelcomeDialog();
+                        }
+                    }
+                })
+                .build();
+        sequence.addSequenceItem(importFileExplanation);
+        sequence.start();
+    }
+
+    public void showWelcomeDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.welcome)
+                .content(R.string.welcome_string)
+                .positiveText(android.R.string.yes)
+                .show();
     }
 
     @Override
@@ -85,7 +133,7 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.content_list)
-    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Utils.hideKeyboard(this);
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
@@ -155,7 +203,7 @@ public class MainActivity extends StandardActivity {
                 .title(R.string.rename_list)
                 .input(newListName, "", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         boolean submitEnabled = !(input.toString().trim().isEmpty() ||
                                 PreferencesManager.get().doesListExist(input.toString()));
                         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
@@ -219,15 +267,22 @@ public class MainActivity extends StandardActivity {
                 new IconDrawable(this, FontAwesomeIcons.fa_gear)
                         .colorRes(R.color.white)
                         .actionBarSize());
+        menu.findItem(R.id.view_tutorial).setIcon(
+                new IconDrawable(this, FontAwesomeIcons.fa_info_circle)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.view_tutorial:
+                showTutorial(false);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
