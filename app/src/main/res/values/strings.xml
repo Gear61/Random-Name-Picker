@@ -25,8 +25,23 @@
     <string name="delete_icon">{fa-minus-circle}</string>
 
     <string name="welcome">Welcome</string>
-    <string name="ask_for_help">Hey there, I\'m Alex! I\'m always looking to make my work as awesome as possible
-        for the community, so if you have any ideas on how to improve this app (bug fixes, feature requests, etc),
-        please use the send feedback option in the settings to tell me! Thank you!
+    <string name="view_tutorial">View tutorial</string>
+    <string name="tutorial_prompt">Would you like to view a very short tutorial on how to use this app? You can review it at any time by clicking
+        the info button in the toolbar above.
+    </string>
+    <string name="accept_tutorial">Yes please!</string>
+    <string name="decline_tutorial">No, I\'m good</string>
+
+    <string name="got_it">GOT IT</string>
+    <string name="add_name_list_explanation">To create a new name list, type its name into the input bar on the left and click this plus button.
+        After that, it will appear below along with any other name lists you already have.
+        Click on any name list to open its edit list/choose names page.
+    </string>
+    <string name="import_explanation">This app can import name lists quickly and seamlessly from .txt files on your device
+        (names in the files must be new-line separated). To do this, click this upload button at any time.</string>
+
+    <string name="welcome_string">And that\'s it! Thank you for downloading this app; I hope it serves you well!
+        If you need more help or have ideas on how to make this app more awesome,
+        please use the send feedback option in the settings menu to tell me!
     </string>
 </resources>

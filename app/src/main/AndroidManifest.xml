@@ -7,7 +7,7 @@
     <application
         tools:replace="android:label"
         android:fullBackupContent="true"
-        android:name=".Misc.Application"
+        android:name=".Misc.MyApplication"
         android:label="@string/app_name"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

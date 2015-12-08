@@ -19,7 +19,7 @@ android {
     }
     repositories {
         maven { url "https://jitpack.io" }
-        maven { url  "http://dl.bintray.com/lukaville/maven" }
+        maven { url "http://dl.bintray.com/lukaville/maven" }
     }
 }
 
@@ -41,4 +41,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.android.support:support-v13:23.1.1'
     compile 'com.nbsp:library:1.02'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5@aar'
 }
