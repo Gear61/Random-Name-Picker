@@ -105,8 +105,7 @@ public class MainActivity extends StandardActivity {
                 .setRadius(Utils.getDpInPixels(40))
                 .setListener(new IShowcaseListener() {
                     @Override
-                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
-                    }
+                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {}
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {

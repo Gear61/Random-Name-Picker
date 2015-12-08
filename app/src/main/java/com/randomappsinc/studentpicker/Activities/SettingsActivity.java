@@ -3,7 +3,6 @@ package com.randomappsinc.studentpicker.Activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,7 +23,7 @@ public class SettingsActivity extends StandardActivity {
     public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
-    @Bind(R.id.parent) CoordinatorLayout parent;
+    @Bind(R.id.parent) View parent;
     @Bind(R.id.settings_options) ListView settingsOptions;
     @BindString(R.string.play_store_error) String playStoreError;
     @BindString(R.string.feedback_subject) String feedbackSubject;
@@ -41,7 +40,7 @@ public class SettingsActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.settings_options)
-    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long id)
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
     {
         Intent intent = null;
         switch (position) {
@@ -53,6 +52,9 @@ public class SettingsActivity extends StandardActivity {
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
             case 1:
+                intent = new Intent(this, OtherAppsActivity.class);
+                break;
+            case 2:
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -60,7 +62,7 @@ public class SettingsActivity extends StandardActivity {
                     return;
                 }
                 break;
-            case 2:
+            case 3:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
