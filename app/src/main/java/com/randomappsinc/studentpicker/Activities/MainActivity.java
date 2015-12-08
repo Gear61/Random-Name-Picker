@@ -101,6 +101,8 @@ public class MainActivity extends StandardActivity {
                 .setTarget(importFile)
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.import_explanation)
+                .setUseAutoRadius(false)
+                .setRadius(Utils.getDpInPixels(40))
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {

@@ -8,8 +8,8 @@ android {
         applicationId "com.randomappsinc.studentpicker"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 270
-        versionName "2.7.0"
+        versionCode 271
+        versionName "2.7.1"
     }
     buildTypes {
         release {
@@ -39,7 +39,6 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.balysv:material-ripple:1.0.2'
     compile 'com.android.support:cardview-v7:23.1.1'
-    compile 'com.android.support:support-v13:23.1.1'
     compile 'com.nbsp:library:1.02'
     compile 'com.github.deano2390:MaterialShowcaseView:1.0.5@aar'
 }
