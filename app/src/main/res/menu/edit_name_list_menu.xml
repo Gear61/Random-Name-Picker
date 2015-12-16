@@ -6,5 +6,15 @@
     <item
         android:id="@+id/import_names"
         android:title="@string/import_names_from_list"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/rename_list"
+        android:title="@string/rename_list"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/delete_list"
+        android:title="@string/delete_list"
+        app:showAsAction="ifRoom"/>
 </menu>
