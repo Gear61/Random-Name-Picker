@@ -18,7 +18,9 @@ import butterknife.OnItemClick;
  * Created by Alex Chiou on 12/8/15.
  */
 public class OtherAppsActivity extends StandardActivity {
-    public static final String[] OTHER_APP_PACKAGE_IDS = {"com.randomappsinc.simpleflashcards",
+    public static final String[] OTHER_APP_PACKAGE_IDS =
+           {"com.randomappsinc.mathrace",
+            "com.randomappsinc.simpleflashcards",
             "com.randomappsinc.berniesanderssoundboard",
             "randomappsinc.com.sqlpracticeplus"};
 

@@ -17,7 +17,8 @@ import butterknife.ButterKnife;
  * Created by Alex Chiou on 12/8/15.
  */
 public class OtherAppsAdapter extends BaseAdapter {
-    public static final int[] OTHER_APP_IMAGE_IDS = {R.drawable.flashcards, R.drawable.bernie, R.drawable.sql_practice};
+    public static final int[] OTHER_APP_IMAGE_IDS = {R.drawable.math_race, R.drawable.flashcards,
+            R.drawable.bernie, R.drawable.sql_practice};
 
     private Context context;
     private String[] appNames;
