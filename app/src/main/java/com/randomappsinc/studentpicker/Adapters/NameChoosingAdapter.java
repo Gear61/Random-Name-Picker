@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Models.NameViewHolder;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.Collections;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -117,12 +120,21 @@ public class NameChoosingAdapter extends BaseAdapter {
         return position;
     }
 
+    public class NameViewHolder {
+        @Bind(R.id.person_name) TextView name;
+        @Bind(R.id.delete_icon) IconTextView delete;
+
+        public NameViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
     // Renders the ListView item that the user has scrolled to or is about to scroll to
     public View getView(final int position, View view, ViewGroup parent) {
         final NameViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.person_name_cell, parent, false);
+            view = vi.inflate(R.layout.choose_name_cell, parent, false);
             holder = new NameViewHolder(view);
             view.setTag(holder);
         }
