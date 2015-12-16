@@ -14,25 +14,19 @@
 
         <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/delete_icon"
-            android:padding="10dp"
             android:text="@string/delete_icon"
-            android:textColor="@color/dark_gray"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:layout_centerVertical="true"/>
+            style="@style/person_name_icon"/>
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/edit_icon"
+            android:text="@string/edit_icon"
+            android:layout_toLeftOf="@+id/delete_icon"
+            style="@style/person_name_icon"/>
 
         <TextView
             android:id="@+id/person_name"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textColor="@color/dark_gray"
-            android:layout_centerVertical="true"
-            android:textSize="28sp"
-            android:layout_toLeftOf="@+id/delete_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_toLeftOf="@+id/edit_icon"
+            style="@style/person_name"/>
     </RelativeLayout>
 </com.balysv.materialripple.MaterialRippleLayout>

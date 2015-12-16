@@ -14,4 +14,24 @@
         <item name="rd_rippleAnimDuration">@integer/shorter_anim_length</item>
         <item name="rd_delayClick">untilRelease</item>
     </style>
+
+    <style name="person_name_icon">
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="person_name">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>
