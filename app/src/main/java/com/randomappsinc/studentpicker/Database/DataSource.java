@@ -118,4 +118,8 @@ public class DataSource {
             addName(name, receivingList);
         }
     }
+
+    public void renamePerson(String oldName, String newName) {
+
+    }
 }
