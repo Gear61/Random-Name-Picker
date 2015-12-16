@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -21,11 +23,13 @@ import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -39,6 +43,10 @@ public class EditNameListFragment extends Fragment {
     @Bind(R.id.content_list) ListView namesList;
     @Bind(R.id.parent) View parent;
     @Bind(R.id.plus_icon) ImageView plus;
+
+    @BindString(R.string.new_list_name) String newListName;
+    @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
+    @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
 
     private EditNameListAdapter adapter;
     private DataSource dataSource;
@@ -98,11 +106,64 @@ public class EditNameListFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+    public void showRenameDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.rename_list)
+                .input(newListName, "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
+                                PreferencesManager.get().doesListExist(input.toString()));
+                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
+                    }
+                })
+                .alwaysCallInputCallback()
+                .negativeText(android.R.string.no)
+                .onAny(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (which == DialogAction.POSITIVE) {
+                            String newListName = dialog.getInputEditText().getText().toString();
+                            dataSource.renameList(listName, newListName);
+                            PreferencesManager.get().renameList(listName, newListName);
+                            listName = newListName;
+                            getActivity().setTitle(listName);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void showDeleteDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title(confirmDeletionTitle)
+                .content(confirmDeletionMessage)
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dataSource.deleteList(listName);
+                        PreferencesManager.get().removeNameList(listName);
+                        getActivity().finish();
+                    }
+                })
+                .show();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
         menu.findItem(R.id.import_names).setIcon(
                 new IconDrawable(getActivity(), FontAwesomeIcons.fa_upload)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
+        menu.findItem(R.id.rename_list).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_edit)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
+        menu.findItem(R.id.delete_list).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_trash)
                         .colorRes(R.color.white)
                         .actionBarSize());
         super.onCreateOptionsMenu(menu, inflater);
@@ -133,6 +194,12 @@ public class EditNameListFragment extends Fragment {
                             .show();
                 }
                 return true;
+            case R.id.rename_list:
+                showRenameDialog();
+                break;
+            case R.id.delete_list:
+                showDeleteDialog();
+                break;
             case android.R.id.home:
                 getActivity().finish();
                 return true;

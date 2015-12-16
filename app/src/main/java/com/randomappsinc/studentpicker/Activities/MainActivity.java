@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +15,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
-import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
@@ -31,7 +28,6 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -47,10 +43,7 @@ public class MainActivity extends StandardActivity {
     @Bind(R.id.plus_icon) ImageView plus;
     @Bind(R.id.import_text_file) FloatingActionButton importFile;
 
-    @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
-    @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
     @BindString(R.string.list_duplicate) String listDuplicate;
-    @BindString(R.string.new_list_name) String newListName;
 
     private NameListsAdapter nameListsAdapter;
 
@@ -160,83 +153,6 @@ public class MainActivity extends StandardActivity {
             intent.putExtra(LIST_NAME_KEY, newList);
             startActivity(intent);
         }
-    }
-
-    @OnItemLongClick(R.id.content_list)
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        String title = getString(R.string.options_for) + nameListsAdapter.getItem(position);
-
-        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
-        IconDrawable editIcon = new IconDrawable(this, FontAwesomeIcons.fa_edit).colorRes(R.color.dark_gray);
-        IconDrawable deleteIcon = new IconDrawable(this, FontAwesomeIcons.fa_remove).colorRes(R.color.dark_gray);
-
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.rename_list)
-                .icon(editIcon).iconPaddingDp(5)
-                .backgroundColor(Color.WHITE)
-                .build());
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .content(R.string.delete_list)
-                .icon(deleteIcon).iconPaddingDp(5)
-                .backgroundColor(Color.WHITE)
-                .build());
-
-        new MaterialDialog.Builder(this)
-                .title(title)
-                .adapter(adapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        dialog.dismiss();
-                        MaterialSimpleListItem item = adapter.getItem(which);
-                        if (item.getContent().equals(getString(R.string.rename_list))) {
-                            showRenameDialog(position);
-                        } else {
-                            showDeleteDialog(position);
-                        }
-                    }
-                })
-                .show();
-        return true;
-    }
-
-    public void showRenameDialog(final int listPosition) {
-        new MaterialDialog.Builder(this)
-                .title(R.string.rename_list)
-                .input(newListName, "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                PreferencesManager.get().doesListExist(input.toString()));
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                    }
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.no)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (which == DialogAction.POSITIVE) {
-                            String newListName = dialog.getInputEditText().getText().toString();
-                            nameListsAdapter.renameList(listPosition, newListName);
-                        }
-                    }
-                })
-                .show();
-    }
-
-    private void showDeleteDialog(final int listPosition) {
-        new MaterialDialog.Builder(this)
-                .title(confirmDeletionTitle)
-                .content(confirmDeletionMessage + " \"" + nameListsAdapter.getItem(listPosition) + "\"?")
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        nameListsAdapter.removeList(listPosition);
-                    }
-                })
-                .show();
     }
 
     @OnClick(R.id.import_text_file)
