@@ -147,6 +147,9 @@ public class NameChoosingFragment extends Fragment {
         else if (event.getEventType().equals(EditListEvent.REMOVE)) {
             nameChoosingAdapter.removeName(event.getName());
         }
+        else if (event.getEventType().equals(EditListEvent.RENAME)) {
+            nameChoosingAdapter.changeName(event.getName(), event.getNewName());
+        }
     }
 
     @Override

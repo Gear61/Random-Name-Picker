@@ -57,6 +57,16 @@ public class NameChoosingAdapter extends BaseAdapter {
         setNoContent();
     }
 
+    public void changeName(String oldName, String newName) {
+        for (int i = 0; i < content.size(); i++) {
+            if (content.get(i).equals(oldName)) {
+                content.set(i, newName);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     public void setNoContent() {
         if (dataSource.getAllNamesInList(listName).isEmpty()) {
             noContent.setText(noNames);
