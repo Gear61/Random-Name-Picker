@@ -6,22 +6,33 @@ package com.randomappsinc.studentpicker.Models;
 public class EditListEvent {
     public static final String ADD = "add";
     public static final String REMOVE = "remove";
+    public static final String RENAME = "rename";
 
     private String eventType;
     private String name;
+    private String newName;
 
-    public EditListEvent(String eventType, String name) {
-        this.eventType = eventType;
-        this.name = name;
-    }
-
-    public String getEventType()
-    {
+    public String getEventType() {
         return eventType;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
+    }
+
+    public String getNewName() {
+        return newName;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNewName(String newName) {
+        this.newName = newName;
     }
 }

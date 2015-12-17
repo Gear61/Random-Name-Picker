@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -59,10 +60,14 @@ public class DataSource {
 
     public void removeName(String name, String listName) {
         open();
+        long numInstances = getNumNamesInList(name, listName);
         String whereArgs[] = {name, listName};
         database.delete(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, MySQLiteHelper.COLUMN_PERSON_NAME + " = ? AND " +
                 MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();
+        for (int i = 0; i < numInstances - 1; i++) {
+            addName(name, listName);
+        }
     }
 
     public void deleteList(String listName) {
@@ -119,7 +124,13 @@ public class DataSource {
         }
     }
 
-    public void renamePerson(String oldName, String newName) {
+    public long getNumNamesInList(String name, String listName) {
+        return DatabaseUtils.queryNumEntries(database, MySQLiteHelper.PERSON_NAMES_TABLE_NAME,
+                MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?",
+                new String[] {listName, name});
+    }
 
+    public void renamePerson(String oldName, String newName, String listName) {
+        long numEntries = getNumNamesInList(oldName, listName);
     }
 }

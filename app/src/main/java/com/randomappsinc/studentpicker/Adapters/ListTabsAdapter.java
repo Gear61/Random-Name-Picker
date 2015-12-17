@@ -14,13 +14,11 @@ import com.randomappsinc.studentpicker.R;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class ListTabsAdapter extends FragmentPagerAdapter
-{
+public class ListTabsAdapter extends FragmentPagerAdapter {
     private String tabTitles[];
     private String listName;
 
-    public ListTabsAdapter(FragmentManager fm, Context context, String listName)
-    {
+    public ListTabsAdapter(FragmentManager fm, Context context, String listName) {
         super(fm);
         this.tabTitles = context.getResources().getStringArray(R.array.list_options);
         this.listName = listName;
@@ -51,7 +49,6 @@ public class ListTabsAdapter extends FragmentPagerAdapter
 
     @Override
     public CharSequence getPageTitle(int position) {
-        // Generate title based on item position
         return tabTitles[position];
     }
 }
