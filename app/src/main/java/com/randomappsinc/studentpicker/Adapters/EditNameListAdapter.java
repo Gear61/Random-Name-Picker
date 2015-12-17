@@ -85,7 +85,8 @@ public class EditNameListAdapter extends BaseAdapter {
         final String currentName = content.get(position);
 
         new MaterialDialog.Builder(context)
-                .input(newName, "", new MaterialDialog.InputCallback() {
+                .title(R.string.change_name)
+                .input(newName, currentName, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         boolean submitEnabled = !(input.toString().trim().isEmpty() ||

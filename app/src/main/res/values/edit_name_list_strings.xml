@@ -17,4 +17,5 @@
     <string name="confirm_deletion_message">Are you sure you want to delete this name list?</string>
     <string name="new_list_name">New list name</string>
     <string name="new_name">New name</string>
+    <string name="change_name">Change name</string>
 </resources>
