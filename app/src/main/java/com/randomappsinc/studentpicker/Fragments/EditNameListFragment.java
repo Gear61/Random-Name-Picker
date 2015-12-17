@@ -87,7 +87,10 @@ public class EditNameListFragment extends Fragment {
         }
         else {
             adapter.addName(newName);
-            EventBus.getDefault().post(new EditListEvent(EditListEvent.ADD, newName));
+            EditListEvent event = new EditListEvent();
+            event.setEventType(EditListEvent.ADD);
+            event.setName(newName);
+            EventBus.getDefault().post(event);
         }
     }
 

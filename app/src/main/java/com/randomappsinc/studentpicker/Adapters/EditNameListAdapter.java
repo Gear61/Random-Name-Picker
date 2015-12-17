@@ -141,7 +141,10 @@ public class EditNameListAdapter extends BaseAdapter {
             @Override
             public void onClick(final View view) {
                 dataSource.removeName(content.get(position), listName);
-                EventBus.getDefault().post(new EditListEvent(EditListEvent.REMOVE, getItem(position)));
+                EditListEvent event = new EditListEvent();
+                event.setEventType(EditListEvent.REMOVE);
+                event.setName(getItem(position));
+                EventBus.getDefault().post(event);
                 removeName(position);
             }
         });
