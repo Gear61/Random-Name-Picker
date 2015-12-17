@@ -81,7 +81,7 @@ public class EditNameListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void showRenameDialog(int position) {
+    public void showRenameDialog(final int position) {
         final String currentName = content.get(position);
 
         new MaterialDialog.Builder(context)
@@ -100,7 +100,14 @@ public class EditNameListAdapter extends BaseAdapter {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (which == DialogAction.POSITIVE) {
                             String newName = dialog.getInputEditText().getText().toString();
-
+                            dataSource.renamePerson(currentName, newName, listName);
+                            content.set(position, newName);
+                            notifyDataSetChanged();
+                            EditListEvent event = new EditListEvent();
+                            event.setEventType(EditListEvent.RENAME);
+                            event.setName(currentName);
+                            event.setNewName(newName);
+                            EventBus.getDefault().post(event);
                         }
                     }
                 })

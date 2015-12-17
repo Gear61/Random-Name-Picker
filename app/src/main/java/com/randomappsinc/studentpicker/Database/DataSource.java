@@ -131,6 +131,7 @@ public class DataSource {
     }
 
     public void renamePerson(String oldName, String newName, String listName) {
-        long numEntries = getNumNamesInList(oldName, listName);
+        removeName(oldName, listName);
+        addName(newName, listName);
     }
 }
