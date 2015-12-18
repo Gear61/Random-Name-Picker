@@ -13,8 +13,7 @@ import java.util.Set;
 /**
  * Created by alexanderchiou on 7/14/15.
  */
-public class PreferencesManager
-{
+public class PreferencesManager {
     private SharedPreferences prefs;
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";

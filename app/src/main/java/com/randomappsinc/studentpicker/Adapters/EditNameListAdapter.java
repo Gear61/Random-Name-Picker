@@ -15,6 +15,7 @@ import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -36,6 +37,7 @@ public class EditNameListAdapter extends BaseAdapter {
         this.context = context;
         this.dataSource = new DataSource(context);
         this.content = dataSource.getAllNamesInList(listName);
+        Collections.sort(this.content);
         this.noContent = noContent;
         setNoContent();
         this.listName = listName;
@@ -50,8 +52,14 @@ public class EditNameListAdapter extends BaseAdapter {
     public void addName(String name) {
         dataSource.addName(name, listName);
         content.add(name);
+        Collections.sort(content);
         setNoContent();
         notifyDataSetChanged();
+
+        EditListEvent event = new EditListEvent();
+        event.setEventType(EditListEvent.ADD);
+        event.setName(name);
+        EventBus.getDefault().post(event);
     }
 
     public void removeName(int index) {
@@ -60,11 +68,26 @@ public class EditNameListAdapter extends BaseAdapter {
         setNoContent();
     }
 
+    public void changeName(int position, String newName) {
+        content.set(position, newName);
+        Collections.sort(content);
+        notifyDataSetChanged();
+    }
+
     public void importNamesFromList(String listToAbsorb) {
         dataSource.importNamesIntoList(listName, listToAbsorb);
         content = dataSource.getAllNamesInList(listName);
+        Collections.sort(content);
         setNoContent();
         notifyDataSetChanged();
+
+        List<String> namesAdded = dataSource.getAllNamesInList(listToAbsorb);
+        for (String name : namesAdded) {
+            EditListEvent event = new EditListEvent();
+            event.setEventType(EditListEvent.ADD);
+            event.setName(name);
+            EventBus.getDefault().post(event);
+        }
     }
 
     public int getCount()
@@ -102,8 +125,7 @@ public class EditNameListAdapter extends BaseAdapter {
                         if (which == DialogAction.POSITIVE) {
                             String newName = dialog.getInputEditText().getText().toString();
                             dataSource.renamePerson(currentName, newName, listName);
-                            content.set(position, newName);
-                            notifyDataSetChanged();
+                            changeName(position, newName);
                             EditListEvent event = new EditListEvent();
                             event.setEventType(EditListEvent.RENAME);
                             event.setName(currentName);

@@ -25,14 +25,12 @@ import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
-import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -87,10 +85,6 @@ public class EditNameListFragment extends Fragment {
         }
         else {
             adapter.addName(newName);
-            EditListEvent event = new EditListEvent();
-            event.setEventType(EditListEvent.ADD);
-            event.setName(newName);
-            EventBus.getDefault().post(event);
         }
     }
 

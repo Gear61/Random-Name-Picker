@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,20 +24,18 @@ public class NameListsAdapter extends BaseAdapter {
     private Context context;
     private List<String> content;
     private TextView noContent;
-    private DataSource dataSource;
 
     public NameListsAdapter(Context context, TextView noContent) {
         this.context = context;
         this.content = new ArrayList<>();
-        this.content.addAll(PreferencesManager.get().getNameLists());
         this.noContent = noContent;
-        setNoContent();
-        this.dataSource = new DataSource(context);
+        refreshList();
     }
 
     public void refreshList() {
-        this.content.clear();
-        this.content.addAll(PreferencesManager.get().getNameLists());
+        content.clear();
+        content.addAll(PreferencesManager.get().getNameLists());
+        Collections.sort(content);
         setNoContent();
         notifyDataSetChanged();
     }
@@ -49,24 +47,9 @@ public class NameListsAdapter extends BaseAdapter {
 
     public void addList(String itemName) {
         content.add(itemName);
+        Collections.sort(content);
         setNoContent();
         PreferencesManager.get().addNameList(itemName);
-        notifyDataSetChanged();
-    }
-
-    public void removeList(int index) {
-        dataSource.deleteList(content.get(index));
-        PreferencesManager.get().removeNameList(content.get(index));
-        content.remove(index);
-        notifyDataSetChanged();
-        setNoContent();
-    }
-
-    public void renameList(int index, String newListName) {
-        String oldListName = content.get(index);
-        dataSource.renameList(oldListName, newListName);
-        PreferencesManager.get().renameList(oldListName, newListName);
-        content.set(index, newListName);
         notifyDataSetChanged();
     }
 

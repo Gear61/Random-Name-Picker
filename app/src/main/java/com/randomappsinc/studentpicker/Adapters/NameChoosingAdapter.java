@@ -36,12 +36,14 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.listName = listName;
         this.dataSource = new DataSource(context);
         this.content = dataSource.getAllNamesInList(listName);
+        Collections.sort(this.content);
         this.noContent = noContent;
         setNoContent();
     }
 
     public void addName(String name) {
         content.add(name);
+        Collections.sort(content);
         notifyDataSetChanged();
         setNoContent();
     }
@@ -61,6 +63,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         for (int i = 0; i < content.size(); i++) {
             if (content.get(i).equals(oldName)) {
                 content.set(i, newName);
+                Collections.sort(content);
                 notifyDataSetChanged();
                 break;
             }
