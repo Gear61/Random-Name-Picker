@@ -112,9 +112,10 @@ public class NameChoosingAdapter extends BaseAdapter {
         setNoContent();
     }
 
-    public void resetStudents() {
+    public void resetNames() {
         content.clear();
         content.addAll(this.dataSource.getAllNamesInList(listName));
+        Collections.sort(content);
         setNoContent();
         notifyDataSetChanged();
     }

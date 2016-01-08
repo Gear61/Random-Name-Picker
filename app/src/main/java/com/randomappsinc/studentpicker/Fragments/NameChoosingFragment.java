@@ -180,7 +180,7 @@ public class NameChoosingFragment extends Fragment {
                 settingsDialog.show();
                 return true;
             case R.id.reset:
-                nameChoosingAdapter.resetStudents();
+                nameChoosingAdapter.resetNames();
                 return true;
             case android.R.id.home:
                 getActivity().finish();
