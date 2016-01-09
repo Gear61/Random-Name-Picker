@@ -71,7 +71,7 @@ public class EditNameListFragment extends Fragment {
         listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        adapter = new EditNameListAdapter(getActivity(), noContent, listName);
+        adapter = new EditNameListAdapter(getActivity(), noContent, listName, parent);
         namesList.setAdapter(adapter);
         return rootView;
     }
@@ -91,7 +91,6 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        // If this fragment is becoming visible
         if (isVisibleToUser) {
             getActivity().invalidateOptionsMenu();
         }

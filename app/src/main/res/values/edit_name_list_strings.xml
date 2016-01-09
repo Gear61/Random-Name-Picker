@@ -6,6 +6,10 @@
     <string name="choose_list_to_import">Choose list to import names from</string>
     <string name="no_name_lists_to_import">You do not have any lists to import names from.</string>
     <string name="names_successfully_imported">Names successfully imported.</string>
+    <string name="undo">UNDO</string>
+    <string name="added">Added&#160;</string>
+    <string name="removed">Removed&#160;</string>
+
     <string name="edit_icon">{fa-edit}</string>
 
     <!-- Action bar options -->
