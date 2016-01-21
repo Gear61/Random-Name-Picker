@@ -1,9 +1,13 @@
 package com.randomappsinc.studentpicker.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +38,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class MainActivity extends StandardActivity {
     public static final String LIST_NAME_KEY = "listName";
+    public static final int READ_EXTERNAL_REQUEST = 1;
 
     @Bind(R.id.item_name_input) EditText newListInput;
     @Bind(R.id.content_list) ListView lists;
@@ -157,8 +162,50 @@ public class MainActivity extends StandardActivity {
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        Intent intent = new Intent(this, FilePickerActivity.class);
-        startActivityForResult(intent, 1);
+        int readFilesStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (readFilesStatus == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, FilePickerActivity.class);
+            startActivityForResult(intent, 1);
+        }
+        else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                new MaterialDialog.Builder(this)
+                        .content(R.string.need_read_external)
+                        .positiveText(android.R.string.yes)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                requestFileAccess();
+                            }
+                        })
+                        .show();
+            }
+            else {
+                requestFileAccess();
+            }
+
+        }
+    }
+
+    public void requestFileAccess() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                READ_EXTERNAL_REQUEST);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case READ_EXTERNAL_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(this, FilePickerActivity.class);
+                    startActivityForResult(intent, 1);
+                }
+                return;
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @Override
