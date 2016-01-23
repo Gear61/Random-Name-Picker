@@ -7,6 +7,9 @@
     <string name="name_chosen">And the lucky winner is&#8230;</string>
     <string name="names_chosen">And the lucky winners are&#8230;</string>
     <string name="out_of_names">No names remain.</string>
+    <string name="copy_text">Copy text</string>
+    <string name="copy_confirmation">The chosen names have been copied to your clipboard.</string>
+    <string name="chosen_names">Chosen names</string>
 
     <string name="name_choosing_settings">Name Choosing Settings</string>
     <string name="num_people_chosen"># of names chosen:</string>

@@ -1,5 +1,8 @@
 package com.randomappsinc.studentpicker.Fragments;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -115,26 +118,37 @@ public class NameChoosingFragment extends Fragment {
     }
 
     @OnClick(R.id.choose)
-    public void choose(View view) {
+    public void choose() {
         if (nameChoosingAdapter.getCount() != 0) {
             List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesChosen, nameChoosingAdapter.getCount() - 1);
-            String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
+            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             new MaterialDialog.Builder(getActivity())
                     .title(title)
                     .content(chosenNames)
                     .positiveText(android.R.string.yes)
+                    .neutralText(R.string.copy_text)
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            copyNamesToClipboard(chosenNames);
+                        }
+                    })
                     .show();
         }
+    }
+
+    public void copyNamesToClipboard(String names) {
+        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Activity.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(getString(R.string.chosen_names), names);
+        clipboard.setPrimaryClip(clip);
+        Utils.showSnackbar(parent, getString(R.string.copy_confirmation));
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
-        // If this fragment is becoming visible
-        if (isVisibleToUser)
-        {
+        if (isVisibleToUser) {
             Utils.hideKeyboard(getActivity());
             getActivity().invalidateOptionsMenu();
         }
