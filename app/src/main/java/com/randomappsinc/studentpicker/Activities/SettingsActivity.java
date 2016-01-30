@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.randomappsinc.studentpicker.Adapters.SettingsAdapter;
@@ -41,8 +40,7 @@ public class SettingsActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.settings_options)
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
-    {
+    public void onItemClick(int position) {
         Intent intent = null;
         switch (position) {
             case 0:
