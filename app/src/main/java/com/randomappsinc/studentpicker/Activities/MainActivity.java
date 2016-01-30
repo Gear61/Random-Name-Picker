@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -132,7 +131,7 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnItemClick(R.id.content_list)
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onItemClick(int position) {
         Utils.hideKeyboard(this);
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
@@ -142,7 +141,7 @@ public class MainActivity extends StandardActivity {
     }
 
     @OnClick(R.id.add_item)
-    public void addItem(View view) {
+    public void addItem() {
         String newList = newListInput.getText().toString().trim();
         newListInput.setText("");
         if (newList.isEmpty()) {

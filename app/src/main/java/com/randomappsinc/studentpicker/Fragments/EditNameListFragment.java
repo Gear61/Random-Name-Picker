@@ -77,7 +77,7 @@ public class EditNameListFragment extends Fragment {
     }
 
     @OnClick(R.id.add_item)
-    public void addItem(View view) {
+    public void addItem() {
         String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
         if (newName.isEmpty()) {

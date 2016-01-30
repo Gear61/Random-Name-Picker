@@ -43,7 +43,7 @@ public class ImportFileActivity extends StandardActivity {
     }
 
     @OnClick(R.id.add_list)
-    public void importNameList(View view) {
+    public void importNameList() {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
             Utils.showSnackbar(parent, getString(R.string.blank_list_name));

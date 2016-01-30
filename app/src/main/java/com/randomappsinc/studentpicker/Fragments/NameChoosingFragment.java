@@ -1,9 +1,12 @@
 package com.randomappsinc.studentpicker.Fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,7 +29,9 @@ import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.Models.NameChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -37,7 +42,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class NameChoosingFragment extends Fragment {
+public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener{
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.names_list) ListView namesList;
     @Bind(R.id.parent) View parent;
@@ -50,14 +55,16 @@ public class NameChoosingFragment extends Fragment {
     private int numNamesChosen;
     private MaterialDialog settingsDialog;
     private NameChoosingSettingsViewHolder settingsHolder;
+    private TextToSpeech textToSpeech;
+    private boolean textToSpeechEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
-        this.withReplacement = false;
-        this.numNamesChosen = 1;
+        withReplacement = false;
+        numNamesChosen = 1;
         settingsDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.name_choosing_settings)
                 .customView(R.layout.name_choosing_settings, true)
@@ -78,6 +85,8 @@ public class NameChoosingFragment extends Fragment {
                 })
                 .build();
         settingsHolder = new NameChoosingSettingsViewHolder(settingsDialog.getCustomView());
+        textToSpeech = new TextToSpeech(getActivity(), this);
+        textToSpeech.setLanguage(Locale.US);
     }
 
     public void applySettings() {
@@ -128,14 +137,53 @@ public class NameChoosingFragment extends Fragment {
                     .content(chosenNames)
                     .positiveText(android.R.string.yes)
                     .neutralText(R.string.copy_text)
+                    .negativeText(R.string.say_names)
                     .onNeutral(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             copyNamesToClipboard(chosenNames);
                         }
                     })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            sayNames(chosenNames);
+                        }
+                    })
                     .show();
         }
+    }
+
+    public void sayNames(String names) {
+        if (textToSpeechEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sayTextPostL(names);
+            }
+            else {
+                sayTextPreL(names);
+            }
+        }
+        else {
+            Utils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void sayTextPreL(String text) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + "");
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void sayTextPostL(String text) {
+        String utteranceId = this.hashCode() + "";
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    }
+
+    @Override
+    public void onInit(int status) {
+        textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
     }
 
     public void copyNamesToClipboard(String names) {
@@ -155,14 +203,15 @@ public class NameChoosingFragment extends Fragment {
     }
 
     public void onEvent(EditListEvent event) {
-        if (event.getEventType().equals(EditListEvent.ADD)) {
-            nameChoosingAdapter.addName(event.getName());
-        }
-        else if (event.getEventType().equals(EditListEvent.REMOVE)) {
-            nameChoosingAdapter.removeName(event.getName());
-        }
-        else if (event.getEventType().equals(EditListEvent.RENAME)) {
-            nameChoosingAdapter.changeName(event.getName(), event.getNewName());
+        switch (event.getEventType()) {
+            case EditListEvent.ADD:
+                nameChoosingAdapter.addName(event.getName());
+                break;
+            case EditListEvent.REMOVE:
+                nameChoosingAdapter.removeName(event.getName());
+                break;
+            case EditListEvent.RENAME:
+                nameChoosingAdapter.changeName(event.getName(), event.getNewName());
         }
     }
 
@@ -176,6 +225,10 @@ public class NameChoosingFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
+        menu.findItem(R.id.silence).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_volume_off)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
         menu.findItem(R.id.settings).setIcon(
                 new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear)
                         .colorRes(R.color.white)
@@ -190,6 +243,9 @@ public class NameChoosingFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.silence:
+                textToSpeech.stop();
+                return true;
             case R.id.settings:
                 settingsDialog.show();
                 return true;
