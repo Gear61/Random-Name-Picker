@@ -128,16 +128,17 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (nameChoosingAdapter.getCount() != 0) {
+        if (nameChoosingAdapter.getCount() > 0) {
             List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesChosen, nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
+            String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
             new MaterialDialog.Builder(getActivity())
                     .title(title)
                     .content(chosenNames)
                     .positiveText(android.R.string.yes)
                     .neutralText(R.string.copy_text)
-                    .negativeText(R.string.say_names)
+                    .negativeText(sayNames)
                     .onNeutral(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -220,6 +221,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         super.onDestroyView();
         ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
     }
 
     @Override
