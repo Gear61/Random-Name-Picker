@@ -131,18 +131,19 @@ public class NameChoosingAdapter extends BaseAdapter {
         listName = newListName;
     }
 
-    public int getCount()
-    {
+    @Override
+    public int getCount() {
         return names.size();
     }
 
-    public String getItem(int position)
-    {
+    @Override
+    public String getItem(int position) {
         return names.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
-        return position;
+        return getItem(position).hashCode();
     }
 
     public class NameViewHolder {
@@ -154,7 +155,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         }
     }
 
-    // Renders the ListView item that the user has scrolled to or is about to scroll to
+    @Override
     public View getView(final int position, View view, ViewGroup parent) {
         NameViewHolder holder;
         if (view == null) {

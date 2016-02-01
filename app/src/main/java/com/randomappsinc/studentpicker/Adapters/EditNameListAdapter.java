@@ -133,18 +133,19 @@ public class EditNameListAdapter extends BaseAdapter {
         snackbar.show();
     }
 
-    public int getCount()
-    {
+    @Override
+    public int getCount() {
         return content.size();
     }
 
-    public String getItem(int position)
-    {
+    @Override
+    public String getItem(int position) {
         return content.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
-        return position;
+        return getItem(position).hashCode();
     }
 
     public void showRenameDialog(final int position) {
@@ -185,7 +186,7 @@ public class EditNameListAdapter extends BaseAdapter {
         }
     }
 
-    // Renders the ListView item that the user has scrolled to or is about to scroll to
+    @Override
     public View getView(final int position, View view, ViewGroup parent) {
         NameViewHolder holder;
         if (view == null) {

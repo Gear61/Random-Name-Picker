@@ -53,29 +53,30 @@ public class NameListsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public int getCount()
-    {
+    @Override
+    public int getCount() {
         return content.size();
     }
 
-    public String getItem(int position)
-    {
+    @Override
+    public String getItem(int position) {
         return content.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
-        return position;
+        return getItem(position).hashCode();
     }
 
     public static class ViewHolder {
         @Bind(R.id.name) TextView listName;
-        public ViewHolder(View view)
-        {
+
+        public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    // Renders the ListView item that the user has scrolled to or is about to scroll to
+    @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
         if (view == null) {
