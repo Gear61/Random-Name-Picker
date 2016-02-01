@@ -42,7 +42,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener{
+public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener {
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.names_list) ListView namesList;
     @Bind(R.id.parent) View parent;
