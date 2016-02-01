@@ -213,6 +213,9 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 break;
             case EditListEvent.RENAME:
                 nameChoosingAdapter.changeName(event.getName(), event.getNewName());
+                break;
+            case EditListEvent.RENAME_LIST:
+                nameChoosingAdapter.processListNameChange(event.getNewName());
         }
     }
 
@@ -225,6 +228,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
+        nameChoosingAdapter.cacheNamesList();
     }
 
     @Override

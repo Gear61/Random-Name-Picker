@@ -25,12 +25,14 @@ import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
+import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -124,6 +126,10 @@ public class EditNameListFragment extends Fragment {
                             PreferencesManager.get().renameList(listName, newListName);
                             listName = newListName;
                             getActivity().setTitle(listName);
+                            EditListEvent editListEvent = new EditListEvent();
+                            editListEvent.setEventType(EditListEvent.RENAME_LIST);
+                            editListEvent.setNewName(newListName);
+                            EventBus.getDefault().post(editListEvent);
                         }
                     }
                 })
