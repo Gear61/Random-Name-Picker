@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     private String noNames;
     private Context context;
     private String listName;
-    private List<String> content;
+    private List<String> names;
     private TextView noContent;
     private DataSource dataSource;
 
@@ -35,23 +36,24 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.context = context;
         this.listName = listName;
         this.dataSource = new DataSource(context);
-        this.content = dataSource.getAllNamesInList(listName);
-        Collections.sort(this.content);
+        List<String> cachedNames = PreferencesManager.get().getCachedNameList(listName);
+        this.names = cachedNames.isEmpty() ? dataSource.getAllNamesInList(listName) : cachedNames;
+        Collections.sort(this.names);
         this.noContent = noContent;
         setNoContent();
     }
 
     public void addName(String name) {
-        content.add(name);
-        Collections.sort(content);
+        names.add(name);
+        Collections.sort(names);
         notifyDataSetChanged();
         setNoContent();
     }
 
     public void removeName(String name) {
-        for (int i = 0; i < content.size(); i++) {
-            if (content.get(i).equals(name)) {
-                content.remove(i);
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).equals(name)) {
+                names.remove(i);
                 notifyDataSetChanged();
                 break;
             }
@@ -60,10 +62,10 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void changeName(String oldName, String newName) {
-        for (int i = 0; i < content.size(); i++) {
-            if (content.get(i).equals(oldName)) {
-                content.set(i, newName);
-                Collections.sort(content);
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).equals(oldName)) {
+                names.set(i, newName);
+                Collections.sort(names);
                 notifyDataSetChanged();
                 break;
             }
@@ -77,7 +79,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         else {
             noContent.setText(outOfNames);
         }
-        int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
+        int viewVisibility = names.isEmpty() ? View.VISIBLE : View.GONE;
         noContent.setVisibility(viewVisibility);
     }
 
@@ -87,7 +89,7 @@ public class NameChoosingAdapter extends BaseAdapter {
             if (i != 0) {
                 chosenNames.append("\n");
             }
-            chosenNames.append(content.get(indexes.get(i)));
+            chosenNames.append(names.get(indexes.get(i)));
         }
         // If without replacement, remove the names
         if (!withReplacement) {
@@ -100,34 +102,43 @@ public class NameChoosingAdapter extends BaseAdapter {
         Collections.sort(indexes);
         Collections.reverse(indexes);
         for (int index : indexes) {
-            content.remove(index);
+            names.remove(index);
         }
         notifyDataSetChanged();
         setNoContent();
     }
 
     public void removeNameAtPosition(int position) {
-        content.remove(position);
+        names.remove(position);
         notifyDataSetChanged();
         setNoContent();
     }
 
     public void resetNames() {
-        content.clear();
-        content.addAll(this.dataSource.getAllNamesInList(listName));
-        Collections.sort(content);
+        names.clear();
+        names.addAll(dataSource.getAllNamesInList(listName));
+        Collections.sort(names);
         setNoContent();
         notifyDataSetChanged();
     }
 
+    public void cacheNamesList() {
+        PreferencesManager.get().cacheNameChoosingList(listName, names);
+    }
+
+    public void processListNameChange(String newListName) {
+        PreferencesManager.get().moveNamesListCache(listName, newListName);
+        listName = newListName;
+    }
+
     public int getCount()
     {
-        return content.size();
+        return names.size();
     }
 
     public String getItem(int position)
     {
-        return content.get(position);
+        return names.get(position);
     }
 
     public long getItemId(int position) {
@@ -145,7 +156,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     // Renders the ListView item that the user has scrolled to or is about to scroll to
     public View getView(final int position, View view, ViewGroup parent) {
-        final NameViewHolder holder;
+        NameViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.choose_name_cell, parent, false);
@@ -155,7 +166,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         else {
             holder = (NameViewHolder) view.getTag();
         }
-        holder.name.setText(content.get(position));
+        holder.name.setText(names.get(position));
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
