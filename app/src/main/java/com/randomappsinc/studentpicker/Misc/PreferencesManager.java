@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,5 +79,18 @@ public class PreferencesManager {
     public void setFirstTimeUser(boolean firstTimeUser) {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
-}
 
+    public void cacheNameChoosingList(String listName, List<String> names) {
+        prefs.edit().putString(listName, JSONUtils.serializeNameList(names)).apply();
+    }
+
+    public List<String> getCachedNameList(String listName) {
+        return JSONUtils.extractNames(prefs.getString(listName, ""));
+    }
+
+    public void moveNamesListCache(String oldListName, String newListName) {
+        String cache = prefs.getString(oldListName, "");
+        prefs.edit().remove(oldListName).apply();
+        prefs.edit().putString(newListName, cache).apply();
+    }
+}
