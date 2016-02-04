@@ -31,31 +31,44 @@ public class EditNameListAdapter extends BaseAdapter {
     private Context context;
     private List<String> content;
     private TextView noContent;
+    private TextView numNames;
     private String listName;
     private DataSource dataSource;
     private View parent;
 
-    public EditNameListAdapter(Context context, TextView noContent, String listName, View parent) {
+    public EditNameListAdapter(Context context, TextView noContent, TextView numNames, String listName, View parent) {
         this.context = context;
         this.dataSource = new DataSource(context);
         this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
+        this.numNames = numNames;
         this.listName = listName;
         this.parent = parent;
         Collections.sort(this.content);
-        setNoContent();
+        setViews();
     }
 
-    public void setNoContent() {
-        int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
-        noContent.setVisibility(viewVisibility);
+    public void setViews() {
+        if (content.isEmpty()) {
+            numNames.setVisibility(View.GONE);
+            noContent.setVisibility(View.VISIBLE);
+        }
+        else {
+            noContent.setVisibility(View.GONE);
+            String names = getCount() == 1
+                    ? context.getString(R.string.single_name)
+                    : context.getString(R.string.plural_names);
+            String numNamesText = String.valueOf(getCount()) + names;
+            numNames.setText(numNamesText);
+            numNames.setVisibility(View.VISIBLE);
+        }
     }
 
     public void addName(String name) {
         dataSource.addName(name, listName);
         content.add(name);
         Collections.sort(content);
-        setNoContent();
+        setViews();
         notifyDataSetChanged();
 
         EditListEvent event = new EditListEvent();
@@ -77,7 +90,7 @@ public class EditNameListAdapter extends BaseAdapter {
 
         content.remove(index);
         notifyDataSetChanged();
-        setNoContent();
+        setViews();
 
         showConfirmationDialog(false, nameToRemove);
     }
@@ -98,7 +111,7 @@ public class EditNameListAdapter extends BaseAdapter {
         dataSource.importNamesIntoList(listName, listToAbsorb);
         content = dataSource.getAllNamesInList(listName);
         Collections.sort(content);
-        setNoContent();
+        setViews();
         notifyDataSetChanged();
 
         List<String> namesAdded = dataSource.getAllNamesInList(listToAbsorb);

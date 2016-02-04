@@ -90,7 +90,11 @@ public class PreferencesManager {
 
     public void moveNamesListCache(String oldListName, String newListName) {
         String cache = prefs.getString(oldListName, "");
-        prefs.edit().remove(oldListName).apply();
+        removeNamesListCache(oldListName);
         prefs.edit().putString(newListName, cache).apply();
+    }
+
+    public void removeNamesListCache(String listName) {
+        prefs.edit().remove(listName).apply();
     }
 }

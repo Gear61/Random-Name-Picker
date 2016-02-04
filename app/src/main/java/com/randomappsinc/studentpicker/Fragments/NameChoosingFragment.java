@@ -43,9 +43,10 @@ import de.greenrobot.event.EventBus;
  * Created by alexanderchiou on 10/18/15.
  */
 public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener {
-    @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.names_list) ListView namesList;
     @Bind(R.id.parent) View parent;
+    @Bind(R.id.no_content) TextView noContent;
+    @Bind(R.id.num_names) TextView numNames;
+    @Bind(R.id.names_list) ListView namesList;
 
     @BindString(R.string.name_chosen) String nameChosenTitle;
     @BindString(R.string.names_chosen) String namesChosenTitle;
@@ -119,9 +120,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.name_choosing, container, false);
         ButterKnife.bind(this, rootView);
-        Bundle bundle = getArguments();
-        String listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, listName);
+        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
         return rootView;
     }

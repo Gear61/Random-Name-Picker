@@ -18,7 +18,7 @@
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/add_item"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 card_view:contentPadding="5dp"
@@ -58,10 +58,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:id="@+id/num_names"
+            android:visibility="gone"
+            style="@style/num_names"/>
+
         <ListView
             android:id="@+id/content_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

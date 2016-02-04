@@ -27,9 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:id="@+id/num_names"
+            style="@style/num_names"/>
+
         <ListView
             android:id="@+id/names_list"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

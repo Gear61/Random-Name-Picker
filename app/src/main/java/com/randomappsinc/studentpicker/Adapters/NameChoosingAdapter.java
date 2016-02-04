@@ -22,15 +22,16 @@ import butterknife.ButterKnife;
  * Created by alexanderchiou on 7/19/15.
  */
 public class NameChoosingAdapter extends BaseAdapter {
+    private Context context;
     private String outOfNames;
     private String noNames;
-    private Context context;
     private String listName;
     private List<String> names;
     private TextView noContent;
+    private TextView numNames;
     private DataSource dataSource;
 
-    public NameChoosingAdapter(Context context, TextView noContent, String listName) {
+    public NameChoosingAdapter(Context context, TextView noContent, TextView numNames, String listName) {
         this.outOfNames = context.getString(R.string.out_of_names);
         this.noNames = context.getString(R.string.no_names);
         this.context = context;
@@ -40,14 +41,15 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.names = cachedNames.isEmpty() ? dataSource.getAllNamesInList(listName) : cachedNames;
         Collections.sort(this.names);
         this.noContent = noContent;
-        setNoContent();
+        this.numNames = numNames;
+        setViews();
     }
 
     public void addName(String name) {
         names.add(name);
         Collections.sort(names);
         notifyDataSetChanged();
-        setNoContent();
+        setViews();
     }
 
     public void removeName(String name) {
@@ -58,7 +60,7 @@ public class NameChoosingAdapter extends BaseAdapter {
                 break;
             }
         }
-        setNoContent();
+        setViews();
     }
 
     public void changeName(String oldName, String newName) {
@@ -72,15 +74,26 @@ public class NameChoosingAdapter extends BaseAdapter {
         }
     }
 
-    public void setNoContent() {
+    public void setViews() {
         if (dataSource.getAllNamesInList(listName).isEmpty()) {
             noContent.setText(noNames);
         }
         else {
             noContent.setText(outOfNames);
         }
-        int viewVisibility = names.isEmpty() ? View.VISIBLE : View.GONE;
-        noContent.setVisibility(viewVisibility);
+        if (names.isEmpty()) {
+            numNames.setVisibility(View.GONE);
+            noContent.setVisibility(View.VISIBLE);
+        }
+        else {
+            noContent.setVisibility(View.GONE);
+            String names = getCount() == 1
+                    ? context.getString(R.string.single_name)
+                    : context.getString(R.string.plural_names);
+            String numNamesText = String.valueOf(getCount()) + names;
+            numNames.setText(numNamesText);
+            numNames.setVisibility(View.VISIBLE);
+        }
     }
 
     public String chooseNamesAtRandom(List<Integer> indexes, boolean withReplacement) {
@@ -105,25 +118,27 @@ public class NameChoosingAdapter extends BaseAdapter {
             names.remove(index);
         }
         notifyDataSetChanged();
-        setNoContent();
+        setViews();
     }
 
     public void removeNameAtPosition(int position) {
         names.remove(position);
         notifyDataSetChanged();
-        setNoContent();
+        setViews();
     }
 
     public void resetNames() {
         names.clear();
         names.addAll(dataSource.getAllNamesInList(listName));
         Collections.sort(names);
-        setNoContent();
+        setViews();
         notifyDataSetChanged();
     }
 
     public void cacheNamesList() {
-        PreferencesManager.get().cacheNameChoosingList(listName, names);
+        if (PreferencesManager.get().doesListExist(listName)) {
+            PreferencesManager.get().cacheNameChoosingList(listName, names);
+        }
     }
 
     public void processListNameChange(String newListName) {
