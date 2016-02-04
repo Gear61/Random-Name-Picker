@@ -38,10 +38,11 @@ import de.greenrobot.event.EventBus;
  * Created by alexanderchiou on 10/18/15.
  */
 public class EditNameListFragment extends Fragment {
+    @Bind(R.id.parent) View parent;
     @Bind(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @Bind(R.id.no_content) TextView noContent;
+    @Bind(R.id.num_names) TextView numNames;
     @Bind(R.id.content_list) ListView namesList;
-    @Bind(R.id.parent) View parent;
     @Bind(R.id.plus_icon) ImageView plus;
 
     @BindString(R.string.new_list_name) String newListName;
@@ -69,11 +70,10 @@ public class EditNameListFragment extends Fragment {
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_plus).colorRes(R.color.white));
 
-        Bundle bundle = getArguments();
-        listName = bundle.getString(MainActivity.LIST_NAME_KEY, "");
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        adapter = new EditNameListAdapter(getActivity(), noContent, listName, parent);
+        adapter = new EditNameListAdapter(getActivity(), noContent, numNames, listName, parent);
         namesList.setAdapter(adapter);
         return rootView;
     }
@@ -147,6 +147,7 @@ public class EditNameListFragment extends Fragment {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dataSource.deleteList(listName);
                         PreferencesManager.get().removeNameList(listName);
+                        PreferencesManager.get().removeNamesListCache(listName);
                         getActivity().finish();
                     }
                 })

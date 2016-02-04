@@ -7,6 +7,8 @@
     <string name="name_chosen">And the lucky winner is&#8230;</string>
     <string name="names_chosen">And the lucky winners are&#8230;</string>
     <string name="out_of_names">No names remain.</string>
+    <string name="single_name">&#160;name</string>
+    <string name="plural_names">&#160;names</string>
 
     <string name="chosen_names">Chosen names</string>
 
