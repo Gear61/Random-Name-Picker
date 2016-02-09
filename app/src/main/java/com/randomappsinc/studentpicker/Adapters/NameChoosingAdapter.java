@@ -27,6 +27,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     private String noNames;
     private String listName;
     private List<String> names;
+    private List<String> alreadyChosenNames;
     private TextView noContent;
     private TextView numNames;
     private DataSource dataSource;
@@ -37,12 +38,30 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.context = context;
         this.listName = listName;
         this.dataSource = new DataSource(context);
+
         List<String> cachedNames = PreferencesManager.get().getCachedNameList(listName);
         this.names = cachedNames.isEmpty() ? dataSource.getAllNamesInList(listName) : cachedNames;
+        this.alreadyChosenNames = PreferencesManager.get().getAlreadyChosenNames(listName);
+
         Collections.sort(this.names);
         this.noContent = noContent;
         this.numNames = numNames;
         setViews();
+    }
+
+    public void clearNameHistory() {
+        alreadyChosenNames.clear();
+    }
+
+    public String getNamesHistory() {
+        StringBuilder namesHistory = new StringBuilder();
+        for (int i = 0; i < alreadyChosenNames.size(); i++) {
+            if (i != 0) {
+                namesHistory.append("\n");
+            }
+            namesHistory.append(alreadyChosenNames.get(i));
+        }
+        return namesHistory.toString();
     }
 
     public void addName(String name) {
@@ -96,6 +115,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         }
     }
 
+    // All name choosing goes through here
     public String chooseNamesAtRandom(List<Integer> indexes, boolean withReplacement) {
         StringBuilder chosenNames = new StringBuilder();
         for (int i = 0; i < indexes.size(); i++) {
@@ -103,6 +123,7 @@ public class NameChoosingAdapter extends BaseAdapter {
                 chosenNames.append("\n");
             }
             chosenNames.append(names.get(indexes.get(i)));
+            alreadyChosenNames.add(names.get(indexes.get(i)));
         }
         // If without replacement, remove the names
         if (!withReplacement) {
@@ -137,7 +158,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void cacheNamesList() {
         if (PreferencesManager.get().doesListExist(listName)) {
-            PreferencesManager.get().cacheNameChoosingList(listName, names);
+            PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames);
         }
     }
 

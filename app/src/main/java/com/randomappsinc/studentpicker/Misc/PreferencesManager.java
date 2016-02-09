@@ -80,12 +80,16 @@ public class PreferencesManager {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
-    public void cacheNameChoosingList(String listName, List<String> names) {
-        prefs.edit().putString(listName, JSONUtils.serializeNameList(names)).apply();
+    public void cacheNameChoosingList(String listName, List<String> names, List<String> alreadyChosenNames) {
+        prefs.edit().putString(listName, JSONUtils.serializeNameList(names, alreadyChosenNames)).apply();
     }
 
     public List<String> getCachedNameList(String listName) {
         return JSONUtils.extractNames(prefs.getString(listName, ""));
+    }
+
+    public List<String> getAlreadyChosenNames(String listName) {
+        return JSONUtils.extractAlreadyChosenNames(prefs.getString(listName, ""));
     }
 
     public void moveNamesListCache(String oldListName, String newListName) {

@@ -53,8 +53,9 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     private NameChoosingAdapter nameChoosingAdapter;
     private boolean withReplacement;
-    private int numNamesChosen;
+    private int numNamesToChoose;
     private MaterialDialog settingsDialog;
+    private MaterialDialog namesHistoryDialog;
     private NameChoosingSettingsViewHolder settingsHolder;
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
@@ -65,7 +66,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
         withReplacement = false;
-        numNamesChosen = 1;
+        numNamesToChoose = 1;
+
         settingsDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.name_choosing_settings)
                 .customView(R.layout.name_choosing_settings, true)
@@ -86,8 +88,22 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 })
                 .build();
         settingsHolder = new NameChoosingSettingsViewHolder(settingsDialog.getCustomView());
+
         textToSpeech = new TextToSpeech(getActivity(), this);
         textToSpeech.setLanguage(Locale.US);
+
+        namesHistoryDialog = new MaterialDialog.Builder(getActivity())
+                .title(R.string.chosen_names_history)
+                .positiveText(android.R.string.yes)
+                .neutralText(R.string.clear)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        nameChoosingAdapter.clearNameHistory();
+                        Utils.showSnackbar(parent, getString(R.string.name_history_cleared));
+                    }
+                })
+                .build();
     }
 
     public void applySettings() {
@@ -95,16 +111,16 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         String numChosenText = settingsHolder.numChosen.getText().toString();
         if (numChosenText.isEmpty()) {
             settingsHolder.numChosen.setText("1");
-            numNamesChosen = 1;
+            numNamesToChoose = 1;
         }
         else {
             int userNumNames = Integer.parseInt(settingsHolder.numChosen.getText().toString());
             if (userNumNames == 0) {
                 settingsHolder.numChosen.setText("1");
-                numNamesChosen = 1;
+                numNamesToChoose = 1;
             }
             else {
-                numNamesChosen = userNumNames;
+                numNamesToChoose = userNumNames;
             }
         }
         settingsHolder.numChosen.clearFocus();
@@ -112,7 +128,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     public void revertSettings() {
         settingsHolder.withReplacement.setChecked(withReplacement);
-        settingsHolder.numChosen.setText(String.valueOf(numNamesChosen));
+        settingsHolder.numChosen.setText(String.valueOf(numNamesToChoose));
         settingsHolder.numChosen.clearFocus();
     }
 
@@ -129,7 +145,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @OnClick(R.id.choose)
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0) {
-            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesChosen, nameChoosingAdapter.getCount() - 1);
+            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesToChoose, nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
@@ -219,6 +235,17 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         }
     }
 
+    public void showNamesHistory() {
+        String namesHistory = nameChoosingAdapter.getNamesHistory();
+        if (!namesHistory.isEmpty()) {
+            namesHistoryDialog.setContent(namesHistory);
+            namesHistoryDialog.show();
+        }
+        else {
+            Utils.showSnackbar(parent, getString(R.string.empty_names_history));
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -234,8 +261,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
-        menu.findItem(R.id.silence).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_volume_off)
+        menu.findItem(R.id.show_names_history).setIcon(
+                new IconDrawable(getActivity(), FontAwesomeIcons.fa_history)
                         .colorRes(R.color.white)
                         .actionBarSize());
         menu.findItem(R.id.settings).setIcon(
@@ -252,8 +279,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.silence:
-                textToSpeech.stop();
+            case R.id.show_names_history:
+                showNamesHistory();
                 return true;
             case R.id.settings:
                 settingsDialog.show();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Name Choosing -->
-    <string name="reset_list">Reset List</string>
+    <string name="reset_list">Reset list</string>
     <string name="with_replacement">With Replacement</string>
     <string name="no_names">You currently do not have any names in this list.</string>
     <string name="name_chosen">And the lucky winner is&#8230;</string>
@@ -21,9 +21,13 @@
     <string name="copy_text">Copy text</string>
     <string name="copy_confirmation">The chosen names have been copied to your clipboard.</string>
 
+    <string name="chosen_names_history">Chosen Names History</string>
+    <string name="show_already_chosen">Show chosen names history</string>
+    <string name="clear">Clear</string>
+    <string name="empty_names_history">Your chosen names history is empty.</string>
+    <string name="name_history_cleared">Your chosen names history has been cleared.</string>
+
     <string name="say_name">Say name</string>
     <string name="say_names">Say names</string>
-    <string name="mute_icon">{fa-volume-off}</string>
-    <string name="silence">Silence</string>
     <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
 </resources>
