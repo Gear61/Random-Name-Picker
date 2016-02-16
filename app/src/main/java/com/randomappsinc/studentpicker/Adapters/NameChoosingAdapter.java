@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
+import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.Collections;
@@ -156,9 +157,9 @@ public class NameChoosingAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void cacheNamesList() {
+    public void cacheState(ChoosingSettings settings) {
         if (PreferencesManager.get().doesListExist(listName)) {
-            PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames);
+            PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames, settings);
         }
     }
 
