@@ -25,7 +25,6 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Misc.Utils;
-import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.Models.NameChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
 
@@ -37,7 +36,6 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -64,7 +62,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        EventBus.getDefault().register(this);
         withReplacement = false;
         numNamesToChoose = 1;
 
@@ -104,6 +101,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                     }
                 })
                 .build();
+    }
+
+    public NameChoosingAdapter getNameChoosingAdapter() {
+        return nameChoosingAdapter;
     }
 
     public void applySettings() {
@@ -219,22 +220,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         }
     }
 
-    public void onEvent(EditListEvent event) {
-        switch (event.getEventType()) {
-            case EditListEvent.ADD:
-                nameChoosingAdapter.addName(event.getName());
-                break;
-            case EditListEvent.REMOVE:
-                nameChoosingAdapter.removeName(event.getName());
-                break;
-            case EditListEvent.RENAME:
-                nameChoosingAdapter.changeName(event.getName(), event.getNewName());
-                break;
-            case EditListEvent.RENAME_LIST:
-                nameChoosingAdapter.processListNameChange(event.getNewName());
-        }
-    }
-
     public void showNamesHistory() {
         String namesHistory = nameChoosingAdapter.getNamesHistory();
         if (!namesHistory.isEmpty()) {
@@ -250,7 +235,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        EventBus.getDefault().unregister(this);
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
