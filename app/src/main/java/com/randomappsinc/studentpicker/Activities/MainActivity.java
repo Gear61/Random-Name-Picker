@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.Activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -72,7 +73,7 @@ public class MainActivity extends StandardActivity {
                     .title(R.string.view_tutorial)
                     .content(R.string.tutorial_prompt)
                     .positiveText(R.string.accept_tutorial)
-                    .negativeText(R.string.decline_tutorial)
+                    .negativeText(R.string.no_im_good)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -80,6 +81,10 @@ public class MainActivity extends StandardActivity {
                         }
                     })
                     .show();
+        }
+
+        if (PreferencesManager.get().rememberAppOpen() == 5) {
+            showPleaseRateDialog();
         }
     }
 
@@ -121,6 +126,26 @@ public class MainActivity extends StandardActivity {
                 .title(R.string.welcome)
                 .content(R.string.welcome_string)
                 .positiveText(android.R.string.yes)
+                .show();
+    }
+
+    public void showPleaseRateDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.please_rate)
+                .negativeText(R.string.no_im_good)
+                .positiveText(R.string.will_rate)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
+                            Utils.showSnackbar(parent, getString(R.string.play_store_error));
+                            return;
+                        }
+                        startActivity(intent);
+                    }
+                })
                 .show();
     }
 

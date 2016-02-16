@@ -20,6 +20,7 @@ public class PreferencesManager {
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
     private static final String STUDENT_LISTS_KEY = "com.randomappsinc.studentpicker.studentLists";
     private static final String FIRST_TIME_KEY = "firstTime";
+    private static final String NUM_APP_OPENS = "numAppOpens";
     private static PreferencesManager instance;
 
     public static PreferencesManager get() {
@@ -100,5 +101,12 @@ public class PreferencesManager {
 
     public void removeNamesListCache(String listName) {
         prefs.edit().remove(listName).apply();
+    }
+
+    public int rememberAppOpen() {
+        int numAppOpens = prefs.getInt(NUM_APP_OPENS, 0);
+        numAppOpens++;
+        prefs.edit().putInt(NUM_APP_OPENS, numAppOpens).apply();
+        return numAppOpens;
     }
 }

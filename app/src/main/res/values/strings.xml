@@ -25,7 +25,7 @@
         the info button in the toolbar above.
     </string>
     <string name="accept_tutorial">Yes please!</string>
-    <string name="decline_tutorial">No, I\'m good</string>
+    <string name="no_im_good">No, I\'m good</string>
 
     <string name="got_it">GOT IT</string>
     <string name="add_name_list_explanation">To create a new name list, type its name into the bar on the left and click this button.
@@ -42,4 +42,11 @@
         If you need more help or have ideas on how to make this app more awesome,
         please use the send feedback option in the settings menu to tell me!
     </string>
+
+    <string name="please_rate">Hey, it looks like you\'re a frequent user of Random Name Picker!
+        If you have a couple seconds, I would be incredibly grateful if you could rate this app in the Play Store.
+        Don\'t worry, I won\'t bother you with this ever again no matter what you choose.
+        Thank you again for even downloading this app to begin with.
+    </string>
+    <string name="will_rate">Sure, I\'ll help</string>
 </resources>
