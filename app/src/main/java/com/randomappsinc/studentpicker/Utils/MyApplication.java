@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.Misc;
+package com.randomappsinc.studentpicker.Utils;
 
 import android.app.Application;
 

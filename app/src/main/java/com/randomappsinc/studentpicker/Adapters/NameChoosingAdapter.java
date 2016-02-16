@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 
 import java.util.Collections;
 import java.util.List;

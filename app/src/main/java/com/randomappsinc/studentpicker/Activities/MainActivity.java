@@ -23,9 +23,9 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
+import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -95,7 +95,7 @@ public class MainActivity extends StandardActivity {
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.add_name_list_explanation)
                 .setUseAutoRadius(false)
-                .setRadius(Utils.getDpInPixels(40))
+                .setRadius(UIUtils.getDpInPixels(40))
                 .build();
         sequence.addSequenceItem(addListExplanation);
 
@@ -104,7 +104,7 @@ public class MainActivity extends StandardActivity {
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.import_explanation)
                 .setUseAutoRadius(false)
-                .setRadius(Utils.getDpInPixels(40))
+                .setRadius(UIUtils.getDpInPixels(40))
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {}
@@ -140,7 +140,7 @@ public class MainActivity extends StandardActivity {
                         Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                            Utils.showSnackbar(parent, getString(R.string.play_store_error));
+                            UIUtils.showSnackbar(parent, getString(R.string.play_store_error));
                             return;
                         }
                         startActivity(intent);
@@ -157,7 +157,7 @@ public class MainActivity extends StandardActivity {
 
     @OnItemClick(R.id.content_list)
     public void onItemClick(int position) {
-        Utils.hideKeyboard(this);
+        UIUtils.hideKeyboard(this);
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
         intent.putExtra(LIST_NAME_KEY, listName);
@@ -170,11 +170,11 @@ public class MainActivity extends StandardActivity {
         String newList = newListInput.getText().toString().trim();
         newListInput.setText("");
         if (newList.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_list_name));
+            UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
         }
         else if (PreferencesManager.get().getNameLists().contains(newList)) {
             String dupeMessage = listDuplicate + " \"" + newList + "\".";
-            Utils.showSnackbar(parent, dupeMessage);
+            UIUtils.showSnackbar(parent, dupeMessage);
         }
         else {
             nameListsAdapter.addList(newList);
@@ -238,7 +238,7 @@ public class MainActivity extends StandardActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             if (!filePath.endsWith(".txt")) {
-                Utils.showSnackbar(parent, getString(R.string.invalid_file));
+                UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
             }
             else {
                 Intent intent = new Intent(this, ImportFileActivity.class);
@@ -251,14 +251,8 @@ public class MainActivity extends StandardActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu, menu);
-        menu.findItem(R.id.settings).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_gear)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.view_tutorial).setIcon(
-                new IconDrawable(this, FontAwesomeIcons.fa_info_circle)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
+        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, this);
+        UIUtils.loadMenuIcon(menu, R.id.view_tutorial, FontAwesomeIcons.fa_info_circle, this);
         return true;
     }
 

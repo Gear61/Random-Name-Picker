@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.Misc;
+package com.randomappsinc.studentpicker.Utils;
 
 /**
  * Created by alexanderchiou on 7/19/15.

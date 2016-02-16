@@ -24,9 +24,9 @@ import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
+import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -82,7 +82,7 @@ public class EditNameListFragment extends Fragment {
         String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
         if (newName.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_name));
+            UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         }
         else {
             adapter.addName(newName);
@@ -155,18 +155,9 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
-        menu.findItem(R.id.import_names).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_upload)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.rename_list).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_edit)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.delete_list).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_trash)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
+        UIUtils.loadMenuIcon(menu, R.id.import_names, FontAwesomeIcons.fa_upload, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.rename_list, FontAwesomeIcons.fa_edit, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.delete_list, FontAwesomeIcons.fa_trash, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -176,7 +167,7 @@ public class EditNameListFragment extends Fragment {
             case R.id.import_names:
                 String[] importCandidates = dataSource.getAllNameLists(listName);
                 if (importCandidates.length == 0) {
-                    Utils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
+                    UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
                 }
                 else {
                     new MaterialDialog.Builder(getActivity())
@@ -186,7 +177,7 @@ public class EditNameListFragment extends Fragment {
                                 @Override
                                 public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                     adapter.importNamesFromList(text.toString());
-                                    Utils.showSnackbar(parent, getString(R.string.names_successfully_imported));
+                                    UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
                                     return true;
                                 }
                             })
