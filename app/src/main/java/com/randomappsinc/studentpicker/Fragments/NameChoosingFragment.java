@@ -24,8 +24,10 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
+import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
-import com.randomappsinc.studentpicker.Models.NameChoosingSettingsViewHolder;
+import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.Models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.HashMap;
@@ -50,11 +52,13 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @BindString(R.string.names_chosen) String namesChosenTitle;
 
     private NameChoosingAdapter nameChoosingAdapter;
-    private boolean withReplacement;
-    private int numNamesToChoose;
+
+    // Settings
+    private ChoosingSettings settings;
+    private ChoosingSettingsViewHolder settingsHolder;
+
     private MaterialDialog settingsDialog;
     private MaterialDialog namesHistoryDialog;
-    private NameChoosingSettingsViewHolder settingsHolder;
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
 
@@ -62,8 +66,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        withReplacement = false;
-        numNamesToChoose = 1;
 
         settingsDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.name_choosing_settings)
@@ -84,7 +86,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                     }
                 })
                 .build();
-        settingsHolder = new NameChoosingSettingsViewHolder(settingsDialog.getCustomView());
 
         textToSpeech = new TextToSpeech(getActivity(), this);
         textToSpeech.setLanguage(Locale.US);
@@ -103,51 +104,58 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 .build();
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.name_choosing, container, false);
+        ButterKnife.bind(this, rootView);
+
+        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
+        namesList.setAdapter(nameChoosingAdapter);
+
+        settings = PreferencesManager.get().getChoosingSetings(listName);
+        settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
+
+        return rootView;
+    }
+
     public NameChoosingAdapter getNameChoosingAdapter() {
         return nameChoosingAdapter;
     }
 
     public void applySettings() {
-        withReplacement = settingsHolder.withReplacement.isChecked();
+        settings.setWithReplacement(settingsHolder.withReplacement.isChecked());
         String numChosenText = settingsHolder.numChosen.getText().toString();
         if (numChosenText.isEmpty()) {
             settingsHolder.numChosen.setText("1");
-            numNamesToChoose = 1;
+            settings.setNumNamesToChoose(1);
         }
         else {
             int userNumNames = Integer.parseInt(settingsHolder.numChosen.getText().toString());
-            if (userNumNames == 0) {
+            if (userNumNames <= 0) {
                 settingsHolder.numChosen.setText("1");
-                numNamesToChoose = 1;
+                settings.setNumNamesToChoose(1);
             }
             else {
-                numNamesToChoose = userNumNames;
+                settings.setNumNamesToChoose(userNumNames);
             }
         }
         settingsHolder.numChosen.clearFocus();
     }
 
     public void revertSettings() {
-        settingsHolder.withReplacement.setChecked(withReplacement);
-        settingsHolder.numChosen.setText(String.valueOf(numNamesToChoose));
+        settingsHolder.withReplacement.setCheckedImmediately(settings.getWithReplacement());
+        settingsHolder.numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
         settingsHolder.numChosen.clearFocus();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.name_choosing, container, false);
-        ButterKnife.bind(this, rootView);
-        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
-        namesList.setAdapter(nameChoosingAdapter);
-        return rootView;
     }
 
     @OnClick(R.id.choose)
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0) {
-            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(numNamesToChoose, nameChoosingAdapter.getCount() - 1);
-            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, withReplacement);
+            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(settings.getNumNamesToChoose(),
+                    nameChoosingAdapter.getCount() - 1);
+            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes,
+                    settings.getWithReplacement());
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
             new MaterialDialog.Builder(getActivity())
@@ -239,7 +247,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-        nameChoosingAdapter.cacheNamesList();
+        nameChoosingAdapter.cacheState(settings);
     }
 
     @Override

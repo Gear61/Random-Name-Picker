@@ -12,11 +12,14 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 11/9/15.
  */
-public class NameChoosingSettingsViewHolder {
+public class ChoosingSettingsViewHolder {
     @Bind(R.id.with_replacement) public CheckBox withReplacement;
     @Bind(R.id.num_people_chosen) public EditText numChosen;
 
-    public NameChoosingSettingsViewHolder(View view) {
+    public ChoosingSettingsViewHolder(View view, ChoosingSettings settings) {
         ButterKnife.bind(this, view);
+
+        withReplacement.setCheckedImmediately(settings.getWithReplacement());
+        numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
     }
 }

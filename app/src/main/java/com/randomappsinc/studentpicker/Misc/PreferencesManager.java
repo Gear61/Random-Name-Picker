@@ -7,6 +7,8 @@ package com.randomappsinc.studentpicker.Misc;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,8 +83,10 @@ public class PreferencesManager {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
-    public void cacheNameChoosingList(String listName, List<String> names, List<String> alreadyChosenNames) {
-        prefs.edit().putString(listName, JSONUtils.serializeNameList(names, alreadyChosenNames)).apply();
+    public void cacheNameChoosingList(String listName, List<String> names, List<String> alreadyChosenNames,
+                                      ChoosingSettings settings) {
+        String cache = JSONUtils.serializeChoosingState(names, alreadyChosenNames, settings);
+        prefs.edit().putString(listName, cache).apply();
     }
 
     public List<String> getCachedNameList(String listName) {
@@ -91,6 +95,10 @@ public class PreferencesManager {
 
     public List<String> getAlreadyChosenNames(String listName) {
         return JSONUtils.extractAlreadyChosenNames(prefs.getString(listName, ""));
+    }
+
+    public ChoosingSettings getChoosingSetings(String listName) {
+        return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 
     public void moveNamesListCache(String oldListName, String newListName) {

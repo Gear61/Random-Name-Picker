@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.Misc;
 
+import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,9 +15,13 @@ import java.util.List;
 public class JSONUtils {
     public static final String NAMES_KEY = "names";
     public static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
+    public static final String SETTINGS_KEY = "settings";
+    public static final String WITH_REPLACEMENT_KEY = "withReplacement";
+    public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
-    public static String serializeNameList(List<String> names, List<String> alreadyChosenNames) {
+    public static String serializeChoosingState(List<String> names, List<String> alreadyChosenNames,
+                                                ChoosingSettings choosingSettings) {
         try {
             JSONObject nameListJson = new JSONObject();
 
@@ -32,6 +38,11 @@ public class JSONUtils {
                 alreadyChosenNamesArray.put(alreadyChosenName);
             }
             nameListJson.put(ALREADY_CHOSEN_NAMES_KEY, alreadyChosenNamesArray);
+
+            JSONObject settings = new JSONObject();
+            settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
+            settings.put(NUM_NAMES_TO_CHOOSE_KEY, choosingSettings.getNumNamesToChoose());
+            nameListJson.put(SETTINGS_KEY, settings);
 
             return nameListJson.toString();
         }
@@ -54,7 +65,7 @@ public class JSONUtils {
         return names;
     }
 
-    // Given a serialized JSON "cache" string of a name list, extracts the names
+    // Given a serialized JSON "cache" string of a name list, extracts the chosen names history
     public static List<String> extractAlreadyChosenNames(String cachedList) {
         List<String> alreadyChosenNames = new ArrayList<>();
         try {
@@ -66,5 +77,18 @@ public class JSONUtils {
         }
         catch (JSONException ignored) {}
         return alreadyChosenNames;
+    }
+
+    // Given a serialized JSON "cache" string of a name list, extracts the settings
+    public static ChoosingSettings extractChoosingSettings(String cachedList) {
+        ChoosingSettings settings = new ChoosingSettings(false, 1);
+        try {
+            JSONObject nameListJson = new JSONObject(cachedList);
+            JSONObject settingsJson = nameListJson.getJSONObject(SETTINGS_KEY);
+            settings.setWithReplacement(settingsJson.getBoolean(WITH_REPLACEMENT_KEY));
+            settings.setNumNamesToChoose(settingsJson.getInt(NUM_NAMES_TO_CHOOSE_KEY));
+        }
+        catch (JSONException ignored) {}
+        return settings;
     }
 }
