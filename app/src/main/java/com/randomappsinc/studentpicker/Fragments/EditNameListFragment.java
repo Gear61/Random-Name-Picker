@@ -19,20 +19,19 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.Misc.Utils;
-import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -73,7 +72,7 @@ public class EditNameListFragment extends Fragment {
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        adapter = new EditNameListAdapter(getActivity(), noContent, numNames, listName, parent);
+        adapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listName, parent);
         namesList.setAdapter(adapter);
         return rootView;
     }
@@ -125,11 +124,10 @@ public class EditNameListFragment extends Fragment {
                             dataSource.renameList(listName, newListName);
                             PreferencesManager.get().renameList(listName, newListName);
                             listName = newListName;
-                            getActivity().setTitle(listName);
-                            EditListEvent editListEvent = new EditListEvent();
-                            editListEvent.setEventType(EditListEvent.RENAME_LIST);
-                            editListEvent.setNewName(newListName);
-                            EventBus.getDefault().post(editListEvent);
+                            ListActivity listActivity = (ListActivity) getActivity();
+                            listActivity.setTitle(listName);
+                            listActivity.getListTabsAdapter().getNameChoosingFragment()
+                                    .getNameChoosingAdapter().processListNameChange(listName);
                         }
                     }
                 })

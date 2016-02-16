@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.widget.IconTextView;
+import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Models.EditListEvent;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.Collections;
@@ -22,13 +22,12 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by alexanderchiou on 7/19/15.
  */
 public class EditNameListAdapter extends BaseAdapter {
-    private Context context;
+    private ListActivity listActivity;
     private List<String> content;
     private TextView noContent;
     private TextView numNames;
@@ -36,9 +35,9 @@ public class EditNameListAdapter extends BaseAdapter {
     private DataSource dataSource;
     private View parent;
 
-    public EditNameListAdapter(Context context, TextView noContent, TextView numNames, String listName, View parent) {
-        this.context = context;
-        this.dataSource = new DataSource(context);
+    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames, String listName, View parent) {
+        this.listActivity = listActivity;
+        this.dataSource = new DataSource(listActivity);
         this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
         this.numNames = numNames;
@@ -56,8 +55,8 @@ public class EditNameListAdapter extends BaseAdapter {
         else {
             noContent.setVisibility(View.GONE);
             String names = getCount() == 1
-                    ? context.getString(R.string.single_name)
-                    : context.getString(R.string.plural_names);
+                    ? listActivity.getString(R.string.single_name)
+                    : listActivity.getString(R.string.plural_names);
             String numNamesText = String.valueOf(getCount()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
@@ -71,10 +70,7 @@ public class EditNameListAdapter extends BaseAdapter {
         setViews();
         notifyDataSetChanged();
 
-        EditListEvent event = new EditListEvent();
-        event.setEventType(EditListEvent.ADD);
-        event.setName(name);
-        EventBus.getDefault().post(event);
+        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
 
         showConfirmationDialog(true, name);
     }
@@ -83,10 +79,7 @@ public class EditNameListAdapter extends BaseAdapter {
         String nameToRemove = getItem(index);
         dataSource.removeName(nameToRemove, listName);
 
-        EditListEvent event = new EditListEvent();
-        event.setEventType(EditListEvent.REMOVE);
-        event.setName(nameToRemove);
-        EventBus.getDefault().post(event);
+        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().removeName(nameToRemove);
 
         content.remove(index);
         notifyDataSetChanged();
@@ -96,11 +89,8 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     public void changeName(int position, String newName) {
-        EditListEvent event = new EditListEvent();
-        event.setEventType(EditListEvent.RENAME);
-        event.setName(getItem(position));
-        event.setNewName(newName);
-        EventBus.getDefault().post(event);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().changeName(getItem(position), newName);
 
         content.set(position, newName);
         Collections.sort(content);
@@ -116,19 +106,16 @@ public class EditNameListAdapter extends BaseAdapter {
 
         List<String> namesAdded = dataSource.getAllNamesInList(listToAbsorb);
         for (String name : namesAdded) {
-            EditListEvent event = new EditListEvent();
-            event.setEventType(EditListEvent.ADD);
-            event.setName(name);
-            EventBus.getDefault().post(event);
+            listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
         }
     }
 
     public void showConfirmationDialog(final boolean addMode, final String name) {
-        String prefix = addMode ? context.getString(R.string.added) : context.getString(R.string.removed);
+        String prefix = addMode ? listActivity.getString(R.string.added) : listActivity.getString(R.string.removed);
         String confirmationMessage = prefix + "\"" + name + "\"";
         Snackbar snackbar = Snackbar.make(parent, confirmationMessage, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.app_teal));
+        snackbar.getView().setBackgroundColor(listActivity.getResources().getColor(R.color.app_teal));
         TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);
         snackbar.setAction(R.string.undo, new View.OnClickListener() {
@@ -164,9 +151,9 @@ public class EditNameListAdapter extends BaseAdapter {
     public void showRenameDialog(final int position) {
         final String currentName = content.get(position);
 
-        new MaterialDialog.Builder(context)
+        new MaterialDialog.Builder(listActivity)
                 .title(R.string.change_name)
-                .input(context.getString(R.string.new_name), currentName, new MaterialDialog.InputCallback() {
+                .input(listActivity.getString(R.string.new_name), currentName, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         boolean submitEnabled = !(input.toString().trim().isEmpty() ||
@@ -203,7 +190,7 @@ public class EditNameListAdapter extends BaseAdapter {
     public View getView(final int position, View view, ViewGroup parent) {
         NameViewHolder holder;
         if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) listActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.edit_person_name_cell, parent, false);
             holder = new NameViewHolder(view);
             view.setTag(holder);

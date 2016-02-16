@@ -15,6 +15,7 @@ import com.randomappsinc.studentpicker.R;
  * Created by alexanderchiou on 10/18/15.
  */
 public class ListTabsAdapter extends FragmentPagerAdapter {
+    private NameChoosingFragment nameChoosingFragment;
     private String tabTitles[];
     private String listName;
 
@@ -35,7 +36,7 @@ public class ListTabsAdapter extends FragmentPagerAdapter {
         bundle.putString(MainActivity.LIST_NAME_KEY, listName);
         switch (position) {
             case 0:
-                NameChoosingFragment nameChoosingFragment = new NameChoosingFragment();
+                nameChoosingFragment = new NameChoosingFragment();
                 nameChoosingFragment.setArguments(bundle);
                 return nameChoosingFragment;
             case 1:
@@ -45,6 +46,10 @@ public class ListTabsAdapter extends FragmentPagerAdapter {
             default:
                 return null;
         }
+    }
+
+    public NameChoosingFragment getNameChoosingFragment() {
+        return nameChoosingFragment;
     }
 
     @Override

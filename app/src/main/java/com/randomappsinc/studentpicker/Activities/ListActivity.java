@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.Activities;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -19,18 +18,19 @@ public class ListActivity extends StandardActivity {
     @Bind(R.id.viewpager) ViewPager mViewPager;
     @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
 
+    private ListTabsAdapter listTabsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
-        Intent intent = getIntent();
-        String listName = intent.getStringExtra(MainActivity.LIST_NAME_KEY);
+        String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        ListTabsAdapter profileTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);
-        mViewPager.setAdapter(profileTabsAdapter);
+        listTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);
+        mViewPager.setAdapter(listTabsAdapter);
         mSlidingTabLayout.setCustomTabView(R.layout.custom_tab, R.id.tab_name);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
@@ -39,5 +39,9 @@ public class ListActivity extends StandardActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mSlidingTabLayout.setViewPager(mViewPager);
+    }
+
+    public ListTabsAdapter getListTabsAdapter() {
+        return listTabsAdapter;
     }
 }
