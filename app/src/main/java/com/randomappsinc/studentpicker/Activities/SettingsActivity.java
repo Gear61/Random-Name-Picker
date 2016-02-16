@@ -3,11 +3,11 @@ package com.randomappsinc.studentpicker.Activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ListView;
 
 import com.randomappsinc.studentpicker.Adapters.SettingsAdapter;
+import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.Bind;
@@ -57,7 +57,7 @@ public class SettingsActivity extends StandardActivity {
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    Snackbar.make(parent, playStoreError, Snackbar.LENGTH_LONG).show();
+                    Utils.showSnackbar(parent, playStoreError);
                     return;
                 }
                 break;
