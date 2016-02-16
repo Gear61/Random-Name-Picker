@@ -5,9 +5,10 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.NameUtils;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
+import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -33,12 +34,12 @@ public class ImportFileActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String filePath = getIntent().getStringExtra(FILE_PATH_KEY);
-        listName.setText(Utils.getFileName(filePath));
+        listName.setText(NameUtils.getFileName(filePath));
         try {
-            names.setText(Utils.getNamesFromFile(filePath));
+            names.setText(NameUtils.getNamesFromFile(filePath));
         }
         catch (Exception e) {
-            Utils.showSnackbar(parent, getString(R.string.load_file_fail));
+            UIUtils.showSnackbar(parent, getString(R.string.load_file_fail));
         }
     }
 
@@ -46,11 +47,11 @@ public class ImportFileActivity extends StandardActivity {
     public void importNameList() {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
-            Utils.showSnackbar(parent, getString(R.string.blank_list_name));
+            UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
         }
         else if (PreferencesManager.get().getNameLists().contains(newListName)) {
             String dupeMessage = listDuplicate + " \"" + newListName + "\".";
-            Utils.showSnackbar(parent, dupeMessage);
+            UIUtils.showSnackbar(parent, dupeMessage);
         }
         else {
             PreferencesManager.get().addNameList(newListName);

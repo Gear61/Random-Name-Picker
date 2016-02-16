@@ -20,15 +20,15 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
-import com.randomappsinc.studentpicker.Misc.Utils;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.Models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.NameUtils;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
+import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +76,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         applySettings();
-                        Utils.showSnackbar(parent, getString(R.string.settings_applied));
+                        UIUtils.showSnackbar(parent, getString(R.string.settings_applied));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -98,7 +98,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         nameChoosingAdapter.clearNameHistory();
-                        Utils.showSnackbar(parent, getString(R.string.name_history_cleared));
+                        UIUtils.showSnackbar(parent, getString(R.string.name_history_cleared));
                     }
                 })
                 .build();
@@ -152,7 +152,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @OnClick(R.id.choose)
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0) {
-            List<Integer> chosenIndexes = Utils.getRandomNumsInRange(settings.getNumNamesToChoose(),
+            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
                     nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes,
                     settings.getWithReplacement());
@@ -190,7 +190,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             }
         }
         else {
-            Utils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
+            UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
         }
     }
 
@@ -216,14 +216,14 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Activity.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(getString(R.string.chosen_names), names);
         clipboard.setPrimaryClip(clip);
-        Utils.showSnackbar(parent, getString(R.string.copy_confirmation));
+        UIUtils.showSnackbar(parent, getString(R.string.copy_confirmation));
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            Utils.hideKeyboard(getActivity());
+            UIUtils.hideKeyboard(getActivity());
             getActivity().invalidateOptionsMenu();
         }
     }
@@ -235,7 +235,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             namesHistoryDialog.show();
         }
         else {
-            Utils.showSnackbar(parent, getString(R.string.empty_names_history));
+            UIUtils.showSnackbar(parent, getString(R.string.empty_names_history));
         }
     }
 
@@ -253,18 +253,9 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
-        menu.findItem(R.id.show_names_history).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_history)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.settings).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_gear)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
-        menu.findItem(R.id.reset).setIcon(
-                new IconDrawable(getActivity(), FontAwesomeIcons.fa_rotate_right)
-                        .colorRes(R.color.white)
-                        .actionBarSize());
+        UIUtils.loadMenuIcon(menu, R.id.show_names_history, FontAwesomeIcons.fa_history, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.reset, FontAwesomeIcons.fa_rotate_right, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 

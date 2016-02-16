@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.randomappsinc.studentpicker.Misc.PreferencesManager;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
