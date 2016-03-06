@@ -2,20 +2,21 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
     <com.rey.material.widget.CheckBox
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/presentation_mode"
+        android:text="@string/presentation_mode"
+        style="@style/setting_checkbox"/>
+
+    <com.rey.material.widget.CheckBox
         android:id="@+id/with_replacement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:text="@string/with_replacement"
-        android:textSize="16dp"
-        app:cbd_animDuration="100"/>
+        style="@style/setting_checkbox"/>
 
     <LinearLayout
         android:padding="5dp"
@@ -33,20 +34,7 @@
 
         <EditText
             android:id="@+id/num_people_chosen"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_marginLeft="5dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
-            android:background="@drawable/text_input_border"
             android:text="@string/default_num_names_chosen"
-            android:textSize="16dp"
-            android:maxLength="2"/>
+            style="@style/two_number_setting"/>
     </LinearLayout>
 </LinearLayout>
