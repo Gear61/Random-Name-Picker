@@ -19,7 +19,6 @@ import com.randomappsinc.studentpicker.R;
  * Created by alexanderchiou on 2/15/16.
  */
 public class UIUtils {
-
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         // Find the currently focused view, so we can grab the correct window token from it.
@@ -35,9 +34,9 @@ public class UIUtils {
         Context context = MyApplication.get().getApplicationContext();
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(context.getResources().getColor(R.color.app_teal));
-        TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
+        rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
+        TextView snackText = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
+        snackText.setTextColor(Color.WHITE);
         snackbar.show();
     }
 
