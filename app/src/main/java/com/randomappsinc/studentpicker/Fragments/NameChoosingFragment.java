@@ -124,6 +124,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     }
 
     public void applySettings() {
+        settings.setPresentationMode(settingsHolder.presentationMode.isChecked());
         settings.setWithReplacement(settingsHolder.withReplacement.isChecked());
         String numChosenText = settingsHolder.numChosen.getText().toString();
         if (numChosenText.isEmpty()) {
@@ -144,6 +145,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     }
 
     public void revertSettings() {
+        settingsHolder.presentationMode.setCheckedImmediately(settings.getPresentationMode());
         settingsHolder.withReplacement.setCheckedImmediately(settings.getWithReplacement());
         settingsHolder.numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
         settingsHolder.numChosen.clearFocus();
