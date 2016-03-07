@@ -58,7 +58,6 @@ public class MainActivity extends StandardActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setTitle(R.string.name_lists_label);
         newListInput.setHint(R.string.add_list_hint);
         noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));

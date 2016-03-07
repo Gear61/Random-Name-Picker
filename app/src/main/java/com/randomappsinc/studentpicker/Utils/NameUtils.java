@@ -1,5 +1,13 @@
 package com.randomappsinc.studentpicker.Utils;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.view.View;
+
+import com.randomappsinc.studentpicker.R;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,4 +72,16 @@ public class NameUtils {
         return namesString.toString();
     }
 
+    public static void copyNamesToClipboard(String names, View parent, int numNames) {
+        Context context = MyApplication.getAppContext();
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(context.getString(R.string.chosen_names), names);
+        clipboard.setPrimaryClip(clip);
+        if (numNames > 1) {
+            UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_plural));
+        }
+        else {
+            UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_singular));
+        }
+    }
 }

@@ -1,0 +1,14 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/say_names"
+        android:title="@string/say_name"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/copy_names"
+        android:title="@string/copy_text"
+        app:showAsAction="ifRoom"/>
+</menu>

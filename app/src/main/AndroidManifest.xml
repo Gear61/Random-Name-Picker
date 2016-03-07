@@ -38,5 +38,10 @@
             android:name=".Activities.ImportFileActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+        <activity
+            android:name=".Activities.PresentationActivity"
+            android:label="@string/presentation_mode_label"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>

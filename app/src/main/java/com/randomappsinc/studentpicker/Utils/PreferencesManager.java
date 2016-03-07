@@ -40,7 +40,7 @@ public class PreferencesManager {
     }
 
     private PreferencesManager() {
-        Context context = MyApplication.get().getApplicationContext();
+        Context context = MyApplication.getAppContext();
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
