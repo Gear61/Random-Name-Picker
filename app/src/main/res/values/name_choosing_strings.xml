@@ -20,7 +20,8 @@
 
     <!-- Chosen name(s) options -->
     <string name="copy_text">Copy text</string>
-    <string name="copy_confirmation">The chosen names have been copied to your clipboard.</string>
+    <string name="copy_confirmation_singular">The chosen name has been copied to your clipboard.</string>
+    <string name="copy_confirmation_plural">The chosen names have been copied to your clipboard.</string>
 
     <string name="chosen_names_history">Chosen Names History</string>
     <string name="show_already_chosen">Show chosen names history</string>

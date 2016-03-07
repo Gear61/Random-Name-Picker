@@ -1,9 +1,7 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -22,10 +20,12 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
+import com.randomappsinc.studentpicker.Activities.PresentationActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.Models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.JSONUtils;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
@@ -154,31 +154,39 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @OnClick(R.id.choose)
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0) {
-            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
+            final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
                     nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes,
                     settings.getWithReplacement());
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
-            new MaterialDialog.Builder(getActivity())
-                    .title(title)
-                    .content(chosenNames)
-                    .positiveText(android.R.string.yes)
-                    .neutralText(R.string.copy_text)
-                    .negativeText(sayNames)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            copyNamesToClipboard(chosenNames);
-                        }
-                    })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            sayNames(chosenNames);
-                        }
-                    })
-                    .show();
+            if (settings.getPresentationMode()) {
+                Intent intent = new Intent(getActivity(), PresentationActivity.class);
+                intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
+                intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
+                getActivity().startActivity(intent);
+            }
+            else {
+                new MaterialDialog.Builder(getActivity())
+                        .title(title)
+                        .content(chosenNames)
+                        .positiveText(android.R.string.yes)
+                        .neutralText(R.string.copy_text)
+                        .negativeText(sayNames)
+                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                NameUtils.copyNamesToClipboard(chosenNames, parent, chosenIndexes.size());
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                sayNames(chosenNames);
+                            }
+                        })
+                        .show();
+            }
         }
     }
 
@@ -212,13 +220,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public void onInit(int status) {
         textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
-    }
-
-    public void copyNamesToClipboard(String names) {
-        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Activity.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(getString(R.string.chosen_names), names);
-        clipboard.setPrimaryClip(clip);
-        UIUtils.showSnackbar(parent, getString(R.string.copy_confirmation));
     }
 
     @Override

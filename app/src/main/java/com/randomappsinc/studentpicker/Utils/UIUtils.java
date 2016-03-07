@@ -31,7 +31,7 @@ public class UIUtils {
     }
 
     public static void showSnackbar(View parent, String message) {
-        Context context = MyApplication.get().getApplicationContext();
+        Context context = MyApplication.getAppContext();
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
@@ -41,7 +41,7 @@ public class UIUtils {
     }
 
     public static int getDpInPixels(int numDp) {
-        Resources resources = MyApplication.get().getApplicationContext().getResources();
+        Resources resources = MyApplication.getAppContext().getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, numDp, resources.getDisplayMetrics());
     }
 
