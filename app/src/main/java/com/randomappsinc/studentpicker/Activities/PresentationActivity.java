@@ -2,11 +2,13 @@ package com.randomappsinc.studentpicker.Activities;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,8 @@ import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,7 +32,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 3/6/16.
  */
-public class PresentationActivity extends StandardActivity {
+public class PresentationActivity extends StandardActivity implements TextToSpeech.OnInitListener{
     public static final String NUM_NAMES_KEY = "numNames";
 
     @Bind(R.id.parent) View parent;
@@ -38,6 +42,8 @@ public class PresentationActivity extends StandardActivity {
     private MediaPlayer player;
     private int numNames;
     private String namesList;
+    private TextToSpeech textToSpeech;
+    private boolean textToSpeechEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,9 @@ public class PresentationActivity extends StandardActivity {
         player = new MediaPlayer();
 
         playSound("drumroll.mp3");
+
+        textToSpeech = new TextToSpeech(this, this);
+        textToSpeech.setLanguage(Locale.US);
     }
 
     private void playSound(String filePath) {
@@ -97,6 +106,38 @@ public class PresentationActivity extends StandardActivity {
         fullSet.start();
     }
 
+    public void sayNames(String names) {
+        if (textToSpeechEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sayTextPostL(names);
+            }
+            else {
+                sayTextPreL(names);
+            }
+        }
+        else {
+            UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void sayTextPreL(String text) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + "");
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void sayTextPostL(String text) {
+        String utteranceId = this.hashCode() + "";
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    }
+
+    @Override
+    public void onInit(int status) {
+        textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -118,7 +159,7 @@ public class PresentationActivity extends StandardActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.say_names:
-                startActivity(new Intent(this, SettingsActivity.class));
+                sayNames(namesList);
                 return true;
             case R.id.copy_names:
                 NameUtils.copyNamesToClipboard(namesList, parent, numNames);
