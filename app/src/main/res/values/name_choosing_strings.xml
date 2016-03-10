@@ -32,4 +32,7 @@
     <string name="say_name">Say name</string>
     <string name="say_names">Say names</string>
     <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
+
+    <string name="set_presentation_text_size">Set presentation text size</string>
+    <string name="set_text_size_title">Presentation Text Size</string>
 </resources>

@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +18,14 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.randomappsinc.studentpicker.Models.SetTextSizeViewHolder;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.JSONUtils;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.io.IOException;
@@ -44,6 +50,8 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     private String namesList;
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
+    private MaterialDialog setTextSizeDialog;
+    private SetTextSizeViewHolder setTextViewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,7 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
         }
 
         namesList = getIntent().getStringExtra(JSONUtils.NAMES_KEY);
+        names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
         names.setText(namesList);
 
         player = new MediaPlayer();
@@ -69,6 +78,29 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
 
         textToSpeech = new TextToSpeech(this, this);
         textToSpeech.setLanguage(Locale.US);
+
+        setTextSizeDialog = new MaterialDialog.Builder(this)
+                .title(R.string.set_text_size_title)
+                .customView(R.layout.set_text_size, true)
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        int newTextSize = setTextViewHolder.textSizeSlider.getValue();
+                        PreferencesManager.get().setPresentationTextSize(newTextSize);
+                        names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
+
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        setTextViewHolder.revertSetting();
+                    }
+                })
+                .build();
+        setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
     }
 
     private void playSound(String filePath) {
@@ -147,6 +179,7 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.presentation_menu, menu);
+        UIUtils.loadMenuIcon(menu, R.id.set_text_size, FontAwesomeIcons.fa_text_height, this);
         UIUtils.loadMenuIcon(menu, R.id.say_names, FontAwesomeIcons.fa_microphone, this);
         if (numNames > 1) {
             menu.findItem(R.id.say_names).setTitle(R.string.say_names);
@@ -158,6 +191,9 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.set_text_size:
+                setTextSizeDialog.show();
+                return true;
             case R.id.say_names:
                 sayNames(namesList);
                 return true;
