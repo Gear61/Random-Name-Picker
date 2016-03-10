@@ -23,6 +23,7 @@ public class PreferencesManager {
     private static final String STUDENT_LISTS_KEY = "com.randomappsinc.studentpicker.studentLists";
     private static final String FIRST_TIME_KEY = "firstTime";
     private static final String NUM_APP_OPENS = "numAppOpens";
+    private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static PreferencesManager instance;
 
     public static PreferencesManager get() {
@@ -116,5 +117,13 @@ public class PreferencesManager {
         numAppOpens++;
         prefs.edit().putInt(NUM_APP_OPENS, numAppOpens).apply();
         return numAppOpens;
+    }
+
+    public int getPresentationTextSize() {
+        return prefs.getInt(PRESENTATION_TEXT_SIZE_KEY, 6);
+    }
+
+    public void setPresentationTextSize(int newSize) {
+        prefs.edit().putInt(PRESENTATION_TEXT_SIZE_KEY, newSize).apply();
     }
 }
