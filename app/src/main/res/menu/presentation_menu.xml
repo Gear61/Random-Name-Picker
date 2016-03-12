@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/set_text_size"
-        android:title="@string/set_presentation_text_size"
+        android:id="@+id/settings"
+        android:title="@string/settings"
         app:showAsAction="ifRoom"/>
 
     <item
