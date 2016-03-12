@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.R;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ public class PreferencesManager {
     private static final String FIRST_TIME_KEY = "firstTime";
     private static final String NUM_APP_OPENS = "numAppOpens";
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
+    private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static PreferencesManager instance;
 
     public static PreferencesManager get() {
@@ -125,5 +127,14 @@ public class PreferencesManager {
 
     public void setPresentationTextSize(int newSize) {
         prefs.edit().putInt(PRESENTATION_TEXT_SIZE_KEY, newSize).apply();
+    }
+
+    public int getPresentationTextColor() {
+        return prefs.getInt(PRESENTATION_TEXT_COLOR_KEY,
+                MyApplication.getAppContext().getResources().getColor(R.color.dark_gray));
+    }
+
+    public void setPresentationTextColor(int newColor) {
+        prefs.edit().putInt(PRESENTATION_TEXT_COLOR_KEY, newColor).apply();
     }
 }

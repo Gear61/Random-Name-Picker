@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.Models.SetTextSizeViewHolder;
 import com.randomappsinc.studentpicker.R;
@@ -38,7 +39,8 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 3/6/16.
  */
-public class PresentationActivity extends StandardActivity implements TextToSpeech.OnInitListener{
+public class PresentationActivity extends StandardActivity
+        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
     public static final String NUM_NAMES_KEY = "numNames";
 
     @Bind(R.id.parent) View parent;
@@ -70,6 +72,7 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
 
         namesList = getIntent().getStringExtra(JSONUtils.NAMES_KEY);
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
+        names.setTextColor(PreferencesManager.get().getPresentationTextColor());
         names.setText(namesList);
 
         player = new MediaPlayer();
@@ -138,7 +141,26 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
         fullSet.start();
     }
 
-    public void sayNames(String names) {
+    private void showSettingsDialog() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.presentation_settings_title)
+                .items(R.array.presentation_settings_options)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+                                setTextSizeDialog.show();
+                                break;
+                            case 1:
+                                showColorChooserDialog();
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void sayNames(String names) {
         if (textToSpeechEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 sayTextPostL(names);
@@ -170,6 +192,23 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
         textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
     }
 
+    private void showColorChooserDialog() {
+        int currentColor = PreferencesManager.get().getPresentationTextColor();
+        new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
+                .doneButton(R.string.md_done_label)
+                .cancelButton(R.string.md_cancel_label)
+                .backButton(R.string.md_back_label)
+                .dynamicButtonColor(false)
+                .preselect(currentColor)
+                .show();
+    }
+
+    @Override
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, int selectedColor) {
+        PreferencesManager.get().setPresentationTextColor(selectedColor);
+        names.setTextColor(selectedColor);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -179,7 +218,7 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.presentation_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.set_text_size, FontAwesomeIcons.fa_text_height, this);
+        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, this);
         UIUtils.loadMenuIcon(menu, R.id.say_names, FontAwesomeIcons.fa_microphone, this);
         if (numNames > 1) {
             menu.findItem(R.id.say_names).setTitle(R.string.say_names);
@@ -191,8 +230,8 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.set_text_size:
-                setTextSizeDialog.show();
+            case R.id.settings:
+                showSettingsDialog();
                 return true;
             case R.id.say_names:
                 sayNames(namesList);

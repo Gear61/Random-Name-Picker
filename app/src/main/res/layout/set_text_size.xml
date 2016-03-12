@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/sample_text"
-        android:text="@string/hi"
+        android:text="@string/sample_text"
         android:textColor="@color/dark_gray"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
