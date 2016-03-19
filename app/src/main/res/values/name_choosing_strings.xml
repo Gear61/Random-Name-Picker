@@ -28,6 +28,7 @@
     <string name="clear">Clear</string>
     <string name="empty_names_history">Your chosen names history is empty.</string>
     <string name="name_history_cleared">Your chosen names history has been cleared.</string>
+    <string name="name_history_copied">Your chosen names history has been copied to your clipboard.</string>
 
     <string name="say_name">Say name</string>
     <string name="say_names">Say names</string>
