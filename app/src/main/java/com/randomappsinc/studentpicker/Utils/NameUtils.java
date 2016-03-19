@@ -72,16 +72,20 @@ public class NameUtils {
         return namesString.toString();
     }
 
-    public static void copyNamesToClipboard(String names, View parent, int numNames) {
+    public static void copyNamesToClipboard(String names, View parent, int numNames, boolean historyMode) {
         Context context = MyApplication.getAppContext();
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(context.getString(R.string.chosen_names), names);
         clipboard.setPrimaryClip(clip);
-        if (numNames > 1) {
-            UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_plural));
+        if (historyMode) {
+            UIUtils.showSnackbar(parent, context.getString(R.string.name_history_copied));
         }
         else {
-            UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_singular));
+            if (numNames > 1) {
+                UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_plural));
+            } else {
+                UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_singular));
+            }
         }
     }
 }

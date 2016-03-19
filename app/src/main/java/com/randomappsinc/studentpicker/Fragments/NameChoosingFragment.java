@@ -58,7 +58,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     private ChoosingSettingsViewHolder settingsHolder;
 
     private MaterialDialog settingsDialog;
-    private MaterialDialog namesHistoryDialog;
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
 
@@ -89,19 +88,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
         textToSpeech = new TextToSpeech(getActivity(), this);
         textToSpeech.setLanguage(Locale.US);
-
-        namesHistoryDialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.chosen_names_history)
-                .positiveText(android.R.string.yes)
-                .neutralText(R.string.clear)
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        nameChoosingAdapter.clearNameHistory();
-                        UIUtils.showSnackbar(parent, getString(R.string.name_history_cleared));
-                    }
-                })
-                .build();
     }
 
     @Override
@@ -171,15 +157,15 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                         .title(title)
                         .content(chosenNames)
                         .positiveText(android.R.string.yes)
-                        .neutralText(R.string.copy_text)
-                        .negativeText(sayNames)
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        .neutralText(sayNames)
+                        .negativeText(R.string.copy_text)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                NameUtils.copyNamesToClipboard(chosenNames, parent, chosenIndexes.size());
+                                NameUtils.copyNamesToClipboard(chosenNames, parent, chosenIndexes.size(), false);
                             }
                         })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 sayNames(chosenNames);
@@ -232,10 +218,28 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     }
 
     public void showNamesHistory() {
-        String namesHistory = nameChoosingAdapter.getNamesHistory();
+        final String namesHistory = nameChoosingAdapter.getNamesHistory();
         if (!namesHistory.isEmpty()) {
-            namesHistoryDialog.setContent(namesHistory);
-            namesHistoryDialog.show();
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.chosen_names_history)
+                    .content(namesHistory)
+                    .positiveText(android.R.string.yes)
+                    .neutralText(R.string.clear)
+                    .negativeText(R.string.copy_text)
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            nameChoosingAdapter.clearNameHistory();
+                            UIUtils.showSnackbar(parent, getString(R.string.name_history_cleared));
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            NameUtils.copyNamesToClipboard(namesHistory, parent, 0, true);
+                        }
+                    })
+                    .show();
         }
         else {
             UIUtils.showSnackbar(parent, getString(R.string.empty_names_history));

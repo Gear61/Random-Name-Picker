@@ -93,7 +93,6 @@ public class PresentationActivity extends StandardActivity
                         int newTextSize = setTextViewHolder.textSizeSlider.getValue();
                         PreferencesManager.get().setPresentationTextSize(newTextSize);
                         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
-
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -213,6 +212,10 @@ public class PresentationActivity extends StandardActivity
     protected void onDestroy() {
         super.onDestroy();
         player.stop();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
     }
 
     @Override
@@ -237,7 +240,7 @@ public class PresentationActivity extends StandardActivity
                 sayNames(namesList);
                 return true;
             case R.id.copy_names:
-                NameUtils.copyNamesToClipboard(namesList, parent, numNames);
+                NameUtils.copyNamesToClipboard(namesList, parent, numNames, false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
