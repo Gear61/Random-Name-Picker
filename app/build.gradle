@@ -8,8 +8,8 @@ android {
         applicationId "com.randomappsinc.studentpicker"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 353
-        versionName "3.5.3"
+        versionCode 354
+        versionName "3.5.4"
         generatedDensities = []
     }
     aaptOptions {

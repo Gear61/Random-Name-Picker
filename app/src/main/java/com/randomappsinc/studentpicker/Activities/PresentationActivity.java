@@ -111,8 +111,7 @@ public class PresentationActivity extends StandardActivity
             player.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
             player.prepare();
             player.start();
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     animateNames();
@@ -192,13 +191,12 @@ public class PresentationActivity extends StandardActivity
     }
 
     private void showColorChooserDialog() {
-        int currentColor = PreferencesManager.get().getPresentationTextColor();
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
                 .doneButton(R.string.md_done_label)
                 .cancelButton(R.string.md_cancel_label)
                 .backButton(R.string.md_back_label)
                 .dynamicButtonColor(false)
-                .preselect(currentColor)
+                .preselect(PreferencesManager.get().getPresentationTextColor())
                 .show();
     }
 

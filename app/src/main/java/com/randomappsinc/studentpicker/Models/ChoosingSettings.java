@@ -6,12 +6,11 @@ package com.randomappsinc.studentpicker.Models;
 public class ChoosingSettings {
     private boolean presentationMode;
     private boolean withReplacement;
+    private boolean automaticTts;
     private int numNamesToChoose;
 
-    public ChoosingSettings(boolean presentationMode, boolean withReplacement, int numNamesToChoose) {
-        this.presentationMode = presentationMode;
-        this.withReplacement = withReplacement;
-        this.numNamesToChoose = numNamesToChoose;
+    public ChoosingSettings() {
+        this.numNamesToChoose = 1;
     }
 
     public boolean getPresentationMode() {
@@ -26,12 +25,20 @@ public class ChoosingSettings {
         return withReplacement;
     }
 
-    public int getNumNamesToChoose() {
-        return numNamesToChoose;
-    }
-
     public void setWithReplacement(boolean withReplacement) {
         this.withReplacement = withReplacement;
+    }
+
+    public boolean getAutomaticTts() {
+        return automaticTts;
+    }
+
+    public void setAutomaticTts(boolean automaticTts) {
+        this.automaticTts = automaticTts;
+    }
+
+    public int getNumNamesToChoose() {
+        return numNamesToChoose;
     }
 
     public void setNumNamesToChoose(int numNamesToChoose) {
