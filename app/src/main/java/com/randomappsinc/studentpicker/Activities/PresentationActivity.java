@@ -50,8 +50,11 @@ public class PresentationActivity extends StandardActivity
     private MediaPlayer player;
     private int numNames;
     private String namesList;
+    private boolean automaticTts;
+
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
+
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
 
@@ -69,6 +72,7 @@ public class PresentationActivity extends StandardActivity
         else {
             header.setText(R.string.name_chosen);
         }
+        automaticTts = getIntent().getBooleanExtra(JSONUtils.AUTOMATIC_TTS_KEY, false);
 
         namesList = getIntent().getStringExtra(JSONUtils.NAMES_KEY);
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
@@ -117,7 +121,14 @@ public class PresentationActivity extends StandardActivity
                     animateNames();
                 }
             }, 2600);
-
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    if (automaticTts) {
+                        sayNames(namesList);
+                    }
+                }
+            });
         }
         catch (IOException e) {
             e.printStackTrace();
