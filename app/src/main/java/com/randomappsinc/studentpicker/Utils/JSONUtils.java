@@ -18,6 +18,7 @@ public class JSONUtils {
     public static final String SETTINGS_KEY = "settings";
     public static final String PRESENTATION_MODE_KEY = "presentationMode";
     public static final String WITH_REPLACEMENT_KEY = "withReplacement";
+    public static final String AUTOMATIC_TTS_KEY = "automaticTts";
     public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
@@ -43,6 +44,7 @@ public class JSONUtils {
             JSONObject settings = new JSONObject();
             settings.put(PRESENTATION_MODE_KEY, choosingSettings.getPresentationMode());
             settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
+            settings.put(AUTOMATIC_TTS_KEY, choosingSettings.getAutomaticTts());
             settings.put(NUM_NAMES_TO_CHOOSE_KEY, choosingSettings.getNumNamesToChoose());
             nameListJson.put(SETTINGS_KEY, settings);
 
@@ -83,13 +85,14 @@ public class JSONUtils {
 
     // Given a serialized JSON "cache" string of a name list, extracts the settings
     public static ChoosingSettings extractChoosingSettings(String cachedList) {
-        ChoosingSettings settings = new ChoosingSettings(false, false, 1);
+        ChoosingSettings settings = new ChoosingSettings();
         try {
             JSONObject nameListJson = new JSONObject(cachedList);
             JSONObject settingsJson = nameListJson.getJSONObject(SETTINGS_KEY);
             settings.setWithReplacement(settingsJson.getBoolean(WITH_REPLACEMENT_KEY));
             settings.setNumNamesToChoose(settingsJson.getInt(NUM_NAMES_TO_CHOOSE_KEY));
             settings.setPresentationMode(settingsJson.getBoolean(PRESENTATION_MODE_KEY));
+            settings.setAutomaticTts(settingsJson.getBoolean(AUTOMATIC_TTS_KEY));
         }
         catch (JSONException ignored) {}
         return settings;
