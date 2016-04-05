@@ -122,6 +122,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 Intent intent = new Intent(getActivity(), PresentationActivity.class);
                 intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
                 intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
+                intent.putExtra(JSONUtils.AUTOMATIC_TTS_KEY, settings.getAutomaticTts());
                 getActivity().startActivity(intent);
             }
             else {
