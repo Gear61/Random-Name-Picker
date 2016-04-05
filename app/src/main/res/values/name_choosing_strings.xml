@@ -14,6 +14,7 @@
     <string name="name_choosing_settings">Name Choosing Settings</string>
     <string name="presentation_mode">Presentation mode</string>
     <string name="with_replacement">With replacement</string>
+    <string name="automatic_tts">Automatically say chosen names</string>
     <string name="num_people_chosen"># of names chosen:</string>
     <string name="default_num_names_chosen">1</string>
     <string name="settings_applied">Your settings have been applied.</string>

@@ -53,7 +53,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     private NameChoosingAdapter nameChoosingAdapter;
 
-    // Settings
     private ChoosingSettings settings;
     private ChoosingSettingsViewHolder settingsHolder;
 
@@ -74,16 +73,17 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        applySettings();
+                        settingsHolder.applySettings();
                         UIUtils.showSnackbar(parent, getString(R.string.settings_applied));
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        revertSettings();
+                        settingsHolder.revertSettings();
                     }
                 })
+                .cancelable(false)
                 .build();
 
         textToSpeech = new TextToSpeech(getActivity(), this);
@@ -109,34 +109,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         return nameChoosingAdapter;
     }
 
-    public void applySettings() {
-        settings.setPresentationMode(settingsHolder.presentationMode.isChecked());
-        settings.setWithReplacement(settingsHolder.withReplacement.isChecked());
-        String numChosenText = settingsHolder.numChosen.getText().toString();
-        if (numChosenText.isEmpty()) {
-            settingsHolder.numChosen.setText("1");
-            settings.setNumNamesToChoose(1);
-        }
-        else {
-            int userNumNames = Integer.parseInt(settingsHolder.numChosen.getText().toString());
-            if (userNumNames <= 0) {
-                settingsHolder.numChosen.setText("1");
-                settings.setNumNamesToChoose(1);
-            }
-            else {
-                settings.setNumNamesToChoose(userNumNames);
-            }
-        }
-        settingsHolder.numChosen.clearFocus();
-    }
-
-    public void revertSettings() {
-        settingsHolder.presentationMode.setCheckedImmediately(settings.getPresentationMode());
-        settingsHolder.withReplacement.setCheckedImmediately(settings.getWithReplacement());
-        settingsHolder.numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
-        settingsHolder.numChosen.clearFocus();
-    }
-
     @OnClick(R.id.choose)
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0) {
@@ -150,6 +122,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 Intent intent = new Intent(getActivity(), PresentationActivity.class);
                 intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
                 intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
+                intent.putExtra(JSONUtils.AUTOMATIC_TTS_KEY, settings.getAutomaticTts());
                 getActivity().startActivity(intent);
             }
             else {
@@ -159,6 +132,12 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                         .positiveText(android.R.string.yes)
                         .neutralText(sayNames)
                         .negativeText(R.string.copy_text)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -171,7 +150,11 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                                 sayNames(chosenNames);
                             }
                         })
+                        .autoDismiss(false)
                         .show();
+                if (settings.getAutomaticTts()) {
+                    sayNames(chosenNames);
+                }
             }
         }
     }

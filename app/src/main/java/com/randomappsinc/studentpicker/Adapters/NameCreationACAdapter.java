@@ -34,7 +34,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
     }
 
     public static class ViewHolder {
-        @Bind(R.id.suggestion) public TextView suggestion;
+        @Bind(R.id.suggestion) TextView suggestion;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -48,7 +48,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
 
     @Override
     public String getItem(int position) {
-        return suggestions.get(position);
+        return position >= suggestions.size() ? "" : suggestions.get(position);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
         else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.suggestion.setText(suggestions.get(position));
+        holder.suggestion.setText(getItem(position));
         return view;
     }
 
