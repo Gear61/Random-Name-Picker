@@ -29,7 +29,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
 
     public NameCreationACAdapter(Context context) {
         this.context = context;
-        this.dataSource = new DataSource(context);
+        this.dataSource = new DataSource();
         this.suggestions = new ArrayList<>();
     }
 

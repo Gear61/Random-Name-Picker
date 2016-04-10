@@ -38,7 +38,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.noNames = context.getString(R.string.no_names);
         this.context = context;
         this.listName = listName;
-        this.dataSource = new DataSource(context);
+        this.dataSource = new DataSource();
 
         List<String> cachedNames = PreferencesManager.get().getCachedNameList(listName);
         this.names = cachedNames.isEmpty() ? dataSource.getAllNamesInList(listName) : cachedNames;

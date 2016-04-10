@@ -62,7 +62,7 @@ public class EditNameListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         ButterKnife.bind(this, rootView);
-        dataSource = new DataSource(getActivity());
+        dataSource = new DataSource();
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
