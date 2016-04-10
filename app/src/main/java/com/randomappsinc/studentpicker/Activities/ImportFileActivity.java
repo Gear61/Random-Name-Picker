@@ -55,7 +55,7 @@ public class ImportFileActivity extends StandardActivity {
         }
         else {
             PreferencesManager.get().addNameList(newListName);
-            DataSource dataSource = new DataSource(this);
+            DataSource dataSource = new DataSource();
             String[] allNames = names.getText().toString().split("\\r?\\n");
             for (String name : allNames) {
                 String cleanName = name.trim();

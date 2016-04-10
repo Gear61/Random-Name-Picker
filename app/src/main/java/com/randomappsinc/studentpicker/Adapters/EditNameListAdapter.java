@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -37,7 +38,7 @@ public class EditNameListAdapter extends BaseAdapter {
 
     public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames, String listName, View parent) {
         this.listActivity = listActivity;
-        this.dataSource = new DataSource(listActivity);
+        this.dataSource = new DataSource();
         this.content = dataSource.getAllNamesInList(listName);
         this.noContent = noContent;
         this.numNames = numNames;
@@ -178,16 +179,31 @@ public class EditNameListAdapter extends BaseAdapter {
 
     public class NameViewHolder {
         @Bind(R.id.person_name) TextView name;
-        @Bind(R.id.edit_icon) IconTextView edit;
-        @Bind(R.id.delete_icon) IconTextView delete;
+
+        private int position;
 
         public NameViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
+        public void loadName(int position) {
+            this.position = position;
+            name.setText(getItem(position));
+        }
+
+        @OnClick(R.id.edit_icon)
+        public void renamePerson() {
+            showRenameDialog(position);
+        }
+
+        @OnClick(R.id.delete_icon)
+        public void deletePerson() {
+            removeName(position);
+        }
     }
 
     @Override
-    public View getView(final int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
         NameViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) listActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -198,20 +214,7 @@ public class EditNameListAdapter extends BaseAdapter {
         else {
             holder = (NameViewHolder) view.getTag();
         }
-
-        holder.name.setText(content.get(position));
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRenameDialog(position);
-            }
-        });
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                removeName(position);
-            }
-        });
+        holder.loadName(position);
         return view;
     }
 }
