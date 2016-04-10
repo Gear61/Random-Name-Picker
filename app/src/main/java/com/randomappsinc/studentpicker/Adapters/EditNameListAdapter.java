@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.R;
@@ -36,7 +35,8 @@ public class EditNameListAdapter extends BaseAdapter {
     private DataSource dataSource;
     private View parent;
 
-    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames, String listName, View parent) {
+    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames,
+                               String listName, View parent) {
         this.listActivity = listActivity;
         this.dataSource = new DataSource();
         this.content = dataSource.getAllNamesInList(listName);
@@ -149,9 +149,8 @@ public class EditNameListAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    public void showRenameDialog(final int position) {
+    private void showRenameDialog(final int position) {
         final String currentName = content.get(position);
-
         new MaterialDialog.Builder(listActivity)
                 .title(R.string.change_name)
                 .input(listActivity.getString(R.string.new_name), currentName, new MaterialDialog.InputCallback() {
@@ -172,6 +171,23 @@ public class EditNameListAdapter extends BaseAdapter {
                             dataSource.renamePerson(currentName, newName, listName);
                             changeName(position, newName);
                         }
+                    }
+                })
+                .show();
+    }
+
+    private void showDeleteDialog(final int position) {
+        String confirmation = listActivity.getString(R.string.are_you_sure) + "\"" + getItem(position) + "\"" +
+                listActivity.getString(R.string.from_this_list);
+        new MaterialDialog.Builder(listActivity)
+                .title(R.string.confirm_name_deletion)
+                .content(confirmation)
+                .negativeText(android.R.string.no)
+                .positiveText(android.R.string.yes)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        removeName(position);
                     }
                 })
                 .show();
@@ -198,7 +214,7 @@ public class EditNameListAdapter extends BaseAdapter {
 
         @OnClick(R.id.delete_icon)
         public void deletePerson() {
-            removeName(position);
+            showDeleteDialog(position);
         }
     }
 
