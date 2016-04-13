@@ -108,6 +108,7 @@ public class EditNameListAdapter extends BaseAdapter {
         }
         Collections.sort(content);
         notifyDataSetChanged();
+        setViews();
         UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
     }
 
