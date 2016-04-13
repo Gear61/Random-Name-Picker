@@ -13,20 +13,14 @@
         android:layout_height="wrap_content">
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/delete_icon"
-            android:text="@string/delete_icon"
+            android:id="@+id/options_icon"
+            android:text="@string/list_icon"
             android:layout_alignParentRight="true"
-            style="@style/person_name_icon"/>
-
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/edit_icon"
-            android:text="@string/edit_icon"
-            android:layout_toLeftOf="@+id/delete_icon"
             style="@style/person_name_icon"/>
 
         <TextView
             android:id="@+id/person_name"
-            android:layout_toLeftOf="@+id/edit_icon"
+            android:layout_toLeftOf="@+id/options_icon"
             style="@style/person_name"/>
     </RelativeLayout>
 </com.balysv.materialripple.MaterialRippleLayout>

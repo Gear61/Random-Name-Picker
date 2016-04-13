@@ -79,13 +79,21 @@ public class NameUtils {
         clipboard.setPrimaryClip(clip);
         if (historyMode) {
             UIUtils.showSnackbar(parent, context.getString(R.string.name_history_copied));
-        }
-        else {
+        } else {
             if (numNames > 1) {
                 UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_plural));
             } else {
                 UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_singular));
             }
         }
+    }
+
+    public static String[] getNameOptions(String name) {
+        Context context = MyApplication.getAppContext();
+        String[] options = new String[3];
+        options[0] = context.getString(R.string.rename) + name + "\"";
+        options[1] = context.getString(R.string.delete) + name + "\"";
+        options[2] = context.getString(R.string.duplicate) + name + "\"";
+        return options;
     }
 }
