@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.NameUtils;
+import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,8 +55,7 @@ public class EditNameListAdapter extends BaseAdapter {
         if (content.isEmpty()) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             noContent.setVisibility(View.GONE);
             String names = getCount() == 1
                     ? listActivity.getString(R.string.single_name)
@@ -96,6 +98,17 @@ public class EditNameListAdapter extends BaseAdapter {
         content.set(position, newName);
         Collections.sort(content);
         notifyDataSetChanged();
+    }
+
+    public void cloneName(String name, int numClones) {
+        for (int i = 0; i < numClones; i++) {
+            dataSource.addName(name, listName);
+            content.add(name);
+            listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
+        }
+        Collections.sort(content);
+        notifyDataSetChanged();
+        UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
     }
 
     public void importNamesFromList(String listToAbsorb) {
@@ -163,14 +176,12 @@ public class EditNameListAdapter extends BaseAdapter {
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (which == DialogAction.POSITIVE) {
-                            String newName = dialog.getInputEditText().getText().toString();
-                            dataSource.renamePerson(currentName, newName, listName);
-                            changeName(position, newName);
-                        }
+                        String newName = dialog.getInputEditText().getText().toString().trim();
+                        dataSource.renamePerson(currentName, newName, listName);
+                        changeName(position, newName);
                     }
                 })
                 .show();
@@ -193,6 +204,31 @@ public class EditNameListAdapter extends BaseAdapter {
                 .show();
     }
 
+    private void showCloneDialog(final int position) {
+        new MaterialDialog.Builder(listActivity)
+                .title(R.string.cloning_title)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input(listActivity.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        String userInput = input.toString().trim();
+                        dialog.getActionButton(DialogAction.POSITIVE)
+                                .setEnabled(!userInput.isEmpty() && Integer.parseInt(userInput) > 0);
+                    }
+                })
+                .alwaysCallInputCallback()
+                .negativeText(android.R.string.no)
+                .positiveText(R.string.add)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
+                        cloneName(getItem(position), numCopies);
+                    }
+                })
+                .show();
+    }
+
     public class NameViewHolder {
         @Bind(R.id.person_name) TextView name;
 
@@ -204,17 +240,29 @@ public class EditNameListAdapter extends BaseAdapter {
 
         public void loadName(int position) {
             this.position = position;
-            name.setText(getItem(position));
+            this.name.setText(getItem(position));
         }
 
-        @OnClick(R.id.edit_icon)
-        public void renamePerson() {
-            showRenameDialog(position);
-        }
-
-        @OnClick(R.id.delete_icon)
-        public void deletePerson() {
-            showDeleteDialog(position);
+        @OnClick(R.id.options_icon)
+        public void showNameOptions() {
+            new MaterialDialog.Builder(listActivity)
+                    .items(NameUtils.getNameOptions(getItem(position)))
+                    .itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                            switch (which) {
+                                case 0:
+                                    showRenameDialog(position);
+                                    break;
+                                case 1:
+                                    showDeleteDialog(position);
+                                    break;
+                                case 2:
+                                    showCloneDialog(position);
+                            }
+                        }
+                    })
+                    .show();
         }
     }
 
