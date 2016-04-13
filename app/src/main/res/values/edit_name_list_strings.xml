@@ -10,7 +10,15 @@
     <string name="added">Added&#160;</string>
     <string name="removed">Removed&#160;</string>
 
-    <string name="edit_icon">{fa-edit}</string>
+    <!-- Name options -->
+    <string name="list_icon">{fa-list}</string>
+    <string name="rename">Rename \"</string>
+    <string name="delete">Delete \"</string>
+    <string name="duplicate">Duplicate \"</string>
+    <string name="cloning_title">How many copies of this name do you want to add?</string>
+    <string name="num_copies"># of copies</string>
+    <string name="clones_added">Name duplicated.</string>
+    <string name="add">Add</string>
 
     <!-- Action bar options -->
     <string name="import_names_from_list">Import names from another list</string>
