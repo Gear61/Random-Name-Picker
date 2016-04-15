@@ -96,4 +96,9 @@ public class NameUtils {
         options[2] = context.getString(R.string.duplicate) + name + "\"";
         return options;
     }
+
+    // Given 0 (1st element in array), returns "1. ", scaling linearly with the input
+    public static String getPrefix(int index) {
+        return String.valueOf(index + 1) + ". ";
+    }
 }
