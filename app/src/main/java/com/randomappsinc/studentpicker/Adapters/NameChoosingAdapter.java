@@ -11,6 +11,7 @@ import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 
 import java.util.Collections;
@@ -123,6 +124,7 @@ public class NameChoosingAdapter extends BaseAdapter {
             if (i != 0) {
                 chosenNames.append("\n");
             }
+            chosenNames.append(NameUtils.getPrefix(i));
             chosenNames.append(names.get(indexes.get(i)));
             alreadyChosenNames.add(names.get(indexes.get(i)));
         }
