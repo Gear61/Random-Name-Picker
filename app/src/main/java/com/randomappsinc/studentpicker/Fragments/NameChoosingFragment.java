@@ -114,8 +114,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         if (nameChoosingAdapter.getCount() > 0) {
             final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
                     nameChoosingAdapter.getCount() - 1);
-            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes,
-                    settings.getWithReplacement());
+            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
             String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
             String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
             if (settings.getPresentationMode()) {
@@ -124,8 +123,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
                 intent.putExtra(JSONUtils.AUTOMATIC_TTS_KEY, settings.getAutomaticTts());
                 getActivity().startActivity(intent);
-            }
-            else {
+            } else {
                 new MaterialDialog.Builder(getActivity())
                         .title(title)
                         .content(chosenNames)
@@ -163,12 +161,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         if (textToSpeechEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 sayTextPostL(names);
-            }
-            else {
+            } else {
                 sayTextPreL(names);
             }
-        }
-        else {
+        } else {
             UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
         }
     }

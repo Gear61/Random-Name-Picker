@@ -7,6 +7,7 @@ public class ChoosingSettings {
     private boolean presentationMode;
     private boolean withReplacement;
     private boolean automaticTts;
+    private boolean showAsList;
     private int numNamesToChoose;
 
     public ChoosingSettings() {
@@ -35,6 +36,14 @@ public class ChoosingSettings {
 
     public void setAutomaticTts(boolean automaticTts) {
         this.automaticTts = automaticTts;
+    }
+
+    public boolean getShowAsList() {
+        return showAsList;
+    }
+
+    public void setShowAsList(boolean showAsList) {
+        this.showAsList = showAsList;
     }
 
     public int getNumNamesToChoose() {

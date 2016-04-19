@@ -23,6 +23,11 @@
         android:text="@string/automatic_tts"
         style="@style/setting_checkbox"/>
 
+    <com.rey.material.widget.CheckBox
+        android:id="@+id/show_as_list"
+        android:text="@string/show_as_list"
+        style="@style/setting_checkbox"/>
+
     <LinearLayout
         android:padding="5dp"
         android:layout_width="wrap_content"
