@@ -98,15 +98,13 @@ public class NameChoosingAdapter extends BaseAdapter {
     public void setViews() {
         if (dataSource.getAllNamesInList(listName).isEmpty()) {
             noContent.setText(noNames);
-        }
-        else {
+        } else {
             noContent.setText(outOfNames);
         }
         if (names.isEmpty()) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             noContent.setVisibility(View.GONE);
             String names = getCount() == 1
                     ? context.getString(R.string.single_name)
@@ -118,18 +116,20 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     // All name choosing goes through here
-    public String chooseNamesAtRandom(List<Integer> indexes, boolean withReplacement) {
+    public String chooseNamesAtRandom(List<Integer> indexes, ChoosingSettings settings) {
         StringBuilder chosenNames = new StringBuilder();
         for (int i = 0; i < indexes.size(); i++) {
             if (i != 0) {
                 chosenNames.append("\n");
             }
-            chosenNames.append(NameUtils.getPrefix(i));
+            if (settings.getShowAsList()) {
+                chosenNames.append(NameUtils.getPrefix(i));
+            }
             chosenNames.append(names.get(indexes.get(i)));
             alreadyChosenNames.add(names.get(indexes.get(i)));
         }
         // If without replacement, remove the names
-        if (!withReplacement) {
+        if (!settings.getWithReplacement()) {
             removeNamesAtPositions(indexes);
         }
         return chosenNames.toString();

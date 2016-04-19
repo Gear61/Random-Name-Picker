@@ -19,6 +19,7 @@ public class JSONUtils {
     public static final String PRESENTATION_MODE_KEY = "presentationMode";
     public static final String WITH_REPLACEMENT_KEY = "withReplacement";
     public static final String AUTOMATIC_TTS_KEY = "automaticTts";
+    public static final String SHOW_AS_LIST_KEY = "showAsList";
     public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
@@ -45,6 +46,7 @@ public class JSONUtils {
             settings.put(PRESENTATION_MODE_KEY, choosingSettings.getPresentationMode());
             settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
             settings.put(AUTOMATIC_TTS_KEY, choosingSettings.getAutomaticTts());
+            settings.put(SHOW_AS_LIST_KEY, choosingSettings.getShowAsList());
             settings.put(NUM_NAMES_TO_CHOOSE_KEY, choosingSettings.getNumNamesToChoose());
             nameListJson.put(SETTINGS_KEY, settings);
 
@@ -93,6 +95,7 @@ public class JSONUtils {
             settings.setNumNamesToChoose(settingsJson.getInt(NUM_NAMES_TO_CHOOSE_KEY));
             settings.setPresentationMode(settingsJson.getBoolean(PRESENTATION_MODE_KEY));
             settings.setAutomaticTts(settingsJson.getBoolean(AUTOMATIC_TTS_KEY));
+            settings.setShowAsList(settingsJson.getBoolean(SHOW_AS_LIST_KEY));
         }
         catch (JSONException ignored) {}
         return settings;
