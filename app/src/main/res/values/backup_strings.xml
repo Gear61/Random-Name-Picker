@@ -8,6 +8,16 @@
         Would you like to do that now?
     </string>
     <string name="backup_explanation">
-
+        This app backs up all of your name lists as .txt files whenever it closes.
+        These files are in the \"RandomNamePicker\" directory on your device
+        and are formatted with the new-line separated format this app uses to import name lists.
+        From here, you can manually trigger a backup or export all of your data as a .zip file.
     </string>
+
+    <string name="export_data">Export data</string>
+    <string name="data_backed_up">Your data has been backed up.</string>
+    <string name="export_with">Export with</string>
+    <string name="rnp_data">Random Name Picker Data</string>
+
+    <string name="archive_failed">We were unable to create the .zip file with your app data.</string>
 </resources>

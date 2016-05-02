@@ -24,6 +24,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.FileUtils;
 import com.randomappsinc.studentpicker.Utils.PermissionUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
@@ -195,14 +196,18 @@ public class MainActivity extends StandardActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                PermissionUtils.requestPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+                                requestReadExternal();
                             }
                         })
                         .show();
             } else {
-                PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+                requestReadExternal();
             }
         }
+    }
+
+    private void requestReadExternal() {
+        PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
     }
 
     @Override
@@ -226,6 +231,12 @@ public class MainActivity extends StandardActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FileUtils.backupData();
     }
 
     @Override
