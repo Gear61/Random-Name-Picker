@@ -15,8 +15,6 @@ import com.randomappsinc.studentpicker.Utils.FileUtils;
 import com.randomappsinc.studentpicker.Utils.PermissionUtils;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
-import java.io.File;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -77,8 +75,6 @@ public class BackupActivity extends StandardActivity {
             requestWriteExternal();
         } else {
             try {
-                Intent sendIntent = new Intent();
-
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setType("vnd.android.cursor.dir/email");
                 emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtils.createZipArchive()));
