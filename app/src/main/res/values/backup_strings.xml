@@ -19,5 +19,5 @@
     <string name="export_with">Export with</string>
     <string name="rnp_data">Random Name Picker Data</string>
 
-    <string name="archive_failed">We were unable to create the .zip file with your app data.</string>
+    <string name="archive_failed">We were unable to create a .zip file with your app data.</string>
 </resources>
