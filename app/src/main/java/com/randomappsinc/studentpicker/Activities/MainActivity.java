@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +24,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PermissionUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
@@ -38,7 +39,6 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class MainActivity extends StandardActivity {
     public static final String LIST_NAME_KEY = "listName";
-    public static final int READ_EXTERNAL_REQUEST = 1;
 
     @Bind(R.id.item_name_input) EditText newListInput;
     @Bind(R.id.content_list) ListView lists;
@@ -170,12 +170,10 @@ public class MainActivity extends StandardActivity {
         newListInput.setText("");
         if (newList.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        }
-        else if (PreferencesManager.get().getNameLists().contains(newList)) {
+        } else if (PreferencesManager.get().getNameLists().contains(newList)) {
             String dupeMessage = listDuplicate + " \"" + newList + "\".";
             UIUtils.showSnackbar(parent, dupeMessage);
-        }
-        else {
+        } else {
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
@@ -185,12 +183,11 @@ public class MainActivity extends StandardActivity {
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        int readFilesStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (readFilesStatus == PackageManager.PERMISSION_GRANTED) {
+        final Activity activity = this;
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             Intent intent = new Intent(this, FilePickerActivity.class);
             startActivityForResult(intent, 1);
-        }
-        else {
+        } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 new MaterialDialog.Builder(this)
                         .content(R.string.need_read_external)
@@ -198,36 +195,21 @@ public class MainActivity extends StandardActivity {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                requestFileAccess();
+                                PermissionUtils.requestPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
                             }
                         })
                         .show();
+            } else {
+                PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
             }
-            else {
-                requestFileAccess();
-            }
-
         }
-    }
-
-    public void requestFileAccess() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                READ_EXTERNAL_REQUEST);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case READ_EXTERNAL_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(this, FilePickerActivity.class);
-                    startActivityForResult(intent, 1);
-                }
-                return;
-            }
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, FilePickerActivity.class);
+            startActivityForResult(intent, 1);
         }
     }
 
@@ -238,8 +220,7 @@ public class MainActivity extends StandardActivity {
             String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             if (!filePath.endsWith(".txt")) {
                 UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
-            }
-            else {
+            } else {
                 Intent intent = new Intent(this, ImportFileActivity.class);
                 intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
                 startActivity(intent);

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="backup_data_title">Back Up Data</string>
+
+    <string name="backup_permission_ask">
+        In order for Random Name Picker to start backing up your app data,
+        you need to give it the ability to write to your device\'s external file system.
+        Would you like to do that now?
+    </string>
+    <string name="backup_explanation">
+
+    </string>
+</resources>

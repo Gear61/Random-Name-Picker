@@ -2,7 +2,10 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.randomappsinc.studentpicker" >
+    package="com.randomappsinc.studentpicker">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         tools:replace="android:label"
@@ -41,6 +44,11 @@
         <activity
             android:name=".Activities.PresentationActivity"
             android:label=""
+            android:configChanges="orientation|screenSize">
+        </activity>
+        <activity
+            android:name=".Activities.BackupActivity"
+            android:label="@string/backup_data_title"
             android:configChanges="orientation|screenSize">
         </activity>
     </application>
