@@ -59,8 +59,7 @@ public class SettingsAdapter extends BaseAdapter {
             view = vi.inflate(R.layout.settings_list_item, parent, false);
             holder = new SettingsViewHolder(view);
             view.setTag(holder);
-        }
-        else {
+        } else {
             holder = (SettingsViewHolder) view.getTag();
         }
         holder.icon.setText(icons[position]);
