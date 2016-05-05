@@ -122,6 +122,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
                 intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
                 intent.putExtra(JSONUtils.AUTOMATIC_TTS_KEY, settings.getAutomaticTts());
+                intent.putExtra(PresentationActivity.ORDERED_LIST_KEY, settings.getShowAsList());
                 getActivity().startActivity(intent);
             } else {
                 new MaterialDialog.Builder(getActivity())
