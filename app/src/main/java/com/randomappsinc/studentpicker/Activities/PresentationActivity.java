@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,6 @@ import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 public class PresentationActivity extends StandardActivity
         implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
     public static final String NUM_NAMES_KEY = "numNames";
+    public static final String ORDERED_LIST_KEY = "orderedList";
 
     @Bind(R.id.parent) View parent;
     @Bind(R.id.header) TextView header;
@@ -68,11 +69,14 @@ public class PresentationActivity extends StandardActivity
         numNames = getIntent().getIntExtra(NUM_NAMES_KEY, 0);
         if (numNames > 1) {
             header.setText(R.string.names_chosen);
-        }
-        else {
+        } else {
             header.setText(R.string.name_chosen);
         }
         automaticTts = getIntent().getBooleanExtra(JSONUtils.AUTOMATIC_TTS_KEY, false);
+        boolean orderedListMode = getIntent().getBooleanExtra(ORDERED_LIST_KEY, false);
+        if (!orderedListMode) {
+            names.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
 
         namesList = getIntent().getStringExtra(JSONUtils.NAMES_KEY);
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
@@ -130,9 +134,7 @@ public class PresentationActivity extends StandardActivity
                 }
             });
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        catch (Exception ignored) {}
     }
 
     private void animateNames() {
@@ -173,12 +175,10 @@ public class PresentationActivity extends StandardActivity
         if (textToSpeechEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 sayTextPostL(names);
-            }
-            else {
+            } else {
                 sayTextPreL(names);
             }
-        }
-        else {
+        } else {
             UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
         }
     }
