@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 11/28/15.
  */
-public class NameCreationACAdapter extends BaseAdapter implements Filterable{
+public class NameCreationACAdapter extends BaseAdapter implements Filterable {
     private List<String> suggestions;
     private DataSource dataSource;
 
@@ -53,7 +53,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).hashCode();
+        return position;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
@@ -63,8 +63,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable{
             view = vi.inflate(R.layout.name_suggestion, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolder) view.getTag();
         }
         holder.suggestion.setText(getItem(position));
