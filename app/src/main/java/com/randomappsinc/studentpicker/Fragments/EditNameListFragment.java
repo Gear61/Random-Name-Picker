@@ -32,6 +32,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 /**
  * Created by alexanderchiou on 10/18/15.
@@ -83,8 +84,7 @@ public class EditNameListFragment extends Fragment {
         newNameInput.setText("");
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
-        }
-        else {
+        } else {
             adapter.addName(newName);
         }
     }
@@ -152,6 +152,11 @@ public class EditNameListFragment extends Fragment {
                 .show();
     }
 
+    @OnItemClick(R.id.content_list)
+    public void showNameOptions(int position) {
+        adapter.showNameOptions(position);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
@@ -168,8 +173,7 @@ public class EditNameListFragment extends Fragment {
                 String[] importCandidates = dataSource.getAllNameLists(listName);
                 if (importCandidates.length == 0) {
                     UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
-                }
-                else {
+                } else {
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.choose_list_to_import)
                             .items(importCandidates)

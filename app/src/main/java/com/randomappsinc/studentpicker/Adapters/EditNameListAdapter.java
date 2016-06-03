@@ -24,7 +24,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -230,40 +229,36 @@ public class EditNameListAdapter extends BaseAdapter {
                 .show();
     }
 
+    public void showNameOptions(final int position) {
+        new MaterialDialog.Builder(listActivity)
+                .items(NameUtils.getNameOptions(getItem(position)))
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+                                showRenameDialog(position);
+                                break;
+                            case 1:
+                                showDeleteDialog(position);
+                                break;
+                            case 2:
+                                showCloneDialog(position);
+                        }
+                    }
+                })
+                .show();
+    }
+
     public class NameViewHolder {
         @Bind(R.id.person_name) TextView name;
-
-        private int position;
 
         public NameViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
         public void loadName(int position) {
-            this.position = position;
             this.name.setText(getItem(position));
-        }
-
-        @OnClick(R.id.options_icon)
-        public void showNameOptions() {
-            new MaterialDialog.Builder(listActivity)
-                    .items(NameUtils.getNameOptions(getItem(position)))
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            switch (which) {
-                                case 0:
-                                    showRenameDialog(position);
-                                    break;
-                                case 1:
-                                    showDeleteDialog(position);
-                                    break;
-                                case 2:
-                                    showCloneDialog(position);
-                            }
-                        }
-                    })
-                    .show();
         }
     }
 
@@ -275,8 +270,7 @@ public class EditNameListAdapter extends BaseAdapter {
             view = vi.inflate(R.layout.edit_person_name_cell, parent, false);
             holder = new NameViewHolder(view);
             view.setTag(holder);
-        }
-        else {
+        } else {
             holder = (NameViewHolder) view.getTag();
         }
         holder.loadName(position);
