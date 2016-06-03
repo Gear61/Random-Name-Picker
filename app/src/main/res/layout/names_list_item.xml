@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.balysv.materialripple.MaterialRippleLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:mrl_rippleColor="@color/app_teal"
-    app:mrl_rippleDelayClick="true"
-    app:mrl_rippleInAdapter="true"
-    app:mrl_rippleDuration="@integer/shorter_anim_length"
     android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/name"
@@ -17,4 +13,4 @@
         android:textColor="@color/dark_gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-</com.balysv.materialripple.MaterialRippleLayout>
+</LinearLayout>
