@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -15,21 +14,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -44,10 +40,6 @@ public class EditNameListFragment extends Fragment {
     @Bind(R.id.num_names) TextView numNames;
     @Bind(R.id.content_list) ListView namesList;
     @Bind(R.id.plus_icon) ImageView plus;
-
-    @BindString(R.string.new_list_name) String newListName;
-    @BindString(R.string.confirm_deletion_title) String confirmDeletionTitle;
-    @BindString(R.string.confirm_deletion_message) String confirmDeletionMessage;
 
     private EditNameListAdapter adapter;
     private DataSource dataSource;
@@ -68,7 +60,7 @@ public class EditNameListFragment extends Fragment {
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
-        plus.setImageDrawable(new IconDrawable(getActivity(), FontAwesomeIcons.fa_plus).colorRes(R.color.white));
+        plus.setImageDrawable(new IconDrawable(getActivity(), IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
@@ -103,55 +95,6 @@ public class EditNameListFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    public void showRenameDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.rename_list)
-                .input(newListName, "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                PreferencesManager.get().doesListExist(input.toString()));
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                    }
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.no)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (which == DialogAction.POSITIVE) {
-                            String newListName = dialog.getInputEditText().getText().toString();
-                            dataSource.renameList(listName, newListName);
-                            PreferencesManager.get().renameList(listName, newListName);
-                            listName = newListName;
-                            ListActivity listActivity = (ListActivity) getActivity();
-                            listActivity.setTitle(listName);
-                            listActivity.getListTabsAdapter().getNameChoosingFragment()
-                                    .getNameChoosingAdapter().processListNameChange(listName);
-                        }
-                    }
-                })
-                .show();
-    }
-
-    private void showDeleteDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title(confirmDeletionTitle)
-                .content(confirmDeletionMessage)
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dataSource.deleteList(listName);
-                        PreferencesManager.get().removeNameList(listName);
-                        PreferencesManager.get().removeNamesListCache(listName);
-                        getActivity().finish();
-                    }
-                })
-                .show();
-    }
-
     @OnItemClick(R.id.content_list)
     public void showNameOptions(int position) {
         adapter.showNameOptions(position);
@@ -160,9 +103,7 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.import_names, FontAwesomeIcons.fa_upload, getActivity());
-        UIUtils.loadMenuIcon(menu, R.id.rename_list, FontAwesomeIcons.fa_edit, getActivity());
-        UIUtils.loadMenuIcon(menu, R.id.delete_list, FontAwesomeIcons.fa_trash, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.import_names, IoniconsIcons.ion_android_list, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -190,15 +131,10 @@ public class EditNameListFragment extends Fragment {
                             .show();
                 }
                 return true;
-            case R.id.rename_list:
-                showRenameDialog();
-                break;
-            case R.id.delete_list:
-                showDeleteDialog();
-                break;
             case android.R.id.home:
                 getActivity().finish();
                 return true;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }

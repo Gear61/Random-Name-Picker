@@ -91,9 +91,9 @@ public class NameUtils {
     public static String[] getNameOptions(String name) {
         Context context = MyApplication.getAppContext();
         String[] options = new String[3];
-        options[0] = context.getString(R.string.rename) + name + "\"";
-        options[1] = context.getString(R.string.delete) + name + "\"";
-        options[2] = context.getString(R.string.duplicate) + name + "\"";
+        options[0] = String.format(context.getString(R.string.rename), name);
+        options[1] = String.format(context.getString(R.string.delete), name);
+        options[2] = String.format(context.getString(R.string.duplicate), name);
         return options;
     }
 

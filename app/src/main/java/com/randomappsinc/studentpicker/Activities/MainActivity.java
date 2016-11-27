@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.Adapters.NameListsAdapter;
 import com.randomappsinc.studentpicker.R;
@@ -58,8 +57,7 @@ public class MainActivity extends StandardActivity {
         super.onCreate(savedInstanceState);
 
         // Kill activity if it's above an existing stack due to launcher bug
-        if (!isTaskRoot() && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER)
-                && getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
+        if (!isTaskRoot() && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER) && getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
             finish();
             return;
         }
@@ -69,8 +67,8 @@ public class MainActivity extends StandardActivity {
 
         newListInput.setHint(R.string.add_list_hint);
         noContent.setText(R.string.no_lists_message);
-        plus.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.white));
-        importFile.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_upload).colorRes(R.color.white));
+        plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
+        importFile.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
@@ -180,7 +178,7 @@ public class MainActivity extends StandardActivity {
         if (newList.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
         } else if (PreferencesManager.get().getNameLists().contains(newList)) {
-            String dupeMessage = listDuplicate + " \"" + newList + "\".";
+            String dupeMessage = String.format(listDuplicate, newList);
             UIUtils.showSnackbar(parent, dupeMessage);
         } else {
             nameListsAdapter.addList(newList);
@@ -192,7 +190,6 @@ public class MainActivity extends StandardActivity {
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        final Activity activity = this;
         if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             Intent intent = new Intent(this, FilePickerActivity.class);
             startActivityForResult(intent, 1);
@@ -250,8 +247,8 @@ public class MainActivity extends StandardActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, this);
-        UIUtils.loadMenuIcon(menu, R.id.view_tutorial, FontAwesomeIcons.fa_info_circle, this);
+        UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
+        UIUtils.loadMenuIcon(menu, R.id.view_tutorial, IoniconsIcons.ion_information_circled, this);
         return true;
     }
 

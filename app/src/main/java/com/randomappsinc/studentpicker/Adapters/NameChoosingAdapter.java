@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.R;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -160,14 +160,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void cacheState(ChoosingSettings settings) {
-        if (PreferencesManager.get().doesListExist(listName)) {
-            PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames, settings);
-        }
-    }
-
-    public void processListNameChange(String newListName) {
-        PreferencesManager.get().moveNamesListCache(listName, newListName);
-        listName = newListName;
+        PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames, settings);
     }
 
     @Override
@@ -187,10 +180,21 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public class NameViewHolder {
         @Bind(R.id.person_name) TextView name;
-        @Bind(R.id.delete_icon) IconTextView delete;
+
+        private int position;
 
         public NameViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        public void loadName(int position) {
+            this.position = position;
+            this.name.setText(getItem(position));
+        }
+
+        @OnClick(R.id.delete_icon)
+        public void deleteName() {
+            removeNameAtPosition(position);
         }
     }
 
@@ -202,17 +206,10 @@ public class NameChoosingAdapter extends BaseAdapter {
             view = vi.inflate(R.layout.choose_name_cell, parent, false);
             holder = new NameViewHolder(view);
             view.setTag(holder);
-        }
-        else {
+        } else {
             holder = (NameViewHolder) view.getTag();
         }
-        holder.name.setText(names.get(position));
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                removeNameAtPosition(position);
-            }
-        });
+        holder.loadName(position);
         return view;
     }
 }

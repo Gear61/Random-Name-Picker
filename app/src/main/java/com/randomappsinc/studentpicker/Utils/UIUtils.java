@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.randomappsinc.studentpicker.R;
 
 /**
@@ -45,7 +45,7 @@ public class UIUtils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, numDp, resources.getDisplayMetrics());
     }
 
-    public static void loadMenuIcon(Menu menu, int itemId, FontAwesomeIcons icon, Context context) {
+    public static void loadMenuIcon(Menu menu, int itemId, Icon icon, Context context) {
         menu.findItem(itemId).setIcon(
                 new IconDrawable(context, icon)
                         .colorRes(R.color.white)

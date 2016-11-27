@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Activities.PresentationActivity;
 import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
@@ -191,9 +192,11 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            UIUtils.hideKeyboard(getActivity());
-            getActivity().invalidateOptionsMenu();
+        if (getActivity() != null) {
+            if (isVisibleToUser) {
+                UIUtils.hideKeyboard(getActivity());
+                getActivity().invalidateOptionsMenu();
+            }
         }
     }
 
@@ -241,8 +244,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.show_names_history, FontAwesomeIcons.fa_history, getActivity());
-        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, getActivity());
-        UIUtils.loadMenuIcon(menu, R.id.reset, FontAwesomeIcons.fa_rotate_right, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.reset, IoniconsIcons.ion_android_refresh, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
