@@ -108,13 +108,12 @@ public class NameListsAdapter extends BaseAdapter {
                 .title(R.string.confirm_deletion_title)
                 .content(R.string.confirm_deletion_message)
                 .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.no)
+                .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dataSource.deleteList(getItem(position));
                         PreferencesManager.get().removeNameList(getItem(position));
-                        PreferencesManager.get().removeNamesListCache(getItem(position));
                         content.remove(position);
                         setNoContent();
                         notifyDataSetChanged();

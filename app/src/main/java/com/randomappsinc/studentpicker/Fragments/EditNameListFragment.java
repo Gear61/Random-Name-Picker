@@ -134,7 +134,6 @@ public class EditNameListFragment extends Fragment {
             case android.R.id.home:
                 getActivity().finish();
                 return true;
-            default:
         }
         return super.onOptionsItemSelected(item);
     }
