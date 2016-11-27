@@ -62,10 +62,11 @@ public class PreferencesManager {
         setNameLists(currentLists);
     }
 
-    public void removeNameList(String newList) {
+    public void removeNameList(String deletedList) {
         Set<String> currentLists = getNameLists();
-        currentLists.remove(newList);
+        currentLists.remove(deletedList);
         setNameLists(currentLists);
+        removeNamesListCache(deletedList);
     }
 
     public void renameList(String oldName, String newName) {
