@@ -9,23 +9,27 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
         <com.rey.material.widget.Button
             android:id="@+id/choose"
             android:text="@string/choose"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             style="@style/ripple_button_style"
             app:rd_style="@style/button_ripple_attributes"/>
 
         <TextView
             android:id="@+id/no_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:visibility="gone"
-            android:textSize="28sp"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:visibility="gone"
+            android:textSize="28dp"/>
 
         <TextView
             android:id="@+id/num_names"

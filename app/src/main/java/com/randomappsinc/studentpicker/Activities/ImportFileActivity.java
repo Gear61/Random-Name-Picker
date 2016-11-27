@@ -37,8 +37,7 @@ public class ImportFileActivity extends StandardActivity {
         listName.setText(NameUtils.getFileName(filePath));
         try {
             names.setText(NameUtils.getNamesFromFile(filePath));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             UIUtils.showSnackbar(parent, getString(R.string.load_file_fail));
         }
     }
@@ -48,12 +47,10 @@ public class ImportFileActivity extends StandardActivity {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        }
-        else if (PreferencesManager.get().getNameLists().contains(newListName)) {
-            String dupeMessage = listDuplicate + " \"" + newListName + "\".";
+        } else if (PreferencesManager.get().getNameLists().contains(newListName)) {
+            String dupeMessage = String.format(listDuplicate, newListName);
             UIUtils.showSnackbar(parent, dupeMessage);
-        }
-        else {
+        } else {
             PreferencesManager.get().addNameList(newListName);
             DataSource dataSource = new DataSource();
             String[] allNames = names.getText().toString().split("\\r?\\n");

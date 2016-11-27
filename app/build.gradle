@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
         minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 363
-        versionName "3.6.3"
+        targetSdkVersion 24
+        versionCode 364
+        versionName "3.6.4"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -21,23 +21,23 @@ android {
     repositories {
         maven { url "http://dl.bintray.com/lukaville/maven" }
     }
+    lintOptions {
+        disable "ResourceType"
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.1'
-    compile 'com.android.support:design:23.3.0'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
-        transitive = true
-    }
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.1.0'
     compile 'com.github.rey5137:material:1.2.1'
     compile 'com.balysv:material-ripple:1.0.2'
-    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.nbsp:library:1.02'
     compile 'com.github.deano2390:MaterialShowcaseView:1.0.5@aar'
-    compile('com.github.afollestad.material-dialogs:commons:0.8.5.8@aar') {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:commons:0.9.1.0'
 }

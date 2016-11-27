@@ -4,7 +4,7 @@
     <string name="no_lists_message">You currently do not have any name lists.</string>
     <string name="add_list_hint">List name</string>
     <string name="blank_list_name">List names cannot be blank.</string>
-    <string name="list_duplicate">You already have a name list named</string>
+    <string name="list_duplicate">You already have a name list named %s.</string>
 
     <!-- Common -->
     <string name="add_description">Add item</string>
@@ -16,7 +16,9 @@
     <string name="options_for">Options for:&#160;</string>
 
     <!-- Icons -->
-    <string name="delete_icon">{fa-minus-circle}</string>
+    <string name="edit_icon">{ion-edit}</string>
+    <string name="trash_icon">{ion-android-delete}</string>
+    <string name="delete_icon">{ion-android-remove-circle}</string>
 
     <string name="welcome">Welcome</string>
     <string name="view_tutorial">View tutorial</string>

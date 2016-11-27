@@ -8,10 +8,10 @@
         android:id="@+id/options_icon"
         android:text="@string/list_icon"
         android:layout_alignParentRight="true"
-        style="@style/person_name_icon"/>
+        style="@style/list_item_button"/>
 
     <TextView
         android:id="@+id/person_name"
         android:layout_toLeftOf="@+id/options_icon"
-        style="@style/person_name"/>
+        style="@style/item_name"/>
 </RelativeLayout>

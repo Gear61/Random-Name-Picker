@@ -15,22 +15,20 @@
         <item name="rd_delayClick">untilRelease</item>
     </style>
 
-    <style name="person_name_icon">
-        <item name="android:padding">10dp</item>
+    <style name="list_item_button">
         <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">32dp</item>
     </style>
 
-    <style name="person_name">
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+    <style name="item_name">
+        <item name="android:layout_margin">8dp</item>
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">28dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -38,9 +36,9 @@
     <style name="num_names">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">18dp</item>
     </style>
 </resources>
