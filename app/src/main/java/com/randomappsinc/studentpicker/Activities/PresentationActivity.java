@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.Models.SetTextSizeViewHolder;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.JSONUtils;
@@ -39,8 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Created by alexanderchiou on 3/6/16.
  */
-public class PresentationActivity extends StandardActivity
-        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
+public class PresentationActivity extends StandardActivity implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
     public static final String NUM_NAMES_KEY = "numNames";
     public static final String ORDERED_LIST_KEY = "orderedList";
 
@@ -230,12 +229,12 @@ public class PresentationActivity extends StandardActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.presentation_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.settings, FontAwesomeIcons.fa_gear, this);
-        UIUtils.loadMenuIcon(menu, R.id.say_names, FontAwesomeIcons.fa_microphone, this);
+        UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
+        UIUtils.loadMenuIcon(menu, R.id.say_names, IoniconsIcons.ion_android_microphone, this);
         if (numNames > 1) {
             menu.findItem(R.id.say_names).setTitle(R.string.say_names);
         }
-        UIUtils.loadMenuIcon(menu, R.id.copy_names, FontAwesomeIcons.fa_clipboard, this);
+        UIUtils.loadMenuIcon(menu, R.id.copy_names, IoniconsIcons.ion_android_clipboard, this);
         return true;
     }
 
