@@ -8,8 +8,8 @@ android {
         applicationId "com.randomappsinc.studentpicker"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 365
-        versionName "3.6.5"
+        versionCode 366
+        versionName "3.6.6"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

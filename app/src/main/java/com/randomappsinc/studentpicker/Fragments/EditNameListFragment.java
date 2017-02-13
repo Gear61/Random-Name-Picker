@@ -1,7 +1,7 @@
 package com.randomappsinc.studentpicker.Fragments;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +34,8 @@ import butterknife.OnItemClick;
  * Created by alexanderchiou on 10/18/15.
  */
 public class EditNameListFragment extends Fragment {
+    public static final String SCREEN_NAME = "Edit Name List Page";
+
     @Bind(R.id.parent) View parent;
     @Bind(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @Bind(R.id.no_content) TextView noContent;

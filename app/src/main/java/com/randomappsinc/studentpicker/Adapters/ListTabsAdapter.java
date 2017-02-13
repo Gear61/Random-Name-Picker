@@ -1,28 +1,34 @@
 package com.randomappsinc.studentpicker.Adapters;
 
-import android.content.Context;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.randomappsinc.studentpicker.Activities.MainActivity;
 import com.randomappsinc.studentpicker.Fragments.EditNameListFragment;
 import com.randomappsinc.studentpicker.Fragments.NameChoosingFragment;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.MyApplication;
 
 /**
  * Created by alexanderchiou on 10/18/15.
  */
-public class ListTabsAdapter extends FragmentPagerAdapter {
+public class ListTabsAdapter extends FragmentStatePagerAdapter {
     private NameChoosingFragment nameChoosingFragment;
+    private Fragment editNameListFragment;
     private String tabTitles[];
     private String listName;
 
-    public ListTabsAdapter(FragmentManager fm, Context context, String listName) {
-        super(fm);
-        this.tabTitles = context.getResources().getStringArray(R.array.list_options);
+    public ListTabsAdapter(FragmentManager fragmentManager, Bundle bundle, String listName) {
+        super(fragmentManager);
+        this.tabTitles = MyApplication.getAppContext().getResources().getStringArray(R.array.list_options);
         this.listName = listName;
+
+        if (bundle != null) {
+            this.nameChoosingFragment = (NameChoosingFragment) fragmentManager.getFragment(bundle, NameChoosingFragment.SCREEN_NAME);
+            this.editNameListFragment = fragmentManager.getFragment(bundle, EditNameListFragment.SCREEN_NAME);
+        }
     }
 
     @Override
@@ -36,12 +42,16 @@ public class ListTabsAdapter extends FragmentPagerAdapter {
         bundle.putString(MainActivity.LIST_NAME_KEY, listName);
         switch (position) {
             case 0:
-                nameChoosingFragment = new NameChoosingFragment();
-                nameChoosingFragment.setArguments(bundle);
+                if (nameChoosingFragment == null) {
+                    nameChoosingFragment = new NameChoosingFragment();
+                    nameChoosingFragment.setArguments(bundle);
+                }
                 return nameChoosingFragment;
             case 1:
-                EditNameListFragment editNameListFragment = new EditNameListFragment();
-                editNameListFragment.setArguments(bundle);
+                if (editNameListFragment == null) {
+                    editNameListFragment = new EditNameListFragment();
+                    editNameListFragment.setArguments(bundle);
+                }
                 return editNameListFragment;
             default:
                 return null;
@@ -50,6 +60,10 @@ public class ListTabsAdapter extends FragmentPagerAdapter {
 
     public NameChoosingFragment getNameChoosingFragment() {
         return nameChoosingFragment;
+    }
+
+    public Fragment getEditNameListFragment() {
+        return editNameListFragment;
     }
 
     @Override
