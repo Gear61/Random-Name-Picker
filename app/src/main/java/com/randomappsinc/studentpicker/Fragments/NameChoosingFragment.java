@@ -1,12 +1,12 @@
 package com.randomappsinc.studentpicker.Fragments;
 
 import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +44,8 @@ import butterknife.OnClick;
  * Created by alexanderchiou on 10/18/15.
  */
 public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener {
+    public static final String SCREEN_NAME = "Name Choosing Page";
+
     @Bind(R.id.parent) View parent;
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.num_names) TextView numNames;

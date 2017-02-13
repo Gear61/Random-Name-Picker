@@ -1,10 +1,13 @@
 package com.randomappsinc.studentpicker.Activities;
 
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.randomappsinc.studentpicker.Adapters.ListTabsAdapter;
+import com.randomappsinc.studentpicker.Fragments.EditNameListFragment;
+import com.randomappsinc.studentpicker.Fragments.NameChoosingFragment;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Views.SlidingTabLayout;
 
@@ -29,10 +32,23 @@ public class ListActivity extends StandardActivity {
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        listTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), this, listName);
+        listTabsAdapter = new ListTabsAdapter(getFragmentManager(), savedInstanceState, listName);
         mViewPager.setAdapter(listTabsAdapter);
         mSlidingTabLayout.setCustomTabView(R.layout.custom_tab, R.id.tab_name);
         mSlidingTabLayout.setViewPager(mViewPager);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        NameChoosingFragment nameChoosingFragment = listTabsAdapter.getNameChoosingFragment();
+        if (nameChoosingFragment != null) {
+            getFragmentManager().putFragment(savedInstanceState, NameChoosingFragment.SCREEN_NAME, nameChoosingFragment);
+        }
+        Fragment editNameListFragment = listTabsAdapter.getEditNameListFragment();
+        if (nameChoosingFragment != null) {
+            getFragmentManager().putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
+        }
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
