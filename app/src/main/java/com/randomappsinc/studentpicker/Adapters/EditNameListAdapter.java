@@ -260,7 +260,7 @@ public class EditNameListAdapter extends BaseAdapter {
         }
 
         public void loadName(int position) {
-            this.name.setText(getItem(position));
+            name.setText(getItem(position));
         }
     }
 

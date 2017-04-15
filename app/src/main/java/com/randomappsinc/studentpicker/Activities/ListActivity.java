@@ -42,10 +42,11 @@ public class ListActivity extends StandardActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         NameChoosingFragment nameChoosingFragment = listTabsAdapter.getNameChoosingFragment();
         if (nameChoosingFragment != null) {
+            nameChoosingFragment.cacheListState();
             getFragmentManager().putFragment(savedInstanceState, NameChoosingFragment.SCREEN_NAME, nameChoosingFragment);
         }
         Fragment editNameListFragment = listTabsAdapter.getEditNameListFragment();
-        if (nameChoosingFragment != null) {
+        if (editNameListFragment != null) {
             getFragmentManager().putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
         }
         super.onSaveInstanceState(savedInstanceState);
