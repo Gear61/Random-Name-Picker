@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -205,15 +206,14 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     private void showCloneDialog(final int position) {
-        new MaterialDialog.Builder(listActivity)
-                .title(R.string.cloning_title)
+        MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
+                .content(R.string.cloning_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input(listActivity.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        String userInput = input.toString().trim();
-                        dialog.getActionButton(DialogAction.POSITIVE)
-                                .setEnabled(!userInput.isEmpty() && Integer.parseInt(userInput) > 0);
+                        boolean isValid = input.length() > 0 && (Integer.parseInt(input.toString()) > 0);
+                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid);
                     }
                 })
                 .alwaysCallInputCallback()
@@ -226,7 +226,9 @@ public class EditNameListAdapter extends BaseAdapter {
                         cloneName(getItem(position), numCopies);
                     }
                 })
-                .show();
+                .build();
+        cloneDialog.getInputEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+        cloneDialog.show();
     }
 
     public void showNameOptions(final int position) {

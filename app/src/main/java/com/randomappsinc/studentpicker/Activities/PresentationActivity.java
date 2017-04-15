@@ -217,6 +217,9 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     }
 
     @Override
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         player.stop();
