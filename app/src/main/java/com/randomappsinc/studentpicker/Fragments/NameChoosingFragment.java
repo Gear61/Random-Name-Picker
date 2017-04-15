@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -50,9 +49,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Bind(R.id.no_content) TextView noContent;
     @Bind(R.id.num_names) TextView numNames;
     @Bind(R.id.names_list) ListView namesList;
-
-    @BindString(R.string.name_chosen) String nameChosenTitle;
-    @BindString(R.string.names_chosen) String namesChosenTitle;
 
     private NameChoosingAdapter nameChoosingAdapter;
 
@@ -118,8 +114,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
                     nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
-            String title = chosenIndexes.size() == 1 ? nameChosenTitle : namesChosenTitle;
-            String sayNames = chosenIndexes.size() == 1 ? getString(R.string.say_name) : getString(R.string.say_names);
             if (settings.getPresentationMode()) {
                 Intent intent = new Intent(getActivity(), PresentationActivity.class);
                 intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
@@ -129,10 +123,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 getActivity().startActivity(intent);
             } else {
                 new MaterialDialog.Builder(getActivity())
-                        .title(title)
+                        .title(chosenIndexes.size() == 1 ? R.string.name_chosen : R.string.names_chosen)
                         .content(chosenNames)
                         .positiveText(android.R.string.yes)
-                        .neutralText(sayNames)
+                        .neutralText(chosenIndexes.size() == 1 ? R.string.say_name : R.string.say_names)
                         .negativeText(R.string.copy_text)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -231,6 +225,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         }
     }
 
+    public void cacheListState() {
+        nameChoosingAdapter.cacheState(settings);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -239,7 +237,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-        nameChoosingAdapter.cacheState(settings);
+        cacheListState();
     }
 
     @Override
