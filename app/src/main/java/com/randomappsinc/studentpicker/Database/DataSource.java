@@ -116,11 +116,16 @@ public class DataSource {
         return names.toArray(new String[names.size()]);
     }
 
-    public void importNamesIntoList(String receivingList, String givingList) {
-        List<String> namesToImport = getAllNamesInList(givingList);
-        for (String name : namesToImport) {
-            addName(name, receivingList);
+    public List<String> importNamesIntoList(String receivingList, List<String> givingLists) {
+        List<String> newNames = new ArrayList<>();
+        for (String listName : givingLists) {
+            List<String> namesToImport = getAllNamesInList(listName);
+            for (String name : namesToImport) {
+                addName(name, receivingList);
+                newNames.add(name);
+            }
         }
+        return newNames;
     }
 
     public long getNumNamesInList(String name, String listName) {
