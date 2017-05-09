@@ -3,7 +3,7 @@
     <string name="edit">Edit</string>
     <string name="blank_name">Names cannot be blank.</string>
     <string name="name_hint">Name</string>
-    <string name="choose_list_to_import">Choose list to import names from</string>
+    <string name="choose_list_to_import">Choose list(s) to import names from</string>
     <string name="no_name_lists_to_import">You do not have any lists to import names from.</string>
     <string name="names_successfully_imported">Names successfully imported.</string>
     <string name="undo">UNDO</string>
@@ -21,7 +21,7 @@
     <string name="add">Add</string>
 
     <!-- Action bar options -->
-    <string name="import_names_from_list">Import names from another list</string>
+    <string name="import_names_from_list">Import names from another list(s)</string>
     <string name="rename_list">Rename List</string>
     <string name="delete_list">Delete List</string>
 
