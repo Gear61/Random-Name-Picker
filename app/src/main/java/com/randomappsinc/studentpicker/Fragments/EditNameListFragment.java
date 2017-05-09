@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -24,6 +26,9 @@ import com.randomappsinc.studentpicker.Adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -105,7 +110,7 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.import_names, IoniconsIcons.ion_android_list, getActivity());
+        UIUtils.loadMenuIcon(menu, R.id.import_names, IoniconsIcons.ion_android_upload, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -113,24 +118,38 @@ public class EditNameListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.import_names:
-                String[] importCandidates = dataSource.getAllNameLists(listName);
+                final String[] importCandidates = dataSource.getAllNameLists(listName);
                 if (importCandidates.length == 0) {
                     UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
                 } else {
-                    new MaterialDialog.Builder(getActivity())
+                    MaterialDialog importDialog = new MaterialDialog.Builder(getActivity())
                             .title(R.string.choose_list_to_import)
                             .items(importCandidates)
-                            .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
                                 @Override
-                                public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                    adapter.importNamesFromList(text.toString());
-                                    UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
+                                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(which.length > 0);
                                     return true;
                                 }
                             })
+                            .alwaysCallMultiChoiceCallback()
                             .negativeText(android.R.string.no)
                             .positiveText(R.string.choose)
-                            .show();
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    Integer[] indices = dialog.getSelectedIndices();
+                                    List<String> listNames = new ArrayList<>();
+                                    for (Integer index : indices) {
+                                        listNames.add(importCandidates[index]);
+                                    }
+                                    adapter.importNamesFromList(listNames);
+                                    UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
+                                }
+                            })
+                            .build();
+                    importDialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                    importDialog.show();
                 }
                 return true;
             case android.R.id.home:

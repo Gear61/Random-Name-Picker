@@ -73,6 +73,13 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
+    public void addNames(List<String> newNames) {
+        names.addAll(newNames);
+        Collections.sort(names);
+        notifyDataSetChanged();
+        setViews();
+    }
+
     public void removeName(String name) {
         for (int i = 0; i < names.size(); i++) {
             if (names.get(i).equals(name)) {

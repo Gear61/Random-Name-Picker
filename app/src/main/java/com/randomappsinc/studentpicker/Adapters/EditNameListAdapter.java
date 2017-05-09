@@ -51,7 +51,7 @@ public class EditNameListAdapter extends BaseAdapter {
         setViews();
     }
 
-    public void setViews() {
+    private void setViews() {
         if (content.isEmpty()) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
@@ -78,7 +78,7 @@ public class EditNameListAdapter extends BaseAdapter {
         showConfirmationDialog(true, name);
     }
 
-    public void removeName(int index) {
+    private void removeName(int index) {
         String nameToRemove = getItem(index);
         dataSource.removeName(nameToRemove, listName);
 
@@ -91,7 +91,7 @@ public class EditNameListAdapter extends BaseAdapter {
         showConfirmationDialog(false, nameToRemove);
     }
 
-    public void changeName(int position, String newName) {
+    private void changeName(int position, String newName) {
         listActivity.getListTabsAdapter().getNameChoosingFragment()
                 .getNameChoosingAdapter().changeName(getItem(position), newName);
 
@@ -100,7 +100,7 @@ public class EditNameListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void cloneName(String name, int numClones) {
+    private void cloneName(String name, int numClones) {
         for (int i = 0; i < numClones; i++) {
             dataSource.addName(name, listName);
             content.add(name);
@@ -112,20 +112,17 @@ public class EditNameListAdapter extends BaseAdapter {
         UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
     }
 
-    public void importNamesFromList(String listToAbsorb) {
-        dataSource.importNamesIntoList(listName, listToAbsorb);
-        content = dataSource.getAllNamesInList(listName);
+    public void importNamesFromList(List<String> listsToAbsorb) {
+        List<String> newNames = dataSource.importNamesIntoList(listName, listsToAbsorb);
+        content.addAll(newNames);
         Collections.sort(content);
         setViews();
         notifyDataSetChanged();
 
-        List<String> namesAdded = dataSource.getAllNamesInList(listToAbsorb);
-        for (String name : namesAdded) {
-            listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
-        }
+        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNames(newNames);
     }
 
-    public void showConfirmationDialog(final boolean addMode, final String name) {
+    private void showConfirmationDialog(final boolean addMode, final String name) {
         String prefix = addMode ? listActivity.getString(R.string.added) : listActivity.getString(R.string.removed);
         String confirmationMessage = prefix + "\"" + name + "\"";
         Snackbar snackbar = Snackbar.make(parent, confirmationMessage, Snackbar.LENGTH_LONG);
@@ -255,11 +252,11 @@ public class EditNameListAdapter extends BaseAdapter {
     public class NameViewHolder {
         @Bind(R.id.person_name) TextView name;
 
-        public NameViewHolder(View view) {
+        private NameViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
-        public void loadName(int position) {
+        private void loadName(int position) {
             name.setText(getItem(position));
         }
     }
