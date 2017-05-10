@@ -1,9 +1,5 @@
 package com.randomappsinc.studentpicker.Utils;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
-
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -26,6 +22,8 @@ public class PreferencesManager {
     private static final String NUM_APP_OPENS = "numAppOpens";
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
+    private static final String SHAKE_IS_NEW = "shakeIsNew";
+
     private static PreferencesManager instance;
 
     public static PreferencesManager get() {
@@ -138,5 +136,11 @@ public class PreferencesManager {
 
     public void setPresentationTextColor(int newColor) {
         prefs.edit().putInt(PRESENTATION_TEXT_COLOR_KEY, newColor).apply();
+    }
+
+    public boolean shouldShowShake() {
+        boolean shouldShowShake = prefs.getBoolean(SHAKE_IS_NEW, true);
+        prefs.edit().putBoolean(SHAKE_IS_NEW, false).apply();
+        return shouldShowShake;
     }
 }

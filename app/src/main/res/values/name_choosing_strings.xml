@@ -34,5 +34,10 @@
 
     <string name="say_name">Say name</string>
     <string name="say_names">Say names</string>
-    <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>3
+    <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
+
+    <string name="shake_it">Shake It!</string>
+    <string name="shake_now_supported">
+        Tired of clicking buttons? Don\'t worry, Random Name Picker has got you covered!
+        You can now shake your device to choose names!</string>
 </resources>

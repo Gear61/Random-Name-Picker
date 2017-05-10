@@ -51,13 +51,12 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Bind(R.id.names_list) ListView namesList;
 
     private NameChoosingAdapter nameChoosingAdapter;
-
     private ChoosingSettings settings;
     private ChoosingSettingsViewHolder settingsHolder;
-
     private MaterialDialog settingsDialog;
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
+    private boolean canShow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +109,8 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (nameChoosingAdapter.getCount() > 0) {
+        if (nameChoosingAdapter.getCount() > 0 && canShow) {
+            canShow = false;
             final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
                     nameChoosingAdapter.getCount() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
@@ -132,6 +132,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 dialog.dismiss();
+                                canShow = true;
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -147,6 +148,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                             }
                         })
                         .autoDismiss(false)
+                        .cancelable(false)
                         .show();
                 if (settings.getAutomaticTts()) {
                     sayNames(chosenNames);
@@ -227,6 +229,12 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     public void cacheListState() {
         nameChoosingAdapter.cacheState(settings);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        canShow = true;
     }
 
     @Override
