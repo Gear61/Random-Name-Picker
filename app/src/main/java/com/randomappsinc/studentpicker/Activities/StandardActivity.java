@@ -1,6 +1,8 @@
 package com.randomappsinc.studentpicker.Activities;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -12,6 +14,12 @@ import com.randomappsinc.studentpicker.Utils.UIUtils;
  */
 
 public class StandardActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         UIUtils.hideKeyboard(this);
