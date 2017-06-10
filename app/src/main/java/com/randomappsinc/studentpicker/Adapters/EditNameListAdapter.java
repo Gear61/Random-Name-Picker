@@ -67,7 +67,7 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     public void addName(String name) {
-        dataSource.addName(name, listName);
+        dataSource.addName(name, listName, 1);
         content.add(name);
         Collections.sort(content);
         setViews();
@@ -102,7 +102,7 @@ public class EditNameListAdapter extends BaseAdapter {
 
     private void cloneName(String name, int numClones) {
         for (int i = 0; i < numClones; i++) {
-            dataSource.addName(name, listName);
+            dataSource.addName(name, listName, 1);
             content.add(name);
             listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
         }
