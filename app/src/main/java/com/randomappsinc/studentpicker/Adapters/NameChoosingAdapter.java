@@ -84,20 +84,20 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void setViews() {
-        if (dataSource.getListInfo(listName).getNumNames() == 0) {
+        if (dataSource.getListInfo(listName).getNumPeople() == 0) {
             noContent.setText(noNames);
         } else {
             noContent.setText(outOfNames);
         }
-        if (currentState.getNumNames() == 0) {
+        if (currentState.getNumPeople() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = currentState.getNumNames() == 1
+            String names = currentState.getNumPeople() == 1
                     ? context.getString(R.string.single_name)
                     : context.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(currentState.getNumNames()) + names;
+            String numNamesText = String.valueOf(currentState.getNumPeople()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
