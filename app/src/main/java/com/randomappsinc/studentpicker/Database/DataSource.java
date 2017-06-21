@@ -55,7 +55,7 @@ public class DataSource {
         return new ListInfo(nameAmounts, names, amount);
     }
 
-    public void addName(String name, String listName, int amount) {
+    public void addNames(String name, String listName, int amount) {
         int currentAmount = getAmount(listName, name);
 
         open();
@@ -75,7 +75,7 @@ public class DataSource {
         close();
     }
 
-    public void removeName(String name, String listName, int amount) {
+    public void removeNames(String name, String listName, int amount) {
         int currentAmount = getAmount(listName, name);
 
         open();
@@ -160,13 +160,13 @@ public class DataSource {
         for (String listName : givingLists) {
             Map<String, Integer> namesToImport = getListInfo(listName).getNameAmounts();
             for (String name : namesToImport.keySet()) {
-                addName(name, receivingList, namesToImport.get(name));
+                addNames(name, receivingList, namesToImport.get(name));
             }
         }
     }
 
     public void renamePeople(String oldName, String newName, String listName, int amount) {
-        removeName(oldName, listName, amount);
-        addName(newName, listName, amount);
+        removeNames(oldName, listName, amount);
+        addNames(newName, listName, amount);
     }
 }

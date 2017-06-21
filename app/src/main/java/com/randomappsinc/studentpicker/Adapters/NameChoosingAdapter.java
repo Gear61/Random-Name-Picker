@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
@@ -28,7 +29,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     private String outOfNames;
     private String noNames;
     private String listName;
-    private List<String> names;
+    private ListInfo currentState;
     private List<String> alreadyChosenNames;
     private TextView noContent;
     private TextView numNames;
@@ -41,11 +42,10 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.listName = listName;
         this.dataSource = new DataSource();
 
-        List<String> cachedNames = PreferencesManager.get().getCachedNameList(listName);
-        this.names = cachedNames.isEmpty() ? dataSource.getListInfo(listName) : cachedNames;
+        ListInfo info = PreferencesManager.get().getCachedNameList(listName);
+        this.currentState = info == null ? dataSource.getListInfo(listName) : info;
         this.alreadyChosenNames = PreferencesManager.get().getAlreadyChosenNames(listName);
 
-        Collections.sort(this.names);
         this.noContent = noContent;
         this.numNames = numNames;
         setViews();
@@ -66,57 +66,38 @@ public class NameChoosingAdapter extends BaseAdapter {
         return namesHistory.toString();
     }
 
-    public void addName(String name) {
-        names.add(name);
-        Collections.sort(names);
+    public void addNames(String name, int amount) {
+        currentState.addNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void addNames(List<String> newNames) {
-        names.addAll(newNames);
-        Collections.sort(names);
+    public void removeNames(String name, int amount) {
+        currentState.removeNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void removeName(String name) {
-        for (int i = 0; i < names.size(); i++) {
-            if (names.get(i).equals(name)) {
-                names.remove(i);
-                notifyDataSetChanged();
-                break;
-            }
-        }
-        setViews();
-    }
-
-    public void changeName(String oldName, String newName) {
-        for (int i = 0; i < names.size(); i++) {
-            if (names.get(i).equals(oldName)) {
-                names.set(i, newName);
-                Collections.sort(names);
-                notifyDataSetChanged();
-                break;
-            }
-        }
+    public void changeNames(String oldName, String newName, int amount) {
+        currentState.renamePeople(oldName, newName, amount);
+        notifyDataSetChanged();
     }
 
     public void setViews() {
-        if (dataSource.getListInfo(listName).isEmpty()) {
+        if (dataSource.getListInfo(listName).getNumNames() == 0) {
             noContent.setText(noNames);
         } else {
             noContent.setText(outOfNames);
         }
-        if (names.isEmpty()) {
+        if (currentState.getNumNames() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = getCount() == 1
+            String names = currentState.getNumNames() == 1
                     ? context.getString(R.string.single_name)
                     : context.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(getCount()) + names;
+            String numNamesText = String.valueOf(currentState.getNumNames()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
@@ -132,8 +113,8 @@ public class NameChoosingAdapter extends BaseAdapter {
             if (settings.getShowAsList()) {
                 chosenNames.append(NameUtils.getPrefix(i));
             }
-            chosenNames.append(names.get(indexes.get(i)));
-            alreadyChosenNames.add(names.get(indexes.get(i)));
+            // chosenNames.append(names.get(indexes.get(i)));
+            // alreadyChosenNames.add(names.get(indexes.get(i)));
         }
         // If without replacement, remove the names
         if (!settings.getWithReplacement()) {
@@ -146,38 +127,36 @@ public class NameChoosingAdapter extends BaseAdapter {
         Collections.sort(indexes);
         Collections.reverse(indexes);
         for (int index : indexes) {
-            names.remove(index);
+            // names.remove(index);
         }
         notifyDataSetChanged();
         setViews();
     }
 
     public void removeNameAtPosition(int position) {
-        names.remove(position);
+        // names.remove(position);
         notifyDataSetChanged();
         setViews();
     }
 
     public void resetNames() {
-        names.clear();
-        names.addAll(dataSource.getListInfo(listName));
-        Collections.sort(names);
+        currentState = dataSource.getListInfo(listName);
         setViews();
         notifyDataSetChanged();
     }
 
     public void cacheState(ChoosingSettings settings) {
-        PreferencesManager.get().cacheNameChoosingList(listName, names, alreadyChosenNames, settings);
+        PreferencesManager.get().cacheNameChoosingList(listName, currentState, alreadyChosenNames, settings);
     }
 
     @Override
     public int getCount() {
-        return names.size();
+        return currentState.getNumNames();
     }
 
     @Override
     public String getItem(int position) {
-        return names.get(position);
+        return currentState.getName(position);
     }
 
     @Override
@@ -196,7 +175,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
         public void loadName(int position) {
             this.position = position;
-            this.name.setText(getItem(position));
+            this.name.setText(currentState.getNameText(position));
         }
 
         @OnClick(R.id.delete_icon)

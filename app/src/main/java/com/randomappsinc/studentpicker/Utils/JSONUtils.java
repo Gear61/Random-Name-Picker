@@ -1,13 +1,17 @@
 package com.randomappsinc.studentpicker.Utils;
 
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.Models.ListInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alexanderchiou on 1/31/16.
@@ -23,15 +27,19 @@ public class JSONUtils {
     public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
-    public static String serializeChoosingState(List<String> names, List<String> alreadyChosenNames,
+    public static String serializeChoosingState(ListInfo currentState, List<String> alreadyChosenNames,
                                                 ChoosingSettings choosingSettings) {
         try {
             JSONObject nameListJson = new JSONObject();
 
             // Store current names in list
             JSONArray namesArray = new JSONArray();
-            for (String name : names) {
-                namesArray.put(name);
+            Map<String, Integer> nameAmounts = currentState.getNameAmounts();
+            for (String name : currentState.getNames()) {
+                int amount = nameAmounts.get(name);
+                for (int i = 0; i < amount; i++) {
+                    namesArray.put(name);
+                }
             }
             nameListJson.put(NAMES_KEY, namesArray);
 
@@ -57,18 +65,33 @@ public class JSONUtils {
         }
     }
 
-    // Given a serialized JSON "cache" string of a name list, extracts the names
-    public static List<String> extractNames(String cachedList) {
+    // Given a serialized JSON "cache" string of a name list, extracts the list state
+    public static ListInfo extractNames(String cachedList) {
+        if (cachedList.isEmpty()) {
+            return null;
+        }
+
+        Map<String, Integer> nameAmounts = new HashMap<>();
         List<String> names = new ArrayList<>();
+        int numNames = 0;
         try {
             JSONObject nameListJson = new JSONObject(cachedList);
             JSONArray namesArray = nameListJson.getJSONArray(NAMES_KEY);
             for (int i = 0; i < namesArray.length(); i++) {
-                names.add(namesArray.getString(i));
+                String name = namesArray.getString(i);
+                if (nameAmounts.containsKey(name)) {
+                    int currentAmount = nameAmounts.get(name);
+                    nameAmounts.put(name, currentAmount + 1);
+                } else {
+                    nameAmounts.put(name, 1);
+                    names.add(name);
+                }
+                numNames++;
             }
+            Collections.sort(names);
         }
         catch (JSONException ignored) {}
-        return names;
+        return new ListInfo(nameAmounts, names, numNames);
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the chosen names history
