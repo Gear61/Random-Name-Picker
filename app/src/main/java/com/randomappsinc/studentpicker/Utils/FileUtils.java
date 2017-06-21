@@ -41,7 +41,7 @@ public class FileUtils {
 
     public static void createListBackup(String listName) {
         DataSource dataSource = new DataSource();
-        List<String> namesInList = dataSource.getAllNamesInList(listName);
+        List<String> namesInList = dataSource.getListInfo(listName);
         if (!namesInList.isEmpty()) {
             File listBackup = new File(Environment.getExternalStorageDirectory().getPath() + "/RandomNamePicker",
                     listName + ".txt");
@@ -80,7 +80,7 @@ public class FileUtils {
 
         Set<String> nameLists = PreferencesManager.get().getNameLists();
         for (String listName : nameLists) {
-            List<String> namesInList = dataSource.getAllNamesInList(listName);
+            List<String> namesInList = dataSource.getListInfo(listName);
             if (!namesInList.isEmpty()) {
                 out.putNextEntry(new ZipEntry(listName + ".txt"));
                 byte[] data = getNameListString(namesInList).getBytes();

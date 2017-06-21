@@ -42,7 +42,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.dataSource = new DataSource();
 
         List<String> cachedNames = PreferencesManager.get().getCachedNameList(listName);
-        this.names = cachedNames.isEmpty() ? dataSource.getAllNamesInList(listName) : cachedNames;
+        this.names = cachedNames.isEmpty() ? dataSource.getListInfo(listName) : cachedNames;
         this.alreadyChosenNames = PreferencesManager.get().getAlreadyChosenNames(listName);
 
         Collections.sort(this.names);
@@ -103,7 +103,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void setViews() {
-        if (dataSource.getAllNamesInList(listName).isEmpty()) {
+        if (dataSource.getListInfo(listName).isEmpty()) {
             noContent.setText(noNames);
         } else {
             noContent.setText(outOfNames);
@@ -160,7 +160,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void resetNames() {
         names.clear();
-        names.addAll(dataSource.getAllNamesInList(listName));
+        names.addAll(dataSource.getListInfo(listName));
         Collections.sort(names);
         setViews();
         notifyDataSetChanged();

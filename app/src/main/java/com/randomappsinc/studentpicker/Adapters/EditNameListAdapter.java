@@ -42,7 +42,7 @@ public class EditNameListAdapter extends BaseAdapter {
                                String listName, View parent) {
         this.listActivity = listActivity;
         this.dataSource = new DataSource();
-        this.content = dataSource.getAllNamesInList(listName);
+        this.content = dataSource.getListInfo(listName);
         this.noContent = noContent;
         this.numNames = numNames;
         this.listName = listName;
@@ -178,7 +178,7 @@ public class EditNameListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String newName = dialog.getInputEditText().getText().toString().trim();
-                        dataSource.renamePerson(currentName, newName, listName);
+                        dataSource.renamePeople(currentName, newName, listName);
                         changeName(position, newName);
                     }
                 })
