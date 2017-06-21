@@ -84,7 +84,7 @@ public class EditNameListFragment extends Fragment {
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
-            adapter.addName(newName);
+            adapter.addNames(newName, 1);
         }
     }
 
