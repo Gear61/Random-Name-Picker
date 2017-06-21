@@ -104,7 +104,8 @@ public class EditNameListAdapter extends BaseAdapter {
     private void cloneName(String name, int numClones) {
         dataSource.addNames(name, listName, numClones);
         content.addNames(name, numClones);
-        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNames(name, numClones);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().addNames(name, numClones);
         notifyDataSetChanged();
         setViews();
         UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
