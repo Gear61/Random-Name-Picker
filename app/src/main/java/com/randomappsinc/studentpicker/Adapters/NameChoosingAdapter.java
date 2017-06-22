@@ -111,8 +111,8 @@ public class NameChoosingAdapter extends BaseAdapter {
         return chosenNames;
     }
 
-    public void removeNameAtPosition(int position) {
-        // names.remove(position);
+    private void removeNameAtPosition(int position) {
+        currentState.removeAllInstancesOfName(position);
         notifyDataSetChanged();
         setViews();
     }

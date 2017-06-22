@@ -89,6 +89,12 @@ public class ListInfo {
         return numInstances;
     }
 
+    public void removeAllInstancesOfName(int position) {
+        String name = getName(position);
+        int amount = nameAmounts.get(name);
+        removeNames(name, amount);
+    }
+
     public String chooseNames(List<Integer> indexes, ChoosingSettings settings, List<String> alreadyChosenNames) {
         StringBuilder namesText = new StringBuilder();
         List<String> allNames = getLongList();
