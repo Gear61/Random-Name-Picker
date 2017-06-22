@@ -11,10 +11,8 @@ import com.randomappsinc.studentpicker.Database.DataSource;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -84,20 +82,20 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void setViews() {
-        if (dataSource.getListInfo(listName).getNumPeople() == 0) {
+        if (dataSource.getListInfo(listName).getNumInstances() == 0) {
             noContent.setText(noNames);
         } else {
             noContent.setText(outOfNames);
         }
-        if (currentState.getNumPeople() == 0) {
+        if (currentState.getNumInstances() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = currentState.getNumPeople() == 1
+            String names = currentState.getNumInstances() == 1
                     ? context.getString(R.string.single_name)
                     : context.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(currentState.getNumPeople()) + names;
+            String numNamesText = String.valueOf(currentState.getNumInstances()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
@@ -105,32 +103,12 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     // All name choosing goes through here
     public String chooseNamesAtRandom(List<Integer> indexes, ChoosingSettings settings) {
-        StringBuilder chosenNames = new StringBuilder();
-        for (int i = 0; i < indexes.size(); i++) {
-            if (i != 0) {
-                chosenNames.append("\n");
-            }
-            if (settings.getShowAsList()) {
-                chosenNames.append(NameUtils.getPrefix(i));
-            }
-            // chosenNames.append(names.get(indexes.get(i)));
-            // alreadyChosenNames.add(names.get(indexes.get(i)));
-        }
-        // If without replacement, remove the names
+        String chosenNames = currentState.chooseNames(indexes, settings, alreadyChosenNames);
         if (!settings.getWithReplacement()) {
-            removeNamesAtPositions(indexes);
+            notifyDataSetChanged();
+            setViews();
         }
-        return chosenNames.toString();
-    }
-
-    public void removeNamesAtPositions(List<Integer> indexes) {
-        Collections.sort(indexes);
-        Collections.reverse(indexes);
-        for (int index : indexes) {
-            // names.remove(index);
-        }
-        notifyDataSetChanged();
-        setViews();
+        return chosenNames;
     }
 
     public void removeNameAtPosition(int position) {
@@ -147,6 +125,10 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void cacheState(ChoosingSettings settings) {
         PreferencesManager.get().cacheNameChoosingList(listName, currentState, alreadyChosenNames, settings);
+    }
+
+    public int getNumInstances() {
+        return currentState.getNumInstances();
     }
 
     @Override

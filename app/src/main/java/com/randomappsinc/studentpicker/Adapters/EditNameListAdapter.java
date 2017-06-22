@@ -51,15 +51,15 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     private void setViews() {
-        if (content.getNumPeople() == 0) {
+        if (content.getNumInstances() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = content.getNumPeople() == 1
+            String names = content.getNumInstances() == 1
                     ? listActivity.getString(R.string.single_name)
                     : listActivity.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(content.getNumPeople()) + names;
+            String numNamesText = String.valueOf(content.getNumInstances()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }

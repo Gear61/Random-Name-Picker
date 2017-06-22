@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.Models;
 
+import com.randomappsinc.studentpicker.Utils.NameUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,12 +14,12 @@ import java.util.Map;
 public class ListInfo {
     private Map<String, Integer> nameAmounts;
     private List<String> names;
-    private int numPeople;
+    private int numInstances;
 
-    public ListInfo(Map<String, Integer> nameAmounts, List<String> names, int numPeople) {
+    public ListInfo(Map<String, Integer> nameAmounts, List<String> names, int numInstances) {
         this.nameAmounts = nameAmounts;
         this.names = names;
-        this.numPeople = numPeople;
+        this.numInstances = numInstances;
     }
 
     public Map<String, Integer> getNameAmounts() {
@@ -48,7 +50,7 @@ public class ListInfo {
             names.add(name);
             Collections.sort(names);
         }
-        numPeople += amount;
+        numInstances += amount;
     }
 
     public void removeNames(String name, int amount) {
@@ -61,7 +63,7 @@ public class ListInfo {
                 nameAmounts.put(name, currentAmount - amount);
             }
         }
-        numPeople -= amount;
+        numInstances -= amount;
     }
 
     public void renamePeople(String oldName, String newName, int amount) {
@@ -83,7 +85,28 @@ public class ListInfo {
         return names.size();
     }
 
-    public int getNumPeople() {
-        return numPeople;
+    public int getNumInstances() {
+        return numInstances;
+    }
+
+    public String chooseNames(List<Integer> indexes, ChoosingSettings settings, List<String> alreadyChosenNames) {
+        StringBuilder namesText = new StringBuilder();
+        List<String> allNames = getLongList();
+        for (int i = 0; i < indexes.size(); i++) {
+            if (i != 0) {
+                namesText.append("\n");
+            }
+            if (settings.getShowAsList()) {
+                namesText.append(NameUtils.getPrefix(i));
+            }
+
+            String chosenName = allNames.get(indexes.get(i));
+            namesText.append(chosenName);
+            alreadyChosenNames.add(chosenName);
+            if (!settings.getWithReplacement()) {
+                removeNames(chosenName, 1);
+            }
+        }
+        return namesText.toString();
     }
 }
