@@ -1,9 +1,7 @@
 package com.randomappsinc.studentpicker.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -80,7 +78,7 @@ public class EditNameListAdapter extends BaseAdapter {
 
     private void removeNames(int index, int amount) {
         String nameToRemove = getItem(index);
-        dataSource.removeNames(nameToRemove, listName, 1);
+        dataSource.removeNames(nameToRemove, listName, amount);
         content.removeNames(nameToRemove, amount);
 
         listActivity.getListTabsAdapter().getNameChoosingFragment()
@@ -121,16 +119,9 @@ public class EditNameListAdapter extends BaseAdapter {
         listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNameMap(nameMap);
     }
 
-    private void showConfirmationDialog(final boolean addMode, final String name) {
-        String prefix = addMode ? listActivity.getString(R.string.added) : listActivity.getString(R.string.removed);
-        String confirmationMessage = prefix + "\"" + name + "\"";
-        Snackbar snackbar = Snackbar.make(parent, confirmationMessage, Snackbar.LENGTH_LONG);
-        View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(listActivity.getResources().getColor(R.color.app_teal));
-        TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        snackbar.setActionTextColor(Color.WHITE);
-        snackbar.show();
+    private void showConfirmationDialog(boolean addMode, String name) {
+        String template = addMode ? listActivity.getString(R.string.added_name) : listActivity.getString(R.string.deleted_name);
+        UIUtils.showSnackbar(parent, String.format(template, name));
     }
 
     @Override
@@ -174,20 +165,51 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     private void showDeleteDialog(final int position) {
-        String confirmation = listActivity.getString(R.string.are_you_sure) + "\"" + getItem(position) + "\"" +
-                listActivity.getString(R.string.from_this_list);
-        new MaterialDialog.Builder(listActivity)
-                .title(R.string.confirm_name_deletion)
-                .content(confirmation)
-                .negativeText(android.R.string.no)
-                .positiveText(android.R.string.yes)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        removeNames(position, 1);
-                    }
-                })
-                .show();
+        final int currentAmount = content.getInstancesOfName(getItem(position));
+        if (currentAmount == 1) {
+            new MaterialDialog.Builder(listActivity)
+                    .title(R.string.confirm_name_deletion)
+                    .content(String.format(listActivity.getString(R.string.confirm_name_delete), getItem(position)))
+                    .negativeText(android.R.string.no)
+                    .positiveText(android.R.string.yes)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            removeNames(position, 1);
+                        }
+                    })
+                    .show();
+        } else {
+            MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
+                    .content(R.string.multiple_deletions_title)
+                    .inputType(InputType.TYPE_CLASS_NUMBER)
+                    .input(listActivity.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                            if (input.length() > 0) {
+                                int amount = Integer.parseInt(input.toString());
+                                boolean validNumber = amount > 0 && amount <= currentAmount;
+                                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(validNumber);
+                                return;
+                            }
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                        }
+                    })
+                    .alwaysCallInputCallback()
+                    .negativeText(android.R.string.no)
+                    .positiveText(R.string.delete)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
+                            removeNames(position, numCopies);
+                        }
+                    })
+                    .build();
+            cloneDialog.getInputEditText().setFilters(new InputFilter[]
+                    {new InputFilter.LengthFilter(String.valueOf(currentAmount).length())});
+            cloneDialog.show();
+        }
     }
 
     private void showCloneDialog(final int position) {
