@@ -115,4 +115,8 @@ public class ListInfo {
         }
         return namesText.toString();
     }
+
+    public int getInstancesOfName(String name) {
+        return nameAmounts.get(name);
+    }
 }
