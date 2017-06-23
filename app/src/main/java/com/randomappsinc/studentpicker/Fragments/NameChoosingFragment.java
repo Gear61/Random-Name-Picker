@@ -238,6 +238,12 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        cacheListState();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -245,7 +251,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-        cacheListState();
     }
 
     @Override

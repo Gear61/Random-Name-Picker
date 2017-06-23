@@ -8,8 +8,8 @@ android {
         applicationId "com.randomappsinc.studentpicker"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 372
-        versionName "3.7.2"
+        versionCode 380
+        versionName "3.8.0"
     }
     buildTypes {
         release {
