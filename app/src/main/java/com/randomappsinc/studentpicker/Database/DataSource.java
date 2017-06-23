@@ -156,13 +156,21 @@ public class DataSource {
         return names.toArray(new String[names.size()]);
     }
 
-    public void importNamesIntoList(String receivingList, List<String> givingLists) {
+    public Map<String, Integer> importNamesIntoList(String receivingList, List<String> givingLists) {
+        Map<String, Integer> nameAmounts = new HashMap<>();
         for (String listName : givingLists) {
             Map<String, Integer> namesToImport = getListInfo(listName).getNameAmounts();
             for (String name : namesToImport.keySet()) {
                 addNames(name, receivingList, namesToImport.get(name));
+                if (nameAmounts.containsKey(name)) {
+                    int currentAmount = nameAmounts.get(name);
+                    nameAmounts.put(name, currentAmount + namesToImport.get(name));
+                } else {
+                    nameAmounts.put(name, namesToImport.get(name));
+                }
             }
         }
+        return nameAmounts;
     }
 
     public void renamePeople(String oldName, String newName, String listName, int amount) {

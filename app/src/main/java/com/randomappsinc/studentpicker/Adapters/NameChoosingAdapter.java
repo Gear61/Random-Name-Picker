@@ -14,6 +14,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +67,14 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void addNames(String name, int amount) {
         currentState.addNames(name, amount);
+        notifyDataSetChanged();
+        setViews();
+    }
+
+    public void addNameMap(Map<String, Integer> nameAmounts) {
+        for (String name : nameAmounts.keySet()) {
+            currentState.addNames(name, nameAmounts.get(name));
+        }
         notifyDataSetChanged();
         setViews();
     }
