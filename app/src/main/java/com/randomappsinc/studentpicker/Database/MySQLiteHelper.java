@@ -30,7 +30,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // Database creation sql statements
     private static final String STUDENTS_CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + COLUMN_LIST_NAME
-            + " TEXT, " + COLUMN_PERSON_NAME + " TEXT, " + COLUMN_NAME_COUNT + "INTEGER);";
+            + " TEXT, " + COLUMN_PERSON_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
 
     // Updates
     // V2
