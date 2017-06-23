@@ -22,6 +22,7 @@ import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -112,13 +113,12 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     public void importNamesFromList(List<String> listsToAbsorb) {
-        dataSource.importNamesIntoList(listName, listsToAbsorb);
+        Map<String, Integer> nameMap = dataSource.importNamesIntoList(listName, listsToAbsorb);
         content = dataSource.getListInfo(listName);
         setViews();
         notifyDataSetChanged();
 
-        // TODO: Replace this with a refresh
-        // listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNames(newNames);
+        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNameMap(nameMap);
     }
 
     private void showConfirmationDialog(final boolean addMode, final String name) {
