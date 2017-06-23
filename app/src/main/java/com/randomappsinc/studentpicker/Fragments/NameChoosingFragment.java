@@ -112,7 +112,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         if (nameChoosingAdapter.getCount() > 0 && canShow) {
             canShow = false;
             final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
-                    nameChoosingAdapter.getCount() - 1);
+                    nameChoosingAdapter.getNumInstances() - 1);
             final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
             if (settings.getPresentationMode()) {
                 Intent intent = new Intent(getActivity(), PresentationActivity.class);
@@ -238,6 +238,12 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        cacheListState();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
@@ -245,7 +251,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-        cacheListState();
     }
 
     @Override

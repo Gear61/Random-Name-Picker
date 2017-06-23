@@ -57,7 +57,7 @@ public class ImportFileActivity extends StandardActivity {
             for (String name : allNames) {
                 String cleanName = name.trim();
                 if (!cleanName.isEmpty()) {
-                    dataSource.addName(cleanName, newListName);
+                    dataSource.addNames(cleanName, newListName, 1);
                 }
             }
             finish();
