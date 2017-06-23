@@ -2,12 +2,15 @@ package com.randomappsinc.studentpicker.Database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.randomappsinc.studentpicker.Models.ListInfo;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alexanderchiou on 7/19/15.
@@ -28,51 +31,88 @@ public class DataSource {
     }
 
     // Terminate connection to database
-    public void close() {
+    private void close() {
         dbHelper.close();
     }
 
-    public List<String> getAllNamesInList(String listName) {
+    public ListInfo getListInfo(String listName) {
+        Map<String, Integer> nameAmounts = new HashMap<>();
         List<String> names = new ArrayList<>();
+        int amount = 0;
         open();
-        String[] columns = {MySQLiteHelper.COLUMN_PERSON_NAME};
+        String[] columns = {MySQLiteHelper.COLUMN_PERSON_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
         String selection = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
         String[] selectionArgs = {listName};
-        Cursor cursor = database.query(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, columns, selection,
-                selectionArgs, null, null, null);
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME, columns, selection,
+                selectionArgs, null, null, MySQLiteHelper.COLUMN_PERSON_NAME + " ASC");
         while (cursor.moveToNext()) {
+            nameAmounts.put(cursor.getString(0), cursor.getInt(1));
             names.add(cursor.getString(0));
+            amount += cursor.getInt(1);
         }
         cursor.close();
         close();
-        return names;
+        return new ListInfo(nameAmounts, names, amount);
     }
 
-    public void addName(String name, String listName) {
-        open();
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
-        values.put(MySQLiteHelper.COLUMN_PERSON_NAME, name);
-        database.insert(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, null, values);
-        close();
-    }
+    public void addNames(String name, String listName, int amount) {
+        int currentAmount = getAmount(listName, name);
 
-    public void removeName(String name, String listName) {
         open();
-        long numInstances = getNumNamesInList(name, listName);
-        String whereArgs[] = {name, listName};
-        database.delete(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, MySQLiteHelper.COLUMN_PERSON_NAME + " = ? AND " +
-                MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
-        close();
-        for (int i = 0; i < numInstances - 1; i++) {
-            addName(name, listName);
+        if (currentAmount == 0) {
+            ContentValues values = new ContentValues();
+            values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
+            values.put(MySQLiteHelper.COLUMN_PERSON_NAME, name);
+            values.put(MySQLiteHelper.COLUMN_NAME_COUNT, amount);
+            database.insert(MySQLiteHelper.TABLE_NAME, null, values);
+        } else {
+            ContentValues newValues = new ContentValues();
+            newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount + amount);
+            String[] whereArgs = new String[]{listName, name};
+            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+            database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
         }
+        close();
+    }
+
+    public void removeNames(String name, String listName, int amount) {
+        int currentAmount = getAmount(listName, name);
+
+        open();
+        if (currentAmount <= amount) {
+            String whereArgs[] = {listName, name};
+            database.delete(MySQLiteHelper.TABLE_NAME,
+                    MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?",
+                    whereArgs);
+        } else {
+            ContentValues newValues = new ContentValues();
+            newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount - amount);
+            String[] whereArgs = new String[]{listName, name};
+            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+            database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
+        }
+        close();
+    }
+
+    private int getAmount(String listName, String name) {
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_NAME_COUNT};
+        String selection = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+        String[] selectionArgs = {listName, name};
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME, columns, selection,
+                selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        close();
+        return 0;
     }
 
     public void deleteList(String listName) {
         open();
         String whereArgs[] = {listName};
-        database.delete(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
+        database.delete(MySQLiteHelper.TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();
     }
 
@@ -81,8 +121,8 @@ public class DataSource {
         ContentValues newValues = new ContentValues();
         newValues.put(MySQLiteHelper.COLUMN_LIST_NAME, newListName);
         String[] whereArgs = new String[]{oldListName};
-        String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + "=?";
-        database.update(MySQLiteHelper.PERSON_NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
+        String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
+        database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
         close();
     }
 
@@ -90,7 +130,7 @@ public class DataSource {
         List<String> matchingNames = new ArrayList<>();
         open();
         Cursor cursor = database.rawQuery("SELECT DISTINCT " + MySQLiteHelper.COLUMN_PERSON_NAME +
-                " FROM " + MySQLiteHelper.PERSON_NAMES_TABLE_NAME + " WHERE " +
+                " FROM " + MySQLiteHelper.TABLE_NAME + " WHERE " +
                 MySQLiteHelper.COLUMN_PERSON_NAME + " like ? COLLATE NOCASE " +
                 "ORDER BY " + MySQLiteHelper.COLUMN_PERSON_NAME + " ASC", new String[] {prefix + "%"});
         while (cursor.moveToNext()) {
@@ -105,7 +145,7 @@ public class DataSource {
         List<String> names = new ArrayList<>();
         open();
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
-        Cursor cursor = database.query(true, MySQLiteHelper.PERSON_NAMES_TABLE_NAME, columns, null, null, null, null, null, null);
+        Cursor cursor = database.query(true, MySQLiteHelper.TABLE_NAME, columns, null, null, null, null, null, null);
         while (cursor.moveToNext()) {
             if (!cursor.getString(0).equals(currentList)) {
                 names.add(cursor.getString(0));
@@ -116,26 +156,25 @@ public class DataSource {
         return names.toArray(new String[names.size()]);
     }
 
-    public List<String> importNamesIntoList(String receivingList, List<String> givingLists) {
-        List<String> newNames = new ArrayList<>();
+    public Map<String, Integer> importNamesIntoList(String receivingList, List<String> givingLists) {
+        Map<String, Integer> nameAmounts = new HashMap<>();
         for (String listName : givingLists) {
-            List<String> namesToImport = getAllNamesInList(listName);
-            for (String name : namesToImport) {
-                addName(name, receivingList);
-                newNames.add(name);
+            Map<String, Integer> namesToImport = getListInfo(listName).getNameAmounts();
+            for (String name : namesToImport.keySet()) {
+                addNames(name, receivingList, namesToImport.get(name));
+                if (nameAmounts.containsKey(name)) {
+                    int currentAmount = nameAmounts.get(name);
+                    nameAmounts.put(name, currentAmount + namesToImport.get(name));
+                } else {
+                    nameAmounts.put(name, namesToImport.get(name));
+                }
             }
         }
-        return newNames;
+        return nameAmounts;
     }
 
-    public long getNumNamesInList(String name, String listName) {
-        return DatabaseUtils.queryNumEntries(database, MySQLiteHelper.PERSON_NAMES_TABLE_NAME,
-                MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?",
-                new String[] {listName, name});
-    }
-
-    public void renamePerson(String oldName, String newName, String listName) {
-        removeName(oldName, listName);
-        addName(newName, listName);
+    public void renamePeople(String oldName, String newName, String listName, int amount) {
+        removeNames(oldName, listName, amount);
+        addNames(newName, listName, amount);
     }
 }

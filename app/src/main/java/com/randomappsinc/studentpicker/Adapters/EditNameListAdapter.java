@@ -1,9 +1,7 @@
 package com.randomappsinc.studentpicker.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,12 +14,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.Activities.ListActivity;
 import com.randomappsinc.studentpicker.Database.DataSource;
+import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,7 +30,7 @@ import butterknife.ButterKnife;
  */
 public class EditNameListAdapter extends BaseAdapter {
     private ListActivity listActivity;
-    private List<String> content;
+    private ListInfo content;
     private TextView noContent;
     private TextView numNames;
     private String listName;
@@ -42,117 +41,101 @@ public class EditNameListAdapter extends BaseAdapter {
                                String listName, View parent) {
         this.listActivity = listActivity;
         this.dataSource = new DataSource();
-        this.content = dataSource.getAllNamesInList(listName);
+        this.content = dataSource.getListInfo(listName);
         this.noContent = noContent;
         this.numNames = numNames;
         this.listName = listName;
         this.parent = parent;
-        Collections.sort(this.content);
         setViews();
     }
 
     private void setViews() {
-        if (content.isEmpty()) {
+        if (content.getNumInstances() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = getCount() == 1
+            String names = content.getNumInstances() == 1
                     ? listActivity.getString(R.string.single_name)
                     : listActivity.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(getCount()) + names;
+            String numNamesText = String.valueOf(content.getNumInstances()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
     }
 
-    public void addName(String name) {
-        dataSource.addName(name, listName);
-        content.add(name);
-        Collections.sort(content);
+    public void addNames(String name, int amount) {
+        dataSource.addNames(name, listName, amount);
+        content.addNames(name, amount);
         setViews();
         notifyDataSetChanged();
 
-        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().addNames(name, amount);
 
         showConfirmationDialog(true, name);
     }
 
-    private void removeName(int index) {
+    private void removeNames(int index, int amount, boolean multiDelete) {
         String nameToRemove = getItem(index);
-        dataSource.removeName(nameToRemove, listName);
+        dataSource.removeNames(nameToRemove, listName, amount);
+        content.removeNames(nameToRemove, amount);
 
-        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().removeName(nameToRemove);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().removeNames(nameToRemove, amount);
 
-        content.remove(index);
         notifyDataSetChanged();
         setViews();
 
-        showConfirmationDialog(false, nameToRemove);
+        if (multiDelete) {
+            UIUtils.showSnackbar(parent, listActivity.getString(R.string.names_deleted));
+        } else {
+            showConfirmationDialog(false, nameToRemove);
+        }
     }
 
-    private void changeName(int position, String newName) {
-        listActivity.getListTabsAdapter().getNameChoosingFragment()
-                .getNameChoosingAdapter().changeName(getItem(position), newName);
+    private void changeName(int position, String newName, int amount) {
+        String oldName = getItem(position);
 
-        content.set(position, newName);
-        Collections.sort(content);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().changeNames(oldName, newName, amount);
+
+        content.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
     }
 
     private void cloneName(String name, int numClones) {
-        for (int i = 0; i < numClones; i++) {
-            dataSource.addName(name, listName);
-            content.add(name);
-            listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addName(name);
-        }
-        Collections.sort(content);
+        dataSource.addNames(name, listName, numClones);
+        content.addNames(name, numClones);
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().addNames(name, numClones);
         notifyDataSetChanged();
         setViews();
         UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
     }
 
     public void importNamesFromList(List<String> listsToAbsorb) {
-        List<String> newNames = dataSource.importNamesIntoList(listName, listsToAbsorb);
-        content.addAll(newNames);
-        Collections.sort(content);
+        Map<String, Integer> nameMap = dataSource.importNamesIntoList(listName, listsToAbsorb);
+        content = dataSource.getListInfo(listName);
         setViews();
         notifyDataSetChanged();
 
-        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNames(newNames);
+        listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNameMap(nameMap);
     }
 
-    private void showConfirmationDialog(final boolean addMode, final String name) {
-        String prefix = addMode ? listActivity.getString(R.string.added) : listActivity.getString(R.string.removed);
-        String confirmationMessage = prefix + "\"" + name + "\"";
-        Snackbar snackbar = Snackbar.make(parent, confirmationMessage, Snackbar.LENGTH_LONG);
-        View rootView = snackbar.getView();
-        snackbar.getView().setBackgroundColor(listActivity.getResources().getColor(R.color.app_teal));
-        TextView tv = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(Color.WHITE);
-        snackbar.setAction(R.string.undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (addMode) {
-                    removeName(content.indexOf(name));
-                }
-                else {
-                    addName(name);
-                }
-            }
-        });
-        snackbar.setActionTextColor(Color.WHITE);
-        snackbar.show();
+    private void showConfirmationDialog(boolean addMode, String name) {
+        String template = addMode ? listActivity.getString(R.string.added_name) : listActivity.getString(R.string.deleted_name);
+        UIUtils.showSnackbar(parent, String.format(template, name));
     }
 
     @Override
     public int getCount() {
-        return content.size();
+        return content.getNumNames();
     }
 
     @Override
     public String getItem(int position) {
-        return content.get(position);
+        return content.getName(position);
     }
 
     @Override
@@ -160,9 +143,51 @@ public class EditNameListAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    private void showRenameDialog(final int position) {
-        final String currentName = content.get(position);
-        new MaterialDialog.Builder(listActivity)
+    private void startRenameProcess(int position) {
+        int currentAmount = content.getInstancesOfName(getItem(position));
+        if (currentAmount == 1) {
+            showRenameDialog(position, currentAmount, false);
+        } else {
+            chooseRenameAmount(position, "");
+        }
+    }
+
+    private void chooseRenameAmount(final int position, String prefill) {
+        final int currentAmount = content.getInstancesOfName(getItem(position));
+        MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
+                .content(R.string.multiple_renames_title)
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input(listActivity.getString(R.string.num_copies), prefill, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        if (input.length() > 0) {
+                            int amount = Integer.parseInt(input.toString());
+                            boolean validNumber = amount > 0 && amount <= currentAmount;
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(validNumber);
+                            return;
+                        }
+                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                    }
+                })
+                .alwaysCallInputCallback()
+                .negativeText(android.R.string.no)
+                .positiveText(R.string.next)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
+                        showRenameDialog(position, numCopies, true);
+                    }
+                })
+                .build();
+        cloneDialog.getInputEditText().setFilters(new InputFilter[]
+                {new InputFilter.LengthFilter(String.valueOf(currentAmount).length())});
+        cloneDialog.show();
+    }
+
+    private void showRenameDialog(final int position, final int amount, boolean multiRename) {
+        final String currentName = content.getName(position);
+        MaterialDialog renameDialog = new MaterialDialog.Builder(listActivity)
                 .title(R.string.change_name)
                 .input(listActivity.getString(R.string.new_name), currentName, new MaterialDialog.InputCallback() {
                     @Override
@@ -174,32 +199,71 @@ public class EditNameListAdapter extends BaseAdapter {
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .onAny(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String newName = dialog.getInputEditText().getText().toString().trim();
-                        dataSource.renamePerson(currentName, newName, listName);
-                        changeName(position, newName);
+                        if (which == DialogAction.POSITIVE) {
+                            String newName = dialog.getInputEditText().getText().toString().trim();
+                            dataSource.renamePeople(currentName, newName, listName, amount);
+                            changeName(position, newName, amount);
+                        } else if (which == DialogAction.NEUTRAL) {
+                            chooseRenameAmount(position, String.valueOf(amount));
+                        }
                     }
                 })
-                .show();
+                .build();
+        if (multiRename) {
+            renameDialog.setActionButton(DialogAction.NEUTRAL, R.string.back);
+        }
+        renameDialog.show();
     }
 
     private void showDeleteDialog(final int position) {
-        String confirmation = listActivity.getString(R.string.are_you_sure) + "\"" + getItem(position) + "\"" +
-                listActivity.getString(R.string.from_this_list);
-        new MaterialDialog.Builder(listActivity)
-                .title(R.string.confirm_name_deletion)
-                .content(confirmation)
-                .negativeText(android.R.string.no)
-                .positiveText(android.R.string.yes)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        removeName(position);
-                    }
-                })
-                .show();
+        final int currentAmount = content.getInstancesOfName(getItem(position));
+        if (currentAmount == 1) {
+            new MaterialDialog.Builder(listActivity)
+                    .title(R.string.confirm_name_deletion)
+                    .content(String.format(listActivity.getString(R.string.confirm_name_delete), getItem(position)))
+                    .negativeText(android.R.string.no)
+                    .positiveText(android.R.string.yes)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            removeNames(position, 1, false);
+                        }
+                    })
+                    .show();
+        } else {
+            MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
+                    .content(R.string.multiple_deletions_title)
+                    .inputType(InputType.TYPE_CLASS_NUMBER)
+                    .input(listActivity.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                            if (input.length() > 0) {
+                                int amount = Integer.parseInt(input.toString());
+                                boolean validNumber = amount > 0 && amount <= currentAmount;
+                                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(validNumber);
+                                return;
+                            }
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                        }
+                    })
+                    .alwaysCallInputCallback()
+                    .negativeText(android.R.string.no)
+                    .positiveText(R.string.delete)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
+                            removeNames(position, numCopies, true);
+                        }
+                    })
+                    .build();
+            cloneDialog.getInputEditText().setFilters(new InputFilter[]
+                    {new InputFilter.LengthFilter(String.valueOf(currentAmount).length())});
+            cloneDialog.show();
+        }
     }
 
     private void showCloneDialog(final int position) {
@@ -236,7 +300,7 @@ public class EditNameListAdapter extends BaseAdapter {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                showRenameDialog(position);
+                                startRenameProcess(position);
                                 break;
                             case 1:
                                 showDeleteDialog(position);
@@ -257,7 +321,7 @@ public class EditNameListAdapter extends BaseAdapter {
         }
 
         private void loadName(int position) {
-            name.setText(getItem(position));
+            name.setText(content.getNameText(position));
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.HashSet;
@@ -86,13 +87,13 @@ public class PreferencesManager {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
-    public void cacheNameChoosingList(String listName, List<String> names, List<String> alreadyChosenNames,
+    public void cacheNameChoosingList(String listName, ListInfo currentState, List<String> alreadyChosenNames,
                                       ChoosingSettings settings) {
-        String cache = JSONUtils.serializeChoosingState(names, alreadyChosenNames, settings);
+        String cache = JSONUtils.serializeChoosingState(currentState, alreadyChosenNames, settings);
         prefs.edit().putString(listName, cache).apply();
     }
 
-    public List<String> getCachedNameList(String listName) {
+    public ListInfo getCachedNameList(String listName) {
         return JSONUtils.extractNames(prefs.getString(listName, ""));
     }
 
