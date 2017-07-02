@@ -67,8 +67,8 @@ public class EditNameListAdapter extends BaseAdapter {
     public void addNames(String name, int amount) {
         dataSource.addNames(name, listName, amount);
         content.addNames(name, amount);
-        setViews();
         notifyDataSetChanged();
+        setViews();
 
         listActivity.getListTabsAdapter().getNameChoosingFragment()
                 .getNameChoosingAdapter().addNames(name, amount);
@@ -80,10 +80,6 @@ public class EditNameListAdapter extends BaseAdapter {
         String nameToRemove = getItem(index);
         dataSource.removeNames(nameToRemove, listName, amount);
         content.removeNames(nameToRemove, amount);
-
-        listActivity.getListTabsAdapter().getNameChoosingFragment()
-                .getNameChoosingAdapter().removeNames(nameToRemove, amount);
-
         notifyDataSetChanged();
         setViews();
 
@@ -92,33 +88,37 @@ public class EditNameListAdapter extends BaseAdapter {
         } else {
             showConfirmationDialog(false, nameToRemove);
         }
+
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().removeNames(nameToRemove, amount);
     }
 
     private void changeName(int position, String newName, int amount) {
         String oldName = getItem(position);
+        content.renamePeople(oldName, newName, amount);
+        notifyDataSetChanged();
 
         listActivity.getListTabsAdapter().getNameChoosingFragment()
                 .getNameChoosingAdapter().changeNames(oldName, newName, amount);
-
-        content.renamePeople(oldName, newName, amount);
-        notifyDataSetChanged();
     }
 
     private void cloneName(String name, int numClones) {
         dataSource.addNames(name, listName, numClones);
         content.addNames(name, numClones);
-        listActivity.getListTabsAdapter().getNameChoosingFragment()
-                .getNameChoosingAdapter().addNames(name, numClones);
         notifyDataSetChanged();
         setViews();
+
         UIUtils.showSnackbar(parent, listActivity.getString(R.string.clones_added));
+
+        listActivity.getListTabsAdapter().getNameChoosingFragment()
+                .getNameChoosingAdapter().addNames(name, numClones);
     }
 
     public void importNamesFromList(List<String> listsToAbsorb) {
         Map<String, Integer> nameMap = dataSource.importNamesIntoList(listName, listsToAbsorb);
         content = dataSource.getListInfo(listName);
-        setViews();
         notifyDataSetChanged();
+        setViews();
 
         listActivity.getListTabsAdapter().getNameChoosingFragment().getNameChoosingAdapter().addNameMap(nameMap);
     }

@@ -128,8 +128,8 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void resetNames() {
         currentState = dataSource.getListInfo(listName);
-        setViews();
         notifyDataSetChanged();
+        setViews();
     }
 
     public void cacheState(ChoosingSettings settings) {

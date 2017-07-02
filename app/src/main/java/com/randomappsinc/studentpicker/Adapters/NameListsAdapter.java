@@ -43,8 +43,8 @@ public class NameListsAdapter extends BaseAdapter {
         content.clear();
         content.addAll(PreferencesManager.get().getNameLists());
         Collections.sort(content);
-        setNoContent();
         notifyDataSetChanged();
+        setNoContent();
     }
 
     private void setNoContent() {
@@ -55,9 +55,9 @@ public class NameListsAdapter extends BaseAdapter {
     public void addList(String itemName) {
         content.add(itemName);
         Collections.sort(content);
+        notifyDataSetChanged();
         setNoContent();
         PreferencesManager.get().addNameList(itemName);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class NameListsAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    public void showRenameDialog(final int position) {
+    private void showRenameDialog(final int position) {
         new MaterialDialog.Builder(context)
                 .title(R.string.rename_list)
                 .input(context.getString(R.string.new_list_name), "", new MaterialDialog.InputCallback() {
