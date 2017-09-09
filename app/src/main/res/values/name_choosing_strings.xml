@@ -39,5 +39,7 @@
     <string name="shake_it">Shake It!</string>
     <string name="shake_now_supported">
         Tired of clicking buttons? Don\'t worry, Random Name Picker has got you covered!
-        You can now shake your device to choose names!</string>
+        You can now shake your device to choose names! Don\'t like this feature?
+        Then turn it off in the settings! Happy shaking!
+    </string>
 </resources>

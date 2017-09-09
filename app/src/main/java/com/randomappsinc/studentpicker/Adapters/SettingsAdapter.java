@@ -9,14 +9,15 @@ import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.Utils.PreferencesManager;
+import com.rey.material.widget.Switch;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 10/13/15.
- */
 public class SettingsAdapter extends BaseAdapter {
+
     private String[] options;
     private String[] icons;
     private Context context;
@@ -43,11 +44,30 @@ public class SettingsAdapter extends BaseAdapter {
     }
 
     public class SettingsViewHolder {
+
         @Bind(R.id.settings_icon) IconTextView icon;
         @Bind(R.id.settings_option) TextView option;
+        @Bind(R.id.shake_toggle) Switch shakeToggle;
 
         public SettingsViewHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        public void loadSetting(int position) {
+            option.setText(options[position]);
+            icon.setText(icons[position]);
+
+            if (position == 0) {
+                shakeToggle.setCheckedImmediately(PreferencesManager.get().isShakeEnabled());
+                shakeToggle.setVisibility(View.VISIBLE);
+            } else {
+                shakeToggle.setVisibility(View.GONE);
+            }
+        }
+
+        @OnClick(R.id.shake_toggle)
+        public void onSoundToggle() {
+            PreferencesManager.get().setShakeEnabled(shakeToggle.isChecked());
         }
     }
 
@@ -62,8 +82,7 @@ public class SettingsAdapter extends BaseAdapter {
         } else {
             holder = (SettingsViewHolder) view.getTag();
         }
-        holder.icon.setText(icons[position]);
-        holder.option.setText(options[position]);
+        holder.loadSetting(position);
         return view;
     }
 }

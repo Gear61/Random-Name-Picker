@@ -46,7 +46,8 @@
         To do this, click this upload button at any time.
     </string>
 
-    <string name="welcome_string">And that\'s it! Thank you for downloading this app; I hope it serves you well!
+    <string name="welcome_string">
+        And that\'s it! Thank you for downloading this app; I hope it serves you well!
         If you need more help or have ideas on how to make this app more awesome,
         please use the send feedback option in the settings menu to tell me!
     </string>
