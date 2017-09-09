@@ -38,6 +38,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class MainActivity extends StandardActivity {
+
     public static final String LIST_NAME_KEY = "listName";
 
     @Bind(R.id.item_name_input) EditText newListInput;

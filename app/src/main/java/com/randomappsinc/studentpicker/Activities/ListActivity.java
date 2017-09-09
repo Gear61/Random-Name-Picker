@@ -18,15 +18,13 @@ import com.squareup.seismic.ShakeDetector;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
+
     @Bind(R.id.viewpager) ViewPager mViewPager;
     @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
 
-    private ListTabsAdapter listTabsAdapter;
-    private ShakeDetector shakeDetector;
+    private ListTabsAdapter mListTabsAdapter;
+    private ShakeDetector mShakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +35,12 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        listTabsAdapter = new ListTabsAdapter(getFragmentManager(), savedInstanceState, listName);
-        mViewPager.setAdapter(listTabsAdapter);
+        mListTabsAdapter = new ListTabsAdapter(getFragmentManager(), savedInstanceState, listName);
+        mViewPager.setAdapter(mListTabsAdapter);
         mSlidingTabLayout.setCustomTabView(R.layout.custom_tab, R.id.tab_name);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        shakeDetector = new ShakeDetector(this);
+        mShakeDetector = new ShakeDetector(this);
 
         if (PreferencesManager.get().shouldShowShake()) {
             new MaterialDialog.Builder(this)
@@ -56,16 +54,16 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        NameChoosingFragment nameChoosingFragment = listTabsAdapter.getNameChoosingFragment();
+        NameChoosingFragment nameChoosingFragment = mListTabsAdapter.getNameChoosingFragment();
         if (nameChoosingFragment != null) {
             nameChoosingFragment.cacheListState();
             getFragmentManager().putFragment(savedInstanceState, NameChoosingFragment.SCREEN_NAME, nameChoosingFragment);
         }
-        Fragment editNameListFragment = listTabsAdapter.getEditNameListFragment();
+        Fragment editNameListFragment = mListTabsAdapter.getEditNameListFragment();
         if (editNameListFragment != null) {
             getFragmentManager().putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
         }
-        shakeDetector.stop();
+        mShakeDetector.stop();
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -76,25 +74,29 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     }
 
     public ListTabsAdapter getListTabsAdapter() {
-        return listTabsAdapter;
+        return mListTabsAdapter;
     }
 
     @Override
     public void hearShake() {
         if (mViewPager.getCurrentItem() == 0) {
-            listTabsAdapter.getNameChoosingFragment().choose();
+            mListTabsAdapter.getNameChoosingFragment().choose();
         }
     }
 
     @Override
     public void onResume() {
-        shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        if (PreferencesManager.get().isShakeEnabled()) {
+            mShakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
         super.onResume();
     }
 
     @Override
     public void onDestroy() {
-        shakeDetector.stop();
+        if (PreferencesManager.get().isShakeEnabled()) {
+            mShakeDetector.stop();
+        }
         super.onDestroy();
     }
 }

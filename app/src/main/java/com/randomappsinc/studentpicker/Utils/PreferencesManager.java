@@ -11,10 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by alexanderchiou on 7/14/15.
- */
 public class PreferencesManager {
+
     private SharedPreferences prefs;
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
@@ -24,6 +22,7 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
+    private static final String SHAKE_ENABLED = "shakeEnabled";
 
     private static PreferencesManager instance;
 
@@ -143,5 +142,13 @@ public class PreferencesManager {
         boolean shouldShowShake = prefs.getBoolean(SHAKE_IS_NEW, true);
         prefs.edit().putBoolean(SHAKE_IS_NEW, false).apply();
         return shouldShowShake;
+    }
+
+    public void setShakeEnabled(boolean shakeEnabled) {
+        prefs.edit().putBoolean(SHAKE_ENABLED, shakeEnabled).apply();
+    }
+
+    public boolean isShakeEnabled() {
+        return prefs.getBoolean(SHAKE_ENABLED, true);
     }
 }
