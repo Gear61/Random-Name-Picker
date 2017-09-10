@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.Activities;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -37,11 +38,13 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PresentationActivity extends StandardActivity
         implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
 
     public static final String LIST_NAME_KEY = "listName";
+    public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
     @Bind(R.id.parent) View parent;
     @Bind(R.id.header) TextView header;
@@ -58,6 +61,14 @@ public class PresentationActivity extends StandardActivity
 
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
+
+    private Handler handler;
+    private Runnable animateNamesTask = new Runnable() {
+        @Override
+        public void run() {
+            animateNames();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +95,7 @@ public class PresentationActivity extends StandardActivity
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
         names.setTextColor(PreferencesManager.get().getPresentationTextColor());
 
+        handler = new Handler();
         player = new MediaPlayer();
 
         textToSpeech = new TextToSpeech(this, this);
@@ -114,37 +126,46 @@ public class PresentationActivity extends StandardActivity
         chooseNames();
     }
 
-    private void chooseNames() {
-        List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
-                settings.getNumNamesToChoose(),
-                listState.getNumInstances() - 1);
-        chosenNamesText = listState.chooseNames(chosenIndexes, settings);
-        names.setText(chosenNamesText);
-        playSound("drumroll.mp3");
+    @OnClick(R.id.choose)
+    public void choose() {
+        chooseNames();
     }
 
-    private void playSound(String filePath) {
+    private void chooseNames() {
+        names.clearAnimation();
+        textToSpeech.stop();
+
+        if (listState.getNumNames() > 0) {
+            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
+                    settings.getNumNamesToChoose(),
+                    listState.getNumInstances() - 1);
+            chosenNamesText = listState.chooseNames(chosenIndexes, settings);
+
+            names.setAlpha(0.0f);
+            names.setText(chosenNamesText);
+
+            playSound();
+        } else {
+            UIUtils.showSnackbar(parent, getString(R.string.no_names_left));
+        }
+    }
+
+    private void playSound() {
         try {
-            AssetFileDescriptor fileDescriptor = getAssets().openFd(filePath);
-            player.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+            AssetFileDescriptor fileDescriptor = getAssets().openFd(DRUMROLL_FILE_NAME);
+            player.reset();
+            player.setDataSource(
+                    fileDescriptor.getFileDescriptor(),
+                    fileDescriptor.getStartOffset(),
+                    fileDescriptor.getLength());
             player.prepare();
             player.start();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    animateNames();
-                }
-            }, 2600);
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    if (settings.getAutomaticTts()) {
-                        sayNames(chosenNamesText);
-                    }
-                }
-            });
+        } catch (Exception ex) {
+            UIUtils.showSnackbar(parent, getString(R.string.drumroll_error));
         }
-        catch (Exception ignored) {}
+
+        handler.removeCallbacks(animateNamesTask);
+        handler.postDelayed(animateNamesTask, 2600);
     }
 
     private void animateNames() {
@@ -159,6 +180,23 @@ public class PresentationActivity extends StandardActivity
 
         AnimatorSet fullSet = new AnimatorSet();
         fullSet.playSequentially(fadeIn, scaleSet);
+        fullSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {}
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if (settings.getAutomaticTts()) {
+                    sayNames(chosenNamesText);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {}
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {}
+        });
         fullSet.start();
     }
 

@@ -38,10 +38,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener {
+
     public static final String SCREEN_NAME = "Name Choosing Page";
 
     @Bind(R.id.parent) View parent;
