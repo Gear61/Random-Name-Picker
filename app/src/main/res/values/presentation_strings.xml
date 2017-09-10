@@ -11,4 +11,7 @@
     <string name="set_text_size_title">Set Text Size</string>
     <string name="set_text_color_title">Set Text Color</string>
     <string name="sample_text">Hi</string>
+
+    <string name="drumroll_error">Unable to load presentation mode sound.</string>
+    <string name="no_names_left">You have no more names left to choose from.</string>
 </resources>

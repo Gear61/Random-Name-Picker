@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,16 +9,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/default_margin"
-        android:paddingLeft="@dimen/default_margin"
-        android:paddingRight="@dimen/default_margin">
+        android:orientation="vertical">
+
+        <com.rey.material.widget.Button
+            android:id="@+id/choose"
+            android:text="@string/choose"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            style="@style/ripple_button_style"
+            app:rd_style="@style/button_ripple_attributes"/>
 
         <TextView
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="16dp"
             android:textSize="28sp"
             android:textColor="@color/dark_gray"
             android:gravity="center_horizontal"/>
@@ -31,8 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/dark_gray"
-                android:alpha="0"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/dark_gray"/>
         </ScrollView>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
