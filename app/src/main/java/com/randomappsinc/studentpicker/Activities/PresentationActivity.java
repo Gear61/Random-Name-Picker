@@ -23,34 +23,35 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
+import com.randomappsinc.studentpicker.Models.ChoosingSettings;
+import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.Models.SetTextSizeViewHolder;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.Utils.JSONUtils;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 3/6/16.
- */
-public class PresentationActivity extends StandardActivity implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
-    public static final String NUM_NAMES_KEY = "numNames";
-    public static final String ORDERED_LIST_KEY = "orderedList";
+public class PresentationActivity extends StandardActivity
+        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
+
+    public static final String LIST_NAME_KEY = "listName";
 
     @Bind(R.id.parent) View parent;
     @Bind(R.id.header) TextView header;
     @Bind(R.id.names) TextView names;
 
     private MediaPlayer player;
-    private int numNames;
-    private String namesList;
-    private boolean automaticTts;
+    private String listName;
+    private ListInfo listState;
+    private ChoosingSettings settings;
+    private String chosenNamesText;
 
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
@@ -65,26 +66,25 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        numNames = getIntent().getIntExtra(NUM_NAMES_KEY, 0);
+        listName = getIntent().getStringExtra(LIST_NAME_KEY);
+        listState = PreferencesManager.get().getNameListState(listName);
+        settings = PreferencesManager.get().getChoosingSettings(listName);
+
+        int numNames = settings.getNumNamesToChoose();
         if (numNames > 1) {
             header.setText(R.string.names_chosen);
         } else {
             header.setText(R.string.name_chosen);
         }
-        automaticTts = getIntent().getBooleanExtra(JSONUtils.AUTOMATIC_TTS_KEY, false);
-        boolean orderedListMode = getIntent().getBooleanExtra(ORDERED_LIST_KEY, false);
-        if (!orderedListMode) {
+
+        if (!settings.getShowAsList()) {
             names.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
-        namesList = getIntent().getStringExtra(JSONUtils.NAMES_KEY);
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
         names.setTextColor(PreferencesManager.get().getPresentationTextColor());
-        names.setText(namesList);
 
         player = new MediaPlayer();
-
-        playSound("drumroll.mp3");
 
         textToSpeech = new TextToSpeech(this, this);
         textToSpeech.setLanguage(Locale.US);
@@ -110,6 +110,17 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
                 })
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
+
+        chooseNames();
+    }
+
+    private void chooseNames() {
+        List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
+                settings.getNumNamesToChoose(),
+                listState.getNumInstances() - 1);
+        chosenNamesText = listState.chooseNames(chosenIndexes, settings);
+        names.setText(chosenNamesText);
+        playSound("drumroll.mp3");
     }
 
     private void playSound(String filePath) {
@@ -127,8 +138,8 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if (automaticTts) {
-                        sayNames(namesList);
+                    if (settings.getAutomaticTts()) {
+                        sayNames(chosenNamesText);
                     }
                 }
             });
@@ -220,6 +231,18 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
     public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        PreferencesManager.get().cacheNameChoosingList(listName, listState, settings);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void finish() {
+        PreferencesManager.get().cacheNameChoosingList(listName, listState, settings);
+        super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         player.stop();
@@ -234,7 +257,7 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
         getMenuInflater().inflate(R.menu.presentation_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
         UIUtils.loadMenuIcon(menu, R.id.say_names, IoniconsIcons.ion_android_microphone, this);
-        if (numNames > 1) {
+        if (settings.getNumNamesToChoose() > 1) {
             menu.findItem(R.id.say_names).setTitle(R.string.say_names);
         }
         UIUtils.loadMenuIcon(menu, R.id.copy_names, IoniconsIcons.ion_android_clipboard, this);
@@ -248,10 +271,10 @@ public class PresentationActivity extends StandardActivity implements TextToSpee
                 showSettingsDialog();
                 return true;
             case R.id.say_names:
-                sayNames(namesList);
+                sayNames(chosenNamesText);
                 return true;
             case R.id.copy_names:
-                NameUtils.copyNamesToClipboard(namesList, parent, numNames, false);
+                NameUtils.copyNamesToClipboard(chosenNamesText, parent, settings.getNumNamesToChoose(), false);
                 return true;
         }
         return super.onOptionsItemSelected(item);

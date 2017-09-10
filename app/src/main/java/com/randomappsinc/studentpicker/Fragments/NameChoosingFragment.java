@@ -26,7 +26,6 @@ import com.randomappsinc.studentpicker.Adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.Models.ChoosingSettings;
 import com.randomappsinc.studentpicker.Models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.Utils.JSONUtils;
 import com.randomappsinc.studentpicker.Utils.NameUtils;
 import com.randomappsinc.studentpicker.Utils.PreferencesManager;
 import com.randomappsinc.studentpicker.Utils.UIUtils;
@@ -57,6 +56,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     private TextToSpeech textToSpeech;
     private boolean textToSpeechEnabled;
     private boolean canShow;
+    private String listName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,11 +93,11 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
         View rootView = inflater.inflate(R.layout.name_choosing, container, false);
         ButterKnife.bind(this, rootView);
 
-        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
 
-        settings = PreferencesManager.get().getChoosingSetings(listName);
+        settings = PreferencesManager.get().getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
 
         return rootView;
@@ -111,17 +111,16 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void choose() {
         if (nameChoosingAdapter.getCount() > 0 && canShow) {
             canShow = false;
-            final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
-                    nameChoosingAdapter.getNumInstances() - 1);
-            final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
             if (settings.getPresentationMode()) {
+                cacheListState();
                 Intent intent = new Intent(getActivity(), PresentationActivity.class);
-                intent.putExtra(PresentationActivity.NUM_NAMES_KEY, chosenIndexes.size());
-                intent.putExtra(JSONUtils.NAMES_KEY, chosenNames);
-                intent.putExtra(JSONUtils.AUTOMATIC_TTS_KEY, settings.getAutomaticTts());
-                intent.putExtra(PresentationActivity.ORDERED_LIST_KEY, settings.getShowAsList());
+                intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
                 getActivity().startActivity(intent);
             } else {
+                final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
+                        nameChoosingAdapter.getNumInstances() - 1);
+                final String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
+
                 new MaterialDialog.Builder(getActivity())
                         .title(chosenIndexes.size() == 1 ? R.string.name_chosen : R.string.names_chosen)
                         .content(chosenNames)

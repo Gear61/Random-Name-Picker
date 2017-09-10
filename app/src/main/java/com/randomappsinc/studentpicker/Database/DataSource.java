@@ -52,7 +52,7 @@ public class DataSource {
         }
         cursor.close();
         close();
-        return new ListInfo(nameAmounts, names, amount);
+        return new ListInfo(nameAmounts, names, amount, new ArrayList<String>());
     }
 
     public void addNames(String name, String listName, int amount) {
