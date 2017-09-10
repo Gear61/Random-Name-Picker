@@ -8,7 +8,6 @@ import com.randomappsinc.studentpicker.Models.ListInfo;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class PreferencesManager {
@@ -86,21 +85,16 @@ public class PreferencesManager {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
-    public void cacheNameChoosingList(String listName, ListInfo currentState, List<String> alreadyChosenNames,
-                                      ChoosingSettings settings) {
-        String cache = JSONUtils.serializeChoosingState(currentState, alreadyChosenNames, settings);
+    public void cacheNameChoosingList(String listName, ListInfo currentState, ChoosingSettings settings) {
+        String cache = JSONUtils.serializeChoosingState(currentState, settings);
         prefs.edit().putString(listName, cache).apply();
     }
 
-    public ListInfo getCachedNameList(String listName) {
+    public ListInfo getNameListState(String listName) {
         return JSONUtils.extractNames(prefs.getString(listName, ""));
     }
 
-    public List<String> getAlreadyChosenNames(String listName) {
-        return JSONUtils.extractAlreadyChosenNames(prefs.getString(listName, ""));
-    }
-
-    public ChoosingSettings getChoosingSetings(String listName) {
+    public ChoosingSettings getChoosingSettings(String listName) {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 

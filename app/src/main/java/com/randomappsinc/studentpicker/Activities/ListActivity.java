@@ -63,7 +63,9 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         if (editNameListFragment != null) {
             getFragmentManager().putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
         }
-        mShakeDetector.stop();
+        if (PreferencesManager.get().isShakeEnabled()) {
+            mShakeDetector.stop();
+        }
         super.onSaveInstanceState(savedInstanceState);
     }
 

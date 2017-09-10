@@ -7,19 +7,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by alexanderchiou on 6/20/17.
- */
-
+/** Represents the choosing state of a name list */
 public class ListInfo {
+
     private Map<String, Integer> nameAmounts;
     private List<String> names;
     private int numInstances;
+    private List<String> nameHistory;
 
-    public ListInfo(Map<String, Integer> nameAmounts, List<String> names, int numInstances) {
+    public ListInfo(Map<String, Integer> nameAmounts, List<String> names, int numInstances, List<String> history) {
         this.nameAmounts = nameAmounts;
         this.names = names;
         this.numInstances = numInstances;
+        this.nameHistory = history;
     }
 
     public Map<String, Integer> getNameAmounts() {
@@ -28,6 +28,10 @@ public class ListInfo {
 
     public List<String> getNames() {
         return names;
+    }
+
+    public List<String> getNameHistory() {
+        return nameHistory;
     }
 
     public List<String> getLongList() {
@@ -95,7 +99,7 @@ public class ListInfo {
         removeNames(name, amount);
     }
 
-    public String chooseNames(List<Integer> indexes, ChoosingSettings settings, List<String> alreadyChosenNames) {
+    public String chooseNames(List<Integer> indexes, ChoosingSettings settings) {
         StringBuilder namesText = new StringBuilder();
         List<String> allNames = getLongList();
         for (int i = 0; i < indexes.size(); i++) {
@@ -108,7 +112,7 @@ public class ListInfo {
 
             String chosenName = allNames.get(indexes.get(i));
             namesText.append(chosenName);
-            alreadyChosenNames.add(chosenName);
+            nameHistory.add(chosenName);
             if (!settings.getWithReplacement()) {
                 removeNames(chosenName, 1);
             }

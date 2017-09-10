@@ -1,9 +1,7 @@
 package com.randomappsinc.studentpicker.Models;
 
-/**
- * Created by alexanderchiou on 2/15/16.
- */
 public class ChoosingSettings {
+
     private boolean presentationMode;
     private boolean withReplacement;
     private boolean automaticTts;

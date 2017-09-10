@@ -20,16 +20,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
 public class NameChoosingAdapter extends BaseAdapter {
+
     private Context context;
     private String outOfNames;
     private String noNames;
     private String listName;
     private ListInfo currentState;
-    private List<String> alreadyChosenNames;
     private TextView noContent;
     private TextView numNames;
     private DataSource dataSource;
@@ -41,9 +38,8 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.listName = listName;
         this.dataSource = new DataSource();
 
-        ListInfo info = PreferencesManager.get().getCachedNameList(listName);
+        ListInfo info = PreferencesManager.get().getNameListState(listName);
         this.currentState = info == null ? dataSource.getListInfo(listName) : info;
-        this.alreadyChosenNames = PreferencesManager.get().getAlreadyChosenNames(listName);
 
         this.noContent = noContent;
         this.numNames = numNames;
@@ -51,16 +47,16 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void clearNameHistory() {
-        alreadyChosenNames.clear();
+        currentState.getNameHistory().clear();
     }
 
     public String getNamesHistory() {
         StringBuilder namesHistory = new StringBuilder();
-        for (int i = 0; i < alreadyChosenNames.size(); i++) {
+        for (int i = 0; i < currentState.getNameHistory().size(); i++) {
             if (i != 0) {
                 namesHistory.append("\n");
             }
-            namesHistory.append(alreadyChosenNames.get(i));
+            namesHistory.append(currentState.getNameHistory().get(i));
         }
         return namesHistory.toString();
     }
@@ -112,7 +108,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     // All name choosing goes through here
     public String chooseNamesAtRandom(List<Integer> indexes, ChoosingSettings settings) {
-        String chosenNames = currentState.chooseNames(indexes, settings, alreadyChosenNames);
+        String chosenNames = currentState.chooseNames(indexes, settings);
         if (!settings.getWithReplacement()) {
             notifyDataSetChanged();
             setViews();
@@ -133,7 +129,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void cacheState(ChoosingSettings settings) {
-        PreferencesManager.get().cacheNameChoosingList(listName, currentState, alreadyChosenNames, settings);
+        PreferencesManager.get().cacheNameChoosingList(listName, currentState, settings);
     }
 
     public int getNumInstances() {
@@ -156,6 +152,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public class NameViewHolder {
+
         @Bind(R.id.person_name) TextView name;
 
         private int position;

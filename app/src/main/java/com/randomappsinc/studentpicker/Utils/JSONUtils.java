@@ -13,10 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by alexanderchiou on 1/31/16.
- */
 public class JSONUtils {
+
     public static final String NAMES_KEY = "names";
     public static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
     public static final String SETTINGS_KEY = "settings";
@@ -27,8 +25,7 @@ public class JSONUtils {
     public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
-    public static String serializeChoosingState(ListInfo currentState, List<String> alreadyChosenNames,
-                                                ChoosingSettings choosingSettings) {
+    public static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
         try {
             JSONObject nameListJson = new JSONObject();
 
@@ -45,7 +42,7 @@ public class JSONUtils {
 
             // Store already chosen names
             JSONArray alreadyChosenNamesArray = new JSONArray();
-            for (String alreadyChosenName : alreadyChosenNames) {
+            for (String alreadyChosenName : currentState.getNameHistory()) {
                 alreadyChosenNamesArray.put(alreadyChosenName);
             }
             nameListJson.put(ALREADY_CHOSEN_NAMES_KEY, alreadyChosenNamesArray);
@@ -74,6 +71,7 @@ public class JSONUtils {
         Map<String, Integer> nameAmounts = new HashMap<>();
         List<String> names = new ArrayList<>();
         int numNames = 0;
+        List<String> alreadyChosenNames = new ArrayList<>();
         try {
             JSONObject nameListJson = new JSONObject(cachedList);
             JSONArray namesArray = nameListJson.getJSONArray(NAMES_KEY);
@@ -89,9 +87,14 @@ public class JSONUtils {
                 numNames++;
             }
             Collections.sort(names);
+
+            JSONArray alreadyChosenNamesArray = nameListJson.getJSONArray(ALREADY_CHOSEN_NAMES_KEY);
+            for (int i = 0; i < alreadyChosenNamesArray.length(); i++) {
+                alreadyChosenNames.add(alreadyChosenNamesArray.getString(i));
+            }
         }
         catch (JSONException ignored) {}
-        return new ListInfo(nameAmounts, names, numNames);
+        return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the chosen names history
