@@ -23,8 +23,6 @@ import butterknife.OnClick;
 public class NameChoosingAdapter extends BaseAdapter {
 
     private Context context;
-    private String outOfNames;
-    private String noNames;
     private String listName;
     private ListInfo currentState;
     private TextView noContent;
@@ -32,8 +30,6 @@ public class NameChoosingAdapter extends BaseAdapter {
     private DataSource dataSource;
 
     public NameChoosingAdapter(Context context, TextView noContent, TextView numNames, String listName) {
-        this.outOfNames = context.getString(R.string.out_of_names);
-        this.noNames = context.getString(R.string.no_names);
         this.context = context;
         this.listName = listName;
         this.dataSource = new DataSource();
@@ -43,6 +39,13 @@ public class NameChoosingAdapter extends BaseAdapter {
 
         this.noContent = noContent;
         this.numNames = numNames;
+        setViews();
+    }
+
+    public void resync() {
+        ListInfo info = PreferencesManager.get().getNameListState(listName);
+        currentState = info == null ? dataSource.getListInfo(listName) : info;
+        notifyDataSetChanged();
         setViews();
     }
 
@@ -88,9 +91,9 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public void setViews() {
         if (dataSource.getListInfo(listName).getNumInstances() == 0) {
-            noContent.setText(noNames);
+            noContent.setText(R.string.no_names);
         } else {
-            noContent.setText(outOfNames);
+            noContent.setText(R.string.out_of_names);
         }
         if (currentState.getNumInstances() == 0) {
             numNames.setVisibility(View.GONE);

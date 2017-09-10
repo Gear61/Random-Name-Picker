@@ -234,6 +234,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     public void onResume() {
         super.onResume();
         canShow = true;
+        nameChoosingAdapter.resync();
     }
 
     @Override
