@@ -15,10 +15,8 @@ import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.studentpicker.R;
 
-/**
- * Created by alexanderchiou on 2/15/16.
- */
 public class UIUtils {
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         // Find the currently focused view, so we can grab the correct window token from it.

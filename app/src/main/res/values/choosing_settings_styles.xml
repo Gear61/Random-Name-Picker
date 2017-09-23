@@ -6,6 +6,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">16dp</item>
         <item name="cbd_animDuration">100</item>
+        <item name="cbd_strokeColor">@color/app_teal</item>
     </style>
 
     <style name="two_number_setting">
