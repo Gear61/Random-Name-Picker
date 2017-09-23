@@ -6,4 +6,9 @@
     <color name="white">#FFFFFF</color>
     <color name="app_teal">#009688</color>
     <color name="status_bar_teal">#00796B</color>
+
+    <color name="teal_400">#26A69A</color>
+    <color name="teal_200">#80CBC4</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_100">#F5F5F5</color>
 </resources>
