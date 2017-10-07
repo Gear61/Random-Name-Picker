@@ -12,10 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
 public class DataSource {
+
     // Database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
@@ -26,7 +24,7 @@ public class DataSource {
     }
 
     // Open connection to database
-    public void open() throws SQLException {
+    private void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 

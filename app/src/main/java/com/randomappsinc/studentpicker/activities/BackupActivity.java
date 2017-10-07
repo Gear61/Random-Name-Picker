@@ -15,15 +15,13 @@ import com.randomappsinc.studentpicker.utils.FileUtils;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 5/1/16.
- */
 public class BackupActivity extends StandardActivity {
-    @Bind(R.id.parent) View parent;
+
+    @BindView(R.id.parent) View parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

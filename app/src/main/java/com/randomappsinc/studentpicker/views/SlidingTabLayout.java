@@ -18,10 +18,8 @@ import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.R;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 public class SlidingTabLayout extends HorizontalScrollView {
+
     private static final int NUM_TABS = 2;
 
     /**

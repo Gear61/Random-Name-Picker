@@ -22,13 +22,11 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
 public class EditNameListAdapter extends BaseAdapter {
+
     private ListActivity listActivity;
     private ListInfo content;
     private TextView noContent;
@@ -314,7 +312,7 @@ public class EditNameListAdapter extends BaseAdapter {
     }
 
     public class NameViewHolder {
-        @Bind(R.id.person_name) TextView name;
+        @BindView(R.id.person_name) TextView name;
 
         private NameViewHolder(View view) {
             ButterKnife.bind(this, view);

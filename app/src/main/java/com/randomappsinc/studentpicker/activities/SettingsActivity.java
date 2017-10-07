@@ -12,8 +12,8 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.rey.material.widget.Switch;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 
@@ -23,8 +23,8 @@ public class SettingsActivity extends StandardActivity {
     public static final String OTHER_APPS_URL = "https://play.google.com/store/apps/dev?id=9093438553713389916";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
-    @Bind(R.id.parent) View parent;
-    @Bind(R.id.settings_options) ListView settingsOptions;
+    @BindView(R.id.parent) View parent;
+    @BindView(R.id.settings_options) ListView settingsOptions;
     @BindString(R.string.play_store_error) String playStoreError;
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
