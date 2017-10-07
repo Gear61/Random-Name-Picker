@@ -145,7 +145,6 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                             }
                         })
                         .autoDismiss(false)
-                        .cancelable(false)
                         .show();
                 if (settings.getAutomaticTts()) {
                     sayNames(chosenNames);
