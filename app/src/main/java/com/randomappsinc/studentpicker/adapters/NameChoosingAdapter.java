@@ -16,7 +16,7 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -156,7 +156,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     public class NameViewHolder {
 
-        @Bind(R.id.person_name) TextView name;
+        @BindView(R.id.person_name) TextView name;
 
         private int position;
 

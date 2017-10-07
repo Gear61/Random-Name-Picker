@@ -10,20 +10,18 @@ import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 11/23/15.
- */
 public class ImportFileActivity extends StandardActivity {
+
     public static final String FILE_PATH_KEY = "filePath";
 
-    @Bind(R.id.parent) View parent;
-    @Bind(R.id.list_name) EditText listName;
-    @Bind(R.id.names) EditText names;
+    @BindView(R.id.parent) View parent;
+    @BindView(R.id.list_name) EditText listName;
+    @BindView(R.id.names) EditText names;
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     @Override

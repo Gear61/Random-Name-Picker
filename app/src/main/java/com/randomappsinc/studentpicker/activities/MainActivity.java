@@ -28,8 +28,8 @@ import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -41,14 +41,14 @@ public class MainActivity extends StandardActivity {
 
     public static final String LIST_NAME_KEY = "listName";
 
-    @Bind(R.id.coordinator_layout) View parent;
-    @Bind(R.id.focal_point) View focalPoint;
-    @Bind(R.id.item_name_input) EditText newListInput;
-    @Bind(R.id.content_list) ListView lists;
-    @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.add_item) View addItem;
-    @Bind(R.id.plus_icon) ImageView plus;
-    @Bind(R.id.import_text_file) FloatingActionButton importFile;
+    @BindView(R.id.coordinator_layout) View parent;
+    @BindView(R.id.focal_point) View focalPoint;
+    @BindView(R.id.item_name_input) EditText newListInput;
+    @BindView(R.id.content_list) ListView lists;
+    @BindView(R.id.no_content) TextView noContent;
+    @BindView(R.id.add_item) View addItem;
+    @BindView(R.id.plus_icon) ImageView plus;
+    @BindView(R.id.import_text_file) FloatingActionButton importFile;
 
     @BindString(R.string.list_duplicate) String listDuplicate;
 

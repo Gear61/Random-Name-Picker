@@ -14,10 +14,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by alexanderchiou on 5/1/16.
- */
 public class FileUtils {
+
     // Create external storage directory for our app if it doesn't exist
     public static void createExternalDirectory() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

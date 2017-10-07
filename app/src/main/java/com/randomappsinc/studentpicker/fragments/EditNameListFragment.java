@@ -30,27 +30,30 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.Unbinder;
 
 /**
  * Created by alexanderchiou on 10/18/15.
  */
 public class EditNameListFragment extends Fragment {
+
     public static final String SCREEN_NAME = "Edit Name List Page";
 
-    @Bind(R.id.parent) View parent;
-    @Bind(R.id.item_name_input) AutoCompleteTextView newNameInput;
-    @Bind(R.id.no_content) TextView noContent;
-    @Bind(R.id.num_names) TextView numNames;
-    @Bind(R.id.content_list) ListView namesList;
-    @Bind(R.id.plus_icon) ImageView plus;
+    @BindView(R.id.parent) View parent;
+    @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
+    @BindView(R.id.no_content) TextView noContent;
+    @BindView(R.id.num_names) TextView numNames;
+    @BindView(R.id.content_list) ListView namesList;
+    @BindView(R.id.plus_icon) ImageView plus;
 
-    private EditNameListAdapter adapter;
-    private DataSource dataSource;
-    private String listName;
+    private EditNameListAdapter mNamesAdapter;
+    private DataSource mDataSource;
+    private String mListName;
+    private Unbinder mUnbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,19 +64,19 @@ public class EditNameListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
-        ButterKnife.bind(this, rootView);
-        dataSource = new DataSource();
+        mUnbinder = ButterKnife.bind(this, rootView);
+        mDataSource = new DataSource();
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
-        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        mListName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        adapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listName, parent);
-        namesList.setAdapter(adapter);
+        mNamesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, mListName, parent);
+        namesList.setAdapter(mNamesAdapter);
         return rootView;
     }
 
@@ -84,7 +87,7 @@ public class EditNameListFragment extends Fragment {
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
-            adapter.addNames(newName, 1);
+            mNamesAdapter.addNames(newName, 1);
         }
     }
 
@@ -99,12 +102,12 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
     }
 
     @OnItemClick(R.id.content_list)
     public void showNameOptions(int position) {
-        adapter.showNameOptions(position);
+        mNamesAdapter.showNameOptions(position);
     }
 
     @Override
@@ -118,7 +121,7 @@ public class EditNameListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.import_names:
-                final String[] importCandidates = dataSource.getAllNameLists(listName);
+                final String[] importCandidates = mDataSource.getAllNameLists(mListName);
                 if (importCandidates.length == 0) {
                     UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
                 } else {
@@ -143,7 +146,7 @@ public class EditNameListFragment extends Fragment {
                                     for (Integer index : indices) {
                                         listNames.add(importCandidates[index]);
                                     }
-                                    adapter.importNamesFromList(listNames);
+                                    mNamesAdapter.importNamesFromList(listNames);
                                     UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
                                 }
                             })

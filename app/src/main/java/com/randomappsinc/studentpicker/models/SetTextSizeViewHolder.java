@@ -8,15 +8,13 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.rey.material.widget.Slider;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 3/9/16.
- */
 public class SetTextSizeViewHolder {
-    @Bind(R.id.text_size_slider) public Slider textSizeSlider;
-    @Bind(R.id.sample_text) public TextView sampleText;
+
+    @BindView(R.id.text_size_slider) public Slider textSizeSlider;
+    @BindView(R.id.sample_text) public TextView sampleText;
 
     public SetTextSizeViewHolder(View view) {
         ButterKnife.bind(this, view);

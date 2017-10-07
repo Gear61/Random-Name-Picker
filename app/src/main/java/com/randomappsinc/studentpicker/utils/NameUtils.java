@@ -17,10 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by alexanderchiou on 7/20/15.
- */
 public class NameUtils {
+
     // For the choose multiple names at once case. We're just generating indices
     public static List<Integer> getRandomNumsInRange(int numNumbers, int capIndex) {
         List<Integer> list = new ArrayList<>();

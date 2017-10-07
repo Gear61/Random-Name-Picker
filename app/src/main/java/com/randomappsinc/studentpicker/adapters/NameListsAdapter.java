@@ -18,14 +18,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
 public class NameListsAdapter extends BaseAdapter {
+
     private Context context;
     private List<String> content;
     private TextView noContent;
@@ -123,7 +121,7 @@ public class NameListsAdapter extends BaseAdapter {
     }
 
     public class NameListViewHolder {
-        @Bind(R.id.list_name) TextView listName;
+        @BindView(R.id.list_name) TextView listName;
 
         private int position;
 

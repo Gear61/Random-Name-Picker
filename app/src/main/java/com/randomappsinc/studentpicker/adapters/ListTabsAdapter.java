@@ -11,10 +11,8 @@ import com.randomappsinc.studentpicker.fragments.EditNameListFragment;
 import com.randomappsinc.studentpicker.fragments.NameChoosingFragment;
 import com.randomappsinc.studentpicker.utils.MyApplication;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
+
     private NameChoosingFragment nameChoosingFragment;
     private Fragment editNameListFragment;
     private String tabTitles[];

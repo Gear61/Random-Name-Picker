@@ -15,13 +15,13 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.views.SlidingTabLayout;
 import com.squareup.seismic.ShakeDetector;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
 
-    @Bind(R.id.viewpager) ViewPager mViewPager;
-    @Bind(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
+    @BindView(R.id.viewpager) ViewPager mViewPager;
+    @BindView(R.id.sliding_tabs) SlidingTabLayout mSlidingTabLayout;
 
     private ListTabsAdapter mListTabsAdapter;
     private ShakeDetector mShakeDetector;

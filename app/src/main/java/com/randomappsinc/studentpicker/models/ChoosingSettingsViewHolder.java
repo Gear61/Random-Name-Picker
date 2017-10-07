@@ -6,18 +6,16 @@ import android.widget.EditText;
 import com.randomappsinc.studentpicker.R;
 import com.rey.material.widget.CheckBox;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 11/9/15.
- */
 public class ChoosingSettingsViewHolder {
-    @Bind(R.id.presentation_mode) CheckBox presentationMode;
-    @Bind(R.id.with_replacement) CheckBox withReplacement;
-    @Bind(R.id.automatic_tts) CheckBox automaticTts;
-    @Bind(R.id.show_as_list) CheckBox showAsList;
-    @Bind(R.id.num_people_chosen) EditText numChosen;
+
+    @BindView(R.id.presentation_mode) CheckBox presentationMode;
+    @BindView(R.id.with_replacement) CheckBox withReplacement;
+    @BindView(R.id.automatic_tts) CheckBox automaticTts;
+    @BindView(R.id.show_as_list) CheckBox showAsList;
+    @BindView(R.id.num_people_chosen) EditText numChosen;
 
     private ChoosingSettings settings;
 

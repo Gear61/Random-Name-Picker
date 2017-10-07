@@ -12,10 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by alexanderchiou on 7/19/15.
- */
 public class MySQLiteHelper extends SQLiteOpenHelper {
+
     // Table name
     public static final String TABLE_NAME = "Students";
 

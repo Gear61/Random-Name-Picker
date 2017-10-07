@@ -15,13 +15,11 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by alexanderchiou on 11/28/15.
- */
 public class NameCreationACAdapter extends BaseAdapter implements Filterable {
+
     private List<String> suggestions;
     private DataSource dataSource;
 
@@ -34,7 +32,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.suggestion) TextView suggestion;
+        @BindView(R.id.suggestion) TextView suggestion;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

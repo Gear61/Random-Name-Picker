@@ -9,10 +9,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 class SlidingTabStrip extends LinearLayout {
+
     private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 2;
     private static final byte DEFAULT_BOTTOM_BORDER_COLOR_ALPHA = 0x26;
     private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 5;

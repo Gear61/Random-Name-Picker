@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -46,9 +46,9 @@ public class PresentationActivity extends StandardActivity
     public static final String LIST_NAME_KEY = "listName";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
-    @Bind(R.id.parent) View parent;
-    @Bind(R.id.header) TextView header;
-    @Bind(R.id.names) TextView names;
+    @BindView(R.id.parent) View parent;
+    @BindView(R.id.header) TextView header;
+    @BindView(R.id.names) TextView names;
 
     private MediaPlayer player;
     private String listName;

@@ -12,7 +12,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.rey.material.widget.Switch;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -45,9 +45,9 @@ public class SettingsAdapter extends BaseAdapter {
 
     public class SettingsViewHolder {
 
-        @Bind(R.id.settings_icon) IconTextView icon;
-        @Bind(R.id.settings_option) TextView option;
-        @Bind(R.id.shake_toggle) Switch shakeToggle;
+        @BindView(R.id.settings_icon) IconTextView icon;
+        @BindView(R.id.settings_option) TextView option;
+        @BindView(R.id.shake_toggle) Switch shakeToggle;
 
         public SettingsViewHolder(View view) {
             ButterKnife.bind(this, view);
