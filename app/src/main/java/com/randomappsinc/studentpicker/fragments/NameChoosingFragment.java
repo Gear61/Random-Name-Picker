@@ -29,6 +29,7 @@ import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.views.ChoicesDisplayDialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class NameChoosingFragment extends Fragment implements TextToSpeech.OnInitListener {
+public class NameChoosingFragment extends Fragment
+        implements TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener {
 
     public static final String SCREEN_NAME = "Name Choosing Page";
 
@@ -52,9 +54,11 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     private ChoosingSettings mSettings;
     private ChoosingSettingsViewHolder mSettingsHolder;
     private MaterialDialog mSettingsDialog;
+
+    private ChoicesDisplayDialog mChoicesDisplayDialog;
     private TextToSpeech mTextToSpeech;
     private boolean mTextToSpeechEnabled;
-    private boolean mCanShow;
+    private boolean mCanShowPresentationScreen;
     private String mListName;
     private Unbinder mUnbinder;
 
@@ -83,9 +87,10 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
                 })
                 .cancelable(false)
                 .build();
+        mChoicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
 
         mTextToSpeech = new TextToSpeech(getActivity(), this);
-        mTextToSpeech.setLanguage(Locale.US);
+        mTextToSpeech.setLanguage(Locale.getDefault());
     }
 
     @Override
@@ -109,52 +114,34 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (mNameChoosingAdapter.getCount() > 0 && mCanShow) {
-            mCanShow = false;
-            if (mSettings.getPresentationMode()) {
-                cacheListState();
-                Intent intent = new Intent(getActivity(), PresentationActivity.class);
-                intent.putExtra(PresentationActivity.LIST_NAME_KEY, mListName);
-                getActivity().startActivity(intent);
-            } else {
-                final List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(mSettings.getNumNamesToChoose(),
-                        mNameChoosingAdapter.getNumInstances() - 1);
-                final String chosenNames = mNameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, mSettings);
+        if (mNameChoosingAdapter.getCount() == 0) {
+            return;
+        }
 
-                new MaterialDialog.Builder(getActivity())
-                        .title(chosenIndexes.size() == 1 ? R.string.name_chosen : R.string.names_chosen)
-                        .content(chosenNames)
-                        .positiveText(android.R.string.yes)
-                        .neutralText(chosenIndexes.size() == 1 ? R.string.say_name : R.string.say_names)
-                        .negativeText(R.string.copy_text)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
-                                mCanShow = true;
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                NameUtils.copyNamesToClipboard(chosenNames, parent, chosenIndexes.size(), false);
-                            }
-                        })
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                sayNames(chosenNames);
-                            }
-                        })
-                        .autoDismiss(false)
-                        .show();
-                if (mSettings.getAutomaticTts()) {
-                    sayNames(chosenNames);
-                }
+        if (mSettings.getPresentationMode()) {
+            if (!mCanShowPresentationScreen) {
+                return;
+            }
+            mCanShowPresentationScreen = false;
+            cacheListState();
+            Intent intent = new Intent(getActivity(), PresentationActivity.class);
+            intent.putExtra(PresentationActivity.LIST_NAME_KEY, mListName);
+            getActivity().startActivity(intent);
+        } else {
+            if (mChoicesDisplayDialog.isShowing()) {
+                return;
+            }
+            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(mSettings.getNumNamesToChoose(),
+                    mNameChoosingAdapter.getNumInstances() - 1);
+            String chosenNames = mNameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, mSettings);
+            mChoicesDisplayDialog.showChoices(chosenNames, chosenIndexes.size());
+            if (mSettings.getAutomaticTts()) {
+                sayNames(chosenNames);
             }
         }
     }
 
+    @Override
     public void sayNames(String names) {
         if (mTextToSpeechEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -178,6 +165,11 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     private void sayTextPostL(String text) {
         String utteranceId = this.hashCode() + "";
         mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    }
+
+    @Override
+    public void copyNamesToClipboard(String chosenNames, int numNames) {
+        NameUtils.copyNamesToClipboard(chosenNames, parent, numNames, false);
     }
 
     @Override
@@ -232,7 +224,7 @@ public class NameChoosingFragment extends Fragment implements TextToSpeech.OnIni
     @Override
     public void onResume() {
         super.onResume();
-        mCanShow = true;
+        mCanShowPresentationScreen = true;
         mNameChoosingAdapter.resync();
     }
 
