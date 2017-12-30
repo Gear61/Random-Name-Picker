@@ -256,7 +256,7 @@ public class PresentationActivity extends StandardActivity
                 .backButton(R.string.md_back_label)
                 .dynamicButtonColor(false)
                 .preselect(PreferencesManager.get().getPresentationTextColor())
-                .show();
+                .show(this);
     }
 
     @Override
