@@ -173,8 +173,12 @@ public class PresentationActivity extends StandardActivity
         fadeIn.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet scaleSet = new AnimatorSet();
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(names, "scaleX", 1.0f, 3.0f, 1.0f).setDuration(250);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(names, "scaleY", 1.0f, 3.0f, 1.0f).setDuration(250);
+        ObjectAnimator scaleX = ObjectAnimator
+                .ofFloat(names, "scaleX", 1.0f, 3.0f, 1.0f)
+                .setDuration(250);
+        ObjectAnimator scaleY = ObjectAnimator
+                .ofFloat(names, "scaleY", 1.0f, 3.0f, 1.0f)
+                .setDuration(250);
         scaleSet.setInterpolator(new DecelerateInterpolator());
         scaleSet.playTogether(scaleX, scaleY);
 
@@ -312,7 +316,11 @@ public class PresentationActivity extends StandardActivity
                 sayNames(chosenNamesText);
                 return true;
             case R.id.copy_names:
-                NameUtils.copyNamesToClipboard(chosenNamesText, parent, settings.getNumNamesToChoose(), false);
+                NameUtils.copyNamesToClipboard(
+                        chosenNamesText,
+                        parent,
+                        settings.getNumNamesToChoose(),
+                        false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
