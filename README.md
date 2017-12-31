@@ -1,4 +1,7 @@
-If you want to contribute to this project, fork it and submit a pull request into master.
+## Download
+
+<a href="https://play.google.com/store/apps/details?id=com.randomappsinc.studentpicker" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="100"/></a>
 
 License
 =======
