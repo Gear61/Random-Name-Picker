@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
@@ -18,12 +20,11 @@ import com.randomappsinc.studentpicker.R;
 public class UIUtils {
 
     public static void hideKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager == null) {
             return;
         }
-
         // Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
         // If no view currently has focus, create a new one, just so we can grab a window token from it
@@ -38,7 +39,7 @@ public class UIUtils {
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
-        TextView snackText = (TextView) rootView.findViewById(android.support.design.R.id.snackbar_text);
+        TextView snackText = rootView.findViewById(android.support.design.R.id.snackbar_text);
         snackText.setTextColor(Color.WHITE);
         snackbar.show();
     }
@@ -53,5 +54,17 @@ public class UIUtils {
                 new IconDrawable(context, icon)
                         .colorRes(R.color.white)
                         .actionBarSize());
+    }
+
+    public static void showShortToast(@StringRes int stringId) {
+        showToast(stringId, Toast.LENGTH_SHORT);
+    }
+
+    public static void showLongToast(@StringRes int stringId) {
+        showToast(stringId, Toast.LENGTH_LONG);
+    }
+
+    private static void showToast(@StringRes int stringId, int duration) {
+        Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
     }
 }
