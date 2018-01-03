@@ -43,7 +43,7 @@ public class NameUtils {
         return fileName.replace(".txt", "");
     }
 
-    public static String convertStreamToString(InputStream is) throws Exception {
+    private static String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -73,16 +73,27 @@ public class NameUtils {
     public static void copyNamesToClipboard(String names, View parent, int numNames, boolean historyMode) {
         Context context = MyApplication.getAppContext();
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
+        if (clipboard == null) {
+            return;
+        }
         ClipData clip = ClipData.newPlainText(context.getString(R.string.chosen_names), names);
         clipboard.setPrimaryClip(clip);
+
+        int messageId;
         if (historyMode) {
-            UIUtils.showSnackbar(parent, context.getString(R.string.name_history_copied));
+            messageId = R.string.name_history_copied;
         } else {
             if (numNames > 1) {
-                UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_plural));
+                messageId = R.string.copy_confirmation_plural;
             } else {
-                UIUtils.showSnackbar(parent, context.getString(R.string.copy_confirmation_singular));
+                messageId = R.string.copy_confirmation_singular;
             }
+        }
+
+        if (parent == null) {
+            UIUtils.showLongToast(messageId);
+        } else {
+            UIUtils.showSnackbar(parent, context.getString(messageId));
         }
     }
 

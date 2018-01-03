@@ -1,7 +1,6 @@
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/parent"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,16 +8,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.rey.material.widget.Button
-            android:id="@+id/choose"
-            android:text="@string/choose"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            style="@style/ripple_button_style"
-            app:rd_style="@style/button_ripple_attributes"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/choose">
 
         <TextView
             android:id="@+id/no_content"
@@ -29,7 +20,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:visibility="gone"
-            android:textSize="28dp"/>
+            android:textSize="28sp"/>
 
         <TextView
             android:id="@+id/num_names"
@@ -40,4 +31,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+    <com.rey.material.widget.Button
+        android:id="@+id/choose"
+        android:text="@string/choose"
+        android:layout_alignParentBottom="true"
+        style="@style/ripple_button_style"
+        app:rd_style="@style/button_ripple_attributes"/>
+</RelativeLayout>

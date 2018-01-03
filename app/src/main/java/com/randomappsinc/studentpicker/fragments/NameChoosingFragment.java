@@ -45,7 +45,6 @@ public class NameChoosingFragment extends Fragment
 
     public static final String SCREEN_NAME = "Name Choosing Page";
 
-    @BindView(R.id.parent) View parent;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) ListView namesList;
@@ -76,7 +75,7 @@ public class NameChoosingFragment extends Fragment
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         mSettingsHolder.applySettings();
-                        UIUtils.showSnackbar(parent, getString(R.string.settings_applied));
+                        UIUtils.showShortToast(R.string.settings_applied);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -150,7 +149,7 @@ public class NameChoosingFragment extends Fragment
                 sayTextPreL(names);
             }
         } else {
-            UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
+            UIUtils.showLongToast(R.string.text_to_speech_fail);
         }
     }
 
@@ -169,7 +168,7 @@ public class NameChoosingFragment extends Fragment
 
     @Override
     public void copyNamesToClipboard(String chosenNames, int numNames) {
-        NameUtils.copyNamesToClipboard(chosenNames, parent, numNames, false);
+        NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false);
     }
 
     @Override
@@ -201,19 +200,18 @@ public class NameChoosingFragment extends Fragment
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             mNameChoosingAdapter.clearNameHistory();
-                            UIUtils.showSnackbar(parent, getString(R.string.name_history_cleared));
+                            UIUtils.showShortToast(R.string.name_history_cleared);
                         }
                     })
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            NameUtils.copyNamesToClipboard(namesHistory, parent, 0, true);
+                            NameUtils.copyNamesToClipboard(namesHistory, null, 0, true);
                         }
                     })
                     .show();
-        }
-        else {
-            UIUtils.showSnackbar(parent, getString(R.string.empty_names_history));
+        } else {
+            UIUtils.showLongToast(R.string.empty_names_history);
         }
     }
 
