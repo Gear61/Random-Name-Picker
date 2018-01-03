@@ -46,7 +46,6 @@ public class PresentationActivity extends StandardActivity
     public static final String LIST_NAME_KEY = "listName";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
-    @BindView(R.id.parent) View parent;
     @BindView(R.id.header) TextView header;
     @BindView(R.id.names) TextView names;
 
@@ -146,7 +145,7 @@ public class PresentationActivity extends StandardActivity
 
             playSound();
         } else {
-            UIUtils.showSnackbar(parent, getString(R.string.no_names_left));
+            UIUtils.showLongToast(R.string.no_names_left);
         }
     }
 
@@ -161,7 +160,7 @@ public class PresentationActivity extends StandardActivity
             player.prepare();
             player.start();
         } catch (Exception ex) {
-            UIUtils.showSnackbar(parent, getString(R.string.drumroll_error));
+            UIUtils.showLongToast(R.string.drumroll_error);
         }
 
         handler.removeCallbacks(animateNamesTask);
@@ -231,7 +230,7 @@ public class PresentationActivity extends StandardActivity
                 sayTextPreL(names);
             }
         } else {
-            UIUtils.showSnackbar(parent, getString(R.string.text_to_speech_fail));
+            UIUtils.showLongToast(R.string.text_to_speech_fail);
         }
     }
 
@@ -318,7 +317,7 @@ public class PresentationActivity extends StandardActivity
             case R.id.copy_names:
                 NameUtils.copyNamesToClipboard(
                         chosenNamesText,
-                        parent,
+                        null,
                         settings.getNumNamesToChoose(),
                         false);
                 return true;
