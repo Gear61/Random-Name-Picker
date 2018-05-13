@@ -254,9 +254,6 @@ public class PresentationActivity extends StandardActivity
 
     private void showColorChooserDialog() {
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
-                .doneButton(R.string.done)
-                .cancelButton(R.string.cancel)
-                .backButton(R.string.custom)
                 .dynamicButtonColor(false)
                 .preselect(PreferencesManager.get().getPresentationTextColor())
                 .show(this);
