@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,5 +67,10 @@ public class UIUtils {
 
     private static void showToast(@StringRes int stringId, int duration) {
         Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
+    }
+
+    public static void setCheckedImmediately(CompoundButton checkableView, boolean checked) {
+        checkableView.setChecked(checked);
+        checkableView.jumpDrawablesToCurrentState();
     }
 }

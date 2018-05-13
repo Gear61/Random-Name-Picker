@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="wrap_content"
@@ -10,24 +11,28 @@
     android:focusableInTouchMode="true"
     tools:ignore="SpUsage">
 
-    <com.rey.material.widget.CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/presentation_mode"
         android:text="@string/presentation_mode"
+        app:buttonTint="@color/checkbox_box_color"
         style="@style/setting_checkbox"/>
 
-    <com.rey.material.widget.CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/with_replacement"
         android:text="@string/with_replacement"
+        app:buttonTint="@color/checkbox_box_color"
         style="@style/setting_checkbox"/>
 
-    <com.rey.material.widget.CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/automatic_tts"
         android:text="@string/automatic_tts"
+        app:buttonTint="@color/checkbox_box_color"
         style="@style/setting_checkbox"/>
 
-    <com.rey.material.widget.CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/show_as_list"
         android:text="@string/show_as_list"
+        app:buttonTint="@color/checkbox_box_color"
         style="@style/setting_checkbox"/>
 
     <LinearLayout

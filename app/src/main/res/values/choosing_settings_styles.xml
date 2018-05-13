@@ -5,8 +5,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">16dp</item>
-        <item name="cbd_animDuration">100</item>
-        <item name="cbd_strokeColor">@color/checkbox_box_color</item>
     </style>
 
     <style name="two_number_setting">
