@@ -14,6 +14,9 @@
         <item>@string/edit</item>
     </array>
     <string name="options_for">Options for:&#160;</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="custom">Custom</string>
 
     <!-- Icons -->
     <string name="edit_icon">{ion-edit}</string>
