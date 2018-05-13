@@ -7,12 +7,11 @@
     android:fitsSystemWindows="true">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:padding="10dp"
+            android:padding="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
@@ -28,8 +27,8 @@
 
             <EditText
                 android:id="@+id/list_name"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:background="@drawable/text_input_border"
@@ -40,21 +39,19 @@
             <EditText
                 android:id="@+id/names"
                 android:gravity="top|start"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
                 android:hint="@string/names"
                 android:lines="5"
                 android:background="@drawable/text_input_border"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.rey.material.widget.Button
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <TextView
                 android:id="@+id/add_list"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/add_name_list"
-                style="@style/ripple_button_style"
-                app:rd_style="@style/button_ripple_attributes"/>
+                style="@style/button"/>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

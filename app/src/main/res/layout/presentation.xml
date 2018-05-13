@@ -36,10 +36,9 @@
         </ScrollView>
     </LinearLayout>
 
-    <com.rey.material.widget.Button
+    <TextView
         android:id="@+id/choose"
         android:text="@string/choose"
         android:layout_alignParentBottom="true"
-        style="@style/ripple_button_style"
-        app:rd_style="@style/button_ripple_attributes"/>
+        style="@style/button"/>
 </RelativeLayout>

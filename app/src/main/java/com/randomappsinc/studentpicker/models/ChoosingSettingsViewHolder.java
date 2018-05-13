@@ -1,10 +1,11 @@
 package com.randomappsinc.studentpicker.models;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.randomappsinc.studentpicker.R;
-import com.rey.material.widget.CheckBox;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,20 +24,21 @@ public class ChoosingSettingsViewHolder {
         ButterKnife.bind(this, view);
 
         this.settings = settings;
-        presentationMode.setCheckedImmediately(settings.getPresentationMode());
-        withReplacement.setCheckedImmediately(settings.getWithReplacement());
-        automaticTts.setCheckedImmediately(settings.getAutomaticTts());
-        showAsList.setCheckedImmediately(settings.getShowAsList());
+        syncCheckboxesWithSettings();
         numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
     }
 
     public void revertSettings() {
-        presentationMode.setCheckedImmediately(settings.getPresentationMode());
-        withReplacement.setCheckedImmediately(settings.getWithReplacement());
-        automaticTts.setCheckedImmediately(settings.getAutomaticTts());
-        showAsList.setCheckedImmediately(settings.getShowAsList());
+        syncCheckboxesWithSettings();
         numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
         numChosen.clearFocus();
+    }
+
+    private void syncCheckboxesWithSettings() {
+        UIUtils.setCheckedImmediately(presentationMode, settings.getPresentationMode());
+        UIUtils.setCheckedImmediately(withReplacement, settings.getWithReplacement());
+        UIUtils.setCheckedImmediately(automaticTts, settings.getAutomaticTts());
+        UIUtils.setCheckedImmediately(showAsList, settings.getShowAsList());
     }
 
     public void applySettings() {

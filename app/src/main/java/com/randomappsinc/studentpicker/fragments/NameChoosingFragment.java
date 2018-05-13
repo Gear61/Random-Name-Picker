@@ -49,24 +49,24 @@ public class NameChoosingFragment extends Fragment
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) ListView namesList;
 
-    private NameChoosingAdapter mNameChoosingAdapter;
-    private ChoosingSettings mSettings;
-    private ChoosingSettingsViewHolder mSettingsHolder;
-    private MaterialDialog mSettingsDialog;
+    private NameChoosingAdapter nameChoosingAdapter;
+    private ChoosingSettings settings;
+    private ChoosingSettingsViewHolder settingsHolder;
+    private MaterialDialog settingsDialog;
 
-    private ChoicesDisplayDialog mChoicesDisplayDialog;
-    private TextToSpeech mTextToSpeech;
-    private boolean mTextToSpeechEnabled;
-    private boolean mCanShowPresentationScreen;
-    private String mListName;
-    private Unbinder mUnbinder;
+    private ChoicesDisplayDialog choicesDisplayDialog;
+    private TextToSpeech textToSpeech;
+    private boolean textToSpeechEnabled;
+    private boolean canShowPresentationScreen;
+    private String listName;
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mSettingsDialog = new MaterialDialog.Builder(getActivity())
+        settingsDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.name_choosing_settings)
                 .customView(R.layout.name_choosing_settings, true)
                 .positiveText(android.R.string.yes)
@@ -74,67 +74,67 @@ public class NameChoosingFragment extends Fragment
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        mSettingsHolder.applySettings();
+                        settingsHolder.applySettings();
                         UIUtils.showShortToast(R.string.settings_applied);
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        mSettingsHolder.revertSettings();
+                        settingsHolder.revertSettings();
                     }
                 })
                 .cancelable(false)
                 .build();
-        mChoicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
+        choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
 
-        mTextToSpeech = new TextToSpeech(getActivity(), this);
-        mTextToSpeech.setLanguage(Locale.getDefault());
+        textToSpeech = new TextToSpeech(getActivity(), this);
+        textToSpeech.setLanguage(Locale.getDefault());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.name_choosing, container, false);
-        mUnbinder = ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
-        mListName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        mNameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, mListName);
-        namesList.setAdapter(mNameChoosingAdapter);
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
+        namesList.setAdapter(nameChoosingAdapter);
 
-        mSettings = PreferencesManager.get().getChoosingSettings(mListName);
-        mSettingsHolder = new ChoosingSettingsViewHolder(mSettingsDialog.getCustomView(), mSettings);
+        settings = PreferencesManager.get().getChoosingSettings(listName);
+        settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
 
         return rootView;
     }
 
     public NameChoosingAdapter getNameChoosingAdapter() {
-        return mNameChoosingAdapter;
+        return nameChoosingAdapter;
     }
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (mNameChoosingAdapter.getCount() == 0) {
+        if (nameChoosingAdapter.getCount() == 0) {
             return;
         }
 
-        if (mSettings.getPresentationMode()) {
-            if (!mCanShowPresentationScreen) {
+        if (settings.getPresentationMode()) {
+            if (!canShowPresentationScreen) {
                 return;
             }
-            mCanShowPresentationScreen = false;
+            canShowPresentationScreen = false;
             cacheListState();
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
-            intent.putExtra(PresentationActivity.LIST_NAME_KEY, mListName);
+            intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
             getActivity().startActivity(intent);
         } else {
-            if (mChoicesDisplayDialog.isShowing()) {
+            if (choicesDisplayDialog.isShowing()) {
                 return;
             }
-            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(mSettings.getNumNamesToChoose(),
-                    mNameChoosingAdapter.getNumInstances() - 1);
-            String chosenNames = mNameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, mSettings);
-            mChoicesDisplayDialog.showChoices(chosenNames, chosenIndexes.size());
-            if (mSettings.getAutomaticTts()) {
+            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
+                    nameChoosingAdapter.getNumInstances() - 1);
+            String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
+            choicesDisplayDialog.showChoices(chosenNames, chosenIndexes.size());
+            if (settings.getAutomaticTts()) {
                 sayNames(chosenNames);
             }
         }
@@ -142,7 +142,7 @@ public class NameChoosingFragment extends Fragment
 
     @Override
     public void sayNames(String names) {
-        if (mTextToSpeechEnabled) {
+        if (textToSpeechEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 sayTextPostL(names);
             } else {
@@ -157,13 +157,13 @@ public class NameChoosingFragment extends Fragment
     private void sayTextPreL(String text) {
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + "");
-        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void sayTextPostL(String text) {
         String utteranceId = this.hashCode() + "";
-        mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class NameChoosingFragment extends Fragment
 
     @Override
     public void onInit(int status) {
-        mTextToSpeechEnabled = (status == TextToSpeech.SUCCESS);
+        textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class NameChoosingFragment extends Fragment
     }
 
     public void showNamesHistory() {
-        final String namesHistory = mNameChoosingAdapter.getNamesHistory();
+        final String namesHistory = nameChoosingAdapter.getNamesHistory();
         if (!namesHistory.isEmpty()) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.chosen_names_history)
@@ -199,7 +199,7 @@ public class NameChoosingFragment extends Fragment
                     .onNeutral(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            mNameChoosingAdapter.clearNameHistory();
+                            nameChoosingAdapter.clearNameHistory();
                             UIUtils.showShortToast(R.string.name_history_cleared);
                         }
                     })
@@ -216,14 +216,14 @@ public class NameChoosingFragment extends Fragment
     }
 
     public void cacheListState() {
-        mNameChoosingAdapter.cacheState(mSettings);
+        nameChoosingAdapter.cacheState(settings);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mCanShowPresentationScreen = true;
-        mNameChoosingAdapter.resync();
+        canShowPresentationScreen = true;
+        nameChoosingAdapter.resync();
     }
 
     @Override
@@ -235,10 +235,10 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
-        if (mTextToSpeech != null) {
-            mTextToSpeech.stop();
-            mTextToSpeech.shutdown();
+        unbinder.unbind();
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
         }
     }
 
@@ -258,10 +258,10 @@ public class NameChoosingFragment extends Fragment
                 showNamesHistory();
                 return true;
             case R.id.settings:
-                mSettingsDialog.show();
+                settingsDialog.show();
                 return true;
             case R.id.reset:
-                mNameChoosingAdapter.resetNames();
+                nameChoosingAdapter.resetNames();
                 return true;
             case android.R.id.home:
                 getActivity().finish();
