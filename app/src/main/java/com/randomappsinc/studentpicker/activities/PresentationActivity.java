@@ -108,7 +108,7 @@ public class PresentationActivity extends StandardActivity
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        int newTextSize = setTextViewHolder.textSizeSlider.getValue();
+                        int newTextSize = setTextViewHolder.textSizeSlider.getProgress() + 1;
                         PreferencesManager.get().setPresentationTextSize(newTextSize);
                         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
                     }
@@ -254,9 +254,9 @@ public class PresentationActivity extends StandardActivity
 
     private void showColorChooserDialog() {
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
-                .doneButton(R.string.md_done_label)
-                .cancelButton(R.string.md_cancel_label)
-                .backButton(R.string.md_back_label)
+                .doneButton(R.string.done)
+                .cancelButton(R.string.cancel)
+                .backButton(R.string.custom)
                 .dynamicButtonColor(false)
                 .preselect(PreferencesManager.get().getPresentationTextColor())
                 .show(this);

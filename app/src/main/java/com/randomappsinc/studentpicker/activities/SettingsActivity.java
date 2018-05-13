@@ -3,29 +3,27 @@ package com.randomappsinc.studentpicker.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.Switch;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.adapters.SettingsAdapter;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.rey.material.widget.Switch;
+import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 
-public class SettingsActivity extends StandardActivity {
+public class SettingsActivity extends StandardActivity implements SettingsAdapter.ItemSelectionListener {
 
     public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
     public static final String OTHER_APPS_URL = "https://play.google.com/store/apps/dev?id=9093438553713389916";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
-    @BindView(R.id.parent) View parent;
-    @BindView(R.id.settings_options) ListView settingsOptions;
-    @BindString(R.string.play_store_error) String playStoreError;
+    @BindView(R.id.settings_options) RecyclerView settingsOptions;
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
 
@@ -36,10 +34,11 @@ public class SettingsActivity extends StandardActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        settingsOptions.setAdapter(new SettingsAdapter(this));
+        settingsOptions.addItemDecoration(new SimpleDividerItemDecoration(this));
+        settingsOptions.setAdapter(new SettingsAdapter(this, this));
     }
 
-    @OnItemClick(R.id.settings_options)
+    @Override
     public void onItemClick(int position) {
         Intent intent = null;
         switch (position) {
@@ -67,7 +66,7 @@ public class SettingsActivity extends StandardActivity {
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    UIUtils.showSnackbar(parent, playStoreError);
+                    UIUtils.showLongToast(R.string.play_store_error);
                     return;
                 }
                 break;

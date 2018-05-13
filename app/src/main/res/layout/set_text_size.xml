@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.rey.material.widget.Slider
+    <SeekBar
         android:id="@+id/text_size_slider"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        app:sl_minValue="1"
-        app:sl_maxValue="11"
-        app:sl_trackSize="10dp"
-        app:sl_thumbRadius="15dp"
-        app:sl_alwaysFillThumb="true"
-        style="@style/Material.Widget.Slider"/>
+        android:layout_height="wrap_content"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:max="10"/>
 
     <TextView
         android:id="@+id/sample_text"

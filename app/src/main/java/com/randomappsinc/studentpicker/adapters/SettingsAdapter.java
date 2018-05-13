@@ -1,88 +1,90 @@
 package com.randomappsinc.studentpicker.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import com.joanzapata.iconify.widget.IconTextView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
-import com.rey.material.widget.Switch;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SettingsAdapter extends BaseAdapter {
+public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingViewHolder> {
 
+    public interface ItemSelectionListener {
+        void onItemClick(int position);
+    }
+
+    @NonNull private ItemSelectionListener itemSelectionListener;
+    private Context context;
     private String[] options;
     private String[] icons;
-    private Context context;
 
-    public SettingsAdapter(Context context) {
+    public SettingsAdapter(Context context, @NonNull ItemSelectionListener itemSelectionListener) {
+        this.itemSelectionListener = itemSelectionListener;
         this.context = context;
         this.options = context.getResources().getStringArray(R.array.settings_options);
         this.icons = context.getResources().getStringArray(R.array.settings_icons);
     }
 
     @Override
-    public int getCount() {
+    @NonNull
+    public SettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(
+                R.layout.settings_list_item,
+                parent,
+                false);
+        return new SettingViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull SettingViewHolder holder, int position) {
+        holder.loadSetting(position);
+    }
+
+    @Override
+    public int getItemCount() {
         return options.length;
     }
 
-    @Override
-    public String getItem(int position) {
-        return options[position];
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    public class SettingsViewHolder {
-
-        @BindView(R.id.settings_icon) IconTextView icon;
+    class SettingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.settings_icon) TextView icon;
         @BindView(R.id.settings_option) TextView option;
-        @BindView(R.id.shake_toggle) Switch shakeToggle;
+        @BindView(R.id.shake_toggle) Switch toggle;
 
-        public SettingsViewHolder(View view) {
+        SettingViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
 
-        public void loadSetting(int position) {
+        void loadSetting(int position) {
             option.setText(options[position]);
             icon.setText(icons[position]);
 
             if (position == 0) {
-                shakeToggle.setCheckedImmediately(PreferencesManager.get().isShakeEnabled());
-                shakeToggle.setVisibility(View.VISIBLE);
+                UIUtils.setCheckedImmediately(toggle, PreferencesManager.get().isShakeEnabled());
+                toggle.setVisibility(View.VISIBLE);
             } else {
-                shakeToggle.setVisibility(View.GONE);
+                toggle.setVisibility(View.GONE);
             }
         }
 
         @OnClick(R.id.shake_toggle)
-        public void onSoundToggle() {
-            PreferencesManager.get().setShakeEnabled(shakeToggle.isChecked());
+        public void onToggle() {
+            PreferencesManager.get().setShakeEnabled(toggle.isChecked());
         }
-    }
 
-    @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        SettingsViewHolder holder;
-        if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.settings_list_item, parent, false);
-            holder = new SettingsViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (SettingsViewHolder) view.getTag();
+        @OnClick(R.id.parent)
+        public void onSettingSelected() {
+            itemSelectionListener.onItemClick(getAdapterPosition());
         }
-        holder.loadSetting(position);
-        return view;
     }
 }
