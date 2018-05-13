@@ -1,9 +1,9 @@
 package com.randomappsinc.studentpicker.adapters;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.MainActivity;
@@ -24,7 +24,9 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
         this.listName = listName;
 
         if (bundle != null) {
-            this.nameChoosingFragment = (NameChoosingFragment) fragmentManager.getFragment(bundle, NameChoosingFragment.SCREEN_NAME);
+            this.nameChoosingFragment = (NameChoosingFragment) fragmentManager.getFragment(
+                    bundle,
+                    NameChoosingFragment.SCREEN_NAME);
             this.editNameListFragment = fragmentManager.getFragment(bundle, EditNameListFragment.SCREEN_NAME);
         }
     }

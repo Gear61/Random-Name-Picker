@@ -59,7 +59,9 @@ public class MainActivity extends StandardActivity {
         super.onCreate(savedInstanceState);
 
         // Kill activity if it's above an existing stack due to launcher bug
-        if (!isTaskRoot() && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER) && getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
+        if (!isTaskRoot()
+                && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER)
+                && getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
             finish();
             return;
         }
@@ -70,7 +72,9 @@ public class MainActivity extends StandardActivity {
         newListInput.setHint(R.string.add_list_hint);
         noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
-        importFile.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_upload).colorRes(R.color.white));
+        importFile.setImageDrawable(new IconDrawable(
+                this,
+                IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
@@ -100,19 +104,17 @@ public class MainActivity extends StandardActivity {
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
         MaterialShowcaseView addListExplanation = new MaterialShowcaseView.Builder(this)
                 .setTarget(addItem)
+                .setShapePadding(UIUtils.getDpInPixels(8))
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.add_name_list_explanation)
-                .setUseAutoRadius(false)
-                .setRadius(UIUtils.getDpInPixels(40))
                 .build();
         sequence.addSequenceItem(addListExplanation);
 
         MaterialShowcaseView importFileExplanation = new MaterialShowcaseView.Builder(this)
                 .setTarget(importFile)
+                .setShapePadding(UIUtils.getDpInPixels(8))
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.import_explanation)
-                .setUseAutoRadius(false)
-                .setRadius(UIUtils.getDpInPixels(40))
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {}
@@ -195,7 +197,9 @@ public class MainActivity extends StandardActivity {
             Intent intent = new Intent(this, FilePickerActivity.class);
             startActivityForResult(intent, 1);
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 new MaterialDialog.Builder(this)
                         .content(R.string.need_read_external)
                         .positiveText(android.R.string.yes)

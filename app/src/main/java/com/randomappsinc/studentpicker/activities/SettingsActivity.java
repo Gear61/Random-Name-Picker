@@ -45,7 +45,7 @@ public class SettingsActivity extends StandardActivity {
         switch (position) {
             case 0:
                 View firstCell = settingsOptions.getChildAt(0);
-                Switch shakeToggle = (Switch) firstCell.findViewById(R.id.shake_toggle);
+                Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
                 PreferencesManager.get().setShakeEnabled(!currentState);

@@ -1,8 +1,8 @@
 package com.randomappsinc.studentpicker.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,9 +36,6 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
-/**
- * Created by alexanderchiou on 10/18/15.
- */
 public class EditNameListFragment extends Fragment {
 
     public static final String SCREEN_NAME = "Edit Name List Page";
