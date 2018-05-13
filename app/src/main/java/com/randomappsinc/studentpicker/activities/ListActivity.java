@@ -1,9 +1,10 @@
 package com.randomappsinc.studentpicker.activities;
 
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,7 +36,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        mListTabsAdapter = new ListTabsAdapter(getFragmentManager(), savedInstanceState, listName);
+        mListTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), savedInstanceState, listName);
         mViewPager.setAdapter(mListTabsAdapter);
         mSlidingTabLayout.setCustomTabView(R.layout.custom_tab, R.id.tab_name);
         mSlidingTabLayout.setViewPager(mViewPager);
@@ -54,14 +55,15 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         NameChoosingFragment nameChoosingFragment = mListTabsAdapter.getNameChoosingFragment();
         if (nameChoosingFragment != null) {
             nameChoosingFragment.cacheListState();
-            getFragmentManager().putFragment(savedInstanceState, NameChoosingFragment.SCREEN_NAME, nameChoosingFragment);
+            fragmentManager.putFragment(savedInstanceState, NameChoosingFragment.SCREEN_NAME, nameChoosingFragment);
         }
         Fragment editNameListFragment = mListTabsAdapter.getEditNameListFragment();
         if (editNameListFragment != null) {
-            getFragmentManager().putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
+            fragmentManager.putFragment(savedInstanceState, EditNameListFragment.SCREEN_NAME, editNameListFragment);
         }
         if (PreferencesManager.get().isShakeEnabled()) {
             mShakeDetector.stop();
