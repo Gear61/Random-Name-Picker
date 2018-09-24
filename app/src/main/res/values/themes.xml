@@ -5,4 +5,12 @@
         <item name="colorPrimaryDark">@color/status_bar_teal</item>
         <item name="colorAccent">@color/app_teal</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/app_teal</item>
+        <item name="colorPrimaryDark">@color/status_bar_teal</item>
+        <item name="colorAccent">@color/app_teal</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

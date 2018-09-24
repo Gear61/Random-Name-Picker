@@ -38,8 +38,6 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment {
 
-    public static final String SCREEN_NAME = "Edit Name List Page";
-
     @BindView(R.id.parent) View parent;
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @BindView(R.id.no_content) TextView noContent;
@@ -49,7 +47,7 @@ public class EditNameListFragment extends Fragment {
 
     private EditNameListAdapter namesAdapter;
     private DataSource datasource;
-    private String listname;
+    private String listName;
     private Unbinder unbinder;
 
     @Override
@@ -69,10 +67,10 @@ public class EditNameListFragment extends Fragment {
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
-        listname = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        namesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listname, parent);
+        namesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listName, parent);
         namesList.setAdapter(namesAdapter);
         return rootView;
     }
@@ -118,7 +116,7 @@ public class EditNameListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.import_names:
-                final String[] importCandidates = datasource.getAllNameLists(listname);
+                final String[] importCandidates = datasource.getAllNameLists(listName);
                 if (importCandidates.length == 0) {
                     UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
                 } else {

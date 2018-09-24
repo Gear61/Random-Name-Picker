@@ -18,17 +18,10 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
     private String tabTitles[];
     private String listName;
 
-    public ListTabsAdapter(FragmentManager fragmentManager, Bundle bundle, String listName) {
+    public ListTabsAdapter(FragmentManager fragmentManager, String listName) {
         super(fragmentManager);
         this.tabTitles = MyApplication.getAppContext().getResources().getStringArray(R.array.list_options);
         this.listName = listName;
-
-        if (bundle != null) {
-            this.nameChoosingFragment = (NameChoosingFragment) fragmentManager.getFragment(
-                    bundle,
-                    NameChoosingFragment.SCREEN_NAME);
-            this.editNameListFragment = fragmentManager.getFragment(bundle, EditNameListFragment.SCREEN_NAME);
-        }
     }
 
     @Override
