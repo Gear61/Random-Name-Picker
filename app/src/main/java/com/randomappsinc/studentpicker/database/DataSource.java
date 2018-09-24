@@ -67,7 +67,9 @@ public class DataSource {
             ContentValues newValues = new ContentValues();
             newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount + amount);
             String[] whereArgs = new String[]{listName, name};
-            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME
+                    + " = ? AND "
+                    + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
             database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
         }
         close();
@@ -80,13 +82,17 @@ public class DataSource {
         if (currentAmount <= amount) {
             String whereArgs[] = {listName, name};
             database.delete(MySQLiteHelper.TABLE_NAME,
-                    MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?",
+                    MySQLiteHelper.COLUMN_LIST_NAME
+                            + " = ? AND "
+                            + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?",
                     whereArgs);
         } else {
             ContentValues newValues = new ContentValues();
             newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount - amount);
             String[] whereArgs = new String[]{listName, name};
-            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+            String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME
+                    + " = ? AND "
+                    + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
             database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
         }
         close();
@@ -95,7 +101,9 @@ public class DataSource {
     private int getAmount(String listName, String name) {
         open();
         String[] columns = {MySQLiteHelper.COLUMN_NAME_COUNT};
-        String selection = MySQLiteHelper.COLUMN_LIST_NAME + " = ? AND " + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+        String selection = MySQLiteHelper.COLUMN_LIST_NAME
+                + " = ? AND "
+                + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
         String[] selectionArgs = {listName, name};
         Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME, columns, selection,
                 selectionArgs, null, null, null);
@@ -143,7 +151,16 @@ public class DataSource {
         List<String> names = new ArrayList<>();
         open();
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
-        Cursor cursor = database.query(true, MySQLiteHelper.TABLE_NAME, columns, null, null, null, null, null, null);
+        Cursor cursor = database.query(
+                true,
+                MySQLiteHelper.TABLE_NAME,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
         while (cursor.moveToNext()) {
             if (!cursor.getString(0).equals(currentList)) {
                 names.add(cursor.getString(0));

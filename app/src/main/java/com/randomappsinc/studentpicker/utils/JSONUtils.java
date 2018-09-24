@@ -15,14 +15,14 @@ import java.util.Map;
 
 public class JSONUtils {
 
-    public static final String NAMES_KEY = "names";
-    public static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
-    public static final String SETTINGS_KEY = "settings";
-    public static final String PRESENTATION_MODE_KEY = "presentationMode";
-    public static final String WITH_REPLACEMENT_KEY = "withReplacement";
-    public static final String AUTOMATIC_TTS_KEY = "automaticTts";
-    public static final String SHOW_AS_LIST_KEY = "showAsList";
-    public static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
+    private static final String NAMES_KEY = "names";
+    private static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
+    private static final String SETTINGS_KEY = "settings";
+    private static final String PRESENTATION_MODE_KEY = "presentationMode";
+    private static final String WITH_REPLACEMENT_KEY = "withReplacement";
+    private static final String AUTOMATIC_TTS_KEY = "automaticTts";
+    private static final String SHOW_AS_LIST_KEY = "showAsList";
+    private static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
     public static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
@@ -95,20 +95,6 @@ public class JSONUtils {
         }
         catch (JSONException ignored) {}
         return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
-    }
-
-    // Given a serialized JSON "cache" string of a name list, extracts the chosen names history
-    public static List<String> extractAlreadyChosenNames(String cachedList) {
-        List<String> alreadyChosenNames = new ArrayList<>();
-        try {
-            JSONObject nameListJson = new JSONObject(cachedList);
-            JSONArray alreadyChosenNamesArray = nameListJson.getJSONArray(ALREADY_CHOSEN_NAMES_KEY);
-            for (int i = 0; i < alreadyChosenNamesArray.length(); i++) {
-                alreadyChosenNames.add(alreadyChosenNamesArray.getString(i));
-            }
-        }
-        catch (JSONException ignored) {}
-        return alreadyChosenNames;
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the settings

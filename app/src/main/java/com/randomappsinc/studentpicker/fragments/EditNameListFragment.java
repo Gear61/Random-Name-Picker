@@ -47,10 +47,10 @@ public class EditNameListFragment extends Fragment {
     @BindView(R.id.content_list) ListView namesList;
     @BindView(R.id.plus_icon) ImageView plus;
 
-    private EditNameListAdapter mNamesAdapter;
-    private DataSource mDataSource;
-    private String mListName;
-    private Unbinder mUnbinder;
+    private EditNameListAdapter namesAdapter;
+    private DataSource datasource;
+    private String listname;
+    private Unbinder unbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,19 +61,19 @@ public class EditNameListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
-        mUnbinder = ButterKnife.bind(this, rootView);
-        mDataSource = new DataSource();
+        unbinder = ButterKnife.bind(this, rootView);
+        datasource = new DataSource();
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(getActivity(), IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
-        mListName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        listname = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         noContent.setText(R.string.no_names);
 
-        mNamesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, mListName, parent);
-        namesList.setAdapter(mNamesAdapter);
+        namesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listname, parent);
+        namesList.setAdapter(namesAdapter);
         return rootView;
     }
 
@@ -84,7 +84,7 @@ public class EditNameListFragment extends Fragment {
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
-            mNamesAdapter.addNames(newName, 1);
+            namesAdapter.addNames(newName, 1);
         }
     }
 
@@ -99,12 +99,12 @@ public class EditNameListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        unbinder.unbind();
     }
 
     @OnItemClick(R.id.content_list)
     public void showNameOptions(int position) {
-        mNamesAdapter.showNameOptions(position);
+        namesAdapter.showNameOptions(position);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class EditNameListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.import_names:
-                final String[] importCandidates = mDataSource.getAllNameLists(mListName);
+                final String[] importCandidates = datasource.getAllNameLists(listname);
                 if (importCandidates.length == 0) {
                     UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
                 } else {
@@ -143,7 +143,7 @@ public class EditNameListFragment extends Fragment {
                                     for (Integer index : indices) {
                                         listNames.add(importCandidates[index]);
                                     }
-                                    mNamesAdapter.importNamesFromList(listNames);
+                                    namesAdapter.importNamesFromList(listNames);
                                     UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
                                 }
                             })
