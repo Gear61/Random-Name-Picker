@@ -67,7 +67,9 @@ public class ListInfo {
                 nameAmounts.put(name, currentAmount - amount);
             }
         }
-        numInstances -= amount;
+        // We need to do a Math.max here to prevent numInstances from going negative
+        // To figure out why this is necessary, look at: https://github.com/Gear61/Random-Name-Picker/issues/34
+        numInstances = Math.max(numInstances -= amount, 0);
     }
 
     public void renamePeople(String oldName, String newName, int amount) {
