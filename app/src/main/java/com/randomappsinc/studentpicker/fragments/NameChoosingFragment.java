@@ -43,8 +43,6 @@ import butterknife.Unbinder;
 public class NameChoosingFragment extends Fragment
         implements TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener {
 
-    public static final String SCREEN_NAME = "Name Choosing Page";
-
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) ListView namesList;
