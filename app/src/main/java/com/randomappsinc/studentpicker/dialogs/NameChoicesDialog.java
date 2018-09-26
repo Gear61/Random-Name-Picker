@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.dialogs;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -22,7 +21,7 @@ public class NameChoicesDialog {
     private String[] optionTemplates;
     private MaterialDialog dialog;
 
-    public NameChoicesDialog(@NonNull final Listener listener, Context context) {
+    public NameChoicesDialog(Context context, final Listener listener) {
         optionTemplates = new String[]{
                 context.getString(R.string.rename_person),
                 context.getString(R.string.delete_name),
