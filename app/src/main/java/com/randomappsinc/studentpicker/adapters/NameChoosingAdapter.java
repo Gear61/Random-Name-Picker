@@ -22,15 +22,13 @@ import butterknife.OnClick;
 
 public class NameChoosingAdapter extends BaseAdapter {
 
-    private Context context;
     private String listName;
     private ListInfo currentState;
     private TextView noContent;
     private TextView numNames;
     private DataSource dataSource;
 
-    public NameChoosingAdapter(Context context, TextView noContent, TextView numNames, String listName) {
-        this.context = context;
+    public NameChoosingAdapter(TextView noContent, TextView numNames, String listName) {
         this.listName = listName;
         this.dataSource = new DataSource();
 
@@ -89,7 +87,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setViews() {
+    void setViews() {
         if (dataSource.getListInfo(listName).getNumInstances() == 0) {
             noContent.setText(R.string.no_names);
         } else {
@@ -100,11 +98,11 @@ public class NameChoosingAdapter extends BaseAdapter {
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
-            String names = currentState.getNumInstances() == 1
-                    ? context.getString(R.string.single_name)
-                    : context.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(currentState.getNumInstances()) + names;
-            numNames.setText(numNamesText);
+            Context context = numNames.getContext();
+            String namesText = currentState.getNumInstances() == 1
+                    ? context.getString(R.string.one_name)
+                    : context.getString(R.string.x_names, currentState.getNumInstances());
+            numNames.setText(namesText);
             numNames.setVisibility(View.VISIBLE);
         }
     }
@@ -160,11 +158,11 @@ public class NameChoosingAdapter extends BaseAdapter {
 
         private int position;
 
-        public NameViewHolder(View view) {
+        NameViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
-        public void loadName(int position) {
+        void loadName(int position) {
             this.position = position;
             this.name.setText(currentState.getNameText(position));
         }
@@ -179,7 +177,8 @@ public class NameChoosingAdapter extends BaseAdapter {
     public View getView(final int position, View view, ViewGroup parent) {
         NameViewHolder holder;
         if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) parent.getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = vi.inflate(R.layout.choose_name_cell, parent, false);
             holder = new NameViewHolder(view);
             view.setTag(holder);
