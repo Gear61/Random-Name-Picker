@@ -25,7 +25,7 @@ import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.utils.NameUtils;
+import com.randomappsinc.studentpicker.dialogs.NameChoicesDialog;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
-public class EditNameListFragment extends Fragment {
+public class EditNameListFragment extends Fragment implements NameChoicesDialog.Listener {
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
@@ -49,6 +49,7 @@ public class EditNameListFragment extends Fragment {
     private EditNameListAdapter namesAdapter;
     private DataSource datasource;
     private String listName;
+    private NameChoicesDialog nameChoicesDialog;
     private Unbinder unbinder;
 
     @Override
@@ -73,6 +74,8 @@ public class EditNameListFragment extends Fragment {
 
         namesAdapter = new EditNameListAdapter((ListActivity) getActivity(), noContent, numNames, listName, parent);
         namesList.setAdapter(namesAdapter);
+
+        nameChoicesDialog = new NameChoicesDialog(this, getActivity());
         return rootView;
     }
 
@@ -103,24 +106,22 @@ public class EditNameListFragment extends Fragment {
 
     @OnItemClick(R.id.content_list)
     public void showNameOptions(final int position) {
-        new MaterialDialog.Builder(getActivity())
-                .items(NameUtils.getNameOptions(namesAdapter.getItem(position), getContext()))
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                namesAdapter.startRenameProcess(position);
-                                break;
-                            case 1:
-                                namesAdapter.showDeleteDialog(position);
-                                break;
-                            case 2:
-                                namesAdapter.showCloneDialog(position);
-                        }
-                    }
-                })
-                .show();
+        nameChoicesDialog.showChoices(namesAdapter.getItem(position));
+    }
+
+    @Override
+    public void onRenameChosen(String name) {
+
+    }
+
+    @Override
+    public void onDeleteChosen(String name) {
+
+    }
+
+    @Override
+    public void onCloneChosen(String name) {
+
     }
 
     @Override

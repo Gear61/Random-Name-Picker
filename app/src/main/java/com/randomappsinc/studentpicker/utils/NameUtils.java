@@ -102,14 +102,6 @@ public class NameUtils {
         }
     }
 
-    public static String[] getNameOptions(String name, Context context) {
-        String[] options = new String[3];
-        options[0] = context.getString(R.string.rename_person, name);
-        options[1] = context.getString(R.string.delete_name, name);
-        options[2] = context.getString(R.string.duplicate, name);
-        return options;
-    }
-
     // Given 0 (1st element in array), returns "1. ", scaling linearly with the input
     public static String getPrefix(int index) {
         return String.valueOf(index + 1) + ". ";

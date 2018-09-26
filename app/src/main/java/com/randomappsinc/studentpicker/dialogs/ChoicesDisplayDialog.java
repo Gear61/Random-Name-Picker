@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.views;
+package com.randomappsinc.studentpicker.dialogs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
