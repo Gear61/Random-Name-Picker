@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 
 public class SettingsActivity extends StandardActivity implements SettingsAdapter.ItemSelectionListener {
 
-    public static final String SUPPORT_EMAIL = "chessnone@gmail.com";
+    public static final String SUPPORT_EMAIL = "RandomAppsInc61@gmail.com";
     public static final String OTHER_APPS_URL = "https://play.google.com/store/apps/dev?id=9093438553713389916";
     public static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 

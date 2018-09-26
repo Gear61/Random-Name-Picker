@@ -24,12 +24,12 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.activities.PresentationActivity;
 import com.randomappsinc.studentpicker.adapters.NameChoosingAdapter;
+import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.ChoicesDisplayDialog;
 
 import java.util.HashMap;
 import java.util.List;
