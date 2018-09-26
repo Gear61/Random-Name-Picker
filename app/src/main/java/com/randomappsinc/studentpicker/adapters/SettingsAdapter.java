@@ -27,12 +27,14 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     private Context context;
     private String[] options;
     private String[] icons;
+    private PreferencesManager preferencesManager;
 
     public SettingsAdapter(Context context, @NonNull ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
         this.context = context;
         this.options = context.getResources().getStringArray(R.array.settings_options);
         this.icons = context.getResources().getStringArray(R.array.settings_icons);
+        this.preferencesManager = new PreferencesManager(context);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
             icon.setText(icons[position]);
 
             if (position == 0) {
-                UIUtils.setCheckedImmediately(toggle, PreferencesManager.get().isShakeEnabled());
+                UIUtils.setCheckedImmediately(toggle, preferencesManager.isShakeEnabled());
                 toggle.setVisibility(View.VISIBLE);
             } else {
                 toggle.setVisibility(View.GONE);
@@ -79,7 +81,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
 
         @OnClick(R.id.shake_toggle)
         public void onToggle() {
-            PreferencesManager.get().setShakeEnabled(toggle.isChecked());
+            preferencesManager.setShakeEnabled(toggle.isChecked());
         }
 
         @OnClick(R.id.parent)

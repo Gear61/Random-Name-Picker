@@ -19,11 +19,13 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
+import com.joanzapata.iconify.fonts.IoniconsModule;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.adapters.NameListsAdapter;
-import com.randomappsinc.studentpicker.utils.FileUtils;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -52,6 +54,7 @@ public class MainActivity extends StandardActivity {
 
     @BindString(R.string.list_duplicate) String listDuplicate;
 
+    private PreferencesManager preferencesManager;
     private NameListsAdapter nameListsAdapter;
 
     @Override
@@ -66,9 +69,13 @@ public class MainActivity extends StandardActivity {
             return;
         }
 
+        Iconify.with(new IoniconsModule())
+                .with(new FontAwesomeModule());
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        preferencesManager = new PreferencesManager(this);
         newListInput.setHint(R.string.add_list_hint);
         noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
@@ -79,8 +86,8 @@ public class MainActivity extends StandardActivity {
         nameListsAdapter = new NameListsAdapter(this, noContent);
         lists.setAdapter(nameListsAdapter);
 
-        if (PreferencesManager.get().getFirstTimeUser()) {
-            PreferencesManager.get().setFirstTimeUser(false);
+        if (preferencesManager.getFirstTimeUser()) {
+            preferencesManager.setFirstTimeUser(false);
             new MaterialDialog.Builder(this)
                     .title(R.string.view_tutorial)
                     .content(R.string.tutorial_prompt)
@@ -95,7 +102,7 @@ public class MainActivity extends StandardActivity {
                     .show();
         }
 
-        if (PreferencesManager.get().rememberAppOpen() == 5) {
+        if (preferencesManager.rememberAppOpen() == 5) {
             showPleaseRateDialog();
         }
     }
@@ -104,7 +111,7 @@ public class MainActivity extends StandardActivity {
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
         MaterialShowcaseView addListExplanation = new MaterialShowcaseView.Builder(this)
                 .setTarget(addItem)
-                .setShapePadding(UIUtils.getDpInPixels(8))
+                .setShapePadding(UIUtils.getDpInPixels(8, this))
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.add_name_list_explanation)
                 .build();
@@ -112,7 +119,7 @@ public class MainActivity extends StandardActivity {
 
         MaterialShowcaseView importFileExplanation = new MaterialShowcaseView.Builder(this)
                 .setTarget(importFile)
-                .setShapePadding(UIUtils.getDpInPixels(8))
+                .setShapePadding(UIUtils.getDpInPixels(8, this))
                 .setDismissText(R.string.got_it)
                 .setContentText(R.string.import_explanation)
                 .setListener(new IShowcaseListener() {
@@ -179,7 +186,7 @@ public class MainActivity extends StandardActivity {
         String newList = newListInput.getText().toString().trim();
         if (newList.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        } else if (PreferencesManager.get().getNameLists().contains(newList)) {
+        } else if (preferencesManager.getNameLists().contains(newList)) {
             String dupeMessage = String.format(listDuplicate, newList);
             UIUtils.showSnackbar(parent, dupeMessage);
         } else {
@@ -193,7 +200,7 @@ public class MainActivity extends StandardActivity {
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
             Intent intent = new Intent(this, FilePickerActivity.class);
             startActivityForResult(intent, 1);
         } else {
@@ -250,12 +257,6 @@ public class MainActivity extends StandardActivity {
     public void startActivityForResult(Intent intent, int requestCode) {
         focalPoint.requestFocus();
         super.startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        FileUtils.backupData();
     }
 
     @Override

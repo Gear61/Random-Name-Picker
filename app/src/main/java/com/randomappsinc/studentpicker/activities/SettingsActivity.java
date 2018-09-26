@@ -27,6 +27,8 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
 
+    private PreferencesManager preferencesManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        preferencesManager = new PreferencesManager(this);
         settingsOptions.addItemDecoration(new SimpleDividerItemDecoration(this));
         settingsOptions.setAdapter(new SettingsAdapter(this, this));
     }
@@ -47,30 +50,27 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
                 Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
-                PreferencesManager.get().setShakeEnabled(!currentState);
+                preferencesManager.setShakeEnabled(!currentState);
                 return;
             case 1:
-                intent = new Intent(this, BackupActivity.class);
-                break;
-            case 2:
                 String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
                 sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 3:
+            case 2:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 4:
+            case 3:
                 Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    UIUtils.showLongToast(R.string.play_store_error);
+                    UIUtils.showLongToast(R.string.play_store_error, this);
                     return;
                 }
                 break;
-            case 5:
+            case 4:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }

@@ -5,11 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.fragments.EditNameListFragment;
 import com.randomappsinc.studentpicker.fragments.NameChoosingFragment;
-import com.randomappsinc.studentpicker.utils.MyApplication;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
@@ -18,9 +16,9 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
     private String tabTitles[];
     private String listName;
 
-    public ListTabsAdapter(FragmentManager fragmentManager, String listName) {
+    public ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
         super(fragmentManager);
-        this.tabTitles = MyApplication.getAppContext().getResources().getStringArray(R.array.list_options);
+        this.tabTitles = tabTitles;
         this.listName = listName;
     }
 
@@ -53,10 +51,6 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
     public NameChoosingFragment getNameChoosingFragment() {
         return nameChoosingFragment;
-    }
-
-    public Fragment getEditNameListFragment() {
-        return editNameListFragment;
     }
 
     @Override

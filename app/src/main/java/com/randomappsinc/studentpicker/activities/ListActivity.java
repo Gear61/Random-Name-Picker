@@ -12,6 +12,7 @@ import com.randomappsinc.studentpicker.adapters.ListTabsAdapter;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.squareup.seismic.ShakeDetector;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -20,9 +21,11 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
     @BindView(R.id.name_list_tabs) TabLayout nameListTabs;
+    @BindArray(R.array.list_options) String[] listTabTitles;
 
-    private ListTabsAdapter mListTabsAdapter;
-    private ShakeDetector mShakeDetector;
+    private ListTabsAdapter listTabsAdapter;
+    private ShakeDetector shakeDetector;
+    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +39,14 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        mListTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), listName);
-        nameListPager.setAdapter(mListTabsAdapter);
+        preferencesManager = new PreferencesManager(this);
+        listTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), listName, listTabTitles);
+        nameListPager.setAdapter(listTabsAdapter);
         nameListTabs.setupWithViewPager(nameListPager);
 
-        mShakeDetector = new ShakeDetector(this);
+        shakeDetector = new ShakeDetector(this);
 
-        if (PreferencesManager.get().shouldShowShake()) {
+        if (preferencesManager.shouldShowShake()) {
             new MaterialDialog.Builder(this)
                     .title(R.string.shake_it)
                     .content(R.string.shake_now_supported)
@@ -54,35 +58,35 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (PreferencesManager.get().isShakeEnabled()) {
-            mShakeDetector.stop();
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
         }
         super.onSaveInstanceState(savedInstanceState);
     }
 
     public ListTabsAdapter getListTabsAdapter() {
-        return mListTabsAdapter;
+        return listTabsAdapter;
     }
 
     @Override
     public void hearShake() {
         if (nameListPager.getCurrentItem() == 0) {
-            mListTabsAdapter.getNameChoosingFragment().choose();
+            listTabsAdapter.getNameChoosingFragment().choose();
         }
     }
 
     @Override
     public void onResume() {
-        if (PreferencesManager.get().isShakeEnabled()) {
-            mShakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
         }
         super.onResume();
     }
 
     @Override
     public void onDestroy() {
-        if (PreferencesManager.get().isShakeEnabled()) {
-            mShakeDetector.stop();
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
         }
         super.onDestroy();
     }

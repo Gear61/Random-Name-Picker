@@ -24,6 +24,8 @@ public class ImportFileActivity extends StandardActivity {
     @BindView(R.id.names) EditText names;
     @BindString(R.string.list_duplicate) String listDuplicate;
 
+    private PreferencesManager preferencesManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,7 @@ public class ImportFileActivity extends StandardActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        preferencesManager = new PreferencesManager(this);
         String filePath = getIntent().getStringExtra(FILE_PATH_KEY);
         listName.setText(NameUtils.getFileName(filePath));
         try {
@@ -45,12 +48,12 @@ public class ImportFileActivity extends StandardActivity {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        } else if (PreferencesManager.get().getNameLists().contains(newListName)) {
+        } else if (preferencesManager.getNameLists().contains(newListName)) {
             String dupeMessage = String.format(listDuplicate, newListName);
             UIUtils.showSnackbar(parent, dupeMessage);
         } else {
-            PreferencesManager.get().addNameList(newListName);
-            DataSource dataSource = new DataSource();
+            preferencesManager.addNameList(newListName);
+            DataSource dataSource = new DataSource(this);
             String[] allNames = names.getText().toString().split("\\r?\\n");
             for (String name : allNames) {
                 String cleanName = name.trim();

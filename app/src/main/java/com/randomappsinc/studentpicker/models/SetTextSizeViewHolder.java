@@ -16,14 +16,17 @@ public class SetTextSizeViewHolder {
     @BindView(R.id.text_size_slider) public SeekBar textSizeSlider;
     @BindView(R.id.sample_text) public TextView sampleText;
 
+    private PreferencesManager preferencesManager;
+
     public SetTextSizeViewHolder(View view) {
+        preferencesManager = new PreferencesManager(view.getContext());
         ButterKnife.bind(this, view);
         textSizeSlider.setOnSeekBarChangeListener(sizeSetListener);
-        textSizeSlider.setProgress(PreferencesManager.get().getPresentationTextSize() - 1);
+        textSizeSlider.setProgress(preferencesManager.getPresentationTextSize() - 1);
         textSizeSlider.jumpDrawablesToCurrentState();
     }
 
-    SeekBar.OnSeekBarChangeListener sizeSetListener = new SeekBar.OnSeekBarChangeListener() {
+    private final SeekBar.OnSeekBarChangeListener sizeSetListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             sampleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, (progress + 1) * 8);
@@ -37,7 +40,7 @@ public class SetTextSizeViewHolder {
     };
 
     public void revertSetting() {
-        textSizeSlider.setProgress(PreferencesManager.get().getPresentationTextSize() - 1);
+        textSizeSlider.setProgress(preferencesManager.getPresentationTextSize() - 1);
         textSizeSlider.jumpDrawablesToCurrentState();
     }
 }

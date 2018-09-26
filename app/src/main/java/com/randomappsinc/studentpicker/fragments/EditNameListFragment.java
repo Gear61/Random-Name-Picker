@@ -25,6 +25,7 @@ import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class EditNameListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        datasource = new DataSource();
+        datasource = new DataSource(getContext());
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -101,8 +102,25 @@ public class EditNameListFragment extends Fragment {
     }
 
     @OnItemClick(R.id.content_list)
-    public void showNameOptions(int position) {
-        namesAdapter.showNameOptions(position);
+    public void showNameOptions(final int position) {
+        new MaterialDialog.Builder(getActivity())
+                .items(NameUtils.getNameOptions(namesAdapter.getItem(position), getContext()))
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case 0:
+                                namesAdapter.startRenameProcess(position);
+                                break;
+                            case 1:
+                                namesAdapter.showDeleteDialog(position);
+                                break;
+                            case 2:
+                                namesAdapter.showCloneDialog(position);
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override

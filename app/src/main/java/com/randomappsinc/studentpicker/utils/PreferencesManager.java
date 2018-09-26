@@ -3,7 +3,6 @@ package com.randomappsinc.studentpicker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
@@ -23,24 +22,7 @@ public class PreferencesManager {
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String SHAKE_ENABLED = "shakeEnabled";
 
-    private static PreferencesManager instance;
-
-    public static PreferencesManager get() {
-        if (instance == null) {
-            instance = getSync();
-        }
-        return instance;
-    }
-
-    private static synchronized PreferencesManager getSync() {
-        if (instance == null) {
-            instance = new PreferencesManager();
-        }
-        return instance;
-    }
-
-    private PreferencesManager() {
-        Context context = MyApplication.getAppContext();
+    public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
@@ -123,9 +105,8 @@ public class PreferencesManager {
         prefs.edit().putInt(PRESENTATION_TEXT_SIZE_KEY, newSize).apply();
     }
 
-    public int getPresentationTextColor() {
-        return prefs.getInt(PRESENTATION_TEXT_COLOR_KEY,
-                MyApplication.getAppContext().getResources().getColor(R.color.dark_gray));
+    public int getPresentationTextColor(int defaultColor) {
+        return prefs.getInt(PRESENTATION_TEXT_COLOR_KEY, defaultColor);
     }
 
     public void setPresentationTextColor(int newColor) {

@@ -28,18 +28,20 @@ public class NameListsAdapter extends BaseAdapter {
     private List<String> content;
     private TextView noContent;
     private DataSource dataSource;
+    private PreferencesManager preferencesManager;
 
     public NameListsAdapter(Context context, TextView noContent) {
         this.context = context;
         this.content = new ArrayList<>();
         this.noContent = noContent;
-        this.dataSource = new DataSource();
+        this.dataSource = new DataSource(context);
+        this.preferencesManager = new PreferencesManager(context);
         refreshList();
     }
 
     public void refreshList() {
         content.clear();
-        content.addAll(PreferencesManager.get().getNameLists());
+        content.addAll(preferencesManager.getNameLists());
         Collections.sort(content);
         notifyDataSetChanged();
         setNoContent();
@@ -55,7 +57,7 @@ public class NameListsAdapter extends BaseAdapter {
         Collections.sort(content);
         notifyDataSetChanged();
         setNoContent();
-        PreferencesManager.get().addNameList(itemName);
+        preferencesManager.addNameList(itemName);
     }
 
     @Override
@@ -80,7 +82,7 @@ public class NameListsAdapter extends BaseAdapter {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                PreferencesManager.get().doesListExist(input.toString().trim()));
+                                preferencesManager.doesListExist(input.toString().trim()));
                         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
                     }
                 })
@@ -92,7 +94,7 @@ public class NameListsAdapter extends BaseAdapter {
                         if (which == DialogAction.POSITIVE) {
                             String newListName = dialog.getInputEditText().getText().toString().trim();
                             dataSource.renameList(getItem(position), newListName);
-                            PreferencesManager.get().renameList(getItem(position), newListName);
+                            preferencesManager.renameList(getItem(position), newListName);
                             content.set(position, newListName);
                             notifyDataSetChanged();
                         }
@@ -111,7 +113,7 @@ public class NameListsAdapter extends BaseAdapter {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dataSource.deleteList(getItem(position));
-                        PreferencesManager.get().removeNameList(getItem(position));
+                        preferencesManager.removeNameList(getItem(position));
                         content.remove(position);
                         setNoContent();
                         notifyDataSetChanged();
@@ -120,16 +122,16 @@ public class NameListsAdapter extends BaseAdapter {
                 .show();
     }
 
-    public class NameListViewHolder {
+    class NameListViewHolder {
         @BindView(R.id.list_name) TextView listName;
 
         private int position;
 
-        public NameListViewHolder(View view) {
+        NameListViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
 
-        public void loadList(int position) {
+        void loadList(int position) {
             this.position = position;
             this.listName.setText(getItem(position));
         }

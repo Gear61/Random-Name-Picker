@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.database;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,8 +20,8 @@ public class DataSource {
     private MySQLiteHelper dbHelper;
 
     // Constructor
-    public DataSource() {
-        dbHelper = new MySQLiteHelper();
+    public DataSource(Context context) {
+        dbHelper = new MySQLiteHelper(context);
     }
 
     // Open connection to database

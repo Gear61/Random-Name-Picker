@@ -36,7 +36,7 @@ public class UIUtils {
     }
 
     public static void showSnackbar(View parent, String message) {
-        Context context = MyApplication.getAppContext();
+        Context context = parent.getContext();
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
@@ -45,8 +45,8 @@ public class UIUtils {
         snackbar.show();
     }
 
-    public static int getDpInPixels(int numDp) {
-        Resources resources = MyApplication.getAppContext().getResources();
+    public static int getDpInPixels(int numDp, Context context) {
+        Resources resources = context.getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, numDp, resources.getDisplayMetrics());
     }
 
@@ -57,16 +57,16 @@ public class UIUtils {
                         .actionBarSize());
     }
 
-    public static void showShortToast(@StringRes int stringId) {
-        showToast(stringId, Toast.LENGTH_SHORT);
+    public static void showShortToast(@StringRes int stringId, Context context) {
+        showToast(stringId, Toast.LENGTH_SHORT, context);
     }
 
-    public static void showLongToast(@StringRes int stringId) {
-        showToast(stringId, Toast.LENGTH_LONG);
+    public static void showLongToast(@StringRes int stringId, Context context) {
+        showToast(stringId, Toast.LENGTH_LONG, context);
     }
 
-    private static void showToast(@StringRes int stringId, int duration) {
-        Toast.makeText(MyApplication.getAppContext(), stringId, duration).show();
+    private static void showToast(@StringRes int stringId, int duration, Context context) {
+        Toast.makeText(context, stringId, duration).show();
     }
 
     public static void setCheckedImmediately(CompoundButton checkableView, boolean checked) {

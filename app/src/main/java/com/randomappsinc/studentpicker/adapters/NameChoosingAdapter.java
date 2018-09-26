@@ -27,12 +27,14 @@ public class NameChoosingAdapter extends BaseAdapter {
     private TextView noContent;
     private TextView numNames;
     private DataSource dataSource;
+    private PreferencesManager preferencesManager;
 
     public NameChoosingAdapter(TextView noContent, TextView numNames, String listName) {
         this.listName = listName;
-        this.dataSource = new DataSource();
+        this.dataSource = new DataSource(noContent.getContext());
 
-        ListInfo info = PreferencesManager.get().getNameListState(listName);
+        this.preferencesManager = new PreferencesManager(noContent.getContext());
+        ListInfo info = preferencesManager.getNameListState(listName);
         this.currentState = info == null ? dataSource.getListInfo(listName) : info;
 
         this.noContent = noContent;
@@ -41,7 +43,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void resync() {
-        ListInfo info = PreferencesManager.get().getNameListState(listName);
+        ListInfo info = preferencesManager.getNameListState(listName);
         currentState = info == null ? dataSource.getListInfo(listName) : info;
         notifyDataSetChanged();
         setViews();
@@ -130,7 +132,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void cacheState(ChoosingSettings settings) {
-        PreferencesManager.get().cacheNameChoosingList(listName, currentState, settings);
+        preferencesManager.cacheNameChoosingList(listName, currentState, settings);
     }
 
     public int getNumInstances() {
