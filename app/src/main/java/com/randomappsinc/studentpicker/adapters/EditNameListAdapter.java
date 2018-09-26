@@ -34,8 +34,7 @@ public class EditNameListAdapter extends BaseAdapter {
     private DataSource dataSource;
     private View parent;
 
-    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames,
-                               String listName, View parent) {
+    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames, String listName, View parent) {
         this.listActivity = listActivity;
         this.dataSource = new DataSource(listActivity);
         this.content = dataSource.getListInfo(listName);
@@ -44,6 +43,10 @@ public class EditNameListAdapter extends BaseAdapter {
         this.listName = listName;
         this.parent = parent;
         setViews();
+    }
+
+    public ListInfo getListInfo() {
+        return content;
     }
 
     private void setViews() {
@@ -138,81 +141,6 @@ public class EditNameListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return getItem(position).hashCode();
-    }
-
-    public void startRenameProcess(int position) {
-        int currentAmount = content.getInstancesOfName(getItem(position));
-        if (currentAmount == 1) {
-            showRenameDialog(position, currentAmount, false);
-        } else {
-            chooseRenameAmount(position, "");
-        }
-    }
-
-    private void chooseRenameAmount(final int position, String prefill) {
-        final int currentAmount = content.getInstancesOfName(getItem(position));
-        MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
-                .content(R.string.multiple_renames_title)
-                .inputType(InputType.TYPE_CLASS_NUMBER)
-                .input(listActivity.getString(R.string.num_copies), prefill, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        if (input.length() > 0) {
-                            int amount = Integer.parseInt(input.toString());
-                            boolean validNumber = amount > 0 && amount <= currentAmount;
-                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(validNumber);
-                            return;
-                        }
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                    }
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.no)
-                .positiveText(R.string.next)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
-                        showRenameDialog(position, numCopies, true);
-                    }
-                })
-                .build();
-        cloneDialog.getInputEditText().setFilters(new InputFilter[]
-                {new InputFilter.LengthFilter(String.valueOf(currentAmount).length())});
-        cloneDialog.show();
-    }
-
-    private void showRenameDialog(final int position, final int amount, boolean multiRename) {
-        final String currentName = content.getName(position);
-        MaterialDialog renameDialog = new MaterialDialog.Builder(listActivity)
-                .title(R.string.change_name)
-                .input(listActivity.getString(R.string.new_name), currentName, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                input.toString().equals(currentName));
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                    }
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.no)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (which == DialogAction.POSITIVE) {
-                            String newName = dialog.getInputEditText().getText().toString().trim();
-                            dataSource.renamePeople(currentName, newName, listName, amount);
-                            changeName(position, newName, amount);
-                        } else if (which == DialogAction.NEUTRAL) {
-                            chooseRenameAmount(position, String.valueOf(amount));
-                        }
-                    }
-                })
-                .build();
-        if (multiRename) {
-            renameDialog.setActionButton(DialogAction.NEUTRAL, R.string.back);
-        }
-        renameDialog.show();
     }
 
     public void showDeleteDialog(final int position) {
