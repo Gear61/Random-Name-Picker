@@ -25,6 +25,7 @@ import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.dialogs.DeleteNameDialog;
 import com.randomappsinc.studentpicker.dialogs.NameChoicesDialog;
 import com.randomappsinc.studentpicker.dialogs.RenameDialog;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -39,7 +40,8 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
-public class EditNameListFragment extends Fragment implements NameChoicesDialog.Listener, RenameDialog.Listener {
+public class EditNameListFragment extends Fragment
+        implements NameChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener {
 
     @BindView(R.id.parent) View parent;
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
@@ -53,6 +55,7 @@ public class EditNameListFragment extends Fragment implements NameChoicesDialog.
     private String listName;
     private NameChoicesDialog nameChoicesDialog;
     private RenameDialog renameDialog;
+    private DeleteNameDialog deleteNameDialog;
     private Unbinder unbinder;
 
     @Override
@@ -87,6 +90,7 @@ public class EditNameListFragment extends Fragment implements NameChoicesDialog.
         super.onActivityCreated(savedInstanceState);
         nameChoicesDialog = new NameChoicesDialog(getActivity(), this);
         renameDialog = new RenameDialog(getActivity(), this);
+        deleteNameDialog = new DeleteNameDialog(getActivity(), this);
     }
 
     @OnClick(R.id.add_item)
@@ -122,7 +126,9 @@ public class EditNameListFragment extends Fragment implements NameChoicesDialog.
 
     @Override
     public void onDeleteChosen(String name) {
-
+        ListInfo listInfo = namesAdapter.getListInfo();
+        int currentAmount = listInfo.getInstancesOfName(name);
+        deleteNameDialog.startDeletionProcess(name, currentAmount);
     }
 
     @Override
@@ -133,6 +139,11 @@ public class EditNameListFragment extends Fragment implements NameChoicesDialog.
     @Override
     public void onRenameSubmitted(String previousName, String newName, int amountToRename) {
         datasource.renamePeople(previousName, newName, listName, amountToRename);
+    }
+
+    @Override
+    public void onDeletionSubmitted(String name, int amountToDelete) {
+
     }
 
     @Override

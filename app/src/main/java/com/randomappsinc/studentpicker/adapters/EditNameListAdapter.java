@@ -34,7 +34,12 @@ public class EditNameListAdapter extends BaseAdapter {
     private DataSource dataSource;
     private View parent;
 
-    public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames, String listName, View parent) {
+    public EditNameListAdapter(
+            ListActivity listActivity,
+            TextView noContent,
+            TextView numNames,
+            String listName,
+            View parent) {
         this.listActivity = listActivity;
         this.dataSource = new DataSource(listActivity);
         this.content = dataSource.getListInfo(listName);
