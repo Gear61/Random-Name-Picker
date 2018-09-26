@@ -63,13 +63,15 @@ public class ListInfo {
             if (currentAmount - amount <= 0) {
                 nameAmounts.remove(name);
                 names.remove(name);
+
+                // If we're removing more instances than there currently are, make sure
+                // we remove the current amount instead so we don't go negative
+                numInstances -= currentAmount;
             } else {
                 nameAmounts.put(name, currentAmount - amount);
+                numInstances -= amount;
             }
         }
-        // We need to do a Math.max here to prevent numInstances from going negative
-        // To figure out why this is necessary, look at: https://github.com/Gear61/Random-Name-Picker/issues/34
-        numInstances = Math.max(numInstances -= amount, 0);
     }
 
     public void renamePeople(String oldName, String newName, int amount) {

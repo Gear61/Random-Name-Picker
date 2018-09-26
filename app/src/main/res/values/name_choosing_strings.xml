@@ -9,6 +9,9 @@
     <string name="single_name">&#160;name</string>
     <string name="plural_names">&#160;names</string>
 
+    <string name="one_name">1 name</string>
+    <string name="x_names">%d names</string>
+
     <string name="chosen_names">Chosen names</string>
 
     <string name="name_choosing_settings">Name Choosing Settings</string>

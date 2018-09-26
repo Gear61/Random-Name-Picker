@@ -96,7 +96,7 @@ public class NameChoosingFragment extends Fragment
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(getActivity(), noContent, numNames, listName);
+        nameChoosingAdapter = new NameChoosingAdapter(noContent, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
 
         settings = PreferencesManager.get().getChoosingSettings(listName);
