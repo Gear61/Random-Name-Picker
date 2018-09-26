@@ -16,7 +16,6 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.ListActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
-import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class EditNameListAdapter extends BaseAdapter {
     public EditNameListAdapter(ListActivity listActivity, TextView noContent, TextView numNames,
                                String listName, View parent) {
         this.listActivity = listActivity;
-        this.dataSource = new DataSource();
+        this.dataSource = new DataSource(listActivity);
         this.content = dataSource.getListInfo(listName);
         this.noContent = noContent;
         this.numNames = numNames;
@@ -141,7 +140,7 @@ public class EditNameListAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    private void startRenameProcess(int position) {
+    public void startRenameProcess(int position) {
         int currentAmount = content.getInstancesOfName(getItem(position));
         if (currentAmount == 1) {
             showRenameDialog(position, currentAmount, false);
@@ -216,7 +215,7 @@ public class EditNameListAdapter extends BaseAdapter {
         renameDialog.show();
     }
 
-    private void showDeleteDialog(final int position) {
+    public void showDeleteDialog(final int position) {
         final int currentAmount = content.getInstancesOfName(getItem(position));
         if (currentAmount == 1) {
             new MaterialDialog.Builder(listActivity)
@@ -264,7 +263,7 @@ public class EditNameListAdapter extends BaseAdapter {
         }
     }
 
-    private void showCloneDialog(final int position) {
+    public void showCloneDialog(final int position) {
         MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
                 .content(R.string.cloning_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
@@ -290,28 +289,7 @@ public class EditNameListAdapter extends BaseAdapter {
         cloneDialog.show();
     }
 
-    public void showNameOptions(final int position) {
-        new MaterialDialog.Builder(listActivity)
-                .items(NameUtils.getNameOptions(getItem(position)))
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                startRenameProcess(position);
-                                break;
-                            case 1:
-                                showDeleteDialog(position);
-                                break;
-                            case 2:
-                                showCloneDialog(position);
-                        }
-                    }
-                })
-                .show();
-    }
-
-    public class NameViewHolder {
+    class NameViewHolder {
         @BindView(R.id.person_name) TextView name;
 
         private NameViewHolder(View view) {

@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,7 +49,9 @@ public class PresentationActivity extends StandardActivity
 
     @BindView(R.id.header) TextView header;
     @BindView(R.id.names) TextView names;
+    @BindColor(R.color.dark_gray) int darkGray;
 
+    private PreferencesManager preferencesManager;
     private MediaPlayer player;
     private String listName;
     private ListInfo listState;
@@ -76,9 +79,10 @@ public class PresentationActivity extends StandardActivity
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        preferencesManager = new PreferencesManager(this);
         listName = getIntent().getStringExtra(LIST_NAME_KEY);
-        listState = PreferencesManager.get().getNameListState(listName);
-        settings = PreferencesManager.get().getChoosingSettings(listName);
+        listState = preferencesManager.getNameListState(listName);
+        settings = preferencesManager.getChoosingSettings(listName);
 
         int numNames = settings.getNumNamesToChoose();
         if (numNames > 1) {
@@ -91,8 +95,8 @@ public class PresentationActivity extends StandardActivity
             names.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
-        names.setTextSize(TypedValue.COMPLEX_UNIT_SP, PreferencesManager.get().getPresentationTextSize() * 8);
-        names.setTextColor(PreferencesManager.get().getPresentationTextColor());
+        names.setTextSize(TypedValue.COMPLEX_UNIT_SP, preferencesManager.getPresentationTextSize() * 8);
+        names.setTextColor(preferencesManager.getPresentationTextColor(darkGray));
 
         handler = new Handler();
         player = new MediaPlayer();
@@ -109,7 +113,7 @@ public class PresentationActivity extends StandardActivity
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         int newTextSize = setTextViewHolder.textSizeSlider.getProgress() + 1;
-                        PreferencesManager.get().setPresentationTextSize(newTextSize);
+                        preferencesManager.setPresentationTextSize(newTextSize);
                         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
                     }
                 })
@@ -145,7 +149,7 @@ public class PresentationActivity extends StandardActivity
 
             playSound();
         } else {
-            UIUtils.showLongToast(R.string.no_names_left);
+            UIUtils.showLongToast(R.string.no_names_left, this);
         }
     }
 
@@ -160,7 +164,7 @@ public class PresentationActivity extends StandardActivity
             player.prepare();
             player.start();
         } catch (Exception ex) {
-            UIUtils.showLongToast(R.string.drumroll_error);
+            UIUtils.showLongToast(R.string.drumroll_error, this);
         }
 
         handler.removeCallbacks(animateNamesTask);
@@ -230,7 +234,7 @@ public class PresentationActivity extends StandardActivity
                 sayTextPreL(names);
             }
         } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail);
+            UIUtils.showLongToast(R.string.text_to_speech_fail, this);
         }
     }
 
@@ -255,13 +259,13 @@ public class PresentationActivity extends StandardActivity
     private void showColorChooserDialog() {
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
                 .dynamicButtonColor(false)
-                .preselect(PreferencesManager.get().getPresentationTextColor())
+                .preselect(preferencesManager.getPresentationTextColor(darkGray))
                 .show(this);
     }
 
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, int selectedColor) {
-        PreferencesManager.get().setPresentationTextColor(selectedColor);
+        preferencesManager.setPresentationTextColor(selectedColor);
         names.setTextColor(selectedColor);
     }
 
@@ -270,13 +274,13 @@ public class PresentationActivity extends StandardActivity
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        PreferencesManager.get().cacheNameChoosingList(listName, listState, settings);
+        preferencesManager.cacheNameChoosingList(listName, listState, settings);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void finish() {
-        PreferencesManager.get().cacheNameChoosingList(listName, listState, settings);
+        preferencesManager.cacheNameChoosingList(listName, listState, settings);
         super.finish();
     }
 
@@ -316,7 +320,8 @@ public class PresentationActivity extends StandardActivity
                         chosenNamesText,
                         null,
                         settings.getNumNamesToChoose(),
-                        false);
+                        false,
+                        this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

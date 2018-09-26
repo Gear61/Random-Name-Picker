@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.randomappsinc.studentpicker.R;
@@ -70,8 +71,12 @@ public class NameUtils {
         return namesString.toString();
     }
 
-    public static void copyNamesToClipboard(String names, View parent, int numNames, boolean historyMode) {
-        Context context = MyApplication.getAppContext();
+    public static void copyNamesToClipboard(
+            String names,
+            @Nullable View parent,
+            int numNames,
+            boolean historyMode,
+            Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
         if (clipboard == null) {
             return;
@@ -91,18 +96,17 @@ public class NameUtils {
         }
 
         if (parent == null) {
-            UIUtils.showLongToast(messageId);
+            UIUtils.showLongToast(messageId, context);
         } else {
             UIUtils.showSnackbar(parent, context.getString(messageId));
         }
     }
 
-    public static String[] getNameOptions(String name) {
-        Context context = MyApplication.getAppContext();
+    public static String[] getNameOptions(String name, Context context) {
         String[] options = new String[3];
-        options[0] = String.format(context.getString(R.string.rename_person), name);
-        options[1] = String.format(context.getString(R.string.delete_name), name);
-        options[2] = String.format(context.getString(R.string.duplicate), name);
+        options[0] = context.getString(R.string.rename_person, name);
+        options[1] = context.getString(R.string.delete_name, name);
+        options[2] = context.getString(R.string.duplicate, name);
         return options;
     }
 

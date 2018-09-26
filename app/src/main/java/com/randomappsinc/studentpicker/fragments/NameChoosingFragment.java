@@ -73,7 +73,7 @@ public class NameChoosingFragment extends Fragment
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         settingsHolder.applySettings();
-                        UIUtils.showShortToast(R.string.settings_applied);
+                        UIUtils.showShortToast(R.string.settings_applied, getContext());
                     }
                 })
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -99,7 +99,7 @@ public class NameChoosingFragment extends Fragment
         nameChoosingAdapter = new NameChoosingAdapter(noContent, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
 
-        settings = PreferencesManager.get().getChoosingSettings(listName);
+        settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
 
         return rootView;
@@ -147,7 +147,7 @@ public class NameChoosingFragment extends Fragment
                 sayTextPreL(names);
             }
         } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail);
+            UIUtils.showLongToast(R.string.text_to_speech_fail, getContext());
         }
     }
 
@@ -166,7 +166,7 @@ public class NameChoosingFragment extends Fragment
 
     @Override
     public void copyNamesToClipboard(String chosenNames, int numNames) {
-        NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false);
+        NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
     @Override
@@ -198,18 +198,23 @@ public class NameChoosingFragment extends Fragment
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             nameChoosingAdapter.clearNameHistory();
-                            UIUtils.showShortToast(R.string.name_history_cleared);
+                            UIUtils.showShortToast(R.string.name_history_cleared, getContext());
                         }
                     })
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            NameUtils.copyNamesToClipboard(namesHistory, null, 0, true);
+                            NameUtils.copyNamesToClipboard(
+                                    namesHistory,
+                                    null,
+                                    0,
+                                    true,
+                                    getContext());
                         }
                     })
                     .show();
         } else {
-            UIUtils.showLongToast(R.string.empty_names_history);
+            UIUtils.showLongToast(R.string.empty_names_history, getContext());
         }
     }
 

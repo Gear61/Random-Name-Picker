@@ -1,11 +1,10 @@
 package com.randomappsinc.studentpicker.database;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.randomappsinc.studentpicker.utils.MyApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,8 +34,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + TABLE_NAME +
             " ADD COLUMN " + COLUMN_NAME_COUNT + " INTEGER;";
 
-    public MySQLiteHelper() {
-        super(MyApplication.getAppContext(), DATABASE_NAME, null, DATABASE_VERSION);
+    MySQLiteHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
