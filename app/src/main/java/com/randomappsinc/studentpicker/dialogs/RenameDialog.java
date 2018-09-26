@@ -84,13 +84,14 @@ public class RenameDialog {
             EditText input = renameAmountDialog.getInputEditText();
             if (input != null) {
                 input.setText("");
-                renameAmountDialog.getInputEditText().setFilters(new InputFilter[]
+                input.setFilters(new InputFilter[]
                         {new InputFilter.LengthFilter(String.valueOf(maxAmount).length())});
             }
             renameAmountDialog.show();
         } else {
             amountToRename = 1;
             renamingDialog.setActionButton(DialogAction.NEUTRAL, null);
+            renamingDialog.show();
         }
     }
 
