@@ -22,6 +22,7 @@ import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.adapters.EditNameListAdapter;
 import com.randomappsinc.studentpicker.adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.dialogs.DeleteNameDialog;
 import com.randomappsinc.studentpicker.dialogs.DuplicationDialog;
 import com.randomappsinc.studentpicker.dialogs.MergeNameListsDialog;
@@ -42,6 +43,14 @@ public class EditNameListFragment extends Fragment implements
         NameChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
         DuplicationDialog.Listener, MergeNameListsDialog.Listener {
 
+    public static EditNameListFragment getInstance(String listName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
+        EditNameListFragment editNameListFragment = new EditNameListFragment();
+        editNameListFragment.setArguments(bundle);
+        return editNameListFragment;
+    }
+
     @BindView(R.id.parent) View parent;
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @BindView(R.id.no_content) TextView noContent;
@@ -50,7 +59,7 @@ public class EditNameListFragment extends Fragment implements
     @BindView(R.id.plus_icon) ImageView plus;
 
     private EditNameListAdapter namesAdapter;
-    private DataSource dataSource;
+    private NameListDataManager nameListDataManager = NameListDataManager.get();
     private String listName;
     private NameChoicesDialog nameChoicesDialog;
     private RenameDialog renameDialog;
@@ -70,7 +79,6 @@ public class EditNameListFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        dataSource = new DataSource(getContext());
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -80,6 +88,7 @@ public class EditNameListFragment extends Fragment implements
                 IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        DataSource dataSource = new DataSource(getContext());
         importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
         noContent.setText(R.string.no_names);
 
@@ -105,6 +114,7 @@ public class EditNameListFragment extends Fragment implements
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
+            nameListDataManager.addName(getContext(), newName, 1, listName);
             namesAdapter.addNames(newName, 1);
             String template = getString(R.string.added_name);
             UIUtils.showSnackbar(parent, String.format(template, newName));
@@ -137,12 +147,13 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public void onRenameSubmitted(String previousName, String newName, int amountToRename) {
-        dataSource.renamePeople(previousName, newName, listName, amountToRename);
+        nameListDataManager.changeName(getContext(), previousName, newName, amountToRename, listName);
         namesAdapter.changeName(previousName, newName, amountToRename);
     }
 
     @Override
     public void onDeletionSubmitted(String name, int amountToDelete) {
+        nameListDataManager.deleteName(getContext(), name, amountToDelete, listName);
         namesAdapter.removeNames(name, amountToDelete);
         if (amountToDelete == 1) {
             String template = getString(R.string.deleted_name);
@@ -154,14 +165,14 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public void onDuplicationSubmitted(String name, int amountToAdd) {
-        dataSource.addNames(name, listName, amountToAdd);
+        nameListDataManager.addName(getContext(), name, amountToAdd, listName);
         namesAdapter.addNames(name, amountToAdd);
         UIUtils.showSnackbar(parent, R.string.clones_added);
     }
 
     @Override
     public void onMergeSubmitted(List<String> listsToMergeIn) {
-        ListInfo updatedListState = dataSource.getListInfo(listName);
+        ListInfo updatedListState = nameListDataManager.importNameLists(getContext(), listName, listsToMergeIn);
         namesAdapter.importNamesFromList(updatedListState);
         UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
     }

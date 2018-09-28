@@ -76,7 +76,7 @@ public class DataSource {
         close();
     }
 
-    public void removeNames(String name, String listName, int amount) {
+    void removeNames(String name, String listName, int amount) {
         int currentAmount = getAmount(listName, name);
 
         open();
@@ -172,7 +172,7 @@ public class DataSource {
         return names.toArray(new String[names.size()]);
     }
 
-    public Map<String, Integer> importNamesIntoList(String receivingList, List<String> givingLists) {
+    Map<String, Integer> importNamesIntoList(String receivingList, List<String> givingLists) {
         Map<String, Integer> nameAmounts = new HashMap<>();
         for (String listName : givingLists) {
             Map<String, Integer> namesToImport = getListInfo(listName).getNameAmounts();

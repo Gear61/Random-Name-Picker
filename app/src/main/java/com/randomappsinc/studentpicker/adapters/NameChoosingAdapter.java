@@ -70,7 +70,6 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
-    // TODO: Call this when name lists are imported
     public void addNameMap(Map<String, Integer> nameAmounts) {
         for (String name : nameAmounts.keySet()) {
             currentState.addNames(name, nameAmounts.get(name));

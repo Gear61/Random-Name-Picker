@@ -31,10 +31,10 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable {
         this.suggestions = new ArrayList<>();
     }
 
-    public static class ViewHolder {
+    static class ViewHolder {
         @BindView(R.id.suggestion) TextView suggestion;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
@@ -74,7 +74,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable {
         return nameFilter;
     }
 
-    Filter nameFilter = new Filter() {
+    private final Filter nameFilter = new Filter() {
         public String convertResultToString(Object resultValue) {
             return (resultValue).toString();
         }
