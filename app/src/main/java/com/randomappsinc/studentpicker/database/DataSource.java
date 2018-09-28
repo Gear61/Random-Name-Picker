@@ -148,7 +148,7 @@ public class DataSource {
         return matchingNames;
     }
 
-    public String[] getAllNameLists(String currentList) {
+    public String[] getAllNameListsMinusCurrent(String currentList) {
         List<String> names = new ArrayList<>();
         open();
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};

@@ -14,7 +14,7 @@ public class NameChoicesDialog {
 
         void onDeleteChosen(String name);
 
-        void onCloneChosen(String name);
+        void onDuplicationChosen(String name);
     }
 
     private String currentName;
@@ -41,7 +41,7 @@ public class NameChoicesDialog {
                                 listener.onDeleteChosen(currentName);
                                 break;
                             case 2:
-                                listener.onCloneChosen(currentName);
+                                listener.onDuplicationChosen(currentName);
                                 break;
                         }
                     }
