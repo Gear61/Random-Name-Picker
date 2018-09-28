@@ -70,6 +70,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
+    // TODO: Call this when name lists are imported
     public void addNameMap(Map<String, Integer> nameAmounts) {
         for (String name : nameAmounts.keySet()) {
             currentState.addNames(name, nameAmounts.get(name));
@@ -89,7 +90,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    void setViews() {
+    private void setViews() {
         if (dataSource.getListInfo(listName).getNumInstances() == 0) {
             noContent.setText(R.string.no_names);
         } else {
@@ -154,7 +155,7 @@ public class NameChoosingAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    public class NameViewHolder {
+    class NameViewHolder {
 
         @BindView(R.id.person_name) TextView name;
 

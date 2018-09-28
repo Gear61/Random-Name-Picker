@@ -71,7 +71,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @Override
     public void hearShake() {
         if (nameListPager.getCurrentItem() == 0) {
-            listTabsAdapter.getNameChoosingFragment().choose();
+            // listTabsAdapter.getNameChoosingFragment().choose();
         }
     }
 

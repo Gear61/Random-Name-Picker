@@ -35,6 +35,10 @@ public class UIUtils {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static void showSnackbar(View parent, @StringRes int resId) {
+        showSnackbar(parent, parent.getContext().getString(resId));
+    }
+
     public static void showSnackbar(View parent, String message) {
         Context context = parent.getContext();
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);

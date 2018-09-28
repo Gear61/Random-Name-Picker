@@ -49,10 +49,6 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public NameChoosingFragment getNameChoosingFragment() {
-        return nameChoosingFragment;
-    }
-
     @Override
     public CharSequence getPageTitle(int position) {
         return tabTitles[position];
