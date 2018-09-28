@@ -21,6 +21,8 @@ android {
     }
     lintOptions {
         disable "ResourceType"
+        disable 'GoogleAppIndexingWarning'
+        baseline file("lint-baseline.xml")
     }
 }
 
