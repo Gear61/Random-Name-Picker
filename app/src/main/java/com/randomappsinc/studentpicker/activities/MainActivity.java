@@ -69,9 +69,6 @@ public class MainActivity extends StandardActivity {
             return;
         }
 
-        Iconify.with(new IoniconsModule())
-                .with(new FontAwesomeModule());
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 

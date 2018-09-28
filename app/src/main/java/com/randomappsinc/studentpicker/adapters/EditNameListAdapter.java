@@ -148,54 +148,6 @@ public class EditNameListAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    public void showDeleteDialog(final int position) {
-        final int currentAmount = content.getInstancesOfName(getItem(position));
-        if (currentAmount == 1) {
-            new MaterialDialog.Builder(listActivity)
-                    .title(R.string.confirm_name_deletion)
-                    .content(String.format(listActivity.getString(R.string.confirm_name_delete), getItem(position)))
-                    .negativeText(android.R.string.no)
-                    .positiveText(android.R.string.yes)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            removeNames(position, 1, false);
-                        }
-                    })
-                    .show();
-        } else {
-            MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
-                    .content(R.string.multiple_deletions_title)
-                    .inputType(InputType.TYPE_CLASS_NUMBER)
-                    .input(listActivity.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
-                        @Override
-                        public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                            if (input.length() > 0) {
-                                int amount = Integer.parseInt(input.toString());
-                                boolean validNumber = amount > 0 && amount <= currentAmount;
-                                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(validNumber);
-                                return;
-                            }
-                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                        }
-                    })
-                    .alwaysCallInputCallback()
-                    .negativeText(android.R.string.no)
-                    .positiveText(R.string.delete)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
-                            removeNames(position, numCopies, true);
-                        }
-                    })
-                    .build();
-            cloneDialog.getInputEditText().setFilters(new InputFilter[]
-                    {new InputFilter.LengthFilter(String.valueOf(currentAmount).length())});
-            cloneDialog.show();
-        }
-    }
-
     public void showCloneDialog(final int position) {
         MaterialDialog cloneDialog = new MaterialDialog.Builder(listActivity)
                 .content(R.string.cloning_title)
