@@ -28,6 +28,7 @@ import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
+import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -42,8 +43,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class NameChoosingFragment extends Fragment
-        implements TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener, NameListDataManager.Listener {
+public class NameChoosingFragment extends Fragment implements
+        TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener,
+        NameListDataManager.Listener, ShakeManager.Listener {
 
     public static NameChoosingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -68,6 +70,7 @@ public class NameChoosingFragment extends Fragment
     private boolean canShowPresentationScreen;
     private String listName;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
+    private ShakeManager shakeManager = ShakeManager.get();
     private Unbinder unbinder;
 
     @Override
@@ -114,6 +117,7 @@ public class NameChoosingFragment extends Fragment
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
 
         nameListDataManager.registerListener(this);
+        shakeManager.registerListener(this);
 
         return rootView;
     }
@@ -144,6 +148,11 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNameMap(nameAmounts);
         }
+    }
+
+    @Override
+    public void onShakeDetected() {
+        choose();
     }
 
     @OnClick(R.id.choose)
@@ -276,6 +285,7 @@ public class NameChoosingFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         nameListDataManager.unregisterListener(this);
+        shakeManager.unregisterListener();
         unbinder.unbind();
         if (textToSpeech != null) {
             textToSpeech.stop();
