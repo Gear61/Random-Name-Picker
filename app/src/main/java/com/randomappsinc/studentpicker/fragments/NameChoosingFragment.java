@@ -24,6 +24,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.MainActivity;
 import com.randomappsinc.studentpicker.activities.PresentationActivity;
 import com.randomappsinc.studentpicker.adapters.NameChoosingAdapter;
+import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
@@ -34,6 +35,7 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +43,15 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class NameChoosingFragment extends Fragment
-        implements TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener {
+        implements TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener, NameListDataManager.Listener {
+
+    public static NameChoosingFragment getInstance(String listName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
+        NameChoosingFragment nameChoosingFragment = new NameChoosingFragment();
+        nameChoosingFragment.setArguments(bundle);
+        return nameChoosingFragment;
+    }
 
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.num_names) TextView numNames;
@@ -57,6 +67,7 @@ public class NameChoosingFragment extends Fragment
     private boolean textToSpeechEnabled;
     private boolean canShowPresentationScreen;
     private String listName;
+    private NameListDataManager nameListDataManager = NameListDataManager.get();
     private Unbinder unbinder;
 
     @Override
@@ -102,11 +113,37 @@ public class NameChoosingFragment extends Fragment
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
 
+        nameListDataManager.registerListener(this);
+
         return rootView;
     }
 
-    public NameChoosingAdapter getNameChoosingAdapter() {
-        return nameChoosingAdapter;
+    @Override
+    public void onNameAdded(String name, int amount, String listName) {
+        if (this.listName.equals(listName)) {
+            nameChoosingAdapter.addNames(name, amount);
+        }
+    }
+
+    @Override
+    public void onNameDeleted(String name, int amount, String listName) {
+        if (this.listName.equals(listName)) {
+            nameChoosingAdapter.removeNames(name, amount);
+        }
+    }
+
+    @Override
+    public void onNameChanged(String oldName, String newName, int amount, String listName) {
+        if (this.listName.equals(listName)) {
+            nameChoosingAdapter.changeNames(oldName, newName, amount);
+        }
+    }
+
+    @Override
+    public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
+        if (this.listName.equals(listName)) {
+            nameChoosingAdapter.addNameMap(nameAmounts);
+        }
     }
 
     @OnClick(R.id.choose)
@@ -238,6 +275,7 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        nameListDataManager.unregisterListener(this);
         unbinder.unbind();
         if (textToSpeech != null) {
             textToSpeech.stop();

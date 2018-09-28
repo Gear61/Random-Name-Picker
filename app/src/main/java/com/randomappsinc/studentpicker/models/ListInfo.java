@@ -34,7 +34,7 @@ public class ListInfo {
         return nameHistory;
     }
 
-    public List<String> getLongList() {
+    private List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : names) {
             int amount = nameAmounts.get(name);

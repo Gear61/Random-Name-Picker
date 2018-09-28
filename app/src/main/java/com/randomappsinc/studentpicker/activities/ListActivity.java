@@ -23,7 +23,6 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @BindView(R.id.name_list_tabs) TabLayout nameListTabs;
     @BindArray(R.array.list_options) String[] listTabTitles;
 
-    private ListTabsAdapter listTabsAdapter;
     private ShakeDetector shakeDetector;
     private PreferencesManager preferencesManager;
 
@@ -40,7 +39,10 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         setTitle(listName);
 
         preferencesManager = new PreferencesManager(this);
-        listTabsAdapter = new ListTabsAdapter(getSupportFragmentManager(), listName, listTabTitles);
+        ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
+                getSupportFragmentManager(),
+                listName,
+                listTabTitles);
         nameListPager.setAdapter(listTabsAdapter);
         nameListTabs.setupWithViewPager(nameListPager);
 
@@ -62,10 +64,6 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
             shakeDetector.stop();
         }
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    public ListTabsAdapter getListTabsAdapter() {
-        return listTabsAdapter;
     }
 
     @Override
