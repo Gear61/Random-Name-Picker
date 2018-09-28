@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.adapters.ListTabsAdapter;
+import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.squareup.seismic.ShakeDetector;
 
@@ -24,6 +25,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @BindArray(R.array.list_options) String[] listTabTitles;
 
     private ShakeDetector shakeDetector;
+    private ShakeManager shakeManager = ShakeManager.get();
     private PreferencesManager preferencesManager;
 
     @Override
@@ -69,7 +71,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @Override
     public void hearShake() {
         if (nameListPager.getCurrentItem() == 0) {
-            // listTabsAdapter.getNameChoosingFragment().choose();
+            shakeManager.onShakeDetected();
         }
     }
 
