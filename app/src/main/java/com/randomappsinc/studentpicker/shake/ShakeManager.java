@@ -1,6 +1,6 @@
 package com.randomappsinc.studentpicker.shake;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 // Utility singleton class to propagate shake detection signals
 public class ShakeManager {

@@ -1,11 +1,12 @@
 package com.randomappsinc.studentpicker.adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-
 import com.randomappsinc.studentpicker.fragments.EditNameListFragment;
 import com.randomappsinc.studentpicker.fragments.NameChoosingFragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
@@ -23,6 +24,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
         return tabTitles.length;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         switch (position) {
@@ -31,7 +33,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return EditNameListFragment.getInstance(listName);
             default:
-                return null;
+                throw new IllegalArgumentException("There should only be 2 tabs!");
         }
     }
 

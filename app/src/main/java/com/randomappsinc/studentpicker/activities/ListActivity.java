@@ -2,17 +2,17 @@ package com.randomappsinc.studentpicker.activities;
 
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.tabs.TabLayout;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.adapters.ListTabsAdapter;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.squareup.seismic.ShakeDetector;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
