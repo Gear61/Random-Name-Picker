@@ -3,10 +3,12 @@ package com.randomappsinc.studentpicker.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.randomappsinc.studentpicker.R;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -17,7 +19,7 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDrawOver(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int left = parent.getPaddingLeft();
         int right = parent.getWidth() - parent.getPaddingRight();
 
@@ -31,7 +33,7 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
             int bottom = top + divider.getIntrinsicHeight();
 
             divider.setBounds(left, top, right, bottom);
-            divider.draw(c);
+            divider.draw(canvas);
         }
     }
 }

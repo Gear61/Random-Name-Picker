@@ -1,8 +1,6 @@
 package com.randomappsinc.studentpicker.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +31,8 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

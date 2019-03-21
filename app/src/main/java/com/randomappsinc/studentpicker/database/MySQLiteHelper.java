@@ -74,7 +74,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private List<String> getNonEmptyLists(SQLiteDatabase database) {
         List<String> lists = new ArrayList<>();
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
-        Cursor cursor = database.query(true, MySQLiteHelper.TABLE_NAME, columns, null, null, null, null, null, null);
+        Cursor cursor = database.query(
+                true,
+                MySQLiteHelper.TABLE_NAME,
+                columns,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
         while (cursor.moveToNext()) {
             lists.add(cursor.getString(0));
         }

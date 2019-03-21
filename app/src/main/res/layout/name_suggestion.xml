@@ -12,5 +12,4 @@
         android:layout_height="wrap_content"
         android:textSize="22dp"
         android:textColor="@color/dark_gray"/>
-
 </LinearLayout>

@@ -3,11 +3,12 @@ package com.randomappsinc.studentpicker.activities;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class StandardActivity extends AppCompatActivity {
 

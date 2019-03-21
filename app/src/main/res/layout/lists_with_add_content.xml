@@ -1,4 +1,4 @@
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +23,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/add_item"
                 android:layout_gravity="end|center_vertical"
                 android:layout_width="50dp"
@@ -38,7 +38,7 @@
                     android:id="@+id/plus_icon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <AutoCompleteTextView
                 android:id="@+id/item_name_input"
@@ -75,4 +75,4 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

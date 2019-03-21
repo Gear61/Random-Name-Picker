@@ -4,19 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.studentpicker.R;
+
+import androidx.annotation.StringRes;
 
 public class UIUtils {
 
@@ -41,11 +44,11 @@ public class UIUtils {
 
     public static void showSnackbar(View parent, String message) {
         Context context = parent.getContext();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(message);
+        ssb.setSpan(new ForegroundColorSpan(Color.WHITE), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
-        TextView snackText = rootView.findViewById(android.support.design.R.id.snackbar_text);
-        snackText.setTextColor(Color.WHITE);
         snackbar.show();
     }
 
