@@ -109,19 +109,13 @@ public class PresentationActivity extends StandardActivity
                 .customView(R.layout.set_text_size, true)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        int newTextSize = setTextViewHolder.textSizeSlider.getProgress() + 1;
-                        preferencesManager.setPresentationTextSize(newTextSize);
-                        names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
-                    }
+                .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+                    int newTextSize = setTextViewHolder.textSizeSlider.getProgress() + 1;
+                    preferencesManager.setPresentationTextSize(newTextSize);
+                    names.setTextSize(TypedValue.COMPLEX_UNIT_SP, newTextSize * 8);
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        setTextViewHolder.revertSetting();
-                    }
+                .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
+                    setTextViewHolder.revertSetting();
                 })
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
@@ -273,7 +267,7 @@ public class PresentationActivity extends StandardActivity
     public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         preferencesManager.cacheNameChoosingList(listName, listState, settings);
         super.onSaveInstanceState(savedInstanceState);
     }
