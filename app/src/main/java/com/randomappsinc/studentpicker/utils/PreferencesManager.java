@@ -27,7 +27,7 @@ public class PreferencesManager {
     }
 
     public Set<String> getNameLists() {
-        return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<String>());
+        return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
     }
 
     private void setNameLists(Set<String> studentLists) {

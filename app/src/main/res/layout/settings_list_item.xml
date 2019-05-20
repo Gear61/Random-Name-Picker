@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:padding="12dp"
-    tools:ignore="RtlHardcoded, SpUsage">
+    android:foreground="?android:attr/selectableItemBackground"
+    tools:ignore="RtlHardcoded, SpUsage"
+    >
 
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/settings_icon"
@@ -15,14 +17,16 @@
         android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:textColor="@color/dark_gray"
-        android:textSize="22dp"/>
+        android:textSize="22dp"
+        />
 
     <Switch
         android:id="@+id/shake_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        />
 
     <TextView
         android:id="@+id/settings_option"
@@ -35,5 +39,6 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:textSize="18dp"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark_gray"
+        />
 </RelativeLayout>
