@@ -87,12 +87,7 @@ public class MainActivity extends StandardActivity {
                     .content(R.string.tutorial_prompt)
                     .positiveText(R.string.accept_tutorial)
                     .negativeText(R.string.no_im_good)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            showTutorial(true);
-                        }
-                    })
+                    .onPositive((dialog, which) -> showTutorial(true))
                     .show();
         }
 
@@ -145,17 +140,14 @@ public class MainActivity extends StandardActivity {
                 .content(R.string.please_rate)
                 .negativeText(R.string.no_im_good)
                 .positiveText(R.string.will_rate)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                            UIUtils.showSnackbar(parent, getString(R.string.play_store_error));
-                            return;
-                        }
-                        startActivity(intent);
+                .onPositive((dialog, which) -> {
+                    Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
+                        UIUtils.showSnackbar(parent, getString(R.string.play_store_error));
+                        return;
                     }
+                    startActivity(intent);
                 })
                 .show();
     }
@@ -204,12 +196,7 @@ public class MainActivity extends StandardActivity {
                 new MaterialDialog.Builder(this)
                         .content(R.string.need_read_external)
                         .positiveText(android.R.string.yes)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                requestReadExternal();
-                            }
-                        })
+                        .onPositive((dialog, which) -> requestReadExternal())
                         .show();
             } else {
                 requestReadExternal();
@@ -224,7 +211,7 @@ public class MainActivity extends StandardActivity {
     @Override
     public void onRequestPermissionsResult(
             int requestCode,
-            @NonNull String permissions[],
+            @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(this, FilePickerActivity.class);

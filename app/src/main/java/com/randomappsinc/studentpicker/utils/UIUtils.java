@@ -44,9 +44,13 @@ public class UIUtils {
 
     public static void showSnackbar(View parent, String message) {
         Context context = parent.getContext();
-        SpannableStringBuilder ssb = new SpannableStringBuilder(message);
-        ssb.setSpan(new ForegroundColorSpan(Color.WHITE), 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(message);
+        spannableString.setSpan(
+                new ForegroundColorSpan(Color.WHITE),
+                0,
+                message.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Snackbar snackbar = Snackbar.make(parent, spannableString, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
         rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
         snackbar.show();
