@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
@@ -31,8 +34,6 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,7 +91,7 @@ public class EditNameListFragment extends Fragment implements
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         DataSource dataSource = new DataSource(getContext());
         importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
-        noContent.setText(R.string.no_names);
+        noContent.setText(R.string.no_names_for_edit);
 
         namesAdapter = new EditNameListAdapter(noContent, numNames, listName);
         namesList.setAdapter(namesAdapter);
@@ -192,7 +193,7 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.import_names, IoniconsIcons.ion_android_upload, getActivity());
         super.onCreateOptionsMenu(menu, inflater);

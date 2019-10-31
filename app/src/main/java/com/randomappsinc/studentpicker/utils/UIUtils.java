@@ -14,12 +14,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.studentpicker.R;
-
-import androidx.annotation.StringRes;
 
 public class UIUtils {
 
