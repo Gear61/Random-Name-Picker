@@ -19,16 +19,16 @@ import androidx.fragment.app.Fragment;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.activities.MainActivity;
-import com.randomappsinc.studentpicker.adapters.EditNameListAdapter;
-import com.randomappsinc.studentpicker.adapters.NameCreationACAdapter;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
-import com.randomappsinc.studentpicker.dialogs.DeleteNameDialog;
-import com.randomappsinc.studentpicker.dialogs.DuplicationDialog;
-import com.randomappsinc.studentpicker.dialogs.MergeNameListsDialog;
-import com.randomappsinc.studentpicker.dialogs.NameChoicesDialog;
-import com.randomappsinc.studentpicker.dialogs.RenameDialog;
+import com.randomappsinc.studentpicker.editing.DeleteNameDialog;
+import com.randomappsinc.studentpicker.editing.DuplicationDialog;
+import com.randomappsinc.studentpicker.editing.EditNameListAdapter;
+import com.randomappsinc.studentpicker.editing.MergeNameListsDialog;
+import com.randomappsinc.studentpicker.editing.NameCreationACAdapter;
+import com.randomappsinc.studentpicker.editing.NameEditChoicesDialog;
+import com.randomappsinc.studentpicker.editing.RenameDialog;
+import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -41,7 +41,7 @@ import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
-        NameChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
+        NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
         DuplicationDialog.Listener, MergeNameListsDialog.Listener {
 
     public static EditNameListFragment getInstance(String listName) {
@@ -62,7 +62,7 @@ public class EditNameListFragment extends Fragment implements
     private EditNameListAdapter namesAdapter;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private String listName;
-    private NameChoicesDialog nameChoicesDialog;
+    private NameEditChoicesDialog nameEditChoicesDialog;
     private RenameDialog renameDialog;
     private DeleteNameDialog deleteNameDialog;
     private DuplicationDialog duplicationDialog;
@@ -101,7 +101,7 @@ public class EditNameListFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        nameChoicesDialog = new NameChoicesDialog(getActivity(), this);
+        nameEditChoicesDialog = new NameEditChoicesDialog(getActivity(), this);
         renameDialog = new RenameDialog(getActivity(), this);
         deleteNameDialog = new DeleteNameDialog(getActivity(), this);
         duplicationDialog = new DuplicationDialog(getActivity(), this);
@@ -124,7 +124,7 @@ public class EditNameListFragment extends Fragment implements
 
     @OnItemClick(R.id.content_list)
     public void showNameOptions(final int position) {
-        nameChoicesDialog.showChoices(namesAdapter.getItem(position));
+        nameEditChoicesDialog.showChoices(namesAdapter.getItem(position));
     }
 
     @Override

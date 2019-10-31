@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,7 +22,10 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.adapters.NameListsAdapter;
+import com.randomappsinc.studentpicker.activities.ImportFileActivity;
+import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.listpage.ListActivity;
+import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;

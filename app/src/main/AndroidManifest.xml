@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".home.MainActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden">
 
@@ -29,12 +29,12 @@
 
         <activity
             android:label="@string/settings"
-            android:name=".activities.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:configChanges="orientation|screenSize">
         </activity>
 
         <activity
-            android:name=".activities.ListActivity"
+            android:name=".listpage.ListActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:configChanges="orientation|screenSize">
@@ -48,7 +48,7 @@
         </activity>
 
         <activity
-            android:name=".activities.PresentationActivity"
+            android:name=".presentation.PresentationActivity"
             android:label=""
             android:configChanges="orientation|screenSize">
         </activity>

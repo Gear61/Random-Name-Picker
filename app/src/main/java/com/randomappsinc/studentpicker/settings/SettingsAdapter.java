@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.adapters;
+package com.randomappsinc.studentpicker.settings;
 
 import android.content.Context;
 import android.view.LayoutInflater;

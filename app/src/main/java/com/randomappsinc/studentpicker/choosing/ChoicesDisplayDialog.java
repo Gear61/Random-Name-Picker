@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.dialogs;
+package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 
@@ -17,37 +17,20 @@ public class ChoicesDisplayDialog {
         void copyNamesToClipboard(String chosenNames, int numNames);
     }
 
-    @NonNull private Listener listener;
     private String chosenNames;
     private int numNames;
     private MaterialDialog dialog;
 
     public ChoicesDisplayDialog(@NonNull Listener listener, Context context) {
-        this.listener = listener;
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
                 .positiveText(android.R.string.yes)
                 .negativeText(R.string.copy_text)
                 .neutralText(R.string.say_name)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ChoicesDisplayDialog.this.listener.copyNamesToClipboard(chosenNames, numNames);
-                    }
-                })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ChoicesDisplayDialog.this.listener.sayNames(chosenNames);
-                    }
-                })
+                .onPositive((dialog, which) -> dialog.dismiss())
+                .onNegative((dialog, which) -> listener.copyNamesToClipboard(chosenNames, numNames))
+                .onNeutral((dialog, which) -> listener.sayNames(chosenNames))
                 .autoDismiss(false)
                 .build();
     }

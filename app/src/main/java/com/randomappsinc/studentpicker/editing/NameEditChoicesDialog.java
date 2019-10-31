@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.dialogs;
+package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
 import android.view.View;
@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
 /** Shows the options for a name on the editing page */
-public class NameChoicesDialog {
+public class NameEditChoicesDialog {
 
     public interface Listener {
         void onRenameChosen(String name);
@@ -21,7 +21,7 @@ public class NameChoicesDialog {
     private String[] optionTemplates;
     private MaterialDialog dialog;
 
-    public NameChoicesDialog(Context context, final Listener listener) {
+    public NameEditChoicesDialog(Context context, final Listener listener) {
         optionTemplates = new String[]{
                 context.getString(R.string.rename_person),
                 context.getString(R.string.delete_name),

@@ -1,10 +1,8 @@
-package com.randomappsinc.studentpicker.dialogs;
+package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
-
-import androidx.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,22 +21,16 @@ public class DuplicationDialog {
         dialog = new MaterialDialog.Builder(context)
                 .content(R.string.cloning_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
-                .input(context.getString(R.string.num_copies), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        boolean isValid = input.length() > 0 && (Integer.parseInt(input.toString()) > 0);
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid);
-                    }
+                .input(context.getString(R.string.num_copies), "", (dialog, input) -> {
+                    boolean isValid = input.length() > 0 && (Integer.parseInt(input.toString()) > 0);
+                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid);
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
                 .positiveText(R.string.add)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
-                        listener.onDuplicationSubmitted(currentName, numCopies);
-                    }
+                .onPositive((dialog, which) -> {
+                    int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
+                    listener.onDuplicationSubmitted(currentName, numCopies);
                 })
                 .build();
         // Cap the amount you can make at 999

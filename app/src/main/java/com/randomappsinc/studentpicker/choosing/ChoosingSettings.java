@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.models;
+package com.randomappsinc.studentpicker.choosing;
 
 public class ChoosingSettings {
 
