@@ -63,15 +63,7 @@
 
         <TextView
             android:id="@+id/no_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:visibility="gone"
-            android:textSize="27sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/empty_state_text"
             />
 
         <TextView
