@@ -13,7 +13,8 @@
         >
 
         <TextView
-            android:id="@+id/no_content"
+            android:id="@+id/empty_text_for_choosing"
+            android:text="@string/no_names_for_choosing"
             style="@style/empty_state_text"
             />
 

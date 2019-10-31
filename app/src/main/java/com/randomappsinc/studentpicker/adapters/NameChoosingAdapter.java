@@ -91,7 +91,7 @@ public class NameChoosingAdapter extends BaseAdapter {
 
     private void setViews() {
         if (dataSource.getListInfo(listName).getNumInstances() == 0) {
-            noContent.setText(R.string.no_names_for_edit);
+            noContent.setText(R.string.no_names_for_choosing);
         } else {
             noContent.setText(R.string.out_of_names);
         }

@@ -26,11 +26,6 @@ import com.randomappsinc.studentpicker.activities.PresentationActivity;
 import com.randomappsinc.studentpicker.adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
-import com.randomappsinc.studentpicker.dialogs.DeleteNameDialog;
-import com.randomappsinc.studentpicker.dialogs.DuplicationDialog;
-import com.randomappsinc.studentpicker.dialogs.MergeNameListsDialog;
-import com.randomappsinc.studentpicker.dialogs.NameChoicesDialog;
-import com.randomappsinc.studentpicker.dialogs.RenameDialog;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
@@ -60,7 +55,7 @@ public class NameChoosingFragment extends Fragment implements
         return nameChoosingFragment;
     }
 
-    @BindView(R.id.no_content) TextView noContent;
+    @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) ListView namesList;
 
@@ -90,7 +85,7 @@ public class NameChoosingFragment extends Fragment implements
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(noContent, numNames, listName);
+        nameChoosingAdapter = new NameChoosingAdapter(noNamesToChoose, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
 
         nameListDataManager.registerListener(this);
@@ -305,6 +300,7 @@ public class NameChoosingFragment extends Fragment implements
                 return true;
             case R.id.reset:
                 nameChoosingAdapter.resetNames();
+                UIUtils.showShortToast(R.string.list_reset_confirmation, getContext());
                 return true;
             case android.R.id.home:
                 getActivity().finish();

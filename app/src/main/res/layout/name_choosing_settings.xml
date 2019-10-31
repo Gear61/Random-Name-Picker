@@ -9,49 +9,57 @@
     android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:ignore="SpUsage">
+    tools:ignore="SpUsage"
+    >
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/presentation_mode"
         android:text="@string/presentation_mode"
         app:buttonTint="@color/checkbox_box_color"
-        style="@style/setting_checkbox"/>
+        style="@style/setting_checkbox"
+        />
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/with_replacement"
         android:text="@string/with_replacement"
         app:buttonTint="@color/checkbox_box_color"
-        style="@style/setting_checkbox"/>
+        style="@style/setting_checkbox"
+        />
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/automatic_tts"
         android:text="@string/automatic_tts"
         app:buttonTint="@color/checkbox_box_color"
-        style="@style/setting_checkbox"/>
+        style="@style/setting_checkbox"
+        />
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/show_as_list"
         android:text="@string/show_as_list"
         app:buttonTint="@color/checkbox_box_color"
-        style="@style/setting_checkbox"/>
+        style="@style/setting_checkbox"
+        />
 
     <LinearLayout
         android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/num_people_chosen"
-            android:textSize="16dp"
-            android:textColor="@color/black"/>
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            />
 
         <EditText
             android:id="@+id/num_people_chosen"
             android:text="@string/default_num_names_chosen"
-            style="@style/two_number_setting"/>
+            style="@style/two_number_setting"
+            />
     </LinearLayout>
 </LinearLayout>
