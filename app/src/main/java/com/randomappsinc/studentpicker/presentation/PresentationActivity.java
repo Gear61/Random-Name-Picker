@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.presentation;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
@@ -26,9 +25,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.models.ChoosingSettings;
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
+import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
-import com.randomappsinc.studentpicker.models.SetTextSizeViewHolder;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -66,12 +65,7 @@ public class PresentationActivity extends StandardActivity
     private SetTextSizeViewHolder setTextViewHolder;
 
     private Handler handler;
-    private Runnable animateNamesTask = new Runnable() {
-        @Override
-        public void run() {
-            animateNames();
-        }
-    };
+    private Runnable animateNamesTask = () -> animateNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,16 +200,13 @@ public class PresentationActivity extends StandardActivity
         new MaterialDialog.Builder(this)
                 .title(R.string.presentation_settings_title)
                 .items(R.array.presentation_settings_options)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                setTextSizeDialog.show();
-                                break;
-                            case 1:
-                                showColorChooserDialog();
-                        }
+                .itemsCallback((dialog, view, which, text) -> {
+                    switch (which) {
+                        case 0:
+                            setTextSizeDialog.show();
+                            break;
+                        case 1:
+                            showColorChooserDialog();
                     }
                 })
                 .show();

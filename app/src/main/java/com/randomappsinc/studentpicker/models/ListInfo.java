@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.models;
 
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
 import java.util.ArrayList;

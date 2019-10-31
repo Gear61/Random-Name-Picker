@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.common;
 
 import android.content.Intent;
 import android.media.AudioManager;

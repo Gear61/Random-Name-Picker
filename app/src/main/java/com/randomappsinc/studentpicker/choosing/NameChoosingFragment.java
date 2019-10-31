@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.fragments;
+package com.randomappsinc.studentpicker.choosing;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -21,13 +21,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.activities.MainActivity;
-import com.randomappsinc.studentpicker.activities.PresentationActivity;
-import com.randomappsinc.studentpicker.adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
-import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
-import com.randomappsinc.studentpicker.models.ChoosingSettings;
-import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
+import com.randomappsinc.studentpicker.home.MainActivity;
+import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;

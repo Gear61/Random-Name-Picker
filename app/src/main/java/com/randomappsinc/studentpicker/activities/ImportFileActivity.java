@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;

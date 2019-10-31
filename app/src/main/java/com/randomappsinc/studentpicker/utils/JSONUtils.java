@@ -1,6 +1,6 @@
 package com.randomappsinc.studentpicker.utils;
 
-import com.randomappsinc.studentpicker.models.ChoosingSettings;
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
 import org.json.JSONArray;

@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.listpage;
 
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -9,7 +9,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.adapters.ListTabsAdapter;
+import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.squareup.seismic.ShakeDetector;

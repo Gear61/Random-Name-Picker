@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.adapters;
+package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 

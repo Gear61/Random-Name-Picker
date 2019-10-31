@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.dialogs;
+package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
 

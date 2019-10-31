@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.settings;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +9,7 @@ import android.widget.Switch;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.adapters.SettingsAdapter;
+import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;

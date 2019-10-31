@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.models;
+package com.randomappsinc.studentpicker.presentation;
 
 import android.util.TypedValue;
 import android.view.View;
