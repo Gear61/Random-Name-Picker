@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 card_view:contentPadding="5dp"
                 card_view:cardUseCompatPadding="true"
-                card_view:cardBackgroundColor="@color/app_teal"
+                card_view:cardBackgroundColor="@color/app_blue"
                 card_view:cardCornerRadius="3dp"
                 card_view:cardElevation="2dp">
 

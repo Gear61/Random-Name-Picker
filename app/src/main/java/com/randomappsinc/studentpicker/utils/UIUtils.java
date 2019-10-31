@@ -52,7 +52,7 @@ public class UIUtils {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Snackbar snackbar = Snackbar.make(parent, spannableString, Snackbar.LENGTH_LONG);
         View rootView = snackbar.getView();
-        rootView.setBackgroundColor(context.getResources().getColor(R.color.app_teal));
+        rootView.setBackgroundColor(context.getResources().getColor(R.color.app_blue));
         snackbar.show();
     }
 
