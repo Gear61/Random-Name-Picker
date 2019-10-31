@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Random Name Picker</string>
     <string name="settings">Settings</string>
-    <string name="no_lists_message">You currently do not have any name lists.</string>
+    <string name="no_lists_message">Type in a name above and click the + button to create your first list!</string>
     <string name="add_list_hint">List name</string>
     <string name="blank_list_name">List names cannot be blank.</string>
     <string name="list_duplicate">You already have a name list named %s.</string>

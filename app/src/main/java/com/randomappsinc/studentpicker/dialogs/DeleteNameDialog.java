@@ -5,11 +5,11 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-
-import androidx.annotation.NonNull;
 
 public class DeleteNameDialog {
 

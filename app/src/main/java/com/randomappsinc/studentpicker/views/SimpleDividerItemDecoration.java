@@ -5,10 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.randomappsinc.studentpicker.R;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.randomappsinc.studentpicker.R;
 
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
 

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
 
+import androidx.annotation.NonNull;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-
-import androidx.annotation.NonNull;
 
 public class DuplicationDialog {
 

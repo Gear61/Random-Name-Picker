@@ -2,14 +2,14 @@ package com.randomappsinc.studentpicker.dialogs;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class MergeNameListsDialog {
 

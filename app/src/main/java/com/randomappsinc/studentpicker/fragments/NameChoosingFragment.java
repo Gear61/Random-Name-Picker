@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -36,8 +38,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -83,19 +83,11 @@ public class NameChoosingFragment extends Fragment implements
                 .customView(R.layout.name_choosing_settings, true)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.no)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        settingsHolder.applySettings();
-                        UIUtils.showShortToast(R.string.settings_applied, getContext());
-                    }
+                .onPositive((dialog, which) -> {
+                    settingsHolder.applySettings();
+                    UIUtils.showShortToast(R.string.settings_applied, getContext());
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        settingsHolder.revertSettings();
-                    }
-                })
+                .onNegative((dialog, which) -> settingsHolder.revertSettings())
                 .cancelable(false)
                 .build();
         choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
@@ -197,16 +189,15 @@ public class NameChoosingFragment extends Fragment implements
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void sayTextPreL(String text) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + "");
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, hashCode() + "");
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void sayTextPostL(String text) {
-        String utteranceId = this.hashCode() + "";
+        String utteranceId = hashCode() + "";
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
@@ -231,7 +222,7 @@ public class NameChoosingFragment extends Fragment implements
         }
     }
 
-    public void showNamesHistory() {
+    private void showNamesHistory() {
         final String namesHistory = nameChoosingAdapter.getNamesHistory();
         if (!namesHistory.isEmpty()) {
             new MaterialDialog.Builder(getActivity())
@@ -240,31 +231,23 @@ public class NameChoosingFragment extends Fragment implements
                     .positiveText(android.R.string.yes)
                     .neutralText(R.string.clear)
                     .negativeText(R.string.copy_text)
-                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            nameChoosingAdapter.clearNameHistory();
-                            UIUtils.showShortToast(R.string.name_history_cleared, getContext());
-                        }
+                    .onNeutral((dialog, which) -> {
+                        nameChoosingAdapter.clearNameHistory();
+                        UIUtils.showShortToast(R.string.name_history_cleared, getContext());
                     })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            NameUtils.copyNamesToClipboard(
-                                    namesHistory,
-                                    null,
-                                    0,
-                                    true,
-                                    getContext());
-                        }
-                    })
+                    .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
+                            namesHistory,
+                            null,
+                            0,
+                            true,
+                            getContext()))
                     .show();
         } else {
             UIUtils.showLongToast(R.string.empty_names_history, getContext());
         }
     }
 
-    public void cacheListState() {
+    private void cacheListState() {
         nameChoosingAdapter.cacheState(settings);
     }
 
@@ -294,7 +277,7 @@ public class NameChoosingFragment extends Fragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.name_choosing_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.show_names_history, FontAwesomeIcons.fa_history, getActivity());
         UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, getActivity());

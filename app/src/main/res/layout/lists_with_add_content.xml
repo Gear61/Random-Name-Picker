@@ -6,7 +6,8 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="SpUsage, ContentDescription, RtlHardcoded">
+    tools:ignore="SpUsage, ContentDescription, RtlHardcoded"
+    >
 
     <LinearLayout
         android:id="@+id/focal_point"
@@ -14,14 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        >
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginRight="8dp"
+            >
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/add_item"
@@ -32,12 +35,14 @@
                 card_view:cardUseCompatPadding="true"
                 card_view:cardBackgroundColor="@color/app_blue"
                 card_view:cardCornerRadius="3dp"
-                card_view:cardElevation="2dp">
+                card_view:cardElevation="2dp"
+                >
 
                 <ImageView
                     android:id="@+id/plus_icon"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    />
             </androidx.cardview.widget.CardView>
 
             <AutoCompleteTextView
@@ -52,27 +57,33 @@
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"/>
+                android:layout_height="44dp"
+                />
         </FrameLayout>
 
         <TextView
             android:id="@+id/no_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:visibility="gone"
-            android:textSize="28dp"
+            android:textSize="27sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
 
         <TextView
             android:id="@+id/num_names"
             android:visibility="gone"
-            style="@style/num_names"/>
+            style="@style/num_names"
+            />
 
         <ListView
             android:id="@+id/content_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

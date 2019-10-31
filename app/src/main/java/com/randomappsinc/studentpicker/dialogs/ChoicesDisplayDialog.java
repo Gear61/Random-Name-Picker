@@ -2,11 +2,11 @@ package com.randomappsinc.studentpicker.dialogs;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-
-import androidx.annotation.NonNull;
 
 /** Shows the chosen names and their corresponding options in a dialog */
 public class ChoicesDisplayDialog {

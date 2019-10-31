@@ -5,10 +5,10 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class StandardActivity extends AppCompatActivity {
 
