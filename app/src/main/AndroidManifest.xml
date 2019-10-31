@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.randomappsinc.studentpicker">
 
@@ -7,44 +8,53 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        tools:replace="android:label"
         android:name=".init.MyApplication"
-        android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        tools:replace="android:label">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme">
         <activity android:name=".init.SplashActivity"
-            android:theme="@style/SplashTheme"
-            >
+            android:theme="@style/SplashTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".home.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
         <activity
             android:name=".settings.SettingsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/settings"></activity>
+            android:label="@string/settings">
+        </activity>
+
         <activity
             android:name=".listpage.ListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
         <activity
             android:name=".activities.ImportFileActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/import_name_list"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity
             android:name=".presentation.PresentationActivity"
             android:configChanges="orientation|screenSize"
-            android:label=""></activity>
+            android:label="">
+        </activity>
     </application>
-
 </manifest>
