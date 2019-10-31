@@ -58,7 +58,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable {
         ViewHolder holder;
         if (view == null) {
             LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.name_suggestion, parent, false);
+            view = vi.inflate(R.layout.name_suggestion_cell, parent, false);
             holder = new ViewHolder(view);
             view.setTag(holder);
         } else {

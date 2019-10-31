@@ -2,8 +2,8 @@
 <resources>
     <!-- Name Choosing -->
     <string name="reset_list">Reset list</string>
-    <string name="no_names_for_edit">
-        Type in a name above and click the + button to add your first name to this list.
+    <string name="no_names_for_choosing">
+        Switch over to the Edit page to start adding names to this list!
     </string>
     <string name="name_chosen">And the lucky winner is&#8230;</string>
     <string name="names_chosen">And the lucky winners are&#8230;</string>
@@ -47,4 +47,6 @@
         You can now shake your device to choose names! Don\'t like this feature?
         Then turn it off in the settings! Happy shaking!
     </string>
+
+    <string name="list_reset_confirmation">List reset and all names restored.</string>
 </resources>

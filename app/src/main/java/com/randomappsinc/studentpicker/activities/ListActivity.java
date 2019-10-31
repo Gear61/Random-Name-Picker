@@ -32,7 +32,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_layout);
+        setContentView(R.layout.list_activity);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
