@@ -26,6 +26,11 @@ import com.randomappsinc.studentpicker.activities.PresentationActivity;
 import com.randomappsinc.studentpicker.adapters.NameChoosingAdapter;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.dialogs.ChoicesDisplayDialog;
+import com.randomappsinc.studentpicker.dialogs.DeleteNameDialog;
+import com.randomappsinc.studentpicker.dialogs.DuplicationDialog;
+import com.randomappsinc.studentpicker.dialogs.MergeNameListsDialog;
+import com.randomappsinc.studentpicker.dialogs.NameChoicesDialog;
+import com.randomappsinc.studentpicker.dialogs.RenameDialog;
 import com.randomappsinc.studentpicker.models.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ChoosingSettingsViewHolder;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
@@ -77,7 +82,26 @@ public class NameChoosingFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.name_choosing, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
+
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        nameChoosingAdapter = new NameChoosingAdapter(noContent, numNames, listName);
+        namesList.setAdapter(nameChoosingAdapter);
+
+        nameListDataManager.registerListener(this);
+        shakeManager.registerListener(this);
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         settingsDialog = new MaterialDialog.Builder(getActivity())
                 .title(R.string.name_choosing_settings)
                 .customView(R.layout.name_choosing_settings, true)
@@ -94,24 +118,9 @@ public class NameChoosingFragment extends Fragment implements
 
         textToSpeech = new TextToSpeech(getActivity(), this);
         textToSpeech.setLanguage(Locale.getDefault());
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.name_choosing, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
-
-        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(noContent, numNames, listName);
-        namesList.setAdapter(nameChoosingAdapter);
 
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
-
-        nameListDataManager.registerListener(this);
-        shakeManager.registerListener(this);
-
-        return rootView;
     }
 
     @Override
