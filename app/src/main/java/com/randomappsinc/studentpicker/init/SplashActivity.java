@@ -1,10 +1,8 @@
 package com.randomappsinc.studentpicker.init;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.randomappsinc.studentpicker.home.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
