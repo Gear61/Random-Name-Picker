@@ -16,7 +16,8 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".init.SplashActivity"
+        <activity
+            android:name=".init.SplashActivity"
             android:theme="@style/SplashTheme">
 
             <intent-filter>
