@@ -224,16 +224,15 @@ public class PresentationActivity extends StandardActivity
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void sayTextPreL(String text) {
         HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + "");
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, String.valueOf(hashCode()));
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void sayTextPostL(String text) {
-        String utteranceId = this.hashCode() + "";
+        String utteranceId = String.valueOf(hashCode());
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 
