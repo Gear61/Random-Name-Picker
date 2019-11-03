@@ -42,12 +42,15 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
+        int listType = getIntent().getIntExtra(MainActivity.LIST_TYPE,0);
+
         preferencesManager = new PreferencesManager(this);
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
                 getSupportFragmentManager(),
                 listName,
                 listTabTitles);
         nameListPager.setAdapter(listTabsAdapter);
+        nameListPager.setCurrentItem(listType);
         nameListTabs.setupWithViewPager(nameListPager);
 
         shakeDetector = new ShakeDetector(this);
