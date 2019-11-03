@@ -42,6 +42,9 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 public class MainActivity extends StandardActivity {
 
     public static final String LIST_NAME_KEY = "listName";
+    public static final int NAME_CHOOSING_FRAGMENT = 0;
+    public static final int EDIT_NAME_LIST_FARGMENT = 1;
+    public static final String LIST_TYPE = "listType";
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -166,6 +169,7 @@ public class MainActivity extends StandardActivity {
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
         intent.putExtra(LIST_NAME_KEY, listName);
+        intent.putExtra(LIST_TYPE, NAME_CHOOSING_FRAGMENT);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -183,6 +187,7 @@ public class MainActivity extends StandardActivity {
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
+            intent.putExtra(LIST_TYPE, EDIT_NAME_LIST_FARGMENT);
             startActivity(intent);
         }
     }
