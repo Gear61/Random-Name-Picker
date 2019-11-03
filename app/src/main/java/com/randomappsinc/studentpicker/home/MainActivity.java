@@ -259,6 +259,7 @@ public class MainActivity extends StandardActivity {
                 return true;
             case R.id.view_tutorial:
                 showTutorial(false);
+                UIUtils.hideKeyboard(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
