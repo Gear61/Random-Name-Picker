@@ -23,6 +23,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
 
     public static final int EDIT_NAME_LIST_FRAGMENT = 1;
     public static final String LIST_TYPE = "listType";
+    public static final boolean START_ON_EDIT_PAGE = true;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
