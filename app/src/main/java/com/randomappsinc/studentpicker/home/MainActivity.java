@@ -39,6 +39,8 @@ import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
+import static com.randomappsinc.studentpicker.listpage.ListActivity.LIST_TYPE;
+
 public class MainActivity extends StandardActivity {
 
     public static final String LIST_NAME_KEY = "listName";
@@ -174,6 +176,7 @@ public class MainActivity extends StandardActivity {
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
+            intent.putExtra(LIST_TYPE,ListActivity.START_ON_EDIT_PAGE);
             startActivity(intent);
         }
     }

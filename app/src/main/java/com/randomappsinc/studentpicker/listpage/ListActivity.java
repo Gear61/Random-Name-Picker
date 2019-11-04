@@ -21,6 +21,10 @@ import butterknife.ButterKnife;
 
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
 
+    public static final String LIST_TYPE = "listType";
+    public static final boolean START_ON_EDIT_PAGE = true;
+    public static final int EDIT_NAME_LIST_FRAGMENT = 1;
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
     @BindView(R.id.name_list_tabs) TabLayout nameListTabs;
@@ -42,12 +46,17 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
+        boolean toStartEditPage = getIntent().getBooleanExtra(LIST_TYPE,false);
+
         preferencesManager = new PreferencesManager(this);
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
                 getSupportFragmentManager(),
                 listName,
                 listTabTitles);
         nameListPager.setAdapter(listTabsAdapter);
+        if (toStartEditPage) {
+            nameListPager.setCurrentItem(EDIT_NAME_LIST_FRAGMENT);
+        }
         nameListTabs.setupWithViewPager(nameListPager);
 
         shakeDetector = new ShakeDetector(this);
