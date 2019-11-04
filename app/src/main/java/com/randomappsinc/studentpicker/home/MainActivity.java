@@ -176,7 +176,7 @@ public class MainActivity extends StandardActivity {
             nameListsAdapter.addList(newList);
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
-            intent.putExtra(START_ON_EDIT_PAGE , true );
+            intent.putExtra(START_ON_EDIT_PAGE, true);
             startActivity(intent);
         }
     }
