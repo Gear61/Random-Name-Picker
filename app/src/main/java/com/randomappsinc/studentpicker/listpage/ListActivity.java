@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.listpage;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
@@ -69,7 +70,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         if (preferencesManager.isShakeEnabled()) {
             shakeDetector.stop();
         }
