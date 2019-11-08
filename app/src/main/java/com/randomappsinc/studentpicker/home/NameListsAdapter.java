@@ -4,10 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,21 +23,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NameListsAdapter extends BaseAdapter {
+public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
     private Context context;
     private List<String> content;
     private TextView noContent;
     private DataSource dataSource;
     private PreferencesManager preferencesManager;
+    private OnListItemClickListener listItemClickListener;
 
-    public NameListsAdapter(Context context, TextView noContent) {
+    public NameListsAdapter(OnListItemClickListener listItemClickListener, Context context, TextView noContent) {
+        this.listItemClickListener = listItemClickListener;
         this.context = context;
         this.content = new ArrayList<>();
         this.noContent = noContent;
         this.dataSource = new DataSource(context);
         this.preferencesManager = new PreferencesManager(context);
         refreshList();
+    }
+
+    @NonNull
+    @Override
+    public NameListsAdapter.NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.names_list_item, parent, false);
+        return new NameListViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NameListsAdapter.NameListViewHolder holder, int position) {
+
+        holder.loadList(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return content.size();
     }
 
     public void refreshList() {
@@ -61,19 +81,8 @@ public class NameListsAdapter extends BaseAdapter {
         preferencesManager.addNameList(itemName);
     }
 
-    @Override
-    public int getCount() {
-        return content.size();
-    }
-
-    @Override
     public String getItem(int position) {
         return content.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
     }
 
     private void showRenameDialog(final int position) {
@@ -97,7 +106,7 @@ public class NameListsAdapter extends BaseAdapter {
                             dataSource.renameList(getItem(position), newListName);
                             preferencesManager.renameList(getItem(position), newListName);
                             content.set(position, newListName);
-                            notifyDataSetChanged();
+                            notifyItemChanged(position);
                         }
                     }
                 })
@@ -117,19 +126,24 @@ public class NameListsAdapter extends BaseAdapter {
                         preferencesManager.removeNameList(getItem(position));
                         content.remove(position);
                         setNoContent();
-                        notifyDataSetChanged();
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, content.size());
+
                     }
                 })
                 .show();
     }
 
-    class NameListViewHolder {
+    class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.list_name) TextView listName;
 
         private int position;
 
+
         NameListViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
+            view.setOnClickListener(this);
         }
 
         void loadList(int position) {
@@ -146,20 +160,19 @@ public class NameListsAdapter extends BaseAdapter {
         public void deleteList() {
             showDeleteDialog(position);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (listItemClickListener != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listItemClickListener.onItemClick(position);
+                }
+            }
+        }
     }
 
-    @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        NameListViewHolder holder;
-        if (view == null) {
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.names_list_item, parent, false);
-            holder = new NameListViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (NameListViewHolder) view.getTag();
-        }
-        holder.loadList(position);
-        return view;
+    public interface OnListItemClickListener {
+        void onItemClick(int position);
     }
 }
