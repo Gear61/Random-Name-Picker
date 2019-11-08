@@ -65,7 +65,7 @@ public class PresentationActivity extends StandardActivity
     private SetTextSizeViewHolder setTextViewHolder;
 
     private Handler handler;
-    private Runnable animateNamesTask = () -> animateNames();
+    private Runnable animateNamesTask = this::animateNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

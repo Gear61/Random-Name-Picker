@@ -21,7 +21,7 @@ public class ChoicesDisplayDialog {
     private int numNames;
     private MaterialDialog dialog;
 
-    public ChoicesDisplayDialog(@NonNull Listener listener, Context context) {
+    ChoicesDisplayDialog(@NonNull Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
@@ -35,7 +35,7 @@ public class ChoicesDisplayDialog {
                 .build();
     }
 
-    public void showChoices(String chosenNames, int numNames) {
+    void showChoices(String chosenNames, int numNames) {
         this.chosenNames = chosenNames;
         this.numNames = numNames;
 
@@ -47,7 +47,7 @@ public class ChoicesDisplayDialog {
         dialog.show();
     }
 
-    public boolean isShowing() {
+    boolean isShowing() {
         return dialog.isShowing();
     }
 }

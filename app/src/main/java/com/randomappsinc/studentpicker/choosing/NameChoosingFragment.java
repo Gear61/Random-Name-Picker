@@ -1,10 +1,7 @@
 package com.randomappsinc.studentpicker.choosing;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
@@ -29,9 +27,7 @@ import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -39,9 +35,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class NameChoosingFragment extends Fragment implements
-        TextToSpeech.OnInitListener, ChoicesDisplayDialog.Listener,
-        NameListDataManager.Listener, ShakeManager.Listener {
+public class NameChoosingFragment extends Fragment
+        implements ChoicesDisplayDialog.Listener, NameListDataManager.Listener,
+        ShakeManager.Listener, TextToSpeechManager.Listener {
 
     public static NameChoosingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -61,12 +57,11 @@ public class NameChoosingFragment extends Fragment implements
     private MaterialDialog settingsDialog;
 
     private ChoicesDisplayDialog choicesDisplayDialog;
-    private TextToSpeech textToSpeech;
-    private boolean textToSpeechEnabled;
     private boolean canShowPresentationScreen;
     private String listName;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ShakeManager shakeManager = ShakeManager.get();
+    private TextToSpeechManager textToSpeechManager;
     private Unbinder unbinder;
 
     @Override
@@ -86,6 +81,8 @@ public class NameChoosingFragment extends Fragment implements
 
         nameListDataManager.registerListener(this);
         shakeManager.registerListener(this);
+
+        textToSpeechManager = new TextToSpeechManager(getContext(), this);
 
         return rootView;
     }
@@ -107,8 +104,7 @@ public class NameChoosingFragment extends Fragment implements
                 .build();
         choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
 
-        textToSpeech = new TextToSpeech(getActivity(), this);
-        textToSpeech.setLanguage(Locale.getDefault());
+
 
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
@@ -178,37 +174,17 @@ public class NameChoosingFragment extends Fragment implements
 
     @Override
     public void sayNames(String names) {
-        if (textToSpeechEnabled) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                sayTextPostL(names);
-            } else {
-                sayTextPreL(names);
-            }
-        } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail, getContext());
-        }
+        textToSpeechManager.speak(names);
     }
 
-    private void sayTextPreL(String text) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, hashCode() + "");
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void sayTextPostL(String text) {
-        String utteranceId = hashCode() + "";
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+    @Override
+    public void onTextToSpeechFailure() {
+        UIUtils.showLongToast(R.string.text_to_speech_fail, getContext());
     }
 
     @Override
     public void copyNamesToClipboard(String chosenNames, int numNames) {
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
-    }
-
-    @Override
-    public void onInit(int status) {
-        textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
     }
 
     @Override
@@ -269,11 +245,8 @@ public class NameChoosingFragment extends Fragment implements
         super.onDestroyView();
         nameListDataManager.unregisterListener(this);
         shakeManager.unregisterListener();
+        textToSpeechManager.shutdown();
         unbinder.unbind();
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
-        }
     }
 
     @Override
