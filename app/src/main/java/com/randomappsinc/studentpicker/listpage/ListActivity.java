@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.listpage;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
@@ -21,9 +22,8 @@ import butterknife.ButterKnife;
 
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
 
-    public static final String LIST_TYPE = "listType";
-    public static final boolean START_ON_EDIT_PAGE = true;
-    public static final int EDIT_NAME_LIST_FRAGMENT = 1;
+    private static final int EDIT_NAME_LIST_PAGE_POSITION = 1;
+    public static final String START_ON_EDIT_PAGE = "startOnEditPage";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
@@ -46,16 +46,14 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
         setTitle(listName);
 
-        boolean toStartEditPage = getIntent().getBooleanExtra(LIST_TYPE,false);
-
         preferencesManager = new PreferencesManager(this);
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
                 getSupportFragmentManager(),
                 listName,
                 listTabTitles);
         nameListPager.setAdapter(listTabsAdapter);
-        if (toStartEditPage) {
-            nameListPager.setCurrentItem(EDIT_NAME_LIST_FRAGMENT);
+        if (getIntent().getBooleanExtra(START_ON_EDIT_PAGE, false)) {
+            nameListPager.setCurrentItem(EDIT_NAME_LIST_PAGE_POSITION);
         }
         nameListTabs.setupWithViewPager(nameListPager);
 
@@ -72,7 +70,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         if (preferencesManager.isShakeEnabled()) {
             shakeDetector.stop();
         }
