@@ -108,8 +108,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
                 .setContentText(R.string.import_explanation)
                 .setListener(new IShowcaseListener() {
                     @Override
-                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
-                    }
+                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {}
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
