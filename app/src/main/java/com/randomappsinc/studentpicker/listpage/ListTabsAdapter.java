@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.randomappsinc.studentpicker.choosing.NameChoosingFragment;
-import com.randomappsinc.studentpicker.fragments.EditNameListFragment;
+import com.randomappsinc.studentpicker.editing.EditNameListFragment;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
