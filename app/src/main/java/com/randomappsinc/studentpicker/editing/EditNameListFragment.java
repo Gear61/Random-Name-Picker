@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.fragments;
+package com.randomappsinc.studentpicker.editing;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,13 +21,6 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
-import com.randomappsinc.studentpicker.editing.DeleteNameDialog;
-import com.randomappsinc.studentpicker.editing.DuplicationDialog;
-import com.randomappsinc.studentpicker.editing.EditNameListAdapter;
-import com.randomappsinc.studentpicker.editing.MergeNameListsDialog;
-import com.randomappsinc.studentpicker.editing.NameCreationACAdapter;
-import com.randomappsinc.studentpicker.editing.NameEditChoicesDialog;
-import com.randomappsinc.studentpicker.editing.RenameDialog;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.UIUtils;
