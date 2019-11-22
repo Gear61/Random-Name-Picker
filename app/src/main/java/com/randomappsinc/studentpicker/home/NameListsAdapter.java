@@ -25,6 +25,10 @@ import butterknife.OnClick;
 
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
+    public interface OnListItemClickListener {
+        void onItemClick(int position);
+    }
+
     private Context context;
     private List<String> content;
     private TextView noContent;
@@ -51,7 +55,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     @Override
     public void onBindViewHolder(@NonNull NameListsAdapter.NameListViewHolder holder, int position) {
-
         holder.loadList(position);
     }
 
@@ -127,8 +130,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
                         content.remove(position);
                         setNoContent();
                         notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, content.size());
-
+                        notifyItemRangeChanged(position, 1);
                     }
                 })
                 .show();
@@ -163,16 +165,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
         @Override
         public void onClick(View v) {
-            if (listItemClickListener != null) {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listItemClickListener.onItemClick(position);
-                }
-            }
+            listItemClickListener.onItemClick(position);
         }
-    }
-
-    public interface OnListItemClickListener {
-        void onItemClick(int position);
     }
 }
