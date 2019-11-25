@@ -47,7 +47,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
     @BindView(R.id.item_name_input) EditText newListInput;
-    @BindView(R.id.names_recycle_view) RecyclerView recyclerView;
+    @BindView(R.id.user_lists) RecyclerView recyclerView;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.add_item) View addItem;
     @BindView(R.id.plus_icon) ImageView plus;
@@ -65,7 +65,6 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
-        noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
