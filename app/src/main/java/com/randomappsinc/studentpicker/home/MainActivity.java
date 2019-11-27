@@ -10,11 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,21 +34,20 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
-public class MainActivity extends StandardActivity {
+public class MainActivity extends StandardActivity implements NameListsAdapter.OnListItemClickListener {
 
     public static final String LIST_NAME_KEY = "listName";
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
     @BindView(R.id.item_name_input) EditText newListInput;
-    @BindView(R.id.content_list) ListView lists;
+    @BindView(R.id.user_lists) RecyclerView recyclerView;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.add_item) View addItem;
     @BindView(R.id.plus_icon) ImageView plus;
@@ -66,15 +65,13 @@ public class MainActivity extends StandardActivity {
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
-        newListInput.setHint(R.string.add_list_hint);
-        noContent.setText(R.string.no_lists_message);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, noContent);
-        lists.setAdapter(nameListsAdapter);
+        nameListsAdapter = new NameListsAdapter(this, this, noContent);
+        recyclerView.setAdapter(nameListsAdapter);
 
         if (preferencesManager.getFirstTimeUser()) {
             preferencesManager.setFirstTimeUser(false);
@@ -109,7 +106,8 @@ public class MainActivity extends StandardActivity {
                 .setContentText(R.string.import_explanation)
                 .setListener(new IShowcaseListener() {
                     @Override
-                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {}
+                    public void onShowcaseDisplayed(MaterialShowcaseView materialShowcaseView) {
+                    }
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView materialShowcaseView) {
@@ -137,7 +135,7 @@ public class MainActivity extends StandardActivity {
                 .negativeText(R.string.no_im_good)
                 .positiveText(R.string.will_rate)
                 .onPositive((dialog, which) -> {
-                    Uri uri =  Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
                         UIUtils.showSnackbar(parent, getString(R.string.play_store_error));
@@ -154,7 +152,7 @@ public class MainActivity extends StandardActivity {
         nameListsAdapter.refreshList();
     }
 
-    @OnItemClick(R.id.content_list)
+    @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
