@@ -10,11 +10,11 @@ import com.randomappsinc.studentpicker.editing.EditNameListFragment;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
-    private String tabTitles[];
+    private String[] tabTitles;
     private String listName;
 
     public ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
-        super(fragmentManager);
+        super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
         this.listName = listName;
     }
