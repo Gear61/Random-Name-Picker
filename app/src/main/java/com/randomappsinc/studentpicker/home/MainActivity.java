@@ -29,6 +29,7 @@ import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -47,7 +48,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
     @BindView(R.id.item_name_input) EditText newListInput;
-    @BindView(R.id.user_lists) RecyclerView recyclerView;
+    @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.add_item) View addItem;
     @BindView(R.id.plus_icon) ImageView plus;
@@ -71,7 +72,8 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
         nameListsAdapter = new NameListsAdapter(this, this, noContent);
-        recyclerView.setAdapter(nameListsAdapter);
+        lists.setAdapter(nameListsAdapter);
+        lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
         if (preferencesManager.getFirstTimeUser()) {
             preferencesManager.setFirstTimeUser(false);

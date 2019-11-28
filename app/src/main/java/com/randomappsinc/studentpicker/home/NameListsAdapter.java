@@ -36,7 +36,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
     private PreferencesManager preferencesManager;
     private OnListItemClickListener listItemClickListener;
 
-    public NameListsAdapter(OnListItemClickListener listItemClickListener, Context context, TextView noContent) {
+    NameListsAdapter(OnListItemClickListener listItemClickListener, Context context, TextView noContent) {
         this.listItemClickListener = listItemClickListener;
         this.context = context;
         this.content = new ArrayList<>();
@@ -49,7 +49,8 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
     @NonNull
     @Override
     public NameListsAdapter.NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.names_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.names_list_item, parent, false);
         return new NameListViewHolder(view);
     }
 
@@ -63,7 +64,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return content.size();
     }
 
-    public void refreshList() {
+    void refreshList() {
         content.clear();
         content.addAll(preferencesManager.getNameLists());
         Collections.sort(content);
@@ -76,7 +77,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         noContent.setVisibility(viewVisibility);
     }
 
-    public void addList(String itemName) {
+    void addList(String itemName) {
         content.add(itemName);
         Collections.sort(content);
         notifyDataSetChanged();
@@ -84,33 +85,27 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         preferencesManager.addNameList(itemName);
     }
 
-    public String getItem(int position) {
+    String getItem(int position) {
         return content.get(position);
     }
 
     private void showRenameDialog(final int position) {
         new MaterialDialog.Builder(context)
                 .title(R.string.rename_list)
-                .input(context.getString(R.string.new_list_name), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                                preferencesManager.doesListExist(input.toString().trim()));
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                    }
+                .input(context.getString(R.string.new_list_name), "", (dialog, input) -> {
+                    boolean submitEnabled = !(input.toString().trim().isEmpty() ||
+                            preferencesManager.doesListExist(input.toString().trim()));
+                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.cancel)
-                .onAny(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (which == DialogAction.POSITIVE) {
-                            String newListName = dialog.getInputEditText().getText().toString().trim();
-                            dataSource.renameList(getItem(position), newListName);
-                            preferencesManager.renameList(getItem(position), newListName);
-                            content.set(position, newListName);
-                            notifyItemChanged(position);
-                        }
+                .onAny((dialog, which) -> {
+                    if (which == DialogAction.POSITIVE) {
+                        String newListName = dialog.getInputEditText().getText().toString().trim();
+                        dataSource.renameList(getItem(position), newListName);
+                        preferencesManager.renameList(getItem(position), newListName);
+                        content.set(position, newListName);
+                        notifyItemChanged(position);
                     }
                 })
                 .show();
@@ -122,16 +117,13 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
                 .content(R.string.confirm_deletion_message)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dataSource.deleteList(getItem(position));
-                        preferencesManager.removeNameList(getItem(position));
-                        content.remove(position);
-                        setNoContent();
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, 1);
-                    }
+                .onPositive((dialog, which) -> {
+                    dataSource.deleteList(getItem(position));
+                    preferencesManager.removeNameList(getItem(position));
+                    content.remove(position);
+                    setNoContent();
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, 1);
                 })
                 .show();
     }
