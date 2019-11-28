@@ -41,7 +41,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
-public class MainActivity extends StandardActivity implements NameListsAdapter.OnListItemClickListener {
+public class MainActivity extends StandardActivity implements NameListsAdapter.Delegate {
 
     public static final String LIST_NAME_KEY = "listName";
 
@@ -71,7 +71,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, this, noContent);
+        nameListsAdapter = new NameListsAdapter(this, this);
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -89,6 +89,8 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         if (preferencesManager.rememberAppOpen() == 5) {
             showPleaseRateDialog();
         }
+
+        setNoContent();
     }
 
     public void showTutorial(final boolean firstTime) {
@@ -161,6 +163,17 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         intent.putExtra(LIST_NAME_KEY, listName);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    public void setNoContent() {
+        if (nameListsAdapter.getItemCount() == 0) {
+            lists.setVisibility(View.GONE);
+            noContent.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.GONE);
+            lists.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.add_item)
