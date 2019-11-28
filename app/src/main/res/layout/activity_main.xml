@@ -60,6 +60,17 @@
                 android:layout_height="44dp"
                 android:hint="@string/add_list_hint"
                 />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/voice_entry_icon"
+                android:text="@string/voice_icon"
+                android:layout_gravity="end|center_vertical"
+                style="@style/list_item_button"
+                android:layout_marginEnd="60dp"
+                android:layout_marginRight="60dp"
+                android:textSize="24sp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                />
         </FrameLayout>
 
         <TextView

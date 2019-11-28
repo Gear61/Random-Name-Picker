@@ -19,6 +19,7 @@
     <string name="edit_icon">{ion-edit}</string>
     <string name="trash_icon">{ion-android-delete}</string>
     <string name="delete_icon">{ion-android-remove-circle}</string>
+    <string name="voice_icon">{ion-android-microphone}</string>
 
     <string name="welcome">Welcome</string>
     <string name="view_tutorial">View tutorial</string>
@@ -61,4 +62,12 @@
 
     <string name="rename_list">Rename List</string>
     <string name="delete_list">Delete List</string>
+
+    <string name="speech_message">Tell us what kind of place you\'re looking for.</string>
+    <string name="speech_not_supported">
+        Sorry, but your Android device doesn\'t support speech recognition.
+    </string>
+    <string name="speech_unrecognized">
+        We couldn\'t recognize what you said. Please try again.
+    </string>
 </resources>
