@@ -49,9 +49,9 @@ public class PreferencesManager {
     }
 
     public void renameList(String oldName, String newName) {
+        moveNamesListCache(oldName, newName);
         removeNameList(oldName);
         addNameList(newName);
-        moveNamesListCache(oldName, newName);
     }
 
     public boolean doesListExist(String listName) {
