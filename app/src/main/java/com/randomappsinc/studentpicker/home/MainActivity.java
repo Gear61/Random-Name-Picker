@@ -262,7 +262,6 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-
             case SPEECH_REQUEST_CODE:
                 if (resultCode != RESULT_OK || data == null) {
                     return;
@@ -289,7 +288,6 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
                 }
                 break;
         }
-
     }
 
     @Override
