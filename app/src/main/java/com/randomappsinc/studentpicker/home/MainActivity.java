@@ -1,16 +1,19 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -31,6 +34,9 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +50,8 @@ import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDI
 public class MainActivity extends StandardActivity implements NameListsAdapter.Delegate {
 
     public static final String LIST_NAME_KEY = "listName";
+    private static final int SPEECH_REQUEST_CODE = 1;
+    private static final int IMPORT_FILE_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -194,6 +202,11 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         }
     }
 
+    @OnClick(R.id.voice_entry_icon)
+    public void voiceEntry() {
+        showGoogleSpeechDialog();
+    }
+
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
@@ -229,18 +242,51 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         }
     }
 
+    private void showGoogleSpeechDialog() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.list_name_input_speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        } catch (ActivityNotFoundException exception) {
+            Toast.makeText(
+                    this,
+                    R.string.speech_not_supported,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-            if (!filePath.endsWith(".txt")) {
-                UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
-            } else {
-                Intent intent = new Intent(this, ImportFileActivity.class);
-                intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
-                startActivity(intent);
-            }
+
+        switch (requestCode) {
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || data == null) {
+                    return;
+                }
+
+                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchInput = result.get(0);
+                newListInput.setText(searchInput);
+                break;
+            case IMPORT_FILE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                    if (!filePath.endsWith(".txt")) {
+                        UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
+                    } else {
+                        Intent intent = new Intent(this, ImportFileActivity.class);
+                        intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
+                        startActivity(intent);
+                    }
+                }
+                break;
         }
     }
 
