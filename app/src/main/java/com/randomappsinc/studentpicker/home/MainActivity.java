@@ -250,10 +250,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
         } catch (ActivityNotFoundException exception) {
-            Toast.makeText(
-                    this,
-                    R.string.speech_not_supported,
-                    Toast.LENGTH_SHORT).show();
+            UIUtils.showLongToast(R.string.speech_not_supported, this);
         }
     }
 
