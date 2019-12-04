@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -148,7 +149,6 @@ public class NameChoosingFragment extends Fragment
         if (nameChoosingAdapter.getCount() == 0) {
             return;
         }
-
         if (settings.getPresentationMode()) {
             if (!canShowPresentationScreen) {
                 return;

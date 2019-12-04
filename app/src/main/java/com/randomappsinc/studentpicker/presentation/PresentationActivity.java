@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -27,6 +28,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -42,7 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PresentationActivity extends StandardActivity
-        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
+        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
@@ -63,6 +65,7 @@ public class PresentationActivity extends StandardActivity
 
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
+    private TextToSpeechManager textToSpeechManager;
 
     private Handler handler;
     private Runnable animateNamesTask = this::animateNames;
@@ -78,6 +81,7 @@ public class PresentationActivity extends StandardActivity
         listName = getIntent().getStringExtra(LIST_NAME_KEY);
         listState = preferencesManager.getNameListState(listName);
         settings = preferencesManager.getChoosingSettings(listName);
+        textToSpeechManager = new TextToSpeechManager(this, this);
 
         int numNames = settings.getNumNamesToChoose();
         if (numNames > 1) {
@@ -152,6 +156,7 @@ public class PresentationActivity extends StandardActivity
                     fileDescriptor.getLength());
             player.prepare();
             player.start();
+            player.setOnCompletionListener(mediaPlayer -> textToSpeechManager.speak(chosenNamesText));
         } catch (Exception ex) {
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
@@ -255,7 +260,8 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
-    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
@@ -277,6 +283,7 @@ public class PresentationActivity extends StandardActivity
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
+        textToSpeechManager.shutdown();
     }
 
     @Override
@@ -310,5 +317,10 @@ public class PresentationActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTextToSpeechFailure() {
+        UIUtils.showLongToast(R.string.text_to_speech_fail, this);
     }
 }
