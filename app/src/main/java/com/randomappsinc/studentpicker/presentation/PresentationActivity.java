@@ -185,6 +185,7 @@ public class PresentationActivity extends StandardActivity
             @Override
             public void onAnimationStart(Animator animator) {}
 
+
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (settings.getAutomaticTts()) {
