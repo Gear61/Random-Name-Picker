@@ -7,6 +7,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:ignore="SpUsage, ContentDescription, RtlHardcoded"
     >
 
@@ -48,7 +49,10 @@
 
             <EditText
                 android:id="@+id/item_name_input"
-                android:padding="8dp"
+                android:paddingRight="44dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/dark_gray"
                 android:textSize="18dp"
@@ -60,12 +64,26 @@
                 android:layout_height="44dp"
                 android:hint="@string/add_list_hint"
                 />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/voice_entry_icon"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="55dp"
+                android:layout_marginRight="55dp"
+                android:layout_gravity="end|center_vertical"
+                android:text="@string/voice_icon"
+                android:textColor="@color/app_blue"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:foreground="?attr/selectableItemBackground"
+                />
         </FrameLayout>
 
         <TextView
             android:id="@+id/no_content"
-            style="@style/empty_state_text"
             android:text="@string/no_lists_message"
+            style="@style/empty_state_text"
             />
 
         <androidx.recyclerview.widget.RecyclerView

@@ -27,6 +27,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -42,14 +43,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PresentationActivity extends StandardActivity
-        implements TextToSpeech.OnInitListener, ColorChooserDialog.ColorCallback {
+        implements ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
-    @BindView(R.id.header) TextView header;
-    @BindView(R.id.names) TextView names;
-    @BindColor(R.color.dark_gray) int darkGray;
+    @BindView(R.id.header)
+    TextView header;
+    @BindView(R.id.names)
+    TextView names;
+    @BindColor(R.color.dark_gray)
+    int darkGray;
 
     private PreferencesManager preferencesManager;
     private MediaPlayer player;
@@ -58,11 +62,9 @@ public class PresentationActivity extends StandardActivity
     private ChoosingSettings settings;
     private String chosenNamesText;
 
-    private TextToSpeech textToSpeech;
-    private boolean textToSpeechEnabled;
-
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
+    private TextToSpeechManager textToSpeechManager;
 
     private Handler handler;
     private Runnable animateNamesTask = this::animateNames;
@@ -78,6 +80,7 @@ public class PresentationActivity extends StandardActivity
         listName = getIntent().getStringExtra(LIST_NAME_KEY);
         listState = preferencesManager.getNameListState(listName);
         settings = preferencesManager.getChoosingSettings(listName);
+        textToSpeechManager = new TextToSpeechManager(this, this);
 
         int numNames = settings.getNumNamesToChoose();
         if (numNames > 1) {
@@ -95,9 +98,6 @@ public class PresentationActivity extends StandardActivity
 
         handler = new Handler();
         player = new MediaPlayer();
-
-        textToSpeech = new TextToSpeech(this, this);
-        textToSpeech.setLanguage(Locale.US);
 
         setTextSizeDialog = new MaterialDialog.Builder(this)
                 .title(R.string.set_text_size_title)
@@ -125,7 +125,6 @@ public class PresentationActivity extends StandardActivity
 
     private void chooseNames() {
         names.clearAnimation();
-        textToSpeech.stop();
 
         if (listState.getNumNames() > 0) {
             List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
@@ -152,6 +151,7 @@ public class PresentationActivity extends StandardActivity
                     fileDescriptor.getLength());
             player.prepare();
             player.start();
+            player.setOnCompletionListener(mediaPlayer -> textToSpeechManager.speak(chosenNamesText));
         } catch (Exception ex) {
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
@@ -178,20 +178,24 @@ public class PresentationActivity extends StandardActivity
         fullSet.playSequentially(fadeIn, scaleSet);
         fullSet.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animator) {}
+            public void onAnimationStart(Animator animator) {
+            }
+
 
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (settings.getAutomaticTts()) {
-                    sayNames(chosenNamesText);
+                    textToSpeechManager.speak(chosenNamesText);
                 }
             }
 
             @Override
-            public void onAnimationCancel(Animator animator) {}
+            public void onAnimationCancel(Animator animator) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animator animator) {}
+            public void onAnimationRepeat(Animator animator) {
+            }
         });
         fullSet.start();
     }
@@ -212,35 +216,6 @@ public class PresentationActivity extends StandardActivity
                 .show();
     }
 
-    private void sayNames(String names) {
-        if (textToSpeechEnabled) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                sayTextPostL(names);
-            } else {
-                sayTextPreL(names);
-            }
-        } else {
-            UIUtils.showLongToast(R.string.text_to_speech_fail, this);
-        }
-    }
-
-    private void sayTextPreL(String text) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, String.valueOf(hashCode()));
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, map);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void sayTextPostL(String text) {
-        String utteranceId = String.valueOf(hashCode());
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-    }
-
-    @Override
-    public void onInit(int status) {
-        textToSpeechEnabled = (status == TextToSpeech.SUCCESS);
-    }
-
     private void showColorChooserDialog() {
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
                 .dynamicButtonColor(false)
@@ -255,7 +230,8 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
-    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
+    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
@@ -273,10 +249,7 @@ public class PresentationActivity extends StandardActivity
     protected void onDestroy() {
         super.onDestroy();
         player.stop();
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
-        }
+        textToSpeechManager.shutdown();
     }
 
     @Override
@@ -298,7 +271,7 @@ public class PresentationActivity extends StandardActivity
                 showSettingsDialog();
                 return true;
             case R.id.say_names:
-                sayNames(chosenNamesText);
+                textToSpeechManager.speak(chosenNamesText);
                 return true;
             case R.id.copy_names:
                 NameUtils.copyNamesToClipboard(
@@ -310,5 +283,10 @@ public class PresentationActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTextToSpeechFailure() {
+        UIUtils.showLongToast(R.string.text_to_speech_fail, this);
     }
 }

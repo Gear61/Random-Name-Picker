@@ -1,10 +1,12 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,9 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,9 +46,11 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
-public class MainActivity extends StandardActivity implements NameListsAdapter.OnListItemClickListener {
+public class MainActivity extends StandardActivity implements NameListsAdapter.Delegate {
 
     public static final String LIST_NAME_KEY = "listName";
+    private static final int SPEECH_REQUEST_CODE = 1;
+    private static final int IMPORT_FILE_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -71,7 +78,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, this, noContent);
+        nameListsAdapter = new NameListsAdapter(this, this);
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -89,6 +96,8 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         if (preferencesManager.rememberAppOpen() == 5) {
             showPleaseRateDialog();
         }
+
+        setNoContent();
     }
 
     public void showTutorial(final boolean firstTime) {
@@ -163,6 +172,17 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         startActivity(intent);
     }
 
+    @Override
+    public void setNoContent() {
+        if (nameListsAdapter.getItemCount() == 0) {
+            lists.setVisibility(View.GONE);
+            noContent.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.GONE);
+            lists.setVisibility(View.VISIBLE);
+        }
+    }
+
     @OnClick(R.id.add_item)
     public void addItem() {
         String newList = newListInput.getText().toString().trim();
@@ -179,6 +199,11 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
             intent.putExtra(START_ON_EDIT_PAGE, true);
             startActivity(intent);
         }
+    }
+
+    @OnClick(R.id.voice_entry_icon)
+    public void voiceEntry() {
+        showGoogleSpeechDialog();
     }
 
     @OnClick(R.id.import_text_file)
@@ -216,18 +241,48 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.O
         }
     }
 
+    private void showGoogleSpeechDialog() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.list_name_input_speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+        } catch (ActivityNotFoundException exception) {
+            UIUtils.showLongToast(R.string.speech_not_supported, this);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-            if (!filePath.endsWith(".txt")) {
-                UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
-            } else {
-                Intent intent = new Intent(this, ImportFileActivity.class);
-                intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
-                startActivity(intent);
-            }
+
+        switch (requestCode) {
+            case SPEECH_REQUEST_CODE:
+                if (resultCode != RESULT_OK || data == null) {
+                    return;
+                }
+
+                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result == null || result.isEmpty()) {
+                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
+                    return;
+                }
+                String searchInput = result.get(0);
+                newListInput.setText(searchInput);
+                break;
+            case IMPORT_FILE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                    if (!filePath.endsWith(".txt")) {
+                        UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
+                    } else {
+                        Intent intent = new Intent(this, ImportFileActivity.class);
+                        intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
+                        startActivity(intent);
+                    }
+                }
+                break;
         }
     }
 

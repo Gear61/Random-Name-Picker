@@ -25,25 +25,27 @@ import butterknife.OnClick;
 
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
-    public interface OnListItemClickListener {
+    public interface Delegate {
         void onItemClick(int position);
+
+        void setNoContent();
     }
 
     private Context context;
     private List<String> content;
-    private TextView noContent;
     private DataSource dataSource;
     private PreferencesManager preferencesManager;
-    private OnListItemClickListener listItemClickListener;
+    private Delegate delegate;
 
-    NameListsAdapter(OnListItemClickListener listItemClickListener, Context context, TextView noContent) {
-        this.listItemClickListener = listItemClickListener;
+    NameListsAdapter(Delegate delegate, Context context) {
+        this.delegate = delegate;
         this.context = context;
         this.content = new ArrayList<>();
-        this.noContent = noContent;
         this.dataSource = new DataSource(context);
         this.preferencesManager = new PreferencesManager(context);
-        refreshList();
+
+        content.addAll(preferencesManager.getNameLists());
+        Collections.sort(content);
     }
 
     @NonNull
@@ -69,19 +71,14 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         content.addAll(preferencesManager.getNameLists());
         Collections.sort(content);
         notifyDataSetChanged();
-        setNoContent();
-    }
-
-    private void setNoContent() {
-        int viewVisibility = content.isEmpty() ? View.VISIBLE : View.GONE;
-        noContent.setVisibility(viewVisibility);
+        delegate.setNoContent();
     }
 
     void addList(String itemName) {
         content.add(itemName);
         Collections.sort(content);
         notifyDataSetChanged();
-        setNoContent();
+        delegate.setNoContent();
         preferencesManager.addNameList(itemName);
     }
 
@@ -121,18 +118,14 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
                     dataSource.deleteList(getItem(position));
                     preferencesManager.removeNameList(getItem(position));
                     content.remove(position);
-                    setNoContent();
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, 1);
+                    delegate.setNoContent();
                 })
                 .show();
     }
 
     class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.list_name) TextView listName;
-
-        private int position;
-
 
         NameListViewHolder(View view) {
             super(view);
@@ -141,23 +134,22 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         }
 
         void loadList(int position) {
-            this.position = position;
             this.listName.setText(getItem(position));
         }
 
         @OnClick(R.id.edit_icon)
         public void renameList() {
-            showRenameDialog(position);
+            showRenameDialog(getAdapterPosition());
         }
 
         @OnClick(R.id.delete_icon)
         public void deleteList() {
-            showDeleteDialog(position);
+            showDeleteDialog(getAdapterPosition());
         }
 
         @Override
         public void onClick(View v) {
-            listItemClickListener.onItemClick(position);
+            delegate.onItemClick(getAdapterPosition());
         }
     }
 }
