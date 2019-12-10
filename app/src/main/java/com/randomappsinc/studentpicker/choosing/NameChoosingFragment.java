@@ -148,7 +148,6 @@ public class NameChoosingFragment extends Fragment
         if (nameChoosingAdapter.getCount() == 0) {
             return;
         }
-
         if (settings.getPresentationMode()) {
             if (!canShowPresentationScreen) {
                 return;
