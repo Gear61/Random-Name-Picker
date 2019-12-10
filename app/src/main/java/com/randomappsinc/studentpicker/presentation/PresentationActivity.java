@@ -48,12 +48,9 @@ public class PresentationActivity extends StandardActivity
     public static final String LIST_NAME_KEY = "listName";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
-    @BindView(R.id.header)
-    TextView header;
-    @BindView(R.id.names)
-    TextView names;
-    @BindColor(R.color.dark_gray)
-    int darkGray;
+    @BindView(R.id.header) TextView header;
+    @BindView(R.id.names) TextView names;
+    @BindColor(R.color.dark_gray) int darkGray;
 
     private PreferencesManager preferencesManager;
     private MediaPlayer player;
@@ -125,7 +122,7 @@ public class PresentationActivity extends StandardActivity
 
     private void chooseNames() {
         names.clearAnimation();
-
+        textToSpeechManager.stopSpeaking();
         if (listState.getNumNames() > 0) {
             List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
                     settings.getNumNamesToChoose(),
@@ -151,7 +148,6 @@ public class PresentationActivity extends StandardActivity
                     fileDescriptor.getLength());
             player.prepare();
             player.start();
-            player.setOnCompletionListener(mediaPlayer -> textToSpeechManager.speak(chosenNamesText));
         } catch (Exception ex) {
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
