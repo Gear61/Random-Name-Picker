@@ -13,12 +13,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.joanzapata.iconify.IconDrawable;
@@ -27,6 +27,7 @@ import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.activities.ImportFileActivity;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
@@ -65,6 +66,7 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     private PreferencesManager preferencesManager;
+    private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
 
     @Override
@@ -74,12 +76,13 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
+        dataSource = new DataSource(this);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, this);
+        nameListsAdapter = new NameListsAdapter(this, preferencesManager.getNameLists());
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -165,6 +168,16 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         intent.putExtra(LIST_NAME_KEY, listName);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemEditClick(int position) {
+        showRenameDialog(position);
+    }
+
+    @Override
+    public void onItemDeleteClick(int position) {
+        showDeleteDialog(position);
     }
 
     @Override
@@ -309,5 +322,43 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showRenameDialog(final int position) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.rename_list)
+                .input(getString(R.string.new_list_name), "", (dialog, input) -> {
+                    boolean submitEnabled = !(input.toString().trim().isEmpty() ||
+                            preferencesManager.doesListExist(input.toString().trim()));
+                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
+                })
+                .alwaysCallInputCallback()
+                .negativeText(android.R.string.cancel)
+                .onAny((dialog, which) -> {
+                    if (which == DialogAction.POSITIVE) {
+                        String newListName = dialog.getInputEditText().getText().toString().trim();
+                        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
+                        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
+                        nameListsAdapter.getContent().set(position, newListName);
+                        nameListsAdapter.notifyItemChanged(position);
+                    }
+                })
+                .show();
+    }
+
+    private void showDeleteDialog(final int position) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.confirm_deletion_title)
+                .content(R.string.confirm_deletion_message)
+                .positiveText(android.R.string.yes)
+                .negativeText(android.R.string.cancel)
+                .onPositive((dialog, which) -> {
+                    dataSource.deleteList(nameListsAdapter.getItem(position));
+                    preferencesManager.removeNameList(nameListsAdapter.getItem(position));
+                    nameListsAdapter.getContent().remove(position);
+                    nameListsAdapter.notifyItemRemoved(position);
+                    setNoContent();
+                })
+                .show();
     }
 }
