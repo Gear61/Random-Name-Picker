@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -158,12 +159,6 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        nameListsAdapter.refreshList();
-    }
-
-    @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
@@ -192,8 +187,10 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
             String dupeMessage = String.format(listDuplicate, newList);
             UIUtils.showSnackbar(parent, dupeMessage);
         } else {
+            preferencesManager.addNameList(newList);
             newListInput.setText("");
             nameListsAdapter.addList(newList);
+
             Intent intent = new Intent(this, ListActivity.class);
             intent.putExtra(LIST_NAME_KEY, newList);
             intent.putExtra(START_ON_EDIT_PAGE, true);
