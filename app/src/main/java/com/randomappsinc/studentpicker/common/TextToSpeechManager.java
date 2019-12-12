@@ -136,7 +136,7 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
                 }
             };
 
-    private void stopSpeaking() {
+    public void stopSpeaking() {
         if (textToSpeech.isSpeaking()) {
             audioManager.abandonAudioFocus(audioFocusChangeListener);
             textToSpeech.stop();
