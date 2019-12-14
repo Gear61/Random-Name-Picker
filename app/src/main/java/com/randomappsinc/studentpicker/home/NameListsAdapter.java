@@ -48,6 +48,13 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         Collections.sort(content);
     }
 
+    void resync() {
+        content.clear();
+        content.addAll(preferencesManager.getNameLists());
+        Collections.sort(content);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public NameListsAdapter.NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
