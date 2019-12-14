@@ -67,22 +67,9 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
     }
 
     void addList(String newList) {
-        boolean insertedBetweenOtherItems = false;
-        // When inserting the new list, make sure to retain sorting order
-        for (int i = 0; i < content.size(); i++) {
-            // If the newly added place type comes before the current one, insert it here
-            if (newList.compareTo(content.get(i)) < 0) {
-                content.add(i, newList);
-                notifyItemInserted(i);
-                insertedBetweenOtherItems = true;
-                break;
-            }
-        }
-        // If we were unable to insert the new list between other items, just insert it at the end
-        if (!insertedBetweenOtherItems) {
-            content.add(newList);
-            notifyItemInserted(content.size() - 1);
-        }
+        content.add(newList);
+        Collections.sort(content);
+        notifyDataSetChanged();
         delegate.setNoContent();
     }
 
