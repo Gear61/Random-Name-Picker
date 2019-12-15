@@ -181,12 +181,12 @@ public class MainActivity extends StandardActivity
 
     @Override
     public void onItemEditClick(int position) {
-        showRenameDialog(position);
+        renameListDialog.show(position);
     }
 
     @Override
     public void onItemDeleteClick(int position) {
-        showDeleteDialog(position);
+        deleteListDialog.show(position);
     }
 
     @Override
@@ -333,20 +333,12 @@ public class MainActivity extends StandardActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void showRenameDialog(final int position) {
-        renameListDialog.show(position);
-    }
-
     @Override
     public void onRenameListConfirmed(int position, String newListName) {
         dataSource.renameList(nameListsAdapter.getItem(position), newListName);
         preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
         nameListsAdapter.renameItem(position, newListName);
         nameListsAdapter.notifyItemChanged(position);
-    }
-
-    private void showDeleteDialog(final int position) {
-        deleteListDialog.show(position);
     }
 
     @Override
