@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.joanzapata.iconify.IconDrawable;
@@ -48,7 +47,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
-public class MainActivity extends StandardActivity implements NameListsAdapter.Delegate {
+public class MainActivity extends StandardActivity
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
     private static final int SPEECH_REQUEST_CODE = 1;
@@ -68,6 +68,8 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
+    private RenameListDialog renameListDialog;
+    private DeleteListDialog deleteListDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,13 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         }
 
         setNoContent();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        renameListDialog = new RenameListDialog(getSupportFragmentManager(), this, preferencesManager);
+        deleteListDialog = new DeleteListDialog(getSupportFragmentManager(), this);
     }
 
     public void showTutorial(final boolean firstTime) {
@@ -325,40 +334,35 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
     }
 
     private void showRenameDialog(final int position) {
-        new MaterialDialog.Builder(this)
-                .title(R.string.rename_list)
-                .input(getString(R.string.new_list_name), "", (dialog, input) -> {
-                    boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                            preferencesManager.doesListExist(input.toString().trim()));
-                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.cancel)
-                .onAny((dialog, which) -> {
-                    if (which == DialogAction.POSITIVE) {
-                        String newListName = dialog.getInputEditText().getText().toString().trim();
-                        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
-                        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
-                        nameListsAdapter.getContent().set(position, newListName);
-                        nameListsAdapter.notifyItemChanged(position);
-                    }
-                })
-                .show();
+        renameListDialog.show(position);
+    }
+
+    @Override
+    public void onRenameListConfirmed(int position, String newListName) {
+        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
+        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
+        nameListsAdapter.renameItem(position, newListName);
+        nameListsAdapter.notifyItemChanged(position);
     }
 
     private void showDeleteDialog(final int position) {
-        new MaterialDialog.Builder(this)
-                .title(R.string.confirm_deletion_title)
-                .content(R.string.confirm_deletion_message)
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.cancel)
-                .onPositive((dialog, which) -> {
-                    dataSource.deleteList(nameListsAdapter.getItem(position));
-                    preferencesManager.removeNameList(nameListsAdapter.getItem(position));
-                    nameListsAdapter.getContent().remove(position);
-                    nameListsAdapter.notifyItemRemoved(position);
-                    setNoContent();
-                })
-                .show();
+        deleteListDialog.show(position);
     }
+
+    @Override
+    public void onDeleteListConfirmed(int position) {
+        dataSource.deleteList(nameListsAdapter.getItem(position));
+        preferencesManager.removeNameList(nameListsAdapter.getItem(position));
+        nameListsAdapter.deleteItem(position);
+        nameListsAdapter.notifyItemRemoved(position);
+        setNoContent();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        renameListDialog = null;
+        deleteListDialog = null;
+    }
+
 }

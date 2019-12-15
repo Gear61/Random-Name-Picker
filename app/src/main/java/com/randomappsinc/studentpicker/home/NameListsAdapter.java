@@ -71,8 +71,12 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return content.get(position);
     }
 
-    public List<String> getContent() {
-        return content;
+     void renameItem(int position, String newName) {
+        content.set(position,newName);
+    }
+
+     void deleteItem(int position) {
+        content.remove(position);
     }
 
     class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
