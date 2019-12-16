@@ -70,6 +70,7 @@ public class MainActivity extends StandardActivity
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
     private DeleteListDialog deleteListDialog;
+    private MaterialDialog.Builder materialDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,9 @@ public class MainActivity extends StandardActivity
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
+        materialDialogBuilder = new MaterialDialog.Builder(this);
+        renameListDialog = new RenameListDialog(getSupportFragmentManager(), this, preferencesManager);
+        deleteListDialog = new DeleteListDialog(materialDialogBuilder, this);
         dataSource = new DataSource(this);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
@@ -104,13 +108,6 @@ public class MainActivity extends StandardActivity
         }
 
         setNoContent();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        renameListDialog = new RenameListDialog(getSupportFragmentManager(), this, preferencesManager);
-        deleteListDialog = new DeleteListDialog(getSupportFragmentManager(), this);
     }
 
     public void showTutorial(final boolean firstTime) {
@@ -338,7 +335,6 @@ public class MainActivity extends StandardActivity
         dataSource.renameList(nameListsAdapter.getItem(position), newListName);
         preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
         nameListsAdapter.renameItem(position, newListName);
-        nameListsAdapter.notifyItemChanged(position);
     }
 
     @Override
@@ -346,15 +342,5 @@ public class MainActivity extends StandardActivity
         dataSource.deleteList(nameListsAdapter.getItem(position));
         preferencesManager.removeNameList(nameListsAdapter.getItem(position));
         nameListsAdapter.deleteItem(position);
-        nameListsAdapter.notifyItemRemoved(position);
-        setNoContent();
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        renameListDialog = null;
-        deleteListDialog = null;
-    }
-
 }
