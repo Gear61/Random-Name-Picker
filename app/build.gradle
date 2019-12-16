@@ -56,6 +56,4 @@ dependencies {
     implementation 'com.nbsp:library:1.02'
     implementation 'com.github.deano2390:MaterialShowcaseView:1.2.0'
     implementation 'com.squareup:seismic:1.0.2'
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
-
 }

@@ -1,46 +1,37 @@
 package com.randomappsinc.studentpicker.home;
 
-import android.app.Dialog;
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
-public class DeleteListDialog extends DialogFragment {
+public class DeleteListDialog {
 
     public interface Listener {
         void onDeleteListConfirmed(int position);
     }
 
-    private FragmentManager fragmentManager;
+    private MaterialDialog.Builder materialDialogBuilder;
     private Listener listener;
     private int position;
 
-    public DeleteListDialog(FragmentManager fragmentManager, Listener listener) {
-        this.fragmentManager = fragmentManager;
+    DeleteListDialog(MaterialDialog.Builder materialDialogBuilder, Listener listener) {
+        this.materialDialogBuilder = materialDialogBuilder;
         this.listener = listener;
+        onCreateDialog();
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return new MaterialDialog.Builder(getActivity())
+   private void onCreateDialog() {
+        materialDialogBuilder
                 .title(R.string.confirm_deletion_title)
                 .content(R.string.confirm_deletion_message)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) ->
-                    listener.onDeleteListConfirmed(position)
+                        listener.onDeleteListConfirmed(position)
                 ).build();
     }
 
     public void show(int position) {
         this.position = position;
-        this.show(fragmentManager, null);
+        materialDialogBuilder.show();
     }
 }
