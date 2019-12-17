@@ -63,7 +63,7 @@ public class JSONUtils {
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the list state
-    public static ListInfo extractNames(String cachedList) {
+    public static ListInfo extractChoosingState(String cachedList) {
         if (cachedList.isEmpty()) {
             return null;
         }

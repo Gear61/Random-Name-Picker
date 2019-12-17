@@ -131,7 +131,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     public void cacheState(ChoosingSettings settings) {
-        preferencesManager.cacheNameChoosingList(listName, currentState, settings);
+        preferencesManager.setNameListState(listName, currentState, settings);
     }
 
     public int getNumInstances() {
