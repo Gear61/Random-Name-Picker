@@ -226,13 +226,13 @@ public class PresentationActivity extends StandardActivity
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        preferencesManager.cacheNameChoosingList(listName, listState, settings);
+        preferencesManager.setNameListState(listName, listState, settings);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void finish() {
-        preferencesManager.cacheNameChoosingList(listName, listState, settings);
+        preferencesManager.setNameListState(listName, listState, settings);
         super.finish();
     }
 
