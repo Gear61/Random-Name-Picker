@@ -87,7 +87,7 @@ public class ListInfo {
     public String getNameText(int position) {
         String name = names.get(position);
         int amount = nameAmounts.get(name);
-        return amount == 1 ? name : name + " (" + String.valueOf(amount) + ")";
+        return amount == 1 ? name : name + " (" + amount + ")";
     }
 
     public int getNumNames() {

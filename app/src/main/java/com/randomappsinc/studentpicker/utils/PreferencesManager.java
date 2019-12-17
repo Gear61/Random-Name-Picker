@@ -80,13 +80,13 @@ public class PreferencesManager {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 
-    public void moveNamesListCache(String oldListName, String newListName) {
+    private void moveNamesListCache(String oldListName, String newListName) {
         String cache = prefs.getString(oldListName, "");
         removeNamesListCache(oldListName);
         prefs.edit().putString(newListName, cache).apply();
     }
 
-    public void removeNamesListCache(String listName) {
+    private void removeNamesListCache(String listName) {
         prefs.edit().remove(listName).apply();
     }
 
