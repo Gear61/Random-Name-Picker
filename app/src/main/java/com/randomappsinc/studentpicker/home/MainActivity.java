@@ -24,9 +24,9 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.activities.ImportFileActivity;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
@@ -51,8 +51,10 @@ public class MainActivity extends StandardActivity
         implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
+
     private static final int SPEECH_REQUEST_CODE = 1;
     private static final int IMPORT_FILE_REQUEST_CODE = 2;
+    private static final int SAVE_IMPORT_REQUEST_CODE = 3;
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -70,7 +72,6 @@ public class MainActivity extends StandardActivity
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
     private DeleteListDialog deleteListDialog;
-    private MaterialDialog.Builder materialDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,16 +80,15 @@ public class MainActivity extends StandardActivity
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
-        materialDialogBuilder = new MaterialDialog.Builder(this);
-        renameListDialog = new RenameListDialog(getSupportFragmentManager(), this, preferencesManager);
-        deleteListDialog = new DeleteListDialog(materialDialogBuilder, this);
+        renameListDialog = new RenameListDialog(this, this, preferencesManager);
+        deleteListDialog = new DeleteListDialog(this, this);
         dataSource = new DataSource(this);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, preferencesManager.getNameLists());
+        nameListsAdapter = new NameListsAdapter(this, preferencesManager);
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -182,8 +182,22 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
+    public void onRenameListConfirmed(int position, String newListName) {
+        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
+        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
+        nameListsAdapter.renameItem(position, newListName);
+    }
+
+    @Override
     public void onItemDeleteClick(int position) {
         deleteListDialog.show(position);
+    }
+
+    @Override
+    public void onDeleteListConfirmed(int position) {
+        dataSource.deleteList(nameListsAdapter.getItem(position));
+        preferencesManager.removeNameList(nameListsAdapter.getItem(position));
+        nameListsAdapter.deleteItem(position);
     }
 
     @Override
@@ -226,7 +240,7 @@ public class MainActivity extends StandardActivity
     public void importTextFile() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
             Intent intent = new Intent(this, FilePickerActivity.class);
-            startActivityForResult(intent, 1);
+            startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
@@ -272,7 +286,6 @@ public class MainActivity extends StandardActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case SPEECH_REQUEST_CODE:
                 if (resultCode != RESULT_OK || data == null) {
@@ -293,10 +306,15 @@ public class MainActivity extends StandardActivity
                     if (!filePath.endsWith(".txt")) {
                         UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
                     } else {
-                        Intent intent = new Intent(this, ImportFileActivity.class);
-                        intent.putExtra(ImportFileActivity.FILE_PATH_KEY, filePath);
-                        startActivity(intent);
+                        Intent intent = new Intent(this, ImportFromTextFileActivity.class);
+                        intent.putExtra(ImportFromTextFileActivity.FILE_PATH_KEY, filePath);
+                        startActivityForResult(intent, SAVE_IMPORT_REQUEST_CODE);
                     }
+                }
+                break;
+            case SAVE_IMPORT_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    nameListsAdapter.resync();
                 }
                 break;
         }
@@ -328,19 +346,5 @@ public class MainActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRenameListConfirmed(int position, String newListName) {
-        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
-        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
-        nameListsAdapter.renameItem(position, newListName);
-    }
-
-    @Override
-    public void onDeleteListConfirmed(int position) {
-        dataSource.deleteList(nameListsAdapter.getItem(position));
-        preferencesManager.removeNameList(nameListsAdapter.getItem(position));
-        nameListsAdapter.deleteItem(position);
     }
 }

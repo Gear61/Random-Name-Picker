@@ -67,26 +67,26 @@ public class PreferencesManager {
         prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
-    public void cacheNameChoosingList(String listName, ListInfo currentState, ChoosingSettings settings) {
+    public void setNameListState(String listName, ListInfo currentState, ChoosingSettings settings) {
         String cache = JSONUtils.serializeChoosingState(currentState, settings);
         prefs.edit().putString(listName, cache).apply();
     }
 
     public ListInfo getNameListState(String listName) {
-        return JSONUtils.extractNames(prefs.getString(listName, ""));
+        return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
     }
 
     public ChoosingSettings getChoosingSettings(String listName) {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 
-    public void moveNamesListCache(String oldListName, String newListName) {
+    private void moveNamesListCache(String oldListName, String newListName) {
         String cache = prefs.getString(oldListName, "");
         removeNamesListCache(oldListName);
         prefs.edit().putString(newListName, cache).apply();
     }
 
-    public void removeNamesListCache(String listName) {
+    private void removeNamesListCache(String listName) {
         prefs.edit().remove(listName).apply();
     }
 

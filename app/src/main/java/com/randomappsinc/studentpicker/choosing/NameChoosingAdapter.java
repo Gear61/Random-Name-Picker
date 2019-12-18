@@ -28,7 +28,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     private DataSource dataSource;
     private PreferencesManager preferencesManager;
 
-    public NameChoosingAdapter(TextView noContent, TextView numNames, String listName) {
+    NameChoosingAdapter(TextView noContent, TextView numNames, String listName) {
         this.listName = listName;
         this.dataSource = new DataSource(noContent.getContext());
 
@@ -41,18 +41,11 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
-    public void resync() {
-        ListInfo info = preferencesManager.getNameListState(listName);
-        currentState = info == null ? dataSource.getListInfo(listName) : info;
-        notifyDataSetChanged();
-        setViews();
-    }
-
-    public void clearNameHistory() {
+    void clearNameHistory() {
         currentState.getNameHistory().clear();
     }
 
-    public String getNamesHistory() {
+    String getNamesHistory() {
         StringBuilder namesHistory = new StringBuilder();
         for (int i = 0; i < currentState.getNameHistory().size(); i++) {
             if (i != 0) {
@@ -63,13 +56,13 @@ public class NameChoosingAdapter extends BaseAdapter {
         return namesHistory.toString();
     }
 
-    public void addNames(String name, int amount) {
+    void addNames(String name, int amount) {
         currentState.addNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void addNameMap(Map<String, Integer> nameAmounts) {
+    void addNameMap(Map<String, Integer> nameAmounts) {
         for (String name : nameAmounts.keySet()) {
             currentState.addNames(name, nameAmounts.get(name));
         }
@@ -77,13 +70,13 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
-    public void removeNames(String name, int amount) {
+    void removeNames(String name, int amount) {
         currentState.removeNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void changeNames(String oldName, String newName, int amount) {
+    void changeNames(String oldName, String newName, int amount) {
         currentState.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
     }
@@ -109,7 +102,7 @@ public class NameChoosingAdapter extends BaseAdapter {
     }
 
     // All name choosing goes through here
-    public String chooseNamesAtRandom(List<Integer> indexes, ChoosingSettings settings) {
+    String chooseNamesAtRandom(List<Integer> indexes, ChoosingSettings settings) {
         String chosenNames = currentState.chooseNames(indexes, settings);
         if (!settings.getWithReplacement()) {
             notifyDataSetChanged();
@@ -124,17 +117,17 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
-    public void resetNames() {
+    void resetNames() {
         currentState = dataSource.getListInfo(listName);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void cacheState(ChoosingSettings settings) {
-        preferencesManager.cacheNameChoosingList(listName, currentState, settings);
+    void cacheState(ChoosingSettings settings) {
+        preferencesManager.setNameListState(listName, currentState, settings);
     }
 
-    public int getNumInstances() {
+    int getNumInstances() {
         return currentState.getNumInstances();
     }
 

@@ -8,4 +8,5 @@
     <string name="add_name_list">Add name list</string>
     <string name="load_file_fail">We failed to load the contents of your .txt file.</string>
     <string name="invalid_file">This app can only import .txt files.</string>
+    <string name="import_success">Name list successfully imported.</string>
 </resources>

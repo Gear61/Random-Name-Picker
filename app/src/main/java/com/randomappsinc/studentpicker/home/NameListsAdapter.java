@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,13 +33,22 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     private List<String> content;
     private Delegate delegate;
+    private PreferencesManager preferencesManager;
 
-    NameListsAdapter(Delegate delegate, Set<String> prefsNameSet) {
+    NameListsAdapter(Delegate delegate, PreferencesManager preferencesManager) {
+        this.preferencesManager = preferencesManager;
         this.delegate = delegate;
         this.content = new ArrayList<>();
 
-        content.addAll(prefsNameSet);
+        content.addAll(preferencesManager.getNameLists());
         Collections.sort(content);
+    }
+
+    void resync() {
+        content.clear();
+        content.addAll(preferencesManager.getNameLists());
+        Collections.sort(content);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -80,7 +89,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         content.remove(position);
         notifyItemRemoved(position);
         delegate.setNoContent();
-
     }
 
     class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
