@@ -1,5 +1,9 @@
 package com.randomappsinc.studentpicker.home;
 
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
@@ -9,18 +13,11 @@ public class DeleteListDialog {
         void onDeleteListConfirmed(int position);
     }
 
-    private MaterialDialog.Builder materialDialogBuilder;
-    private Listener listener;
+    private MaterialDialog dialog;
     private int position;
 
-    DeleteListDialog(MaterialDialog.Builder materialDialogBuilder, Listener listener) {
-        this.materialDialogBuilder = materialDialogBuilder;
-        this.listener = listener;
-        onCreateDialog();
-    }
-
-   private void onCreateDialog() {
-        materialDialogBuilder
+    DeleteListDialog(@NonNull Listener listener, Context context) {
+        dialog = new MaterialDialog.Builder(context)
                 .title(R.string.confirm_deletion_title)
                 .content(R.string.confirm_deletion_message)
                 .positiveText(android.R.string.yes)
@@ -32,6 +29,6 @@ public class DeleteListDialog {
 
     public void show(int position) {
         this.position = position;
-        materialDialogBuilder.show();
+        dialog.show();
     }
 }

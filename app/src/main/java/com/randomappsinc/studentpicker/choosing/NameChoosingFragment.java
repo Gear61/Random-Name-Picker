@@ -230,7 +230,6 @@ public class NameChoosingFragment extends Fragment
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-        nameChoosingAdapter.resync();
     }
 
     @Override

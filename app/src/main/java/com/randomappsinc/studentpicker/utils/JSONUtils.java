@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JSONUtils {
+class JSONUtils {
 
     private static final String NAMES_KEY = "names";
     private static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
@@ -25,7 +25,7 @@ public class JSONUtils {
     private static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
     // Given a list of names, converts it to a JSON and stringifies it
-    public static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
+    static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
         try {
             JSONObject nameListJson = new JSONObject();
 
@@ -63,7 +63,7 @@ public class JSONUtils {
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the list state
-    public static ListInfo extractNames(String cachedList) {
+    static ListInfo extractChoosingState(String cachedList) {
         if (cachedList.isEmpty()) {
             return null;
         }
@@ -97,8 +97,8 @@ public class JSONUtils {
         return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
     }
 
-    // Given a serialized JSON "cache" string of a name list, extracts the settings
-    public static ChoosingSettings extractChoosingSettings(String cachedList) {
+    // Given a serialized JSON "cache" string of a name list, extracts the choosing settings
+    static ChoosingSettings extractChoosingSettings(String cachedList) {
         ChoosingSettings settings = new ChoosingSettings();
         try {
             JSONObject nameListJson = new JSONObject(cachedList);

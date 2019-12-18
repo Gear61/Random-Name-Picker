@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.activities;
+package com.randomappsinc.studentpicker.importdata;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ImportFileActivity extends StandardActivity {
+public class ImportFromTextFileActivity extends StandardActivity {
 
     public static final String FILE_PATH_KEY = "filePath";
 
@@ -62,6 +62,8 @@ public class ImportFileActivity extends StandardActivity {
                     dataSource.addNames(cleanName, newListName, 1);
                 }
             }
+            UIUtils.showShortToast(R.string.import_success, this);
+            setResult(RESULT_OK);
             finish();
         }
     }
