@@ -25,6 +25,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
@@ -46,7 +47,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
-public class MainActivity extends StandardActivity implements NameListsAdapter.Delegate {
+public class MainActivity extends StandardActivity
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
 
@@ -66,7 +68,10 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     private PreferencesManager preferencesManager;
+    private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
+    private RenameListDialog renameListDialog;
+    private DeleteListDialog deleteListDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,15 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         ButterKnife.bind(this);
 
         preferencesManager = new PreferencesManager(this);
+        renameListDialog = new RenameListDialog(this, this, preferencesManager);
+        deleteListDialog = new DeleteListDialog(this, this);
+        dataSource = new DataSource(this);
         plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, this);
+        nameListsAdapter = new NameListsAdapter(this, preferencesManager);
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -166,6 +174,30 @@ public class MainActivity extends StandardActivity implements NameListsAdapter.D
         intent.putExtra(LIST_NAME_KEY, listName);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemEditClick(int position) {
+        renameListDialog.show(position);
+    }
+
+    @Override
+    public void onRenameListConfirmed(int position, String newListName) {
+        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
+        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
+        nameListsAdapter.renameItem(position, newListName);
+    }
+
+    @Override
+    public void onItemDeleteClick(int position) {
+        deleteListDialog.show(position);
+    }
+
+    @Override
+    public void onDeleteListConfirmed(int position) {
+        dataSource.deleteList(nameListsAdapter.getItem(position));
+        preferencesManager.removeNameList(nameListsAdapter.getItem(position));
+        nameListsAdapter.deleteItem(position);
     }
 
     @Override
