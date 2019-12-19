@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.home;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 
 import java.util.ArrayList;
@@ -28,21 +24,21 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
     public interface Delegate {
         void onItemClick(int position);
 
+        void onItemEditClick(int position);
+
+        void onItemDeleteClick(int position);
+
         void setNoContent();
     }
 
-    private Context context;
     private List<String> content;
-    private DataSource dataSource;
-    private PreferencesManager preferencesManager;
     private Delegate delegate;
+    private PreferencesManager preferencesManager;
 
-    NameListsAdapter(Delegate delegate, Context context) {
+    NameListsAdapter(Delegate delegate, PreferencesManager preferencesManager) {
+        this.preferencesManager = preferencesManager;
         this.delegate = delegate;
-        this.context = context;
         this.content = new ArrayList<>();
-        this.dataSource = new DataSource(context);
-        this.preferencesManager = new PreferencesManager(context);
 
         content.addAll(preferencesManager.getNameLists());
         Collections.sort(content);
@@ -84,42 +80,15 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return content.get(position);
     }
 
-    private void showRenameDialog(final int position) {
-        new MaterialDialog.Builder(context)
-                .title(R.string.rename_list)
-                .input(context.getString(R.string.new_list_name), "", (dialog, input) -> {
-                    boolean submitEnabled = !(input.toString().trim().isEmpty() ||
-                            preferencesManager.doesListExist(input.toString().trim()));
-                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                })
-                .alwaysCallInputCallback()
-                .negativeText(android.R.string.cancel)
-                .onAny((dialog, which) -> {
-                    if (which == DialogAction.POSITIVE) {
-                        String newListName = dialog.getInputEditText().getText().toString().trim();
-                        dataSource.renameList(getItem(position), newListName);
-                        preferencesManager.renameList(getItem(position), newListName);
-                        content.set(position, newListName);
-                        notifyItemChanged(position);
-                    }
-                })
-                .show();
+    void renameItem(int position, String newName) {
+        content.set(position, newName);
+        notifyItemChanged(position);
     }
 
-    private void showDeleteDialog(final int position) {
-        new MaterialDialog.Builder(context)
-                .title(R.string.confirm_deletion_title)
-                .content(R.string.confirm_deletion_message)
-                .positiveText(android.R.string.yes)
-                .negativeText(android.R.string.cancel)
-                .onPositive((dialog, which) -> {
-                    dataSource.deleteList(getItem(position));
-                    preferencesManager.removeNameList(getItem(position));
-                    content.remove(position);
-                    notifyItemRemoved(position);
-                    delegate.setNoContent();
-                })
-                .show();
+    void deleteItem(int position) {
+        content.remove(position);
+        notifyItemRemoved(position);
+        delegate.setNoContent();
     }
 
     class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -137,12 +106,12 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
         @OnClick(R.id.edit_icon)
         public void renameList() {
-            showRenameDialog(getAdapterPosition());
+            delegate.onItemEditClick(getAdapterPosition());
         }
 
         @OnClick(R.id.delete_icon)
         public void deleteList() {
-            showDeleteDialog(getAdapterPosition());
+            delegate.onItemDeleteClick(getAdapterPosition());
         }
 
         @Override
