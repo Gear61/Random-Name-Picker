@@ -24,7 +24,7 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
     public interface Delegate {
         void onItemClick(int position);
 
-        void onItemEditClick(int position);
+        void onItemEditClick(int position, String listName);
 
         void onItemDeleteClick(int position);
 
@@ -102,7 +102,8 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
         @OnClick(R.id.edit_icon)
         void renameList() {
-            delegate.onItemEditClick(getAdapterPosition());
+            String listName = nameLists.get(getAdapterPosition());
+            delegate.onItemEditClick(getAdapterPosition(), listName);
         }
 
         @OnClick(R.id.delete_icon)

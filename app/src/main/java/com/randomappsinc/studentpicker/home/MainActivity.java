@@ -177,8 +177,8 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onItemEditClick(int position) {
-        renameListDialog.show(position);
+    public void onItemEditClick(int position, String listName) {
+        renameListDialog.show(position, listName);
     }
 
     @Override
