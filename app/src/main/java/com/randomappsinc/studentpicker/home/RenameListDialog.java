@@ -25,7 +25,8 @@ public class RenameListDialog {
                     boolean submitEnabled = !(input.toString().trim().isEmpty() ||
                             preferencesManager.doesListExist(input.toString().trim()));
                     dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
-                }).alwaysCallInputCallback()
+                })
+                .alwaysCallInputCallback()
                 .negativeText(android.R.string.cancel)
                 .onAny((dialog, which) -> {
                     if (which == DialogAction.POSITIVE) {
@@ -33,11 +34,13 @@ public class RenameListDialog {
                         listener.onRenameListConfirmed(position, newListName);
                     }
                     dialog.getInputEditText().setText("");
-                }).build();
+                })
+                .build();
     }
 
-    public void show(int position) {
+    public void show(int position, String currentName) {
         this.position = position;
+        dialog.getInputEditText().setText(currentName);
         dialog.show();
     }
 }
