@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,23 +31,19 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         void setNoContent();
     }
 
-    private List<String> content;
+    private List<String> nameLists = new ArrayList<>();
     private Delegate delegate;
-    private PreferencesManager preferencesManager;
 
-    NameListsAdapter(Delegate delegate, PreferencesManager preferencesManager) {
-        this.preferencesManager = preferencesManager;
+    NameListsAdapter(Delegate delegate, Set<String> initialNameLists) {
         this.delegate = delegate;
-        this.content = new ArrayList<>();
-
-        content.addAll(preferencesManager.getNameLists());
-        Collections.sort(content);
+        this.nameLists.addAll(initialNameLists);
+        Collections.sort(nameLists);
     }
 
-    void resync() {
-        content.clear();
-        content.addAll(preferencesManager.getNameLists());
-        Collections.sort(content);
+    void refresh(Set<String> newNameLists) {
+        nameLists.clear();
+        nameLists.addAll(newNameLists);
+        Collections.sort(nameLists);
         notifyDataSetChanged();
     }
 
@@ -66,27 +62,27 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     @Override
     public int getItemCount() {
-        return content.size();
+        return nameLists.size();
     }
 
     void addList(String newList) {
-        content.add(newList);
-        Collections.sort(content);
+        nameLists.add(newList);
+        Collections.sort(nameLists);
         notifyDataSetChanged();
         delegate.setNoContent();
     }
 
     String getItem(int position) {
-        return content.get(position);
+        return nameLists.get(position);
     }
 
     void renameItem(int position, String newName) {
-        content.set(position, newName);
+        nameLists.set(position, newName);
         notifyItemChanged(position);
     }
 
     void deleteItem(int position) {
-        content.remove(position);
+        nameLists.remove(position);
         notifyItemRemoved(position);
         delegate.setNoContent();
     }
@@ -105,12 +101,12 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         }
 
         @OnClick(R.id.edit_icon)
-        public void renameList() {
+        void renameList() {
             delegate.onItemEditClick(getAdapterPosition());
         }
 
         @OnClick(R.id.delete_icon)
-        public void deleteList() {
+        void deleteList() {
             delegate.onItemDeleteClick(getAdapterPosition());
         }
 
