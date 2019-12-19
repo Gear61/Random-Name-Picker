@@ -18,7 +18,7 @@ public class SetTextSizeViewHolder {
 
     private PreferencesManager preferencesManager;
 
-    public SetTextSizeViewHolder(View view) {
+    SetTextSizeViewHolder(View view) {
         preferencesManager = new PreferencesManager(view.getContext());
         ButterKnife.bind(this, view);
         textSizeSlider.setOnSeekBarChangeListener(sizeSetListener);
@@ -39,7 +39,7 @@ public class SetTextSizeViewHolder {
         public void onStopTrackingTouch(SeekBar seekBar) {}
     };
 
-    public void revertSetting() {
+    void revertSetting() {
         textSizeSlider.setProgress(preferencesManager.getPresentationTextSize() - 1);
         textSizeSlider.jumpDrawablesToCurrentState();
     }
