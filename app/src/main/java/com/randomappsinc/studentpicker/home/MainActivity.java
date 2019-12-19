@@ -88,7 +88,7 @@ public class MainActivity extends StandardActivity
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, preferencesManager);
+        nameListsAdapter = new NameListsAdapter(this, preferencesManager.getNameLists());
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -314,7 +314,7 @@ public class MainActivity extends StandardActivity
                 break;
             case SAVE_IMPORT_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    nameListsAdapter.resync();
+                    nameListsAdapter.refresh(preferencesManager.getNameLists());
                 }
                 break;
         }
