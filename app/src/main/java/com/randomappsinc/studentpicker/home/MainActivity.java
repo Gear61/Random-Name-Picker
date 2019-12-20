@@ -56,16 +56,25 @@ public class MainActivity extends StandardActivity
     private static final int IMPORT_FILE_REQUEST_CODE = 2;
     private static final int SAVE_IMPORT_REQUEST_CODE = 3;
 
-    @BindView(R.id.coordinator_layout) View parent;
-    @BindView(R.id.focal_point) View focalPoint;
-    @BindView(R.id.item_name_input) EditText newListInput;
-    @BindView(R.id.user_lists) RecyclerView lists;
-    @BindView(R.id.no_content) TextView noContent;
-    @BindView(R.id.add_item) View addItem;
-    @BindView(R.id.plus_icon) ImageView plus;
-    @BindView(R.id.import_text_file) FloatingActionButton importFile;
+    @BindView(R.id.coordinator_layout)
+    View parent;
+    @BindView(R.id.focal_point)
+    View focalPoint;
+    @BindView(R.id.item_name_input)
+    EditText newListInput;
+    @BindView(R.id.user_lists)
+    RecyclerView lists;
+    @BindView(R.id.no_content)
+    TextView noContent;
+    @BindView(R.id.add_item)
+    View addItem;
+    @BindView(R.id.plus_icon)
+    ImageView plus;
+    @BindView(R.id.import_text_file)
+    FloatingActionButton importFile;
 
-    @BindString(R.string.list_duplicate) String listDuplicate;
+    @BindString(R.string.list_duplicate)
+    String listDuplicate;
 
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
@@ -189,7 +198,9 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onItemDeleteClick(int position) {
+    public void onItemDeleteClick(int position, String listName) {
+        String dialogContent = getString(R.string.confirm_deletion_message) + " \"" + listName + "\"?";
+        deleteListDialog.dialog.setContent(dialogContent);
         deleteListDialog.show(position);
     }
 
