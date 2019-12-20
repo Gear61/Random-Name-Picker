@@ -189,7 +189,9 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onItemDeleteClick(int position) {
+    public void onItemDeleteClick(int position, String listName) {
+        String dialogContent = getString(R.string.confirm_deletion_message) + " \"" + listName + "\"?";
+        deleteListDialog.dialog.setContent(dialogContent);
         deleteListDialog.show(position);
     }
 
