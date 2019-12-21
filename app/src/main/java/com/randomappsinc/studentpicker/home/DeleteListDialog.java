@@ -13,7 +13,7 @@ public class DeleteListDialog {
         void onDeleteListConfirmed(int position);
     }
 
-    public MaterialDialog dialog;
+    private MaterialDialog dialog;
     private int position;
 
     DeleteListDialog(@NonNull Listener listener, Context context) {
@@ -26,8 +26,9 @@ public class DeleteListDialog {
                 ).build();
     }
 
-    // Instead of sending the content inside the show function, Defining the dialog object as public is better to get an access for it from the MainActivity
-    // I think changing the content inside a function called "show" isn't a good idea.
+    void setContent(String content) {
+        dialog.setContent(content);
+    }
 
     public void show(int position) {
         this.position = position;
