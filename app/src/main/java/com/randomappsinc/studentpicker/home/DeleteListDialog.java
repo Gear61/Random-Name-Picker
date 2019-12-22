@@ -26,8 +26,10 @@ public class DeleteListDialog {
                 ).build();
     }
 
-    void setContent(String content) {
-        dialog.setContent(content);
+    // Well there is no purpose of sending the position here do you keep it for the upcoming work?
+    void presentForList(int position, String listName) {
+        String dialogContent = dialog.getContext().getString(R.string.confirm_deletion_message," \"" + listName + "\"");
+        dialog.setContent(dialogContent);
     }
 
     public void show(int position) {
