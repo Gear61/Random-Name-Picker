@@ -14,18 +14,18 @@ import java.util.List;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
-    private String[] tabTitles;
-    private String listName;
-    private List<Fragment> fragmentList = new ArrayList<>();
+    private final String[] tabTitles;
+    private final String listName;
+    private final List<Fragment> fragmentList = new ArrayList<>();
 
     ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
         this.listName = listName;
-        adapterSetup();
+        setUpFragmentList();
     }
 
-    private void adapterSetup() {
+    private void setUpFragmentList() {
         fragmentList.add(NameChoosingFragment.getInstance(listName));
         fragmentList.add(GroupsFragment.getInstance());
         fragmentList.add(EditNameListFragment.getInstance(listName));
