@@ -191,7 +191,6 @@ public class MainActivity extends StandardActivity
     @Override
     public void onItemDeleteClick(int position, String listName) {
         deleteListDialog.presentForList(position, listName);
-        deleteListDialog.show();
     }
 
     @Override
