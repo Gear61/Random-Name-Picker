@@ -14,6 +14,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
     private final String[] tabTitles;
     private final String listName;
 
+
     ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
