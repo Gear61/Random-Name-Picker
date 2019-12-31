@@ -41,6 +41,12 @@ public class NameChoosingAdapter extends BaseAdapter {
         setViews();
     }
 
+    void refreshList(ListInfo newState) {
+        this.currentState = newState;
+        notifyDataSetChanged();
+        setViews();
+    }
+
     void clearNameHistory() {
         currentState.getNameHistory().clear();
     }
