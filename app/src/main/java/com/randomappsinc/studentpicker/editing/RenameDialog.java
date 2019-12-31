@@ -67,7 +67,7 @@ public class RenameDialog {
     public void startRenamingProcess(String name, int maxAmount) {
         currentName = name;
         currentMaxAmount = maxAmount;
-        renamingDialog.getInputEditText().setText("");
+        renamingDialog.getInputEditText().setText(name);
         if (maxAmount > 1) {
             EditText input = renameAmountDialog.getInputEditText();
             if (input != null) {
