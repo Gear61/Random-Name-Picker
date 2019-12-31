@@ -55,7 +55,7 @@
                 android:paddingBottom="8dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/dark_gray"
-                android:textSize="18dp"
+                android:textSize="17dp"
                 android:background="@drawable/add_item_border"
                 android:layout_marginRight="55dp"
                 android:singleLine="true"
