@@ -39,6 +39,8 @@ public class NameChoosingFragment extends Fragment
         implements ChoicesDisplayDialog.Listener, NameListDataManager.Listener,
         ShakeManager.Listener, TextToSpeechManager.Listener {
 
+    private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
+
     public static NameChoosingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.LIST_NAME_KEY, listName);
@@ -62,6 +64,7 @@ public class NameChoosingFragment extends Fragment
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
+    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -83,6 +86,7 @@ public class NameChoosingFragment extends Fragment
         shakeManager.registerListener(this);
 
         textToSpeechManager = new TextToSpeechManager(getContext(), this);
+        preferencesManager = new PreferencesManager(getContext());
 
         return rootView;
     }
@@ -103,8 +107,6 @@ public class NameChoosingFragment extends Fragment
                 .cancelable(false)
                 .build();
         choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
-
-
 
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
@@ -156,7 +158,8 @@ public class NameChoosingFragment extends Fragment
             cacheListState();
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
-            getActivity().startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+            startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {
             if (choicesDisplayDialog.isShowing()) {
                 return;
@@ -168,6 +171,22 @@ public class NameChoosingFragment extends Fragment
             if (settings.getAutomaticTts()) {
                 sayNames(chosenNames);
             }
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // If we are choosing without replacement, then presentation mode has mutated the choosing state
+        // and we need to update the list
+        if (requestCode == PRESENTATION_MODE_REQUEST_CODE && !settings.getWithReplacement()) {
+            nameChoosingAdapter.refreshList(preferencesManager.getNameListState(listName));
         }
     }
 
