@@ -76,7 +76,7 @@ public class EditNameListFragment extends Fragment implements
 
         newNameInput.setHint(R.string.name_hint);
         newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        newNameInput.setAdapter(new NameCreationACAdapter(getActivity()));
+        newNameInput.setAdapter(new NameCreationAutoCompleteAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(
                 getActivity(),
                 IoniconsIcons.ion_android_add).colorRes(R.color.white));
