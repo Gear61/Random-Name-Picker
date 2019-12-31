@@ -47,17 +47,18 @@
 
             <AutoCompleteTextView
                 android:id="@+id/item_name_input"
-                android:completionThreshold="1"
-                android:padding="8dp"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/dark_gray"
-                android:textSize="18dp"
-                android:background="@drawable/add_item_border"
-                android:layout_marginRight="55dp"
-                android:singleLine="true"
-                android:imeOptions="actionDone"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="55dp"
+                android:completionThreshold="1"
+                android:padding="8dp"
+                android:textColor="@color/dark_gray"
+                android:textSize="17dp"
+                android:background="@drawable/add_item_border"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
                 />
         </FrameLayout>
 
