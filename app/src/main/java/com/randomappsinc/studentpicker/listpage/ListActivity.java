@@ -51,6 +51,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
                 getSupportFragmentManager(),
                 listName,
                 listTabTitles);
+        nameListPager.setOffscreenPageLimit(2);
         nameListPager.setAdapter(listTabsAdapter);
         if (getIntent().getBooleanExtra(START_ON_EDIT_PAGE, false)) {
             nameListPager.setCurrentItem(EDIT_NAME_LIST_PAGE_POSITION);
