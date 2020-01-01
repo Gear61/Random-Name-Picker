@@ -230,7 +230,7 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
-        Intent intent = SpeechUtil.openSpeechToTextDialog(this);
+        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.list_name_input_speech_message));
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
             overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
@@ -279,8 +279,9 @@ public class MainActivity extends StandardActivity
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case SPEECH_REQUEST_CODE:
-                String searchInput = SpeechUtil.processSpeechResults(resultCode, data, this);
-                newListInput.setText(searchInput);
+                String searchInput = SpeechUtil.processSpeechResult(resultCode, data, this);
+                if (searchInput != null)
+                    newListInput.setText(searchInput);
                 break;
             case IMPORT_FILE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {

@@ -14,16 +14,17 @@ import java.util.Locale;
 import static android.app.Activity.RESULT_OK;
 
 public class SpeechUtil {
-    public static Intent openSpeechToTextDialog(Context context) {
+
+    public static Intent getSpeechToTextIntent(String dialogText) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.list_name_input_speech_message));
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, dialogText);
         return intent;
     }
 
     @Nullable
-    public static String processSpeechResults(int resultCode, Intent data, Context context) {
+    public static String processSpeechResult(int resultCode, Intent data, Context context) {
         if (resultCode != RESULT_OK || data == null) {
             return null;
         }
