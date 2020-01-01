@@ -40,7 +40,7 @@ public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
         DuplicationDialog.Listener, MergeNameListsDialog.Listener {
 
-    private static final int SPEECH_REQUEST_CODE = 4;
+    private static final int SPEECH_REQUEST_CODE = 1;
 
     public static EditNameListFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -127,7 +127,7 @@ public class EditNameListFragment extends Fragment implements
 
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
-        Intent intent = SpeechUtil.openSpeechToTextDialog(getActivity());
+        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.name_input_speech_message_to_list,  listName));
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
             getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
@@ -229,8 +229,9 @@ public class EditNameListFragment extends Fragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SPEECH_REQUEST_CODE) {
-            String searchInput = SpeechUtil.processSpeechResults(resultCode, data, getActivity());
-            newNameInput.setText(searchInput);
+            String searchInput = SpeechUtil.processSpeechResult(resultCode, data, getActivity());
+            if (searchInput != null)
+                newNameInput.setText(searchInput);
         }
     }
 }
