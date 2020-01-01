@@ -9,37 +9,35 @@ import com.randomappsinc.studentpicker.choosing.NameChoosingFragment;
 import com.randomappsinc.studentpicker.editing.EditNameListFragment;
 import com.randomappsinc.studentpicker.grouping.GroupsFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
     private final String[] tabTitles;
     private final String listName;
-    private final List<Fragment> fragmentList = new ArrayList<>();
 
     ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
         this.listName = listName;
-        setUpFragmentList();
-    }
-
-    private void setUpFragmentList() {
-        fragmentList.add(NameChoosingFragment.getInstance(listName));
-        fragmentList.add(GroupsFragment.getInstance());
-        fragmentList.add(EditNameListFragment.getInstance(listName));
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return tabTitles.length;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        switch (position) {
+            case 0:
+                return NameChoosingFragment.getInstance(listName);
+            case 1:
+                return GroupsFragment.getInstance();
+            case 2:
+                return EditNameListFragment.getInstance(listName);
+            default:
+                throw new IllegalArgumentException("There should only be 3 tabs!");
+        }
     }
 
     @Override
