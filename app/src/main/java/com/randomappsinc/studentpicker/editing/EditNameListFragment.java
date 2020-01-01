@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.editing;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.utils.SpeechUtil;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -36,6 +39,8 @@ import butterknife.Unbinder;
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
         DuplicationDialog.Listener, MergeNameListsDialog.Listener {
+
+    private static final int SPEECH_REQUEST_CODE = 4;
 
     public static EditNameListFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -118,6 +123,17 @@ public class EditNameListFragment extends Fragment implements
     @OnItemClick(R.id.content_list)
     public void showNameOptions(final int position) {
         nameEditChoicesDialog.showChoices(namesAdapter.getItem(position));
+    }
+
+    @OnClick(R.id.voice_entry_icon)
+    public void voiceEntry() {
+        Intent intent = SpeechUtil.openSpeechToTextDialog(getActivity());
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        } catch (ActivityNotFoundException exception) {
+            UIUtils.showLongToast(R.string.speech_not_supported, getActivity());
+        }
     }
 
     @Override
@@ -207,5 +223,14 @@ public class EditNameListFragment extends Fragment implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SPEECH_REQUEST_CODE) {
+            String searchInput = SpeechUtil.processSpeechResults(resultCode, data, getActivity());
+            newNameInput.setText(searchInput);
+        }
     }
 }
