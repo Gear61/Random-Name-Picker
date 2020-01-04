@@ -230,8 +230,9 @@ public class EditNameListFragment extends Fragment implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SPEECH_REQUEST_CODE) {
             String searchInput = SpeechUtil.processSpeechResult(resultCode, data, getActivity());
-            if (searchInput != null)
+            if (searchInput != null){
                 newNameInput.setText(searchInput);
+            }
         }
     }
 }

@@ -64,7 +64,6 @@
     <string name="delete_list">Delete List</string>
 
     <string name="list_name_input_speech_message">Tell us what you want to name your list</string>
-    <string name="name_input_speech_message_to_list">Tell us the name you want to add to %s\'s list</string>
     <string name="speech_not_supported">
         Sorry, but your Android device doesn\'t support speech recognition.
     </string>
