@@ -280,8 +280,9 @@ public class MainActivity extends StandardActivity
         switch (requestCode) {
             case SPEECH_REQUEST_CODE:
                 String searchInput = SpeechUtil.processSpeechResult(resultCode, data, this);
-                if (searchInput != null)
+                if (searchInput != null) {
                     newListInput.setText(searchInput);
+                }
                 break;
             case IMPORT_FILE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
