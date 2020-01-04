@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,11 +30,9 @@ import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.SpeechUtil;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
-
-import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -233,7 +230,13 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
-        showGoogleSpeechDialog();
+        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.list_name_input_speech_message));
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        } catch (ActivityNotFoundException exception) {
+            UIUtils.showLongToast(R.string.speech_not_supported, this);
+        }
     }
 
     @OnClick(R.id.import_text_file)
@@ -271,34 +274,15 @@ public class MainActivity extends StandardActivity
         }
     }
 
-    private void showGoogleSpeechDialog() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.list_name_input_speech_message));
-        try {
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-        } catch (ActivityNotFoundException exception) {
-            UIUtils.showLongToast(R.string.speech_not_supported, this);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case SPEECH_REQUEST_CODE:
-                if (resultCode != RESULT_OK || data == null) {
-                    return;
+                String searchInput = SpeechUtil.processSpeechResult(resultCode, data, this);
+                if (searchInput != null) {
+                    newListInput.setText(searchInput);
                 }
-
-                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                if (result == null || result.isEmpty()) {
-                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
-                    return;
-                }
-                String searchInput = result.get(0);
-                newListInput.setText(searchInput);
                 break;
             case IMPORT_FILE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {

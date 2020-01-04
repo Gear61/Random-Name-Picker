@@ -60,6 +60,11 @@
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/voice_entry_icon"
+                style="@style/voice_input_icon"
+                />
         </FrameLayout>
 
         <TextView
