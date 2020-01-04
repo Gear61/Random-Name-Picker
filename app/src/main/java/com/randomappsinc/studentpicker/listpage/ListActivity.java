@@ -1,7 +1,9 @@
 package com.randomappsinc.studentpicker.listpage;
 
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +17,7 @@ import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.utils.SpeechUtil;
 import com.squareup.seismic.ShakeDetector;
 
 import butterknife.BindArray;
