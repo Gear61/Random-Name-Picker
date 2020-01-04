@@ -126,8 +126,8 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @OnClick(R.id.voice_entry_icon)
-    public void voiceEntry() {
-        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.name_input_speech_message_to_list,  listName));
+    public void addNameWithVoice() {
+        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.name_input_speech_message_to_list));
         try {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
             getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
