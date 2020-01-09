@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -19,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NameChoosingAdapter extends BaseAdapter {
+public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapter.NameViewHolder> {
 
     private String listName;
     private ListInfo currentState;
@@ -39,6 +41,24 @@ public class NameChoosingAdapter extends BaseAdapter {
         this.noContent = noContent;
         this.numNames = numNames;
         setViews();
+    }
+
+    @NonNull
+    @Override
+    public NameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.choose_name_cell, parent, false);
+        return new NameChoosingAdapter.NameViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull NameViewHolder holder, int position) {
+        holder.loadName();
+    }
+
+    @Override
+    public int getItemCount() {
+        return currentState.getNumNames();
     }
 
     void refreshList(ListInfo newState) {
@@ -137,55 +157,26 @@ public class NameChoosingAdapter extends BaseAdapter {
         return currentState.getNumInstances();
     }
 
-    @Override
-    public int getCount() {
+    int getCount() {
         return currentState.getNumNames();
     }
 
-    @Override
-    public String getItem(int position) {
-        return currentState.getName(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
-    }
-
-    class NameViewHolder {
+    class NameViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.person_name) TextView name;
 
-        private int position;
-
         NameViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
 
-        void loadName(int position) {
-            this.position = position;
-            this.name.setText(currentState.getNameText(position));
+        void loadName() {
+            this.name.setText(currentState.getNameText(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_icon)
         public void deleteName() {
-            removeNameAtPosition(position);
+            removeNameAtPosition(getAdapterPosition());
         }
-    }
-
-    @Override
-    public View getView(final int position, View view, ViewGroup parent) {
-        NameViewHolder holder;
-        if (view == null) {
-            LayoutInflater vi = (LayoutInflater) parent.getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = vi.inflate(R.layout.choose_name_cell, parent, false);
-            holder = new NameViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (NameViewHolder) view.getTag();
-        }
-        holder.loadName(position);
-        return view;
     }
 }

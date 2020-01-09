@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -51,7 +53,7 @@ public class NameChoosingFragment extends Fragment
 
     @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
-    @BindView(R.id.names_list) ListView namesList;
+    @BindView(R.id.names_list) RecyclerView namesList;
 
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
