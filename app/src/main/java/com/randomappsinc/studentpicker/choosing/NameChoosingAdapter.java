@@ -171,7 +171,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
         }
 
         void loadName() {
-            this.name.setText(currentState.getNameText(getAdapterPosition()));
+            name.setText(currentState.getNameText(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_icon)
