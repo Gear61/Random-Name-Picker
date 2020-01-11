@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.choosing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
 import java.util.Map;
@@ -81,12 +83,14 @@ public class NameChoosingFragment extends Fragment
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         nameChoosingAdapter = new NameChoosingAdapter(noNamesToChoose, numNames, listName);
         namesList.setAdapter(nameChoosingAdapter);
+        Context context = rootView.getContext();
+        namesList.addItemDecoration(new SimpleDividerItemDecoration(context));
 
         nameListDataManager.registerListener(this);
         shakeManager.registerListener(this);
 
-        textToSpeechManager = new TextToSpeechManager(getContext(), this);
-        preferencesManager = new PreferencesManager(getContext());
+        textToSpeechManager = new TextToSpeechManager(context, this);
+        preferencesManager = new PreferencesManager(context);
 
         return rootView;
     }
