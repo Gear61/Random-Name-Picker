@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:padding="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_of_names_in_group"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            />
+
+        <EditText
+            android:id="@+id/num_of_names_in_group"
+            android:text="@string/default_number_of_names_in_each_group"
+            style="@style/two_number_setting"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_of_groups"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            />
+
+        <EditText
+            android:id="@+id/num_of_groups"
+            android:text="@string/default_number_of_groups"
+            style="@style/two_number_setting"
+            />
+    </LinearLayout>
+</LinearLayout>
