@@ -74,6 +74,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
     @OnPageChange(R.id.name_list_pager)
     public void onTabChanged() {
         UIUtils.hideKeyboard(this);
+        invalidateOptionsMenu();
     }
 
     @Override

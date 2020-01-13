@@ -139,7 +139,11 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
 
     private void removeNameAtPosition(int position) {
         currentState.removeAllInstancesOfName(position);
-        notifyDataSetChanged();
+        if (currentState.getNumNames() >= 1) {
+            notifyItemRemoved(position);
+        } else {
+            notifyDataSetChanged();
+        }
         setViews();
     }
 

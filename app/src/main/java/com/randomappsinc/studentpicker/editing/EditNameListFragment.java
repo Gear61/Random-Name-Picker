@@ -188,17 +188,20 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SPEECH_REQUEST_CODE) {
+            String searchInput = SpeechUtil.processSpeechResult(resultCode, data, getActivity());
+            if (searchInput != null){
+                newNameInput.setText(searchInput);
+            }
+        }
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && getActivity() != null) {
-            getActivity().invalidateOptionsMenu();
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -223,16 +226,5 @@ public class EditNameListFragment extends Fragment implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SPEECH_REQUEST_CODE) {
-            String searchInput = SpeechUtil.processSpeechResult(resultCode, data, getActivity());
-            if (searchInput != null){
-                newNameInput.setText(searchInput);
-            }
-        }
     }
 }
