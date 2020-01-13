@@ -209,17 +209,6 @@ public class NameChoosingFragment extends Fragment
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getActivity() != null) {
-            if (isVisibleToUser) {
-                UIUtils.hideKeyboard(getActivity());
-                getActivity().invalidateOptionsMenu();
-            }
-        }
-    }
-
     private void showNamesHistory() {
         final String namesHistory = nameChoosingAdapter.getNamesHistory();
         if (!namesHistory.isEmpty()) {
