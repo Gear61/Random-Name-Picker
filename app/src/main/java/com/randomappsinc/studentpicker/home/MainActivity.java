@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,6 +24,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.common.VoiceRecognizerDialogFragment;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
@@ -45,13 +46,15 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class MainActivity extends StandardActivity
-        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener {
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener, VoiceRecognizerDialogFragment.VoiceRecognizerInterface {
 
     public static final String LIST_NAME_KEY = "listName";
 
     private static final int SPEECH_REQUEST_CODE = 1;
     private static final int IMPORT_FILE_REQUEST_CODE = 2;
     private static final int SAVE_IMPORT_REQUEST_CODE = 3;
+    private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
+    private static final int READ_RECORD_AUDIO_PERMISSION_CODE = 2;
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -65,6 +68,8 @@ public class MainActivity extends StandardActivity
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     private PreferencesManager preferencesManager;
+    private VoiceRecognizerDialogFragment voiceRecognizerDialogFragment;
+    private FragmentManager fragmentManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
@@ -76,6 +81,8 @@ public class MainActivity extends StandardActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        fragmentManager = getSupportFragmentManager();
+        voiceRecognizerDialogFragment = new VoiceRecognizerDialogFragment(this, this);
         preferencesManager = new PreferencesManager(this);
         renameListDialog = new RenameListDialog(this, this, preferencesManager);
         deleteListDialog = new DeleteListDialog(this, this);
@@ -230,12 +237,20 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
-        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.list_name_input_speech_message));
-        try {
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-        } catch (ActivityNotFoundException exception) {
-            UIUtils.showLongToast(R.string.speech_not_supported, this);
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, this)) {
+            voiceRecognizerDialogFragment.show(fragmentManager, "dialogVoiceRecognizer");
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.RECORD_AUDIO)) {
+                new MaterialDialog.Builder(this)
+                        .content(R.string.need_record_audio)
+                        .positiveText(android.R.string.yes)
+                        .onPositive((dialog, which) -> requestRecordAudio())
+                        .show();
+            } else {
+                requestRecordAudio();
+            }
         }
     }
 
@@ -260,7 +275,11 @@ public class MainActivity extends StandardActivity
     }
 
     private void requestReadExternal() {
-        PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+        PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+    }
+
+    private void requestRecordAudio() {
+        PermissionUtils.requestPermission(this, Manifest.permission.RECORD_AUDIO, READ_RECORD_AUDIO_PERMISSION_CODE);
     }
 
     @Override
@@ -269,8 +288,15 @@ public class MainActivity extends StandardActivity
             @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, FilePickerActivity.class);
-            startActivityForResult(intent, 1);
+            switch (requestCode) {
+                case READ_EXTERNAL_STORAGE_PERMISSION_CODE:
+                    Intent intent = new Intent(this, FilePickerActivity.class);
+                    startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
+                    break;
+                case READ_RECORD_AUDIO_PERMISSION_CODE:
+                    voiceRecognizerDialogFragment.show(fragmentManager, "dialogVoiceRecognizer");
+                    break;
+            }
         }
     }
 
@@ -330,5 +356,12 @@ public class MainActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void spokenText(String searchInput) {
+        if (searchInput != null) {
+            newListInput.setText(searchInput);
+        }
     }
 }
