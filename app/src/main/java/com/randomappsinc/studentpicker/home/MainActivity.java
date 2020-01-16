@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,8 +22,8 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.common.StandardActivity;
-import com.randomappsinc.studentpicker.common.VoiceRecognizerDialogFragment;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
@@ -46,7 +45,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class MainActivity extends StandardActivity
-        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener, VoiceRecognizerDialogFragment.VoiceRecognizerInterface {
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
 
@@ -68,8 +67,7 @@ public class MainActivity extends StandardActivity
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     private PreferencesManager preferencesManager;
-    private VoiceRecognizerDialogFragment voiceRecognizerDialogFragment;
-    private FragmentManager fragmentManager;
+    private SpeechToTextManager speechToTextManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
@@ -81,8 +79,7 @@ public class MainActivity extends StandardActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        fragmentManager = getSupportFragmentManager();
-        voiceRecognizerDialogFragment = new VoiceRecognizerDialogFragment(this, this);
+        speechToTextManager = new SpeechToTextManager(this, this);
         preferencesManager = new PreferencesManager(this);
         renameListDialog = new RenameListDialog(this, this, preferencesManager);
         deleteListDialog = new DeleteListDialog(this, this);
@@ -238,7 +235,7 @@ public class MainActivity extends StandardActivity
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, this)) {
-            voiceRecognizerDialogFragment.show(fragmentManager, "dialogVoiceRecognizer");
+            speechToTextManager.showSpeechDialog();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
@@ -294,7 +291,7 @@ public class MainActivity extends StandardActivity
                     startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
                     break;
                 case READ_RECORD_AUDIO_PERMISSION_CODE:
-                    voiceRecognizerDialogFragment.show(fragmentManager, "dialogVoiceRecognizer");
+                    speechToTextManager.showSpeechDialog();
                     break;
             }
         }
@@ -359,9 +356,7 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void spokenText(String searchInput) {
-        if (searchInput != null) {
-            newListInput.setText(searchInput);
-        }
+    public void onSpokenText(String searchInput) {
+        newListInput.setText(searchInput);
     }
 }
