@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.grouping;
 
 import android.content.Context;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
@@ -12,9 +11,9 @@ class GroupingSettingsDialog {
     private MaterialDialog dialog;
     private GroupingSettingsViewHolder settingsHolder;
 
-    GroupingSettingsDialog(Context context) {
+    GroupingSettingsDialog(Context context, GroupingSettings settings) {
         dialog = new MaterialDialog.Builder(context)
-                .title(R.string.grouping_setting)
+                .title(R.string.group_settings_dialog_title)
                 .customView(R.layout.group_making_settings, true)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.no)
@@ -25,14 +24,8 @@ class GroupingSettingsDialog {
                 .onNegative((dialog, which) -> settingsHolder.revertSettings())
                 .cancelable(false)
                 .build();
-    }
 
-    void setSettingsHolder(GroupingSettingsViewHolder settingsHolder) {
-        this.settingsHolder = settingsHolder;
-    }
-
-    View getCustomView() {
-        return dialog.getCustomView();
+        settingsHolder = new GroupingSettingsViewHolder(dialog.getCustomView(), context, settings);
     }
 
     void show() {

@@ -1,7 +1,9 @@
 package com.randomappsinc.studentpicker.grouping;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.randomappsinc.studentpicker.R;
 
@@ -10,58 +12,57 @@ import butterknife.ButterKnife;
 
 class GroupingSettingsViewHolder {
 
-    @BindView(R.id.num_of_names_in_group) EditText namesInGroup;
+    @BindView(R.id.number_of_names_in_list) TextView numberOfNamesInList;
+    @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
 
+    private Context context;
     private GroupingSettings settings;
 
-    GroupingSettingsViewHolder(View view, GroupingSettings settings) {
+    GroupingSettingsViewHolder(View view, Context context, GroupingSettings settings) {
         ButterKnife.bind(this, view);
+        this.context = context;
         this.settings = settings;
+        numberOfNamesInList.setText(
+                context.getResources().getString(R.string.grouping_settings_number_of_names_in_list, 0));
     }
 
     void revertSettings() {
-        namesInGroup.setText(String.valueOf(settings.getNumOfNamesInGroup()));
-        namesInGroup.clearFocus();
+        namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
+        namesPerGroup.clearFocus();
         numGroups.setText(String.valueOf(settings.getNumOfGroups()));
         numGroups.clearFocus();
     }
 
     void applySettings() {
-        applyNumberOfNames(namesInGroup);
-        applyNumberOfGroups(numGroups);
+        applyNumberOfNames();
+        applyNumberOfGroups();
     }
 
-    private void applyNumberOfNames(EditText namesInGroup) {
-        String numOfNamesInGroup = namesInGroup.getText().toString();
-        if (numOfNamesInGroup.isEmpty()) {
-            namesInGroup.setText("2");
-            settings.setNumOfNamesInGroup(2);
+    private void applyNumberOfNames() {
+        String numOfNamesPerGroup = namesPerGroup.getText().toString();
+        int inputtedNumber = numOfNamesPerGroup.isEmpty() ? 0 :
+                Integer.parseInt(namesPerGroup.getText().toString());
+        if (inputtedNumber <= 0) {
+            namesPerGroup.setText(R.string.default_number_of_names_per_group);
+            settings.setNumOfNamesPerGroup(context.getResources().getInteger(R.integer.default_number_of_names_per_group));
         } else {
-            int userNumNames = Integer.parseInt(namesInGroup.getText().toString());
-            if (userNumNames <= 0) {
-                namesInGroup.setText("1");
-                settings.setNumOfNamesInGroup(1);
-            } else {
-                settings.setNumOfNamesInGroup(userNumNames);
-            }
+            namesPerGroup.setText(String.valueOf(inputtedNumber));
+            settings.setNumOfNamesPerGroup(inputtedNumber);
         }
-        namesInGroup.clearFocus();
+        namesPerGroup.clearFocus();
     }
 
-    private void applyNumberOfGroups(EditText numGroups) {
+    private void applyNumberOfGroups() {
         String numOfGroup = numGroups.getText().toString();
-        if (numOfGroup.isEmpty()) {
-            numGroups.setText("1");
-            settings.setNumOfGroups(1);
+        int inputtedNumber = numOfGroup.isEmpty() ? 0 :
+                Integer.parseInt(numGroups.getText().toString().trim());
+        if (inputtedNumber <= 0) {
+            numGroups.setText(R.string.default_number_of_groups);
+            settings.setNumOfGroups(context.getResources().getInteger(R.integer.default_number_of_groups));
         } else {
-            int userNumGroup = Integer.parseInt(numGroups.getText().toString());
-            if (userNumGroup <= 0) {
-                numGroups.setText("1");
-                settings.setNumOfGroups(1);
-            } else {
-                settings.setNumOfGroups(userNumGroup);
-            }
+            numGroups.setText(String.valueOf(inputtedNumber));
+            settings.setNumOfGroups(inputtedNumber);
         }
         numGroups.clearFocus();
     }

@@ -21,17 +21,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GroupingFragment extends Fragment {
+public class GroupingMakingFragment extends Fragment {
 
-    public static GroupingFragment getInstance() {
-        return new GroupingFragment();
+    public static GroupingMakingFragment getInstance() {
+        return new GroupingMakingFragment();
     }
 
     @BindView(R.id.no_groups) TextView noGroups;
 
     private GroupingSettings settings;
     private GroupingSettingsDialog settingsDialog;
-    private GroupingSettingsViewHolder settingsHolder;
     private Unbinder unbinder;
 
     @Override
@@ -53,10 +52,9 @@ public class GroupingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        settings = new GroupingSettings();
-        settingsDialog = new GroupingSettingsDialog(getActivity());
-        settingsHolder = new GroupingSettingsViewHolder(settingsDialog.getCustomView(), settings);
-        settingsDialog.setSettingsHolder(settingsHolder);
+        settings = new GroupingSettings(getResources().getInteger(R.integer.default_number_of_names_per_group),
+                getResources().getInteger(R.integer.default_number_of_groups));
+        settingsDialog = new GroupingSettingsDialog(getActivity(), settings);
     }
 
     @Override
