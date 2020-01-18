@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -21,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SpeechToTextManager implements RecognitionListener {
+public class SpeechToTextManager implements RecognitionListener, DialogInterface.OnDismissListener {
 
     public interface Listener {
         void onTextSpoken(String spokenText);
@@ -50,6 +51,7 @@ public class SpeechToTextManager implements RecognitionListener {
                 .customView(R.layout.speech_to_text_dialog, false)
                 .build();
         dialog.getWindow().getAttributes().windowAnimations = R.style.speech_dialog_animation;
+        dialog.setOnDismissListener(this);
         ButterKnife.bind(this, dialog.getCustomView());
     }
 
@@ -74,7 +76,9 @@ public class SpeechToTextManager implements RecognitionListener {
     public void onBufferReceived(byte[] buffer) {}
 
     @Override
-    public void onEndOfSpeech() {}
+    public void onEndOfSpeech() {
+        speechRecognizer.stopListening();
+    }
 
     @Override
     public void onError(int error) {
@@ -91,6 +95,11 @@ public class SpeechToTextManager implements RecognitionListener {
 
     @Override
     public void onReadyForSpeech(Bundle params) {}
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        speechRecognizer.stopListening();
+    }
 
     @Override
     public void onResults(Bundle results) {
