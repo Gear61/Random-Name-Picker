@@ -262,6 +262,7 @@ public class MainActivity extends StandardActivity
     @Override
     public void onTextSpoken(String spokenText) {
         newListInput.setText(spokenText);
+        newListInput.setSelection(spokenText.length());
     }
 
     @OnClick(R.id.import_text_file)

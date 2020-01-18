@@ -14,6 +14,7 @@ import androidx.annotation.StringRes;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.StringUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +46,7 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
         speechRecognizerIntent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().getLanguage());
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
         speechRecognizer.setRecognitionListener(this);
 
         dialog = new MaterialDialog.Builder(context)
@@ -68,9 +70,7 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     }
 
     @Override
-    public void onBeginningOfSpeech() {
-        message.setText(R.string.spinning_icon_while_waiting);
-    }
+    public void onBeginningOfSpeech() {}
 
     @Override
     public void onBufferReceived(byte[] buffer) {}
@@ -82,16 +82,20 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
 
     @Override
     public void onError(int error) {
-        if (error == SpeechRecognizer.ERROR_NO_MATCH) {
-            changeUIStateToRetry();
-        }
+        changeUIStateToRetry();
     }
 
     @Override
     public void onEvent(int eventType, Bundle params) {}
 
     @Override
-    public void onPartialResults(Bundle partialResults) {}
+    public void onPartialResults(Bundle partialResults) {
+        List<String> data = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        if (data != null && !data.isEmpty()) {
+            String latestPartialTranscription = data.get(data.size() - 1);
+            message.setText(StringUtil.capitalizeWords(latestPartialTranscription));
+        }
+    }
 
     @Override
     public void onReadyForSpeech(Bundle params) {}
@@ -105,7 +109,9 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     public void onResults(Bundle results) {
         List<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         if (matches != null && !matches.isEmpty()) {
-            listener.onTextSpoken(matches.get(0));
+            String finalTranscription = StringUtil.capitalizeWords(matches.get(0));
+            message.setText(finalTranscription);
+            listener.onTextSpoken(finalTranscription);
             dialog.dismiss();
         } else {
             changeUIStateToRetry();

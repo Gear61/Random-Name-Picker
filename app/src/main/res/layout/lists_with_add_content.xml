@@ -55,7 +55,7 @@
                 android:padding="8dp"
                 android:textColor="@color/dark_gray"
                 android:textSize="17dp"
-                android:background="@drawable/add_item_border"
+                android:background="@drawable/white_rectangle_with_blue_border"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
