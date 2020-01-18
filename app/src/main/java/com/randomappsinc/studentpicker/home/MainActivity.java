@@ -30,7 +30,6 @@ import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
-import com.randomappsinc.studentpicker.utils.SpeechUtil;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
@@ -45,13 +44,14 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class MainActivity extends StandardActivity
-        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener, SpeechToTextManager.Listener {
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener,
+        DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
 
-    private static final int SPEECH_REQUEST_CODE = 1;
-    private static final int IMPORT_FILE_REQUEST_CODE = 2;
-    private static final int SAVE_IMPORT_REQUEST_CODE = 3;
+    private static final int IMPORT_FILE_REQUEST_CODE = 1;
+    private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
+
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
     private static final int READ_RECORD_AUDIO_PERMISSION_CODE = 2;
 
@@ -248,7 +248,8 @@ public class MainActivity extends StandardActivity
                     Manifest.permission.RECORD_AUDIO)) {
                 new MaterialDialog.Builder(this)
                         .content(R.string.need_record_audio)
-                        .positiveText(android.R.string.yes)
+                        .positiveText(R.string.okay)
+                        .negativeText(R.string.cancel)
                         .onPositive((dialog, which) -> requestRecordAudio())
                         .show();
             } else {
@@ -258,8 +259,8 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onTextSpoken(String searchInput) {
-        newListInput.setText(searchInput);
+    public void onTextSpoken(String spokenText) {
+        newListInput.setText(spokenText);
     }
 
     @OnClick(R.id.import_text_file)
@@ -283,11 +284,13 @@ public class MainActivity extends StandardActivity
     }
 
     private void requestReadExternal() {
-        PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+        PermissionUtils.requestPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
     }
 
     private void requestRecordAudio() {
-        PermissionUtils.requestPermission(this, Manifest.permission.RECORD_AUDIO, READ_RECORD_AUDIO_PERMISSION_CODE);
+        PermissionUtils.requestPermission(
+                this, Manifest.permission.RECORD_AUDIO, READ_RECORD_AUDIO_PERMISSION_CODE);
     }
 
     @Override
@@ -312,12 +315,6 @@ public class MainActivity extends StandardActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case SPEECH_REQUEST_CODE:
-                String searchInput = SpeechUtil.processSpeechResult(resultCode, data, this);
-                if (searchInput != null) {
-                    newListInput.setText(searchInput);
-                }
-                break;
             case IMPORT_FILE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
@@ -326,11 +323,11 @@ public class MainActivity extends StandardActivity
                     } else {
                         Intent intent = new Intent(this, ImportFromTextFileActivity.class);
                         intent.putExtra(ImportFromTextFileActivity.FILE_PATH_KEY, filePath);
-                        startActivityForResult(intent, SAVE_IMPORT_REQUEST_CODE);
+                        startActivityForResult(intent, SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE);
                     }
                 }
                 break;
-            case SAVE_IMPORT_REQUEST_CODE:
+            case SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     nameListsAdapter.refresh(preferencesManager.getNameLists());
                 }
