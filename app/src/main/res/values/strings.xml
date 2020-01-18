@@ -80,4 +80,7 @@
     <string name="try_again">Try again</string>
     <string name="spinning_icon_while_waiting">{fa-cog spin 20sp}</string>
     <string name="did_not_catch_speech">We didn\'t catch what you said, please try again.</string>
+
+    <string name="okay">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

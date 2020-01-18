@@ -7,10 +7,11 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SpeechToTextManager implements RecognitionListener {
+
     public interface Listener {
         void onTextSpoken(String spokenText);
     }
@@ -36,7 +38,8 @@ public class SpeechToTextManager implements RecognitionListener {
         this.listener = listener;
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().getLanguage());
         speechRecognizer.setRecognitionListener(this);
 
@@ -61,12 +64,10 @@ public class SpeechToTextManager implements RecognitionListener {
     }
 
     @Override
-    public void onBufferReceived(byte[] buffer) {
-    }
+    public void onBufferReceived(byte[] buffer) {}
 
     @Override
-    public void onEndOfSpeech() {
-    }
+    public void onEndOfSpeech() {}
 
     @Override
     public void onError(int error) {
@@ -76,16 +77,13 @@ public class SpeechToTextManager implements RecognitionListener {
     }
 
     @Override
-    public void onEvent(int eventType, Bundle params) {
-    }
+    public void onEvent(int eventType, Bundle params) {}
 
     @Override
-    public void onPartialResults(Bundle partialResults) {
-    }
+    public void onPartialResults(Bundle partialResults) {}
 
     @Override
-    public void onReadyForSpeech(Bundle params) {
-    }
+    public void onReadyForSpeech(Bundle params) {}
 
     @Override
     public void onResults(Bundle results) {
@@ -99,8 +97,7 @@ public class SpeechToTextManager implements RecognitionListener {
     }
 
     @Override
-    public void onRmsChanged(float rmsdB) {
-    }
+    public void onRmsChanged(float rmsdB) {}
 
     private void changeUIStateToListening() {
         voiceIcon.setText(R.string.voice_icon_recognizer_white);
