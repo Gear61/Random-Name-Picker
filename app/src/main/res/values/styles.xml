@@ -77,7 +77,7 @@
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="SpeechDialogAnimation">
+    <style name="speech_dialog_animation">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_from_top</item>
     </style>
