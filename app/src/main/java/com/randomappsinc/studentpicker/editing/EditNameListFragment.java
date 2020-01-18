@@ -1,7 +1,7 @@
 package com.randomappsinc.studentpicker.editing;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,16 +16,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
-import com.randomappsinc.studentpicker.utils.SpeechUtil;
+import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -38,9 +41,9 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener {
+        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener {
 
-    private static final int SPEECH_REQUEST_CODE = 1;
+    private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
     public static EditNameListFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -66,6 +69,7 @@ public class EditNameListFragment extends Fragment implements
     private DuplicationDialog duplicationDialog;
     private MergeNameListsDialog mergeNameListsDialog;
     private String[] importCandidates;
+    private SpeechToTextManager speechToTextManager;
     private Unbinder unbinder;
 
     @Override
@@ -91,6 +95,9 @@ public class EditNameListFragment extends Fragment implements
         importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
         noContent.setText(R.string.no_names_for_edit);
 
+        speechToTextManager = new SpeechToTextManager(getContext(), this);
+        speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
+
         namesAdapter = new EditNameListAdapter(noContent, numNames, listName);
         namesList.setAdapter(namesAdapter);
         return rootView;
@@ -107,7 +114,7 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @OnClick(R.id.add_item)
-    public void addItem() {
+    void addItem() {
         String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
         if (newName.isEmpty()) {
@@ -121,18 +128,32 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @OnItemClick(R.id.content_list)
-    public void showNameOptions(final int position) {
+    void showNameOptions(final int position) {
         nameEditChoicesDialog.showChoices(namesAdapter.getItem(position));
     }
 
     @OnClick(R.id.voice_entry_icon)
-    public void addNameWithVoice() {
-        Intent intent = SpeechUtil.getSpeechToTextIntent(getString(R.string.name_input_speech_message_to_list));
-        try {
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-            getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-        } catch (ActivityNotFoundException exception) {
-            UIUtils.showLongToast(R.string.speech_not_supported, getActivity());
+    void addNameWithVoice() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, getContext())) {
+            speechToTextManager.startSpeechToTextFlow();
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    getActivity(),
+                    Manifest.permission.RECORD_AUDIO)) {
+                new MaterialDialog.Builder(getContext())
+                        .content(R.string.need_record_audio)
+                        .positiveText(R.string.okay)
+                        .negativeText(R.string.cancel)
+                        .onPositive((dialog, which) ->
+                                requestPermissions(
+                                        new String[] {Manifest.permission.RECORD_AUDIO},
+                                        RECORD_AUDIO_PERMISSION_CODE))
+                        .show();
+            } else {
+                requestPermissions(
+                        new String[] {Manifest.permission.RECORD_AUDIO},
+                        RECORD_AUDIO_PERMISSION_CODE);
+            }
         }
     }
 
@@ -188,14 +209,18 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SPEECH_REQUEST_CODE) {
-            String searchInput = SpeechUtil.processSpeechResult(resultCode, data, getActivity());
-            if (searchInput != null){
-                newNameInput.setText(searchInput);
-            }
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            speechToTextManager.startSpeechToTextFlow();
         }
+    }
+
+    @Override
+    public void onTextSpoken(String spokenText) {
+        newNameInput.setText(spokenText);
     }
 
     @Override
