@@ -32,13 +32,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/add_item_border"
+        android:background="@drawable/white_rectangle_with_blue_border"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
         android:textSize="17sp"
         android:text="@string/try_again"
-        android:textColor="@color/blue_200"
+        android:textColor="@color/app_blue"
         />
 </LinearLayout>
