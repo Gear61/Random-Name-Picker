@@ -3,5 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval"
     >
-    <solid android:color="@color/status_bar_blue" />
+
+    <solid android:color="@color/white"/>
+
+    <stroke
+        android:width="8dp"
+        android:color="@color/red"
+        />
 </shape>

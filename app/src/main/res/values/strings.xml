@@ -20,8 +20,8 @@
     <string name="trash_icon">{ion-android-delete}</string>
     <string name="delete_icon">{ion-android-remove-circle}</string>
     <string name="voice_icon">{ion-android-microphone}</string>
-    <string name="voice_icon_recognizer_white">{ion-android-microphone 40sp #FFFFFF}</string>
-    <string name="voice_icon_recognizer_blue">{ion-android-microphone 40sp #1976D2}</string>
+    <string name="speech_to_text_listening_mic_icon">{ion-android-microphone 40dp #FFFFFF}</string>
+    <string name="speech_to_text_retry_mic_icon">{ion-android-microphone 40dp #1976D2}</string>
 
     <string name="welcome">Welcome</string>
     <string name="view_tutorial">View tutorial</string>
@@ -70,7 +70,7 @@
     <string name="rename_list">Rename List</string>
     <string name="delete_list">Delete List</string>
 
-    <string name="list_name_input_speech_message">Tell us what you want to name your list</string>
+    <string name="list_name_speech_input_prompt">Tell us what you want to name your list</string>
     <string name="speech_not_supported">
         Sorry, but your Android device doesn\'t support speech recognition.
     </string>

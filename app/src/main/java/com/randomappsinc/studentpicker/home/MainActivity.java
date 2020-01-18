@@ -80,6 +80,7 @@ public class MainActivity extends StandardActivity
         ButterKnife.bind(this);
 
         speechToTextManager = new SpeechToTextManager(this, this);
+        speechToTextManager.setListeningPrompt(R.string.list_name_speech_input_prompt);
         preferencesManager = new PreferencesManager(this);
         renameListDialog = new RenameListDialog(this, this, preferencesManager);
         deleteListDialog = new DeleteListDialog(this, this);
