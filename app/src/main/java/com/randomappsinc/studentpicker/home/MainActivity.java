@@ -111,6 +111,12 @@ public class MainActivity extends StandardActivity
         setNoContent();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        speechToTextManager.cleanUp();
+    }
+
     public void showTutorial(final boolean firstTime) {
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);
         MaterialShowcaseView addListExplanation = new MaterialShowcaseView.Builder(this)
@@ -235,7 +241,7 @@ public class MainActivity extends StandardActivity
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, this)) {
-            speechToTextManager.showSpeechDialog();
+            speechToTextManager.startSpeechToTextFlow();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
@@ -249,6 +255,11 @@ public class MainActivity extends StandardActivity
                 requestRecordAudio();
             }
         }
+    }
+
+    @Override
+    public void onTextSpoken(String searchInput) {
+        newListInput.setText(searchInput);
     }
 
     @OnClick(R.id.import_text_file)
@@ -291,7 +302,7 @@ public class MainActivity extends StandardActivity
                     startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
                     break;
                 case READ_RECORD_AUDIO_PERMISSION_CODE:
-                    speechToTextManager.showSpeechDialog();
+                    speechToTextManager.startSpeechToTextFlow();
                     break;
             }
         }
@@ -353,10 +364,5 @@ public class MainActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSpokenText(String searchInput) {
-        newListInput.setText(searchInput);
     }
 }

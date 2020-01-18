@@ -78,6 +78,6 @@
         We couldn\'t recognize what you said. Please try again.
     </string>
     <string name="try_again">Try again</string>
-    <string name="waiting">{fa-cog spin 20sp}</string>
-    <string name="did_not_catch">Didn\'t catch that, Try speaking again</string>
+    <string name="spinning_icon_while_waiting">{fa-cog spin 20sp}</string>
+    <string name="did_not_catch_speech">We didn\'t catch what you said, please try again.</string>
 </resources>
