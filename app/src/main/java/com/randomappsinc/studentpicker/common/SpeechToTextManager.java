@@ -9,6 +9,8 @@ import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.StringRes;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
@@ -33,6 +35,7 @@ public class SpeechToTextManager implements RecognitionListener {
     private Intent speechRecognizerIntent;
     private Listener listener;
     private MaterialDialog dialog;
+    private @StringRes int listeningPrompt;
 
     public SpeechToTextManager(Context context, Listener listener) {
         this.listener = listener;
@@ -44,10 +47,14 @@ public class SpeechToTextManager implements RecognitionListener {
         speechRecognizer.setRecognitionListener(this);
 
         dialog = new MaterialDialog.Builder(context)
-                .customView(R.layout.voice_recognizble_layout, false)
+                .customView(R.layout.speech_to_text_dialog, false)
                 .build();
         dialog.getWindow().getAttributes().windowAnimations = R.style.speech_dialog_animation;
-        ButterKnife.bind(this, dialog);
+        ButterKnife.bind(this, dialog.getCustomView());
+    }
+
+    public void setListeningPrompt(@StringRes int listeningPrompt) {
+        this.listeningPrompt = listeningPrompt;
     }
 
     public void startSpeechToTextFlow() {
@@ -100,15 +107,15 @@ public class SpeechToTextManager implements RecognitionListener {
     public void onRmsChanged(float rmsdB) {}
 
     private void changeUIStateToListening() {
-        voiceIcon.setText(R.string.voice_icon_recognizer_white);
-        voiceIcon.setBackgroundResource(R.drawable.recognizable_voice_blue);
-        message.setText(R.string.list_name_input_speech_message);
+        voiceIcon.setText(R.string.speech_to_text_listening_mic_icon);
+        voiceIcon.setBackgroundResource(R.drawable.filled_blue_circle_background);
+        message.setText(listeningPrompt);
         tryAgain.setVisibility(View.GONE);
     }
 
     private void changeUIStateToRetry() {
-        voiceIcon.setText(R.string.voice_icon_recognizer_blue);
-        voiceIcon.setBackgroundResource(R.drawable.recognizable_voice_error);
+        voiceIcon.setText(R.string.speech_to_text_retry_mic_icon);
+        voiceIcon.setBackgroundResource(R.drawable.red_ring_background);
         message.setText(R.string.did_not_catch_speech);
         tryAgain.setVisibility(View.VISIBLE);
     }
