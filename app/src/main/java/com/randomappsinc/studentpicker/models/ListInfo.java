@@ -35,6 +35,21 @@ public class ListInfo {
         return nameHistory;
     }
 
+    public void clearNameHistory() {
+        nameHistory.clear();
+    }
+
+    public String getNameHistoryFormatted() {
+        StringBuilder namesHistory = new StringBuilder();
+        for (int i = 0; i < nameHistory.size(); i++) {
+            if (i != 0) {
+                namesHistory.append("\n");
+            }
+            namesHistory.append(nameHistory.get(i));
+        }
+        return namesHistory.toString();
+    }
+
     private List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : names) {

@@ -221,6 +221,7 @@ public class EditNameListFragment extends Fragment implements
     @Override
     public void onTextSpoken(String spokenText) {
         newNameInput.setText(spokenText);
+        newNameInput.setSelection(spokenText.length());
     }
 
     @Override
