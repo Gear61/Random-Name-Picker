@@ -21,9 +21,8 @@ public class RenameDialog {
     private int currentMaxAmount;
     private int amountToRename;
 
-    public RenameDialog(Context context, final Listener listener) {
+    RenameDialog(Context context, final Listener listener) {
         renameAmountDialog = new MaterialDialog.Builder(context)
-                .content(R.string.multiple_renames_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input(context.getString(R.string.num_copies), "", (dialog, input) -> {
                     if (input.length() > 0) {
@@ -37,10 +36,12 @@ public class RenameDialog {
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
                 .positiveText(R.string.next)
+                .onNeutral((dialog, which) -> {
+                    dialog.getInputEditText().setText("" + currentMaxAmount);
+                    handlePositiveAmountToRename();
+                })
                 .onPositive((dialog, which) -> {
-                    amountToRename = Integer.parseInt(
-                            dialog.getInputEditText().getText().toString().trim());
-                    goIntoRenamingDialogFromAmountChoice();
+                    handlePositiveAmountToRename();
                 })
                 .build();
 
@@ -64,14 +65,22 @@ public class RenameDialog {
                 .build();
     }
 
-    public void startRenamingProcess(String name, int maxAmount) {
+    private void handlePositiveAmountToRename() {
+        amountToRename = Integer.parseInt(
+                renameAmountDialog.getInputEditText().getText().toString().trim());
+        goIntoRenamingDialogFromAmountChoice();
+    }
+
+    void startRenamingProcess(String name, int maxAmount) {
         currentName = name;
         currentMaxAmount = maxAmount;
         renamingDialog.getInputEditText().setText(name);
         if (maxAmount > 1) {
+            renameAmountDialog.setActionButton(DialogAction.NEUTRAL, R.string.all_of_them);
+            renameAmountDialog.setContent(R.string.multiple_renames_title, name , maxAmount);
             EditText input = renameAmountDialog.getInputEditText();
             if (input != null) {
-                input.setText("");
+                input.setText("" + maxAmount);
                 input.setFilters(new InputFilter[]
                         {new InputFilter.LengthFilter(String.valueOf(maxAmount).length())});
             }
