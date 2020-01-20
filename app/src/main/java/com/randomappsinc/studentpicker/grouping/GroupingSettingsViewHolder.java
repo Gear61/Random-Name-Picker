@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,15 +15,11 @@ class GroupingSettingsViewHolder {
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
 
-    private Context context;
     private GroupingSettings settings;
 
-    GroupingSettingsViewHolder(View view, Context context, GroupingSettings settings) {
+    GroupingSettingsViewHolder(View view, GroupingSettings settings) {
         ButterKnife.bind(this, view);
-        this.context = context;
         this.settings = settings;
-        numberOfNamesInList.setText(
-                context.getResources().getString(R.string.grouping_settings_number_of_names_in_list, 0));
     }
 
     void revertSettings() {
@@ -45,7 +40,7 @@ class GroupingSettingsViewHolder {
                 Integer.parseInt(namesPerGroup.getText().toString());
         if (inputtedNumber <= 0) {
             namesPerGroup.setText(R.string.default_number_of_names_per_group);
-            settings.setNumOfNamesPerGroup(context.getResources().getInteger(R.integer.default_number_of_names_per_group));
+            settings.setNumOfNamesPerGroup(settings.getNumOfNamesPerGroup());
         } else {
             namesPerGroup.setText(String.valueOf(inputtedNumber));
             settings.setNumOfNamesPerGroup(inputtedNumber);
@@ -59,7 +54,7 @@ class GroupingSettingsViewHolder {
                 Integer.parseInt(numGroups.getText().toString().trim());
         if (inputtedNumber <= 0) {
             numGroups.setText(R.string.default_number_of_groups);
-            settings.setNumOfGroups(context.getResources().getInteger(R.integer.default_number_of_groups));
+            settings.setNumOfGroups(settings.getNumOfGroups());
         } else {
             numGroups.setText(String.valueOf(inputtedNumber));
             settings.setNumOfGroups(inputtedNumber);

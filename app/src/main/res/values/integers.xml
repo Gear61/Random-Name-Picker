@@ -4,5 +4,4 @@
     <integer name="shorter_anim_length">150</integer>
     <integer name="default_number_of_names_per_group">2</integer>
     <integer name="default_number_of_groups">1</integer>
-
 </resources>
