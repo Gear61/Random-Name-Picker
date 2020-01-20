@@ -25,7 +25,7 @@ class GroupingSettingsDialog {
                 .cancelable(false)
                 .build();
 
-        settingsHolder = new GroupingSettingsViewHolder(dialog.getCustomView(), context, settings);
+        settingsHolder = new GroupingSettingsViewHolder(dialog.getCustomView(), settings);
     }
 
     void show() {
