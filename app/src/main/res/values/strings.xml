@@ -16,11 +16,6 @@
         <item>@string/edit</item>
     </array>
     <string name="options_for">Options for:&#160;</string>
-    <string name="make_groups">Make Groups</string>
-    <string name="no_groups_created_message">
-        Use the {ion-android-settings} icon to customize your groups
-        and then tap \"Make Groups\" at the bottom.
-    </string>
 
     <!-- Icons -->
     <string name="edit_icon">{ion-edit}</string>

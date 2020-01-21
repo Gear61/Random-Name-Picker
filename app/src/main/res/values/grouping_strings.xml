@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="make_groups">Make Groups</string>
+    <string name="no_groups_created_message">
+        Use the {ion-android-settings} icon to customize your groups
+        and then tap \"Make Groups\" at the bottom.
+    </string>
+    <string name="group_settings_dialog_title">Group Making Settings</string>
+    <string name="grouping_settings_number_of_names_in_list">This list has %d names.</string>
+    <string name="default_number_of_names_per_group">2</string>
+    <string name="default_number_of_groups">1</string>
+    <string name="num_of_names_in_group"># of names per group:</string>
+    <string name="num_of_groups"># of groups:</string>
+</resources>
