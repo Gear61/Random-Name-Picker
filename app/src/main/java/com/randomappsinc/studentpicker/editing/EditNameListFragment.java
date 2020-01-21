@@ -12,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
@@ -30,18 +30,18 @@ import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener {
+        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -57,7 +57,7 @@ public class EditNameListFragment extends Fragment implements
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.num_names) TextView numNames;
-    @BindView(R.id.content_list) ListView namesList;
+    @BindView(R.id.content_list) RecyclerView namesList;
     @BindView(R.id.plus_icon) ImageView plus;
 
     private EditNameListAdapter namesAdapter;
@@ -98,8 +98,9 @@ public class EditNameListFragment extends Fragment implements
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
 
-        namesAdapter = new EditNameListAdapter(noContent, numNames, listName);
+        namesAdapter = new EditNameListAdapter(noContent, numNames, listName, this);
         namesList.setAdapter(namesAdapter);
+        namesList.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         return rootView;
     }
 
@@ -127,8 +128,8 @@ public class EditNameListFragment extends Fragment implements
         }
     }
 
-    @OnItemClick(R.id.content_list)
-    void showNameOptions(final int position) {
+    @Override
+    public void showNameOptions(final int position) {
         nameEditChoicesDialog.showChoices(namesAdapter.getItem(position));
     }
 
