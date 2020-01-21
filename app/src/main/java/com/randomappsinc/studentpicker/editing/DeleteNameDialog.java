@@ -32,7 +32,6 @@ public class DeleteNameDialog {
                 .onPositive((dialog, which) -> listener.onDeletionSubmitted(currentName, amountToDelete))
                 .build();
         deleteManyDialog = new MaterialDialog.Builder(context)
-                .content(R.string.multiple_deletions_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input(context.getString(R.string.num_copies), "", (dialog, input) -> {
                     if (input.length() > 0) {
@@ -42,6 +41,9 @@ public class DeleteNameDialog {
                         return;
                     }
                     dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                })
+                .onNeutral((dialog, which) -> {
+                    listener.onDeletionSubmitted(currentName, currentMaxAmount);
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
@@ -57,9 +59,11 @@ public class DeleteNameDialog {
         currentName = name;
         currentMaxAmount = maxAmount;
         if (maxAmount > 1) {
+            deleteManyDialog.setActionButton(DialogAction.NEUTRAL, R.string.all_of_them);
+            deleteManyDialog.setContent(R.string.multiple_deletions_title, "\"" + name + "\"", maxAmount);
             EditText input = deleteManyDialog.getInputEditText();
             if (input != null) {
-                input.setText("");
+                input.setText(String.valueOf(maxAmount));
                 input.setFilters(new InputFilter[]
                         {new InputFilter.LengthFilter(String.valueOf(maxAmount).length())});
             }
