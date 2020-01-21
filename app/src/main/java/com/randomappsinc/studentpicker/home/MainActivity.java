@@ -20,8 +20,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -52,7 +52,6 @@ public class MainActivity extends StandardActivity
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
     private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
 
-    private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
     private static final int READ_RECORD_AUDIO_PERMISSION_CODE = 2;
 
     @BindView(R.id.coordinator_layout) View parent;
@@ -267,27 +266,10 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.import_text_file)
     public void importTextFile() {
-        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
-            Intent intent = new Intent(this, FilePickerActivity.class);
-            startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                new MaterialDialog.Builder(this)
-                        .content(R.string.need_read_external)
-                        .positiveText(android.R.string.yes)
-                        .onPositive((dialog, which) -> requestReadExternal())
-                        .show();
-            } else {
-                requestReadExternal();
-            }
-        }
-    }
-
-    private void requestReadExternal() {
-        PermissionUtils.requestPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+        Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        txtFileIntent.setType("text/*");
+        startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
     }
 
     private void requestRecordAudio() {
@@ -301,15 +283,7 @@ public class MainActivity extends StandardActivity
             @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            switch (requestCode) {
-                case READ_EXTERNAL_STORAGE_PERMISSION_CODE:
-                    Intent intent = new Intent(this, FilePickerActivity.class);
-                    startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
-                    break;
-                case READ_RECORD_AUDIO_PERMISSION_CODE:
-                    speechToTextManager.startSpeechToTextFlow();
-                    break;
-            }
+            speechToTextManager.startSpeechToTextFlow();
         }
     }
 
@@ -318,15 +292,19 @@ public class MainActivity extends StandardActivity
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case IMPORT_FILE_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-                    if (!filePath.endsWith(".txt")) {
-                        UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
-                    } else {
-                        Intent intent = new Intent(this, ImportFromTextFileActivity.class);
-                        intent.putExtra(ImportFromTextFileActivity.FILE_PATH_KEY, filePath);
-                        startActivityForResult(intent, SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE);
-                    }
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    Uri uri = data.getData();
+
+                    // Persist ability to read from this file
+                    int takeFlags = data.getFlags()
+                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                    String uriString = uri.toString();
+                    Intent intent = new Intent(this, ImportFromTextFileActivity.class);
+                    intent.putExtra(Constants.FILE_URI_KEY, uriString);
+                    startActivityForResult(intent, SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE);
                 }
                 break;
             case SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE:

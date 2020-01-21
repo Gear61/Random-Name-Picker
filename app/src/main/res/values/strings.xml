@@ -39,11 +39,6 @@
         Click on any name list to open its edit list/choose names page.
     </string>
 
-    <string name="need_read_external">
-        In order to import name lists, you need to give this app access to your device\'s external files.
-        Would you like to do that?
-    </string>
-
     <string name="need_record_audio">
         In order to use speech to text functionality you need to give this app access to your device\'s microphone.
         Would you like to do that?
