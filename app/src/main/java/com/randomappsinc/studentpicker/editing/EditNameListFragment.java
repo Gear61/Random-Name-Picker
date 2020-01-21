@@ -159,21 +159,22 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public void onRenameChosen(String name) {
-        ListInfo listInfo = namesAdapter.getListInfo();
-        int currentAmount = listInfo.getInstancesOfName(name);
-        renameDialog.startRenamingProcess(name, currentAmount);
+        renameDialog.startRenamingProcess(name, amountOfEditChoiceFlow(name));
     }
 
     @Override
     public void onDeleteChosen(String name) {
-        ListInfo listInfo = namesAdapter.getListInfo();
-        int currentAmount = listInfo.getInstancesOfName(name);
-        deleteNameDialog.startDeletionProcess(name, currentAmount);
+        deleteNameDialog.startDeletionProcess(name, amountOfEditChoiceFlow(name));
     }
 
     @Override
     public void onDuplicationChosen(String name) {
-        duplicationDialog.show(name);
+        duplicationDialog.show(name, amountOfEditChoiceFlow(name));
+    }
+
+    private int amountOfEditChoiceFlow(String name) {
+        ListInfo listInfo = namesAdapter.getListInfo();
+        return listInfo.getInstancesOfName(name);
     }
 
     @Override
@@ -195,10 +196,18 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onDuplicationSubmitted(String name, int amountToAdd) {
-        nameListDataManager.addName(getContext(), name, amountToAdd, listName);
-        namesAdapter.addNames(name, amountToAdd);
-        UIUtils.showSnackbar(parent, R.string.clones_added);
+    public void onDuplicationSubmitted(String name, int amountToHave, int currentAmount) {
+        if (currentAmount > amountToHave) {
+            int amountToDelete = currentAmount - amountToHave;
+            nameListDataManager.deleteName(getContext(), name, amountToDelete, listName);
+            namesAdapter.removeNames(name, amountToDelete);
+            UIUtils.showSnackbar(parent, getString(R.string.duplicates_deleted, amountToDelete));
+        } else {
+            int amountToAdd = amountToHave - currentAmount;
+            nameListDataManager.addName(getContext(), name, amountToAdd, listName);
+            namesAdapter.addNames(name, amountToAdd);
+            UIUtils.showSnackbar(parent, getString(R.string.clones_added, amountToAdd));
+        }
     }
 
     @Override
