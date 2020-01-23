@@ -19,6 +19,7 @@ public class EditNameListAdapter extends BaseAdapter {
     private ListInfo content;
     private TextView noContent;
     private TextView numNames;
+    int num = 0;
 
     public EditNameListAdapter(
             TextView noContent,
