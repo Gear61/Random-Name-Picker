@@ -15,27 +15,24 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class NameCreationACAdapter extends BaseAdapter implements Filterable {
+public class NameCreationAutoCompleteAdapter extends BaseAdapter implements Filterable {
 
     private List<String> suggestions;
     private DataSource dataSource;
 
     private Context context;
 
-    public NameCreationACAdapter(Context context) {
+    NameCreationAutoCompleteAdapter(Context context) {
         this.context = context;
         this.dataSource = new DataSource(context);
         this.suggestions = new ArrayList<>();
     }
 
     static class ViewHolder {
-        @BindView(R.id.suggestion) TextView suggestion;
+        TextView suggestionTextView;
 
         ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            suggestionTextView = (TextView) view;
         }
     }
 
@@ -64,7 +61,7 @@ public class NameCreationACAdapter extends BaseAdapter implements Filterable {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.suggestion.setText(getItem(position));
+        holder.suggestionTextView.setText(getItem(position));
         return view;
     }
 
