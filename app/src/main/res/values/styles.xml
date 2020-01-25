@@ -63,4 +63,23 @@
         <item name="android:visibility">gone</item>
         <item name="android:textSize">27sp</item>
     </style>
+
+    <style name="voice_input_icon">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginEnd">55dp</item>
+        <item name="android:layout_marginRight">55dp</item>
+        <item name="android:layout_gravity">end|center_vertical</item>
+        <item name="android:text">@string/voice_icon</item>
+        <item name="android:textColor">@color/app_blue</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="speech_dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_from_top</item>
+    </style>
+
 </resources>

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/** Singleton to help maintain the state of the name choosing page */
 public class NameListDataManager {
 
     public interface Listener {

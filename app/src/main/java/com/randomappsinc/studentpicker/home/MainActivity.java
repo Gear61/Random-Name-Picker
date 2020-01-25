@@ -1,12 +1,10 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +20,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
@@ -33,9 +32,6 @@ import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
-
-import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -48,13 +44,15 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class MainActivity extends StandardActivity
-        implements NameListsAdapter.Delegate, RenameListDialog.Listener, DeleteListDialog.Listener {
+        implements NameListsAdapter.Delegate, RenameListDialog.Listener,
+        DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
 
-    private static final int SPEECH_REQUEST_CODE = 1;
-    private static final int IMPORT_FILE_REQUEST_CODE = 2;
-    private static final int SAVE_IMPORT_REQUEST_CODE = 3;
+    private static final int IMPORT_FILE_REQUEST_CODE = 1;
+    private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
+
+    private static final int READ_RECORD_AUDIO_PERMISSION_CODE = 2;
 
     @BindView(R.id.coordinator_layout) View parent;
     @BindView(R.id.focal_point) View focalPoint;
@@ -68,6 +66,7 @@ public class MainActivity extends StandardActivity
     @BindString(R.string.list_duplicate) String listDuplicate;
 
     private PreferencesManager preferencesManager;
+    private SpeechToTextManager speechToTextManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
@@ -79,6 +78,8 @@ public class MainActivity extends StandardActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        speechToTextManager = new SpeechToTextManager(this, this);
+        speechToTextManager.setListeningPrompt(R.string.list_name_speech_input_prompt);
         preferencesManager = new PreferencesManager(this);
         renameListDialog = new RenameListDialog(this, this, preferencesManager);
         deleteListDialog = new DeleteListDialog(this, this);
@@ -108,6 +109,12 @@ public class MainActivity extends StandardActivity
         }
 
         setNoContent();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        speechToTextManager.cleanUp();
     }
 
     public void showTutorial(final boolean firstTime) {
@@ -189,8 +196,8 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onItemDeleteClick(int position) {
-        deleteListDialog.show(position);
+    public void onItemDeleteClick(int position, String listName) {
+        deleteListDialog.presentForList(position, listName);
     }
 
     @Override
@@ -233,31 +240,41 @@ public class MainActivity extends StandardActivity
 
     @OnClick(R.id.voice_entry_icon)
     public void voiceEntry() {
-        showGoogleSpeechDialog();
-    }
-
-    @OnClick(R.id.import_text_file)
-    public void importTextFile() {
-        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
-            Intent intent = new Intent(this, FilePickerActivity.class);
-            startActivityForResult(intent, IMPORT_FILE_REQUEST_CODE);
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, this)) {
+            speechToTextManager.startSpeechToTextFlow();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Manifest.permission.RECORD_AUDIO)) {
                 new MaterialDialog.Builder(this)
-                        .content(R.string.need_read_external)
-                        .positiveText(android.R.string.yes)
-                        .onPositive((dialog, which) -> requestReadExternal())
+                        .content(R.string.need_record_audio)
+                        .positiveText(R.string.okay)
+                        .negativeText(R.string.cancel)
+                        .onPositive((dialog, which) -> requestRecordAudio())
                         .show();
             } else {
-                requestReadExternal();
+                requestRecordAudio();
             }
         }
     }
 
-    private void requestReadExternal() {
-        PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+    @Override
+    public void onTextSpoken(String spokenText) {
+        newListInput.setText(spokenText);
+        newListInput.setSelection(spokenText.length());
+    }
+
+    @OnClick(R.id.import_text_file)
+    public void importTextFile() {
+        Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        txtFileIntent.setType("text/*");
+        startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
+    }
+
+    private void requestRecordAudio() {
+        PermissionUtils.requestPermission(
+                this, Manifest.permission.RECORD_AUDIO, READ_RECORD_AUDIO_PERMISSION_CODE);
     }
 
     @Override
@@ -266,20 +283,7 @@ public class MainActivity extends StandardActivity
             @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, FilePickerActivity.class);
-            startActivityForResult(intent, 1);
-        }
-    }
-
-    private void showGoogleSpeechDialog() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.list_name_input_speech_message));
-        try {
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
-        } catch (ActivityNotFoundException exception) {
-            UIUtils.showLongToast(R.string.speech_not_supported, this);
+            speechToTextManager.startSpeechToTextFlow();
         }
     }
 
@@ -287,32 +291,23 @@ public class MainActivity extends StandardActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case SPEECH_REQUEST_CODE:
-                if (resultCode != RESULT_OK || data == null) {
-                    return;
-                }
-
-                List<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                if (result == null || result.isEmpty()) {
-                    UIUtils.showLongToast(R.string.speech_unrecognized, this);
-                    return;
-                }
-                String searchInput = result.get(0);
-                newListInput.setText(searchInput);
-                break;
             case IMPORT_FILE_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-                    if (!filePath.endsWith(".txt")) {
-                        UIUtils.showSnackbar(parent, getString(R.string.invalid_file));
-                    } else {
-                        Intent intent = new Intent(this, ImportFromTextFileActivity.class);
-                        intent.putExtra(ImportFromTextFileActivity.FILE_PATH_KEY, filePath);
-                        startActivityForResult(intent, SAVE_IMPORT_REQUEST_CODE);
-                    }
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    Uri uri = data.getData();
+
+                    // Persist ability to read from this file
+                    int takeFlags = data.getFlags()
+                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                    String uriString = uri.toString();
+                    Intent intent = new Intent(this, ImportFromTextFileActivity.class);
+                    intent.putExtra(Constants.FILE_URI_KEY, uriString);
+                    startActivityForResult(intent, SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE);
                 }
                 break;
-            case SAVE_IMPORT_REQUEST_CODE:
+            case SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     nameListsAdapter.refresh(preferencesManager.getNameLists());
                 }

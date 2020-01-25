@@ -14,11 +14,13 @@ import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.squareup.seismic.ShakeDetector;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnPageChange;
 
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
 
@@ -68,6 +70,12 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
                     .cancelable(false)
                     .show();
         }
+    }
+
+    @OnPageChange(R.id.name_list_pager)
+    public void onTabChanged() {
+        UIUtils.hideKeyboard(this);
+        invalidateOptionsMenu();
     }
 
     @Override

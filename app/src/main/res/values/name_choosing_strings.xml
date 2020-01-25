@@ -3,12 +3,12 @@
     <!-- Name Choosing -->
     <string name="reset_list">Reset list</string>
     <string name="no_names_for_choosing">
-        Switch over to the Edit page to start adding names to this list!
+        Switch over to the Edit page to add names to this list!
     </string>
     <string name="name_chosen">And the lucky winner is&#8230;</string>
     <string name="names_chosen">And the lucky winners are&#8230;</string>
     <string name="out_of_names">
-        No names remain. Tap on the {ion-android-refresh} in the top right to put them all back.
+        No names remain. Tap on the {ion-android-refresh} button at the top right to put them all back.
     </string>
     <string name="single_name">&#160;name</string>
     <string name="plural_names">&#160;names</string>
