@@ -39,8 +39,9 @@
     <string name="multiple_deletions_title">
           How many copies of %s do you want to delete?
           You currently have %d copies of this name.
-     </string>    <string name="names_deleted">Name(s) deleted.</string>
+     </string>
 
+    <string name="names_deleted">Name(s) deleted.</string>
     <string name="multiple_renames_title">How many copies of this name do you want to change?</string>
     <string name="next">Next</string>
     <string name="back">Back</string>
