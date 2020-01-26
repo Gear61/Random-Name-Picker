@@ -41,7 +41,7 @@ import butterknife.Unbinder;
 
 public class NameChoosingFragment extends Fragment
         implements ChoicesDisplayDialog.Listener, NameListDataManager.Listener,
-        ShakeManager.Listener, TextToSpeechManager.Listener, NameChoosingAdapter.Listener, NameChoosingHistoryManager.Listener {
+        ShakeManager.Listener, TextToSpeechManager.Listener, NameChoosingAdapter.Listener {
 
     private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
 
@@ -102,7 +102,7 @@ public class NameChoosingFragment extends Fragment
         }
         setViews();
 
-        nameChoosingHistoryManager = new NameChoosingHistoryManager(listInfo, context, this);
+        nameChoosingHistoryManager = new NameChoosingHistoryManager(listInfo, context);
         nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
         namesList.setAdapter(nameChoosingAdapter);
 
@@ -311,10 +311,5 @@ public class NameChoosingFragment extends Fragment
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onEmptyHistoryNames() {
-        UIUtils.showLongToast(R.string.empty_names_history, getActivity());
     }
 }
