@@ -32,6 +32,7 @@ import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +42,7 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener {
+        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, NameListDataManager.AdjustAmountListener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -95,6 +96,7 @@ public class EditNameListFragment extends Fragment implements
         importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
         noContent.setText(R.string.no_names_for_edit);
 
+        nameListDataManager.registerAmountListener(this);
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
 
@@ -159,22 +161,20 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public void onRenameChosen(String name) {
-        renameDialog.startRenamingProcess(name, amountOfEditChoiceFlow(name));
+        int currentAmount = namesAdapter.getListInfo().getInstancesOfName(name);
+        renameDialog.startRenamingProcess(name, currentAmount);
     }
 
     @Override
     public void onDeleteChosen(String name) {
-        deleteNameDialog.startDeletionProcess(name, amountOfEditChoiceFlow(name));
+        int currentAmount = namesAdapter.getListInfo().getInstancesOfName(name);
+        deleteNameDialog.startDeletionProcess(name, currentAmount);
     }
 
     @Override
-    public void onDuplicationChosen(String name) {
-        duplicationDialog.show(name, amountOfEditChoiceFlow(name));
-    }
-
-    private int amountOfEditChoiceFlow(String name) {
-        ListInfo listInfo = namesAdapter.getListInfo();
-        return listInfo.getInstancesOfName(name);
+    public void onNameAdjustmentChosen(String name) {
+        int currentAmount = namesAdapter.getListInfo().getInstancesOfName(name);
+        duplicationDialog.show(name, currentAmount);
     }
 
     @Override
@@ -196,18 +196,8 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onDuplicationSubmitted(String name, int amountToHave, int currentAmount) {
-        if (currentAmount > amountToHave) {
-            int amountToDelete = currentAmount - amountToHave;
-            nameListDataManager.deleteName(getContext(), name, amountToDelete, listName);
-            namesAdapter.removeNames(name, amountToDelete);
-            UIUtils.showSnackbar(parent, getString(R.string.duplicates_deleted, amountToDelete));
-        } else {
-            int amountToAdd = amountToHave - currentAmount;
-            nameListDataManager.addName(getContext(), name, amountToAdd, listName);
-            namesAdapter.addNames(name, amountToAdd);
-            UIUtils.showSnackbar(parent, getString(R.string.clones_added, amountToAdd));
-        }
+    public void onNameAmountAdjustmentSubmitted(String name, int amountToHave, int currentAmount) {
+       nameListDataManager.setNameAmount(name, amountToHave, currentAmount, getActivity(), listName);
     }
 
     @Override
@@ -261,5 +251,17 @@ public class EditNameListFragment extends Fragment implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNamesRemoved(String name, int amountToDelete) {
+        namesAdapter.removeNames(name, amountToDelete);
+        UIUtils.showSnackbar(parent, getString(R.string.name_amount_adjusted));
+    }
+
+    @Override
+    public void onNamesAdded(String name, int amountToAdd) {
+        namesAdapter.addNames(name, amountToAdd);
+        UIUtils.showSnackbar(parent, getString(R.string.name_amount_adjusted));
     }
 }

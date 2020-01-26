@@ -22,7 +22,14 @@ public class NameListDataManager {
         void onNameListsImported(Map<String, Integer> nameAmounts, String listName);
     }
 
+    public interface AdjustAmountListener {
+        void onNamesRemoved(String name, int amountToDelete);
+
+        void onNamesAdded(String name, int amountToAdd);
+    }
+
     private static NameListDataManager instance;
+    private AdjustAmountListener adjustAmountListener;
 
     public static NameListDataManager get() {
         if (instance == null) {
@@ -48,6 +55,10 @@ public class NameListDataManager {
         listeners.remove(listener);
     }
 
+    public void registerAmountListener(AdjustAmountListener adjustAmountListener) {
+        this.adjustAmountListener = adjustAmountListener;
+    }
+
     public void addName(Context context, String name, int amount, String listName) {
         DataSource dataSource = new DataSource(context);
         dataSource.addNames(name, listName, amount);
@@ -61,6 +72,18 @@ public class NameListDataManager {
         dataSource.removeNames(name, listName, amount);
         for (Listener listener : listeners) {
             listener.onNameDeleted(name, amount, listName);
+        }
+    }
+
+    public void setNameAmount(String name, int amountToHave, int currentAmount, Context context, String listName) {
+        if (currentAmount > amountToHave) {
+            int amountToDelete = currentAmount - amountToHave;
+            deleteName(context, name, amountToDelete, listName);
+            adjustAmountListener.onNamesRemoved(name, amountToDelete);
+        } else {
+            int amountToAdd = amountToHave - currentAmount;
+            addName(context, name, amountToAdd, listName);
+            adjustAmountListener.onNamesAdded(name, amountToAdd);
         }
     }
 

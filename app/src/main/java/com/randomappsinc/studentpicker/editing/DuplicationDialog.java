@@ -11,7 +11,7 @@ import com.randomappsinc.studentpicker.R;
 public class DuplicationDialog {
 
     public interface Listener {
-        void onDuplicationSubmitted(String name, int amountToHave, int currentAmount);
+        void onNameAmountAdjustmentSubmitted(String name, int newAmount, int currentAmount);
     }
 
     private MaterialDialog dialog;
@@ -20,31 +20,28 @@ public class DuplicationDialog {
 
     public DuplicationDialog(Context context, final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
-                .content(R.string.cloning_title)
+                .content(R.string.name_adjustment_message)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
                 .input(context.getString(R.string.num_copies), "", (dialog, input) -> {
-                    if (input.length() > 0) {
-                        int numCopies = Integer.parseInt(input.toString());
-                        boolean isValid = numCopies > 0 && numCopies != currentAmount;
-                        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid);
-                    }
+                    boolean isValid = input.length() > 0 && Integer.parseInt(input.toString()) != currentAmount;
+                    dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid);
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
                 .positiveText(R.string.submit)
                 .onPositive((dialog, which) -> {
                     int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
-                    listener.onDuplicationSubmitted(currentName, numCopies, currentAmount);
+                    listener.onNameAmountAdjustmentSubmitted(currentName, numCopies, currentAmount);
                 })
                 .build();
         // Cap the amount you can make at 999
-        dialog.getInputEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
+        dialog.getInputEditText().setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
     }
 
     public void show(String name, int amount) {
         currentName = name;
         currentAmount = amount;
-        dialog.setContent(R.string.cloning_title, "\"" + name + "\"", currentAmount);
+        dialog.setContent(R.string.name_adjustment_message, "\"" + name + "\"", currentAmount);
         dialog.getInputEditText().setText(String.valueOf(currentAmount));
         dialog.show();
     }
