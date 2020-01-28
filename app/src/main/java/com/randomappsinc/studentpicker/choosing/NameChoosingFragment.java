@@ -295,7 +295,7 @@ public class NameChoosingFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_names_history:
-                nameChoosingHistoryManager.showNamesHistory();
+                nameChoosingHistoryManager.maybeShowNamesHistory();
                 return true;
             case R.id.settings:
                 settingsDialog.show();
