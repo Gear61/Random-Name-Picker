@@ -22,6 +22,8 @@
     <string name="trash_icon">{ion-android-delete}</string>
     <string name="delete_icon">{ion-android-remove-circle}</string>
     <string name="voice_icon">{ion-android-microphone}</string>
+    <string name="speech_to_text_listening_mic_icon">{ion-android-microphone 40dp #FFFFFF}</string>
+    <string name="speech_to_text_retry_mic_icon">{ion-android-microphone 40dp #1976D2}</string>
 
     <string name="welcome">Welcome</string>
     <string name="view_tutorial">View tutorial</string>
@@ -39,8 +41,8 @@
         Click on any name list to open its edit list/choose names page.
     </string>
 
-    <string name="need_read_external">
-        In order to import name lists, you need to give this app access to your device\'s external files.
+    <string name="need_record_audio">
+        In order to use speech to text functionality you need to give this app access to your device\'s microphone.
         Would you like to do that?
     </string>
     <string name="import_explanation">
@@ -65,11 +67,16 @@
     <string name="rename_list">Rename List</string>
     <string name="delete_list">Delete List</string>
 
-    <string name="list_name_input_speech_message">Tell us what you want to name your list</string>
+    <string name="list_name_speech_input_prompt">Tell us what you want to name your list</string>
     <string name="speech_not_supported">
         Sorry, but your Android device doesn\'t support speech recognition.
     </string>
     <string name="speech_unrecognized">
         We couldn\'t recognize what you said. Please try again.
     </string>
+    <string name="try_again">Try again</string>
+    <string name="did_not_catch_speech">We didn\'t catch what you said, please try again.</string>
+
+    <string name="okay">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

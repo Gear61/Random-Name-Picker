@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.choosing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,24 +9,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
 import com.randomappsinc.studentpicker.home.MainActivity;
+import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +41,9 @@ import butterknife.Unbinder;
 
 public class NameChoosingFragment extends Fragment
         implements ChoicesDisplayDialog.Listener, NameListDataManager.Listener,
-        ShakeManager.Listener, TextToSpeechManager.Listener {
+        ShakeManager.Listener, TextToSpeechManager.Listener, NameChoosingAdapter.Listener {
+
+    private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
 
     public static NameChoosingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -49,7 +55,7 @@ public class NameChoosingFragment extends Fragment
 
     @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
-    @BindView(R.id.names_list) ListView namesList;
+    @BindView(R.id.names_list) RecyclerView namesList;
 
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
@@ -62,6 +68,9 @@ public class NameChoosingFragment extends Fragment
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
+    private PreferencesManager preferencesManager;
+    private DataSource dataSource;
+    private ListInfo listInfo;
     private Unbinder unbinder;
 
     @Override
@@ -76,13 +85,24 @@ public class NameChoosingFragment extends Fragment
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        nameChoosingAdapter = new NameChoosingAdapter(noNamesToChoose, numNames, listName);
-        namesList.setAdapter(nameChoosingAdapter);
+        Context context = rootView.getContext();
+        namesList.addItemDecoration(new SimpleDividerItemDecoration(context));
 
         nameListDataManager.registerListener(this);
         shakeManager.registerListener(this);
 
-        textToSpeechManager = new TextToSpeechManager(getContext(), this);
+        textToSpeechManager = new TextToSpeechManager(context, this);
+        preferencesManager = new PreferencesManager(context);
+        dataSource = new DataSource(context);
+
+        listInfo = preferencesManager.getNameListState(listName);
+        if (listInfo == null) {
+            listInfo = dataSource.getListInfo(listName);
+        }
+        setViews();
+
+        nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
+        namesList.setAdapter(nameChoosingAdapter);
 
         return rootView;
     }
@@ -104,16 +124,40 @@ public class NameChoosingFragment extends Fragment
                 .build();
         choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
 
-
-
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
+    }
+
+    @Override
+    public void onNameRemoved() {
+        setViews();
+    }
+
+    private void setViews() {
+        if (dataSource.getListInfo(listName).getNumInstances() == 0) {
+            noNamesToChoose.setText(R.string.no_names_for_choosing);
+        } else {
+            noNamesToChoose.setText(R.string.out_of_names);
+        }
+        if (listInfo.getNumInstances() == 0) {
+            numNames.setVisibility(View.GONE);
+            noNamesToChoose.setVisibility(View.VISIBLE);
+        } else {
+            noNamesToChoose.setVisibility(View.GONE);
+            Context context = numNames.getContext();
+            String namesText = listInfo.getNumInstances() == 1
+                    ? context.getString(R.string.one_name)
+                    : context.getString(R.string.x_names, listInfo.getNumInstances());
+            numNames.setText(namesText);
+            numNames.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onNameAdded(String name, int amount, String listName) {
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNames(name, amount);
+            setViews();
         }
     }
 
@@ -121,6 +165,7 @@ public class NameChoosingFragment extends Fragment
     public void onNameDeleted(String name, int amount, String listName) {
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.removeNames(name, amount);
+            setViews();
         }
     }
 
@@ -135,6 +180,7 @@ public class NameChoosingFragment extends Fragment
     public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNameMap(nameAmounts);
+            setViews();
         }
     }
 
@@ -145,7 +191,7 @@ public class NameChoosingFragment extends Fragment
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (nameChoosingAdapter.getCount() == 0) {
+        if (listInfo.getNumNames() == 0) {
             return;
         }
         if (settings.getPresentationMode()) {
@@ -156,18 +202,41 @@ public class NameChoosingFragment extends Fragment
             cacheListState();
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
-            getActivity().startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+            startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {
             if (choicesDisplayDialog.isShowing()) {
                 return;
             }
             List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
-                    nameChoosingAdapter.getNumInstances() - 1);
-            String chosenNames = nameChoosingAdapter.chooseNamesAtRandom(chosenIndexes, settings);
+                    listInfo.getNumInstances() - 1);
+            String chosenNames = listInfo.chooseNames(chosenIndexes, settings);
+            if (!settings.getWithReplacement()) {
+                nameChoosingAdapter.notifyDataSetChanged();
+                setViews();
+            }
             choicesDisplayDialog.showChoices(chosenNames, chosenIndexes.size());
             if (settings.getAutomaticTts()) {
                 sayNames(chosenNames);
             }
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // If we are choosing without replacement, then presentation mode has mutated the choosing state
+        // and we need to update the list
+        if (requestCode == PRESENTATION_MODE_REQUEST_CODE && !settings.getWithReplacement()) {
+            listInfo = preferencesManager.getNameListState(listName);
+            nameChoosingAdapter.refreshList(listInfo);
+            setViews();
         }
     }
 
@@ -186,19 +255,8 @@ public class NameChoosingFragment extends Fragment
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getActivity() != null) {
-            if (isVisibleToUser) {
-                UIUtils.hideKeyboard(getActivity());
-                getActivity().invalidateOptionsMenu();
-            }
-        }
-    }
-
     private void showNamesHistory() {
-        final String namesHistory = nameChoosingAdapter.getNamesHistory();
+        final String namesHistory = listInfo.getNameHistoryFormatted();
         if (!namesHistory.isEmpty()) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.chosen_names_history)
@@ -207,7 +265,7 @@ public class NameChoosingFragment extends Fragment
                     .neutralText(R.string.clear)
                     .negativeText(R.string.copy_text)
                     .onNeutral((dialog, which) -> {
-                        nameChoosingAdapter.clearNameHistory();
+                        listInfo.clearNameHistory();
                         UIUtils.showShortToast(R.string.name_history_cleared, getContext());
                     })
                     .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
@@ -223,7 +281,7 @@ public class NameChoosingFragment extends Fragment
     }
 
     private void cacheListState() {
-        nameChoosingAdapter.cacheState(settings);
+        preferencesManager.setNameListState(listName, listInfo, settings);
     }
 
     @Override
@@ -266,7 +324,9 @@ public class NameChoosingFragment extends Fragment
                 settingsDialog.show();
                 return true;
             case R.id.reset:
-                nameChoosingAdapter.resetNames();
+                listInfo = dataSource.getListInfo(listName);
+                nameChoosingAdapter.refreshList(listInfo);
+                setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, getContext());
                 return true;
             case android.R.id.home:

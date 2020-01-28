@@ -75,11 +75,7 @@ public class PresentationActivity extends StandardActivity
         textToSpeechManager = new TextToSpeechManager(this, this);
 
         int numNames = settings.getNumNamesToChoose();
-        if (numNames > 1) {
-            header.setText(R.string.names_chosen);
-        } else {
-            header.setText(R.string.name_chosen);
-        }
+        header.setText(numNames > 1 ? R.string.names_chosen : R.string.name_chosen);
 
         if (!settings.getShowAsList()) {
             names.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -225,6 +221,11 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
+    public void onTextToSpeechFailure() {
+        UIUtils.showLongToast(R.string.text_to_speech_fail, this);
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         preferencesManager.setNameListState(listName, listState, settings);
         super.onSaveInstanceState(savedInstanceState);
@@ -232,7 +233,11 @@ public class PresentationActivity extends StandardActivity
 
     @Override
     public void finish() {
-        preferencesManager.setNameListState(listName, listState, settings);
+        // If we are choosing without replacement, then the choosing page has been mutating the list
+        // and the changes need to be saved
+        if (!settings.getWithReplacement()) {
+            preferencesManager.setNameListState(listName, listState, settings);
+        }
         super.finish();
     }
 
@@ -274,10 +279,5 @@ public class PresentationActivity extends StandardActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onTextToSpeechFailure() {
-        UIUtils.showLongToast(R.string.text_to_speech_fail, this);
     }
 }

@@ -55,8 +55,8 @@
                 android:paddingBottom="8dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/dark_gray"
-                android:textSize="18dp"
-                android:background="@drawable/add_item_border"
+                android:textSize="17dp"
+                android:background="@drawable/white_rectangle_with_blue_border"
                 android:layout_marginRight="55dp"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
@@ -67,16 +67,7 @@
 
             <com.joanzapata.iconify.widget.IconTextView
                 android:id="@+id/voice_entry_icon"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginEnd="55dp"
-                android:layout_marginRight="55dp"
-                android:layout_gravity="end|center_vertical"
-                android:text="@string/voice_icon"
-                android:textColor="@color/app_blue"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:foreground="?attr/selectableItemBackground"
+                style="@style/voice_input_icon"
                 />
         </FrameLayout>
 

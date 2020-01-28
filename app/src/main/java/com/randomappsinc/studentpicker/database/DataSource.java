@@ -19,7 +19,6 @@ public class DataSource {
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
 
-    // Constructor
     public DataSource(Context context) {
         dbHelper = new MySQLiteHelper(context);
     }
@@ -189,7 +188,7 @@ public class DataSource {
         return nameAmounts;
     }
 
-    public void renamePeople(String oldName, String newName, String listName, int amount) {
+    void renamePeople(String oldName, String newName, String listName, int amount) {
         removeNames(oldName, listName, amount);
         addNames(newName, listName, amount);
     }
