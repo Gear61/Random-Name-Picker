@@ -90,6 +90,19 @@ public class ListInfo {
         }
     }
 
+    public void setNameAmount(String name, int newAmount) {
+        if (nameAmounts.containsKey(name)) {
+            int currentAmount = nameAmounts.get(name);
+            if (currentAmount > newAmount) {
+                int amountToDelete = currentAmount - newAmount;
+                removeNames(name, amountToDelete);
+            } else {
+                int amountToAdd = newAmount - currentAmount;
+                addNames(name, amountToAdd);
+            }
+        }
+    }
+
     public void renamePeople(String oldName, String newName, int amount) {
         removeNames(oldName, amount);
         addNames(newName, amount);

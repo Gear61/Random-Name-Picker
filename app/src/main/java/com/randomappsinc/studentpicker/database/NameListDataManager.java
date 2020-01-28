@@ -23,9 +23,7 @@ public class NameListDataManager {
     }
 
     public interface AdjustAmountListener {
-        void onNamesRemoved(String name, int amountToDelete);
-
-        void onNamesAdded(String name, int amountToAdd);
+        void onAdjustNameAmount(String name, int newAmount);
     }
 
     private static NameListDataManager instance;
@@ -75,16 +73,16 @@ public class NameListDataManager {
         }
     }
 
-    public void setNameAmount(String name, int amountToHave, int currentAmount, Context context, String listName) {
-        if (currentAmount > amountToHave) {
-            int amountToDelete = currentAmount - amountToHave;
-            deleteName(context, name, amountToDelete, listName);
-            adjustAmountListener.onNamesRemoved(name, amountToDelete);
+    public void setNameAmount(String name, int newAmount, int currentAmount, Context context, String listName) {
+        DataSource dataSource = new DataSource(context);
+        if (currentAmount > newAmount) {
+            int amountToDelete = currentAmount - newAmount;
+            dataSource.removeNames(name, listName, amountToDelete);
         } else {
-            int amountToAdd = amountToHave - currentAmount;
-            addName(context, name, amountToAdd, listName);
-            adjustAmountListener.onNamesAdded(name, amountToAdd);
+            int amountToAdd = newAmount - currentAmount;
+            dataSource.addNames(name, listName, amountToAdd);
         }
+        adjustAmountListener.onAdjustNameAmount(name, newAmount);
     }
 
     public void changeName(Context context, String oldName, String newName, int amount, String listName) {

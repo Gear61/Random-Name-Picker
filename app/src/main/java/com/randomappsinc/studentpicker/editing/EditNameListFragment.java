@@ -32,7 +32,6 @@ import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +41,7 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, NameListDataManager.AdjustAmountListener {
+        NameAmountAdjustmentDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, NameListDataManager.AdjustAmountListener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -67,7 +66,7 @@ public class EditNameListFragment extends Fragment implements
     private NameEditChoicesDialog nameEditChoicesDialog;
     private RenameDialog renameDialog;
     private DeleteNameDialog deleteNameDialog;
-    private DuplicationDialog duplicationDialog;
+    private NameAmountAdjustmentDialog nameAmountAdjustmentDialog;
     private MergeNameListsDialog mergeNameListsDialog;
     private String[] importCandidates;
     private SpeechToTextManager speechToTextManager;
@@ -111,7 +110,7 @@ public class EditNameListFragment extends Fragment implements
         nameEditChoicesDialog = new NameEditChoicesDialog(getActivity(), this);
         renameDialog = new RenameDialog(getActivity(), this);
         deleteNameDialog = new DeleteNameDialog(getActivity(), this);
-        duplicationDialog = new DuplicationDialog(getActivity(), this);
+        nameAmountAdjustmentDialog = new NameAmountAdjustmentDialog(getActivity(), this);
         mergeNameListsDialog = new MergeNameListsDialog(getActivity(), this, importCandidates);
     }
 
@@ -174,7 +173,7 @@ public class EditNameListFragment extends Fragment implements
     @Override
     public void onNameAdjustmentChosen(String name) {
         int currentAmount = namesAdapter.getListInfo().getInstancesOfName(name);
-        duplicationDialog.show(name, currentAmount);
+        nameAmountAdjustmentDialog.show(name, currentAmount);
     }
 
     @Override
@@ -196,8 +195,8 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onNameAmountAdjustmentSubmitted(String name, int amountToHave, int currentAmount) {
-       nameListDataManager.setNameAmount(name, amountToHave, currentAmount, getActivity(), listName);
+    public void onNameAmountAdjustmentSubmitted(String name, int newAmount, int currentAmount) {
+       nameListDataManager.setNameAmount(name, newAmount, currentAmount, getContext(), listName);
     }
 
     @Override
@@ -254,14 +253,8 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onNamesRemoved(String name, int amountToDelete) {
-        namesAdapter.removeNames(name, amountToDelete);
-        UIUtils.showSnackbar(parent, getString(R.string.name_amount_adjusted));
-    }
-
-    @Override
-    public void onNamesAdded(String name, int amountToAdd) {
-        namesAdapter.addNames(name, amountToAdd);
-        UIUtils.showSnackbar(parent, getString(R.string.name_amount_adjusted));
+    public void onAdjustNameAmount(String name, int newAmount) {
+        namesAdapter.setNameAmount(name, newAmount);
+        UIUtils.showSnackbar(parent, R.string.name_amount_adjusted);
     }
 }

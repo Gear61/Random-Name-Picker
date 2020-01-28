@@ -8,7 +8,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
-public class DuplicationDialog {
+public class NameAmountAdjustmentDialog {
 
     public interface Listener {
         void onNameAmountAdjustmentSubmitted(String name, int newAmount, int currentAmount);
@@ -18,7 +18,7 @@ public class DuplicationDialog {
     private String currentName;
     private int currentAmount;
 
-    public DuplicationDialog(Context context, final Listener listener) {
+    public NameAmountAdjustmentDialog(Context context, final Listener listener) {
         dialog = new MaterialDialog.Builder(context)
                 .content(R.string.name_adjustment_message)
                 .inputType(InputType.TYPE_CLASS_NUMBER)

@@ -64,6 +64,12 @@ public class EditNameListAdapter extends BaseAdapter {
         setViews();
     }
 
+    public void setNameAmount(String name, int amount) {
+        content.setNameAmount(name, amount);
+        notifyDataSetChanged();
+        setViews();
+    }
+
     public void changeName(String oldName, String newName, int amount) {
         content.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
