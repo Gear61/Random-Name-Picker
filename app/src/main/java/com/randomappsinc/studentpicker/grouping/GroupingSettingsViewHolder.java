@@ -20,6 +20,8 @@ class GroupingSettingsViewHolder {
     GroupingSettingsViewHolder(View view, GroupingSettings settings) {
         ButterKnife.bind(this, view);
         this.settings = settings;
+        namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
+        numGroups.setText(String.valueOf(settings.getNumOfGroups()));
     }
 
     void revertSettings() {
