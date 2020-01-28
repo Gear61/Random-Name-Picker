@@ -32,7 +32,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return NameChoosingFragment.getInstance(listName);
             case 1:
-                return GroupingMakingFragment.getInstance();
+                return GroupingMakingFragment.getInstance(listName);
             case 2:
                 return EditNameListFragment.getInstance(listName);
             default:

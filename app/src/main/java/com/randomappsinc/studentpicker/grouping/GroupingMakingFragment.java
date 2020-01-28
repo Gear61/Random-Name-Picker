@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.grouping;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,22 +17,38 @@ import androidx.fragment.app.Fragment;
 
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.home.MainActivity;
+import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.utils.NameUtils;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class GroupingMakingFragment extends Fragment {
 
-    public static GroupingMakingFragment getInstance() {
-        return new GroupingMakingFragment();
+    public static GroupingMakingFragment getInstance(String listName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
+        GroupingMakingFragment groupingMakingFragment = new GroupingMakingFragment();
+        groupingMakingFragment.setArguments(bundle);
+        return groupingMakingFragment;
     }
 
     @BindView(R.id.no_groups) TextView noGroups;
 
     private GroupingSettings settings;
     private GroupingSettingsDialog settingsDialog;
+    private String listName;
+    private DataSource dataSource;
+    private ListInfo listInfo;
+    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -44,6 +62,12 @@ public class GroupingMakingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_grouping, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
+        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        Context context = rootView.getContext();
+        preferencesManager = new PreferencesManager(context);
+        dataSource = new DataSource(context);
+        listInfo = dataSource.getListInfo(listName);
+
         noGroups.setVisibility(View.VISIBLE);
 
         return rootView;
@@ -52,9 +76,32 @@ public class GroupingMakingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        settings = new GroupingSettings(getResources().getInteger(R.integer.default_number_of_names_per_group),
-                getResources().getInteger(R.integer.default_number_of_groups));
+        settings = preferencesManager.getGroupingSettings(getContext(), listName);
         settingsDialog = new GroupingSettingsDialog(getActivity(), settings);
+    }
+
+    @OnClick(R.id.make_groups)
+    void makeGroups() {
+        if (listInfo.getNumNames() == 0) {
+            return;
+        }
+        cacheListState();
+        List<List<Integer>> listOfGroups = NameUtils.getRandomGroup(settings.getNumOfNamesPerGroup(),
+                settings.getNumOfGroups(),
+                listInfo.getNumInstances() - 1);
+
+        List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);
+        Toast.makeText(getContext(), String.valueOf(listOfNamesPerGroup), Toast.LENGTH_LONG).show();
+    }
+
+    private void cacheListState() {
+        preferencesManager.setGroupingSettings(listName, settings);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cacheListState();
     }
 
     @Override
