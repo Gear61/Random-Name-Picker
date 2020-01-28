@@ -19,7 +19,6 @@ public class DeleteListDialog {
     DeleteListDialog(@NonNull Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
                 .title(R.string.confirm_deletion_title)
-                .content(R.string.confirm_deletion_message)
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) ->
@@ -27,8 +26,11 @@ public class DeleteListDialog {
                 ).build();
     }
 
-    public void show(int position) {
+    void presentForList(int position, String listName) {
         this.position = position;
+        String dialogContent =
+                dialog.getContext().getString(R.string.confirm_deletion_message, " \"" + listName + "\"");
+        dialog.setContent(dialogContent);
         dialog.show();
     }
 }

@@ -1,14 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
+
+    def versionMajor = 3
+    def versionMinor = 10
+    def versionPatch = 2
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 406
-        versionName "3.9.16"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode ((versionMajor * 10000) + (versionMinor * 100) + versionPatch)
+        versionName String.format("%d.%d.%d", versionMajor, versionMinor, versionPatch)
     }
     buildTypes {
         release {
@@ -27,9 +31,6 @@ android {
                     'proguard-rules.pro'
         }
     }
-    repositories {
-        maven { url "http://dl.bintray.com/lukaville/maven" }
-    }
     lintOptions {
         disable "ResourceType"
         disable 'GoogleAppIndexingWarning'
@@ -44,16 +45,15 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     implementation 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
-    implementation 'com.nbsp:library:1.02'
     implementation 'com.github.deano2390:MaterialShowcaseView:1.2.0'
     implementation 'com.squareup:seismic:1.0.2'
 }

@@ -10,11 +10,6 @@ import androidx.annotation.Nullable;
 
 import com.randomappsinc.studentpicker.R;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,37 +34,27 @@ public class NameUtils {
         return chosenNumbers;
     }
 
-    public static String getFileName(String filePath) {
-        String[] pieces = filePath.split("/");
-        String fileName = pieces[pieces.length - 1];
-        return fileName.replace(".txt", "");
-    }
-
-    private static String convertStreamToString(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
+    public static List<List<Integer>> getRandomGroup(int namesPerGroup, int numberOfGroups, int capIndex) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i <= capIndex; i++) {
+            list.add(i);
         }
-        reader.close();
-        return sb.toString();
-    }
 
-    public static String getNamesFromFile(String filePath) throws Exception {
-        File file = new File(filePath);
-        FileInputStream fileInputStream = new FileInputStream(file);
-        String contents = convertStreamToString(fileInputStream);
-        String[] allNames = contents.split("\\r?\\n");
-        StringBuilder namesString = new StringBuilder();
-        for (int i = 0; i < allNames.length; i++) {
-            if (i != 0) {
-                namesString.append("\n");
+        Collections.shuffle(list);
+        int chosenCounter = 0;
+        List<List<Integer>> listOfGroups = new ArrayList<>();
+        for (int i = 0; i < numberOfGroups; i++) {
+            List<Integer> listOfNamesPerGroup = new ArrayList<>();
+            int j = 0;
+            while (capIndex != -1 && j < namesPerGroup) {
+                listOfNamesPerGroup.add(list.get(chosenCounter++));
+                capIndex--;
+                j++;
             }
-            namesString.append(allNames[i]);
+            listOfGroups.add(listOfNamesPerGroup);
+            if (capIndex == -1) break;
         }
-        fileInputStream.close();
-        return namesString.toString();
+        return listOfGroups;
     }
 
     public static void copyNamesToClipboard(
@@ -105,6 +90,6 @@ public class NameUtils {
 
     // Given 0 (1st element in array), returns "1. ", scaling linearly with the input
     public static String getPrefix(int index) {
-        return String.valueOf(index + 1) + ". ";
+        return (index + 1) + ". ";
     }
 }
