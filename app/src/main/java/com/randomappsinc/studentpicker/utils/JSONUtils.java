@@ -27,8 +27,6 @@ class JSONUtils {
     private static final String AUTOMATIC_TTS_KEY = "automaticTts";
     private static final String SHOW_AS_LIST_KEY = "showAsList";
     private static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
-    private static final String NUM_OF_NAMES_PER_GROUP = "numOfNamesPerGroup";
-    private static final String NUM_OF_GROUPS = "numOfGroups";
 
     // Given a list of names, converts it to a JSON and stringifies it
     static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
@@ -116,31 +114,6 @@ class JSONUtils {
             settings.setShowAsList(settingsJson.getBoolean(SHOW_AS_LIST_KEY));
         } catch (JSONException ignored) {
         }
-        return settings;
-    }
-
-    static String serializeGroupingSettingsState(GroupingSettings groupingSettings) {
-        try {
-            JSONObject settings = new JSONObject();
-            settings.put(NUM_OF_NAMES_PER_GROUP, groupingSettings.getNumOfNamesPerGroup());
-            settings.put(NUM_OF_GROUPS, groupingSettings.getNumOfGroups());
-            return settings.toString();
-        }
-         catch (JSONException e) {
-            return "";
-        }
-    }
-
-    static GroupingSettings extractGroupingSettings(Context context, String groupingSettingCached) {
-        GroupingSettings settings = new GroupingSettings(
-                context.getResources().getInteger(R.integer.default_number_of_names_per_group),
-                context.getResources().getInteger(R.integer.default_number_of_groups));
-        try {
-            JSONObject settingsJson = new JSONObject(groupingSettingCached);
-            settings.setNumOfNamesPerGroup(settingsJson.getInt(NUM_OF_NAMES_PER_GROUP));
-            settings.setNumOfGroups(settingsJson.getInt(NUM_OF_GROUPS));
-        }
-        catch (JSONException ignored) {}
         return settings;
     }
 }
