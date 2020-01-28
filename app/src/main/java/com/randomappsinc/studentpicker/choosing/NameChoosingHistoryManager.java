@@ -18,7 +18,7 @@ public class NameChoosingHistoryManager {
 
         dialog = new MaterialDialog.Builder(context)
                 .title(R.string.chosen_names_history)
-                .positiveText(android.R.string.yes)
+                .positiveText(R.string.okay)
                 .neutralText(R.string.clear)
                 .negativeText(R.string.copy_text)
                 .onNeutral((dialog, which) -> {
@@ -34,7 +34,7 @@ public class NameChoosingHistoryManager {
                 .build();
     }
 
-    void showNamesHistory() {
+    void maybeShowNamesHistory() {
         String namesHistory = listInfo.getNameHistoryFormatted();
         if (!namesHistory.isEmpty()) {
             dialog.setContent(namesHistory);
