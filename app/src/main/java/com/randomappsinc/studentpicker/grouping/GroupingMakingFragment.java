@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -46,7 +44,6 @@ public class GroupingMakingFragment extends Fragment {
     private GroupingSettings settings;
     private GroupingSettingsDialog settingsDialog;
     private String listName;
-    private DataSource dataSource;
     private ListInfo listInfo;
     private Unbinder unbinder;
 
@@ -62,8 +59,7 @@ public class GroupingMakingFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        dataSource = new DataSource(getContext());
-        listInfo = dataSource.getListInfo(listName);
+        listInfo = new DataSource(getContext()).getListInfo(listName);
 
         noGroups.setVisibility(View.VISIBLE);
 
