@@ -69,6 +69,7 @@ public class NameChoosingFragment extends Fragment
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
     private PreferencesManager preferencesManager;
+    private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
     private ListInfo listInfo;
     private Unbinder unbinder;
@@ -101,6 +102,7 @@ public class NameChoosingFragment extends Fragment
         }
         setViews();
 
+        nameChoosingHistoryManager = new NameChoosingHistoryManager(listInfo, context);
         nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
         namesList.setAdapter(nameChoosingAdapter);
 
@@ -255,31 +257,6 @@ public class NameChoosingFragment extends Fragment
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
-    private void showNamesHistory() {
-        final String namesHistory = listInfo.getNameHistoryFormatted();
-        if (!namesHistory.isEmpty()) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.chosen_names_history)
-                    .content(namesHistory)
-                    .positiveText(android.R.string.yes)
-                    .neutralText(R.string.clear)
-                    .negativeText(R.string.copy_text)
-                    .onNeutral((dialog, which) -> {
-                        listInfo.clearNameHistory();
-                        UIUtils.showShortToast(R.string.name_history_cleared, getContext());
-                    })
-                    .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
-                            namesHistory,
-                            null,
-                            0,
-                            true,
-                            getContext()))
-                    .show();
-        } else {
-            UIUtils.showLongToast(R.string.empty_names_history, getContext());
-        }
-    }
-
     private void cacheListState() {
         preferencesManager.setNameListState(listName, listInfo, settings);
     }
@@ -318,7 +295,7 @@ public class NameChoosingFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_names_history:
-                showNamesHistory();
+                nameChoosingHistoryManager.maybeShowNamesHistory();
                 return true;
             case R.id.settings:
                 settingsDialog.show();
