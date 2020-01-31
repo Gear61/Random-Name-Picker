@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -46,9 +44,7 @@ public class GroupingMakingFragment extends Fragment {
     private GroupingSettings settings;
     private GroupingSettingsDialog settingsDialog;
     private String listName;
-    private DataSource dataSource;
     private ListInfo listInfo;
-    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -63,10 +59,7 @@ public class GroupingMakingFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        Context context = rootView.getContext();
-        preferencesManager = new PreferencesManager(context);
-        dataSource = new DataSource(context);
-        listInfo = dataSource.getListInfo(listName);
+        listInfo = new DataSource(getContext()).getListInfo(listName);
 
         noGroups.setVisibility(View.VISIBLE);
 
@@ -76,7 +69,9 @@ public class GroupingMakingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        settings = preferencesManager.getGroupingSettings(getContext(), listName);
+        settings = new GroupingSettings(
+                getResources().getInteger(R.integer.default_number_of_names_per_group),
+                getResources().getInteger(R.integer.default_number_of_groups));
         settingsDialog = new GroupingSettingsDialog(getActivity(), settings);
     }
 
@@ -85,23 +80,12 @@ public class GroupingMakingFragment extends Fragment {
         if (listInfo.getNumNames() == 0) {
             return;
         }
-        cacheListState();
         List<List<Integer>> listOfGroups = NameUtils.getRandomGroup(settings.getNumOfNamesPerGroup(),
                 settings.getNumOfGroups(),
                 listInfo.getNumInstances() - 1);
 
         List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);
         Toast.makeText(getContext(), String.valueOf(listOfNamesPerGroup), Toast.LENGTH_LONG).show();
-    }
-
-    private void cacheListState() {
-        preferencesManager.setGroupingSettings(listName, settings);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        cacheListState();
     }
 
     @Override

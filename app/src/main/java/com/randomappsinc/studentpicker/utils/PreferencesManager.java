@@ -22,7 +22,6 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String SHAKE_ENABLED = "shakeEnabled";
-    private static final String GROUPING_SETTINGS = "groupingSettings";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
@@ -126,14 +125,5 @@ public class PreferencesManager {
 
     public boolean isShakeEnabled() {
         return prefs.getBoolean(SHAKE_ENABLED, true);
-    }
-
-    public void setGroupingSettings(String listName, GroupingSettings groupingSettings) {
-        String cache = JSONUtils.serializeGroupingSettingsState(groupingSettings);
-        prefs.edit().putString(listName + GROUPING_SETTINGS, cache).apply();
-    }
-
-    public GroupingSettings getGroupingSettings(Context context, String listName) {
-        return JSONUtils.extractGroupingSettings(context, prefs.getString(listName + GROUPING_SETTINGS, ""));
     }
 }
