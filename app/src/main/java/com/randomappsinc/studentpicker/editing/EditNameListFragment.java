@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +37,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
@@ -131,8 +129,8 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void showNameOptions(final int position) {
-        nameEditChoicesDialog.showChoices(namesAdapter.getItem(position));
+    public void showNameOptions(final String name) {
+        nameEditChoicesDialog.showChoices(name);
     }
 
     @OnClick(R.id.voice_entry_icon)

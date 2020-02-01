@@ -15,11 +15,12 @@ import com.randomappsinc.studentpicker.models.ListInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapter.NameViewHolder> {
 
     public interface Listener {
-        void showNameOptions(int position);
+        void showNameOptions(String name);
     }
 
     private ListInfo content;
@@ -117,16 +118,15 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         private NameViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
         }
 
         private void loadName(int position) {
             name.setText(content.getNameText(position));
         }
 
-        @Override
+        @OnClick(R.id.parent)
         public void onClick(View v) {
-            listener.showNameOptions(getAdapterPosition());
+            listener.showNameOptions(getItem(getAdapterPosition()));
         }
     }
 }
