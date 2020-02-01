@@ -35,7 +35,7 @@ public class NameAmountAdjustmentDialog {
                 })
                 .build();
         // Cap the amount you can make at 999
-        dialog.getInputEditText().setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+        dialog.getInputEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(3)});
     }
 
     public void show(String name, int amount) {

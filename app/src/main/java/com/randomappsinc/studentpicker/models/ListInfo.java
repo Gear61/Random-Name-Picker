@@ -92,14 +92,13 @@ public class ListInfo {
 
     public void setNameAmount(String name, int newAmount) {
         if (nameAmounts.containsKey(name)) {
-            int currentAmount = nameAmounts.get(name);
-            if (currentAmount > newAmount) {
-                int amountToDelete = currentAmount - newAmount;
-                removeNames(name, amountToDelete);
+            if (newAmount != 0) {
+                nameAmounts.put(name, newAmount);
             } else {
-                int amountToAdd = newAmount - currentAmount;
-                addNames(name, amountToAdd);
+                nameAmounts.remove(name);
+                names.remove(name);
             }
+            numInstances = newAmount;
         }
     }
 

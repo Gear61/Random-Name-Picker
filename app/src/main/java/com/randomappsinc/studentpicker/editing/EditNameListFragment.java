@@ -41,7 +41,7 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        NameAmountAdjustmentDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, NameListDataManager.AdjustAmountListener {
+        NameAmountAdjustmentDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener{
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -95,7 +95,6 @@ public class EditNameListFragment extends Fragment implements
         importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
         noContent.setText(R.string.no_names_for_edit);
 
-        nameListDataManager.registerAmountListener(this);
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
 
@@ -196,7 +195,9 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public void onNameAmountAdjustmentSubmitted(String name, int newAmount, int currentAmount) {
-       nameListDataManager.setNameAmount(name, newAmount, currentAmount, getContext(), listName);
+        nameListDataManager.setNameAmount(name, newAmount, currentAmount, getContext(), listName);
+        namesAdapter.setNameAmount(name, newAmount);
+        UIUtils.showSnackbar(parent, R.string.name_amount_adjusted);
     }
 
     @Override
@@ -250,11 +251,5 @@ public class EditNameListFragment extends Fragment implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAdjustNameAmount(String name, int newAmount) {
-        namesAdapter.setNameAmount(name, newAmount);
-        UIUtils.showSnackbar(parent, R.string.name_amount_adjusted);
     }
 }
