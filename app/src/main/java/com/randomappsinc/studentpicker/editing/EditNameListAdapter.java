@@ -28,11 +28,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
     private TextView numNames;
     private Listener listener;
 
-    public EditNameListAdapter(
-            TextView noContent,
-            TextView numNames,
-            String listName,
-            Listener listener) {
+    EditNameListAdapter(TextView noContent, TextView numNames, String listName, Listener listener) {
         Context context = noContent.getContext();
         DataSource dataSource = new DataSource(context);
         this.content = dataSource.getListInfo(listName);
@@ -42,7 +38,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         setViews();
     }
 
-    public ListInfo getListInfo() {
+    ListInfo getListInfo() {
         return content;
     }
 
@@ -56,30 +52,30 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
             String names = content.getNumInstances() == 1
                     ? context.getString(R.string.single_name)
                     : context.getString(R.string.plural_names);
-            String numNamesText = String.valueOf(content.getNumInstances()) + names;
+            String numNamesText = (content.getNumInstances()) + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
     }
 
-    public void addNames(String name, int amount) {
+    void addNames(String name, int amount) {
         content.addNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void removeNames(String name, int amount) {
+    void removeNames(String name, int amount) {
         content.removeNames(name, amount);
         notifyDataSetChanged();
         setViews();
     }
 
-    public void changeName(String oldName, String newName, int amount) {
+    void changeName(String oldName, String newName, int amount) {
         content.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
     }
 
-    public void importNamesFromList(ListInfo updatedListInfo) {
+    void importNamesFromList(ListInfo updatedListInfo) {
         content = updatedListInfo;
         notifyDataSetChanged();
         setViews();
@@ -108,7 +104,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         return content.getNumNames();
     }
 
-    public String getItem(int position) {
+    private String getItem(int position) {
         return content.getName(position);
     }
 

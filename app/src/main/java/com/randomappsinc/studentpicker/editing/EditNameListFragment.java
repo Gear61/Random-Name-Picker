@@ -41,7 +41,8 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener {
+        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener,
+        EditNameListAdapter.Listener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
