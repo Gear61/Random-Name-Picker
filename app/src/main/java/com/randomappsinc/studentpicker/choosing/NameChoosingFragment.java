@@ -133,6 +133,7 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onNameRemoved() {
         setViews();
+        cacheListState();
     }
 
     private void setViews() {
@@ -160,6 +161,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNames(name, amount);
             setViews();
+            cacheListState();
         }
     }
 
@@ -168,6 +170,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.removeNames(name, amount);
             setViews();
+            cacheListState();
         }
     }
 
@@ -175,6 +178,7 @@ public class NameChoosingFragment extends Fragment
     public void onNameChanged(String oldName, String newName, int amount, String listName) {
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.changeNames(oldName, newName, amount);
+            cacheListState();
         }
     }
 
@@ -183,6 +187,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNameMap(nameAmounts);
             setViews();
+            cacheListState();
         }
     }
 
@@ -201,7 +206,6 @@ public class NameChoosingFragment extends Fragment
                 return;
             }
             canShowPresentationScreen = false;
-            cacheListState();
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
@@ -221,6 +225,9 @@ public class NameChoosingFragment extends Fragment
             if (settings.getAutomaticTts()) {
                 sayNames(chosenNames);
             }
+        }
+        if (!settings.getWithReplacement()) {
+            cacheListState();
         }
     }
 
@@ -265,12 +272,6 @@ public class NameChoosingFragment extends Fragment
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        cacheListState();
     }
 
     @Override
