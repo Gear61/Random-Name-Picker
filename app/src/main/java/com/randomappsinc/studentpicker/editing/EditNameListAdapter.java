@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -13,22 +15,30 @@ import com.randomappsinc.studentpicker.models.ListInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class EditNameListAdapter extends BaseAdapter {
+public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapter.NameViewHolder> {
+
+    public interface Listener {
+        void showNameOptions(String name);
+    }
 
     private ListInfo content;
     private TextView noContent;
     private TextView numNames;
+    private Listener listener;
 
     public EditNameListAdapter(
             TextView noContent,
             TextView numNames,
-            String listName) {
+            String listName,
+            Listener listener) {
         Context context = noContent.getContext();
         DataSource dataSource = new DataSource(context);
         this.content = dataSource.getListInfo(listName);
         this.noContent = noContent;
         this.numNames = numNames;
+        this.listener = listener;
         setViews();
     }
 
@@ -75,14 +85,17 @@ public class EditNameListAdapter extends BaseAdapter {
         setViews();
     }
 
+    @NonNull
     @Override
-    public int getCount() {
-        return content.getNumNames();
+    public NameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.edit_person_name_cell, parent, false);
+        return new NameViewHolder(view);
     }
 
     @Override
-    public String getItem(int position) {
-        return content.getName(position);
+    public void onBindViewHolder(@NonNull NameViewHolder holder, int position) {
+        holder.loadName(position);
     }
 
     @Override
@@ -90,31 +103,30 @@ public class EditNameListAdapter extends BaseAdapter {
         return getItem(position).hashCode();
     }
 
-    class NameViewHolder {
+    @Override
+    public int getItemCount() {
+        return content.getNumNames();
+    }
+
+    public String getItem(int position) {
+        return content.getName(position);
+    }
+
+    class NameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.person_name) TextView name;
 
         private NameViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
 
         private void loadName(int position) {
             name.setText(content.getNameText(position));
         }
-    }
 
-    @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        NameViewHolder holder;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) parent.getContext()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.edit_person_name_cell, parent, false);
-            holder = new NameViewHolder(view);
-            view.setTag(holder);
-        } else {
-            holder = (NameViewHolder) view.getTag();
+        @OnClick(R.id.parent)
+        public void onClick(View v) {
+            listener.showNameOptions(getItem(getAdapterPosition()));
         }
-        holder.loadName(position);
-        return view;
     }
 }
