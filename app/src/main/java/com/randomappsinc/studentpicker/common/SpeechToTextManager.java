@@ -33,6 +33,7 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     @BindView(R.id.message) TextView message;
     @BindView(R.id.try_again) View tryAgain;
 
+    private Context context;
     private SpeechRecognizer speechRecognizer;
     private Intent speechRecognizerIntent;
     private Listener listener;
@@ -40,14 +41,13 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     private @StringRes int listeningPrompt;
 
     public SpeechToTextManager(Context context, Listener listener) {
+        this.context = context;
         this.listener = listener;
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechRecognizerIntent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().getLanguage());
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        speechRecognizer.setRecognitionListener(this);
 
         dialog = new MaterialDialog.Builder(context)
                 .customView(R.layout.speech_to_text_dialog, false)
@@ -62,9 +62,14 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     }
 
     public void startSpeechToTextFlow() {
+        if (speechRecognizer != null) {
+            speechRecognizer.destroy();
+        }
         if (!dialog.isShowing()) {
             dialog.show();
         }
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
+        speechRecognizer.setRecognitionListener(this);
         speechRecognizer.startListening(speechRecognizerIntent);
         changeUIStateToListening();
     }
@@ -102,7 +107,8 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-        speechRecognizer.stopListening();
+        speechRecognizer.destroy();
+        speechRecognizer = null;
     }
 
     @Override
@@ -142,5 +148,6 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
 
     public void cleanUp() {
         speechRecognizer.destroy();
+        context = null;
     }
 }
