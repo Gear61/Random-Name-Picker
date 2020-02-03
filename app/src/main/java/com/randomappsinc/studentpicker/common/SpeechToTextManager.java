@@ -10,6 +10,7 @@ import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,7 +35,10 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     @BindView(R.id.try_again) View tryAgain;
 
     private Context context;
-    private SpeechRecognizer speechRecognizer;
+
+    // This is lazily instantiated and is also nulled out when the user dismisses the prompt without speaking
+    private @Nullable SpeechRecognizer speechRecognizer;
+
     private Intent speechRecognizerIntent;
     private Listener listener;
     private MaterialDialog dialog;
@@ -147,7 +151,9 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     }
 
     public void cleanUp() {
-        speechRecognizer.destroy();
+        if (speechRecognizer != null) {
+            speechRecognizer.destroy();
+        }
         context = null;
     }
 }
