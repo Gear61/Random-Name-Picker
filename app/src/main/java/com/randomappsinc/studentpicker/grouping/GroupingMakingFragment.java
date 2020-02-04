@@ -31,8 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class GroupingMakingFragment extends Fragment
-        implements GroupsMakingAdapter.Delegate, NameListDataManager.Listener {
+public class GroupingMakingFragment extends Fragment implements NameListDataManager.Listener {
 
     public static GroupingMakingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
@@ -50,6 +49,7 @@ public class GroupingMakingFragment extends Fragment
     private String listName;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ListInfo listInfo;
+    private DataSource dataSource;
     private GroupsMakingAdapter groupsMakingListAdapter;
     private Unbinder unbinder;
 
@@ -65,10 +65,11 @@ public class GroupingMakingFragment extends Fragment
         unbinder = ButterKnife.bind(this, rootView);
 
         listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        listInfo = new DataSource(getContext()).getListInfo(listName);
+        dataSource = new DataSource(getContext());
+        listInfo = dataSource.getListInfo(listName);
         nameListDataManager.registerListener(this);
 
-        groupsMakingListAdapter = new GroupsMakingAdapter(this);
+        groupsMakingListAdapter = new GroupsMakingAdapter();
         groupsList.setAdapter(groupsMakingListAdapter);
         setNoGroup();
 
@@ -79,7 +80,7 @@ public class GroupingMakingFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         settings = new GroupingSettings(
-                listInfo.getNumNames(),
+                listInfo.getNumInstances(),
                 getResources().getInteger(R.integer.default_number_of_names_per_group),
                 getResources().getInteger(R.integer.default_number_of_groups));
         settingsDialog = new GroupingSettingsDialog(getActivity(), settings);
@@ -87,25 +88,29 @@ public class GroupingMakingFragment extends Fragment
 
     @Override
     public void onNameAdded(String name, int amount, String listName) {
-        listInfo = new DataSource(getContext()).getListInfo(listName);
-        settings.setListSize(listInfo.getNumNames());
+        listInfo.addNames(name, amount);
+        settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
     public void onNameDeleted(String name, int amount, String listName) {
-        listInfo = new DataSource(getContext()).getListInfo(listName);
-        settings.setListSize(listInfo.getNumNames());
+        listInfo.removeNames(name, amount);
+        settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
     public void onNameChanged(String oldName, String newName, int amount, String listName) {
-        listInfo = new DataSource(getContext()).getListInfo(listName);
+        listInfo.renamePeople(oldName, newName, amount);
     }
 
     @Override
-    public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {}
+    public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
+        listInfo = dataSource.getListInfo(listName);
+        settings.setNameListSize(listInfo.getNumInstances());
+        settingsDialog.refreshSetting();
+    }
 
     @OnClick(R.id.make_groups)
     void makeGroups() {
@@ -118,10 +123,10 @@ public class GroupingMakingFragment extends Fragment
                 listInfo.getNumInstances() - 1);
         List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
+        setNoGroup();
     }
 
-    @Override
-    public void setNoGroup() {
+    private void setNoGroup() {
         if (groupsMakingListAdapter.getItemCount() == 0) {
             groupsList.setVisibility(View.GONE);
             noGroups.setVisibility(View.VISIBLE);

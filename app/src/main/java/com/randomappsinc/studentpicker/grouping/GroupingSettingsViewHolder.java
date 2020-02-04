@@ -21,14 +21,14 @@ class GroupingSettingsViewHolder {
         ButterKnife.bind(this, view);
         this.settings = settings;
         numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()
-                .getString(R.string.grouping_settings_number_of_names_in_list, settings.getListSize()));
+                .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
         namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
         numGroups.setText(String.valueOf(settings.getNumOfGroups()));
     }
 
     void refreshListSizeSetting() {
-        numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()
-                .getString(R.string.grouping_settings_number_of_names_in_list, settings.getListSize()));
+        numberOfNamesInList.setText(numberOfNamesInList.getContext()
+                .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
     }
 
     void revertSettings() {
