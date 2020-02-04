@@ -2,12 +2,12 @@ package com.randomappsinc.studentpicker.grouping;
 
 public class GroupingSettings {
 
-    private int listSize;
+    private int nameListSize;
     private int numOfNamesPerGroup;
     private int numOfGroups;
 
-    public GroupingSettings(int listSize, int numOfNamesPerGroup, int numOfGroups) {
-        this.listSize = listSize;
+    public GroupingSettings(int nameListSize, int numOfNamesPerGroup, int numOfGroups) {
+        this.nameListSize = nameListSize;
         this.numOfNamesPerGroup = numOfNamesPerGroup;
         this.numOfGroups = numOfGroups;
     }
@@ -28,11 +28,11 @@ public class GroupingSettings {
         this.numOfGroups = numOfGroups;
     }
 
-    public int getListSize() {
-        return listSize;
+    public int getNameListSize() {
+        return nameListSize;
     }
 
-    public void setListSize(int listSize) {
-        this.listSize = listSize;
+    public void setNameListSize(int nameListSize) {
+        this.nameListSize = nameListSize;
     }
 }

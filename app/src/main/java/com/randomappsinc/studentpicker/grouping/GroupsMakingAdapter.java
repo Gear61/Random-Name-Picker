@@ -19,15 +19,12 @@ import butterknife.ButterKnife;
 
 public class GroupsMakingAdapter extends RecyclerView.Adapter<GroupsMakingAdapter.GroupViewHolder> {
 
-    public interface Delegate {
-        void setNoGroup();
-    }
-
     private List<List<String>> listOfGroups = new ArrayList<>();
-    private Delegate delegate;
 
-    GroupsMakingAdapter(Delegate delegate) {
-        this.delegate = delegate;
+    void setData(List<List<String>> listOfGroups) {
+        this.listOfGroups.clear();
+        this.listOfGroups.addAll(listOfGroups);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -59,7 +56,7 @@ public class GroupsMakingAdapter extends RecyclerView.Adapter<GroupsMakingAdapte
         }
 
         void loadData() {
-            groupNumber.setText(groupNumber.getContext().getResources()
+            groupNumber.setText(groupNumber.getContext()
                     .getString(R.string.group_number, getAdapterPosition() + 1));
             groupNames.setText("");
             for (int i = 0; i < listOfGroups.get(getAdapterPosition()).size(); i++) {
@@ -70,12 +67,5 @@ public class GroupsMakingAdapter extends RecyclerView.Adapter<GroupsMakingAdapte
                 groupNames.append(listOfGroups.get(getAdapterPosition()).get(i));
             }
         }
-    }
-
-    void setData(List<List<String>> listOfGroups) {
-        this.listOfGroups.clear();
-        this.listOfGroups = listOfGroups;
-        notifyDataSetChanged();
-        delegate.setNoGroup();
     }
 }
