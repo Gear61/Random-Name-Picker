@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
+import com.randomappsinc.studentpicker.grouping.GroupingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
 import java.util.HashSet;
@@ -58,8 +59,7 @@ public class PreferencesManager {
         return getNameLists().contains(listName);
     }
 
-    public boolean getFirstTimeUser()
-    {
+    public boolean getFirstTimeUser() {
         return prefs.getBoolean(FIRST_TIME_KEY, true);
     }
 

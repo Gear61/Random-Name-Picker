@@ -9,8 +9,10 @@
     <!-- Common -->
     <string name="add_description">Add item</string>
     <string name="choose">Choose</string>
+    <string name="groups">Groups</string>
     <array name="list_options">
         <item>@string/choose</item>
+        <item>@string/groups</item>
         <item>@string/edit</item>
     </array>
     <string name="options_for">Options for:&#160;</string>

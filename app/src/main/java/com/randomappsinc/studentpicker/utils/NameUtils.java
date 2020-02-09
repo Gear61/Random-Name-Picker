@@ -34,6 +34,29 @@ public class NameUtils {
         return chosenNumbers;
     }
 
+    public static List<List<Integer>> getRandomGroup(int namesPerGroup, int numberOfGroups, int capIndex) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i <= capIndex; i++) {
+            list.add(i);
+        }
+
+        Collections.shuffle(list);
+        int chosenCounter = 0;
+        List<List<Integer>> listOfGroups = new ArrayList<>();
+        for (int i = 0; i < numberOfGroups; i++) {
+            List<Integer> listOfNamesPerGroup = new ArrayList<>();
+            int j = 0;
+            while (capIndex != -1 && j < namesPerGroup) {
+                listOfNamesPerGroup.add(list.get(chosenCounter++));
+                capIndex--;
+                j++;
+            }
+            listOfGroups.add(listOfNamesPerGroup);
+            if (capIndex == -1) break;
+        }
+        return listOfGroups;
+    }
+
     public static void copyNamesToClipboard(
             String names,
             @Nullable View parent,
