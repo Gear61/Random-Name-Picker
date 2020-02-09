@@ -11,4 +11,5 @@
     <string name="default_number_of_groups">1</string>
     <string name="num_of_names_in_group"># of names per group:</string>
     <string name="num_of_groups"># of groups:</string>
+    <string name="group_number">Group # %d</string>
 </resources>

@@ -28,6 +28,10 @@ class GroupingSettingsDialog {
         settingsHolder = new GroupingSettingsViewHolder(dialog.getCustomView(), settings);
     }
 
+    void refreshSetting() {
+        settingsHolder.refreshListSizeSetting();
+    }
+
     void show() {
         dialog.show();
     }
