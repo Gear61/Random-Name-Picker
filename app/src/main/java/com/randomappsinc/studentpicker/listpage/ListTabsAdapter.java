@@ -7,13 +7,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.randomappsinc.studentpicker.choosing.NameChoosingFragment;
 import com.randomappsinc.studentpicker.editing.EditNameListFragment;
+import com.randomappsinc.studentpicker.grouping.GroupingMakingFragment;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
-    private String[] tabTitles;
-    private String listName;
+    private final String[] tabTitles;
+    private final String listName;
 
-    public ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
+    ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
         this.listName = listName;
@@ -31,9 +32,11 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return NameChoosingFragment.getInstance(listName);
             case 1:
+                return GroupingMakingFragment.getInstance(listName);
+            case 2:
                 return EditNameListFragment.getInstance(listName);
             default:
-                throw new IllegalArgumentException("There should only be 2 tabs!");
+                throw new IllegalArgumentException("There should only be 3 tabs!");
         }
     }
 

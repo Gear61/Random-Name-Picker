@@ -1,6 +1,10 @@
 package com.randomappsinc.studentpicker.utils;
 
+import android.content.Context;
+
+import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
+import com.randomappsinc.studentpicker.grouping.GroupingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
 import org.json.JSONArray;
@@ -57,7 +61,7 @@ class JSONUtils {
 
             return nameListJson.toString();
         }
-        catch (JSONException e) {
+         catch (JSONException e) {
             return "";
         }
     }
@@ -108,8 +112,8 @@ class JSONUtils {
             settings.setPresentationMode(settingsJson.getBoolean(PRESENTATION_MODE_KEY));
             settings.setAutomaticTts(settingsJson.getBoolean(AUTOMATIC_TTS_KEY));
             settings.setShowAsList(settingsJson.getBoolean(SHOW_AS_LIST_KEY));
+        } catch (JSONException ignored) {
         }
-        catch (JSONException ignored) {}
         return settings;
     }
 }
