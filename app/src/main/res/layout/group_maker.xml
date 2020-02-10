@@ -12,6 +12,7 @@
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/no_groups"
         android:text="@string/no_groups_created_message"
+        android:visibility="visible"
         style="@style/empty_state_text"
         />
 
