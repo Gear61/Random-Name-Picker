@@ -31,26 +31,25 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class GroupingMakingFragment extends Fragment implements NameListDataManager.Listener {
+public class GroupMakingFragment extends Fragment implements NameListDataManager.Listener {
 
-    public static GroupingMakingFragment getInstance(String listName) {
+    public static GroupMakingFragment getInstance(String listName) {
         Bundle bundle = new Bundle();
         bundle.putString(MainActivity.LIST_NAME_KEY, listName);
-        GroupingMakingFragment groupingMakingFragment = new GroupingMakingFragment();
-        groupingMakingFragment.setArguments(bundle);
-        return groupingMakingFragment;
+        GroupMakingFragment groupMakingFragment = new GroupMakingFragment();
+        groupMakingFragment.setArguments(bundle);
+        return groupMakingFragment;
     }
 
     @BindView(R.id.no_groups) TextView noGroups;
     @BindView(R.id.groups_list) RecyclerView groupsList;
 
-    private GroupingSettings settings;
-    private GroupingSettingsDialog settingsDialog;
-    private String listName;
+    private GroupMakingSettings settings;
+    private GroupMakingSettingsDialog settingsDialog;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ListInfo listInfo;
     private DataSource dataSource;
-    private GroupsMakingAdapter groupsMakingListAdapter;
+    private GroupMakingAdapter groupsMakingListAdapter;
     private Unbinder unbinder;
 
     @Override
@@ -61,15 +60,15 @@ public class GroupingMakingFragment extends Fragment implements NameListDataMana
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_grouping, container, false);
+        View rootView = inflater.inflate(R.layout.group_maker, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
         dataSource = new DataSource(getContext());
         listInfo = dataSource.getListInfo(listName);
         nameListDataManager.registerListener(this);
 
-        groupsMakingListAdapter = new GroupsMakingAdapter();
+        groupsMakingListAdapter = new GroupMakingAdapter();
         groupsList.setAdapter(groupsMakingListAdapter);
         setNoGroup();
 
@@ -79,11 +78,11 @@ public class GroupingMakingFragment extends Fragment implements NameListDataMana
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        settings = new GroupingSettings(
+        settings = new GroupMakingSettings(
                 listInfo.getNumInstances(),
                 getResources().getInteger(R.integer.default_number_of_names_per_group),
                 getResources().getInteger(R.integer.default_number_of_groups));
-        settingsDialog = new GroupingSettingsDialog(getActivity(), settings);
+        settingsDialog = new GroupMakingSettingsDialog(getActivity(), settings);
     }
 
     @Override
@@ -118,7 +117,7 @@ public class GroupingMakingFragment extends Fragment implements NameListDataMana
             return;
         }
 
-        List<List<Integer>> listOfGroups = NameUtils.getRandomGroup(settings.getNumOfNamesPerGroup(),
+        List<List<Integer>> listOfGroups = NameUtils.getRandomGroups(settings.getNumOfNamesPerGroup(),
                 settings.getNumOfGroups(),
                 listInfo.getNumInstances() - 1);
         List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);

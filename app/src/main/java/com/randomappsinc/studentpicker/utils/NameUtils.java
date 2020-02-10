@@ -34,7 +34,7 @@ public class NameUtils {
         return chosenNumbers;
     }
 
-    public static List<List<Integer>> getRandomGroup(int namesPerGroup, int numberOfGroups, int capIndex) {
+    public static List<List<Integer>> getRandomGroups(int namesPerGroup, int numberOfGroups, int capIndex) {
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i <= capIndex; i++) {
             list.add(i);

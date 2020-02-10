@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GroupsMakingAdapter extends RecyclerView.Adapter<GroupsMakingAdapter.GroupViewHolder> {
+public class GroupMakingAdapter extends RecyclerView.Adapter<GroupMakingAdapter.GroupViewHolder> {
 
     private List<List<String>> listOfGroups = new ArrayList<>();
 
