@@ -1,10 +1,6 @@
 package com.randomappsinc.studentpicker.utils;
 
-import android.content.Context;
-
-import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.grouping.GroupingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
 import org.json.JSONArray;

@@ -11,7 +11,9 @@
         android:id="@+id/number_of_names_in_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/grouping_settings_number_of_names_in_list"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
         android:textSize="17sp"
         android:textColor="@color/dark_gray"
         />

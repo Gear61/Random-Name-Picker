@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.grouping.GroupingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
 import java.util.HashSet;

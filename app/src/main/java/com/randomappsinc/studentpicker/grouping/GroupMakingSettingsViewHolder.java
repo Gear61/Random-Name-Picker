@@ -9,15 +9,15 @@ import com.randomappsinc.studentpicker.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class GroupingSettingsViewHolder {
+class GroupMakingSettingsViewHolder {
 
     @BindView(R.id.number_of_names_in_list) TextView numberOfNamesInList;
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
 
-    private GroupingSettings settings;
+    private GroupMakingSettings settings;
 
-    GroupingSettingsViewHolder(View view, GroupingSettings settings) {
+    GroupMakingSettingsViewHolder(View view, GroupMakingSettings settings) {
         ButterKnife.bind(this, view);
         this.settings = settings;
         numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()

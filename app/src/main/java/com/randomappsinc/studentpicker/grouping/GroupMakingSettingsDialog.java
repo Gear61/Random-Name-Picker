@@ -6,12 +6,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-class GroupingSettingsDialog {
+class GroupMakingSettingsDialog {
 
     private MaterialDialog dialog;
-    private GroupingSettingsViewHolder settingsHolder;
+    private GroupMakingSettingsViewHolder settingsHolder;
 
-    GroupingSettingsDialog(Context context, GroupingSettings settings) {
+    GroupMakingSettingsDialog(Context context, GroupMakingSettings settings) {
         dialog = new MaterialDialog.Builder(context)
                 .title(R.string.group_settings_dialog_title)
                 .customView(R.layout.group_making_settings, true)
@@ -25,7 +25,7 @@ class GroupingSettingsDialog {
                 .cancelable(false)
                 .build();
 
-        settingsHolder = new GroupingSettingsViewHolder(dialog.getCustomView(), settings);
+        settingsHolder = new GroupMakingSettingsViewHolder(dialog.getCustomView(), settings);
     }
 
     void refreshSetting() {

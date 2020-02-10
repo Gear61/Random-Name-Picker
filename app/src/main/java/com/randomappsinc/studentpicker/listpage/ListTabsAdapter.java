@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.randomappsinc.studentpicker.choosing.NameChoosingFragment;
 import com.randomappsinc.studentpicker.editing.EditNameListFragment;
-import com.randomappsinc.studentpicker.grouping.GroupingMakingFragment;
+import com.randomappsinc.studentpicker.grouping.GroupMakingFragment;
 
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
@@ -32,7 +32,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return NameChoosingFragment.getInstance(listName);
             case 1:
-                return GroupingMakingFragment.getInstance(listName);
+                return GroupMakingFragment.getInstance(listName);
             case 2:
                 return EditNameListFragment.getInstance(listName);
             default:

@@ -303,6 +303,7 @@ public class NameChoosingFragment extends Fragment
                 return true;
             case R.id.reset:
                 listInfo = dataSource.getListInfo(listName);
+                cacheListState();
                 nameChoosingAdapter.refreshList(listInfo);
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, getContext());
