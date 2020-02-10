@@ -70,7 +70,6 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
 
         groupsMakingListAdapter = new GroupMakingAdapter();
         groupsList.setAdapter(groupsMakingListAdapter);
-        setNoGroup();
 
         return rootView;
     }
@@ -122,17 +121,8 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
                 listInfo.getNumInstances() - 1);
         List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
-        setNoGroup();
-    }
-
-    private void setNoGroup() {
-        if (groupsMakingListAdapter.getItemCount() == 0) {
-            groupsList.setVisibility(View.GONE);
-            noGroups.setVisibility(View.VISIBLE);
-        } else {
-            noGroups.setVisibility(View.GONE);
-            groupsList.setVisibility(View.VISIBLE);
-        }
+        noGroups.setVisibility(View.GONE);
+        groupsList.setVisibility(View.VISIBLE);
     }
 
     @Override
