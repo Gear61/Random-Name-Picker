@@ -60,7 +60,7 @@
         <EditText
             android:id="@+id/num_of_groups"
             android:text="@string/default_number_of_groups"
-            style="@style/two_number_setting"
+            style="@style/groups_number_setting"
             />
     </LinearLayout>
 </LinearLayout>

@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.grouping;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -9,7 +11,7 @@ import com.randomappsinc.studentpicker.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class GroupMakingSettingsViewHolder {
+class GroupMakingSettingsViewHolder implements TextWatcher {
 
     @BindView(R.id.number_of_names_in_list) TextView numberOfNamesInList;
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
@@ -24,6 +26,9 @@ class GroupMakingSettingsViewHolder {
                 .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
         namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
         numGroups.setText(String.valueOf(settings.getNumOfGroups()));
+
+        namesPerGroup.addTextChangedListener(this);
+        numGroups.addTextChangedListener(this);
     }
 
     void refreshListSizeSetting() {
@@ -69,5 +74,36 @@ class GroupMakingSettingsViewHolder {
             settings.setNumOfGroups(inputtedNumber);
         }
         numGroups.clearFocus();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (isEditableAndFocused(editable, namesPerGroup)) {
+            numGroups.setText(getOffset(namesPerGroup));
+        } else if (isEditableAndFocused(editable, numGroups)) {
+            namesPerGroup.setText(getOffset(numGroups));
+        }
+    }
+
+    private String getOffset(EditText editText) {
+        String inputtedNumber = editText.getText().toString().trim();
+        int newNumber = (inputtedNumber.isEmpty()) ? 0 :
+                Integer.parseInt(inputtedNumber);
+        if (newNumber <= 0) {
+            newNumber = editText.getContext().getResources()
+                    .getInteger(R.integer.default_number_of_names_per_group);
+        }
+        int offset = (int) Math.ceil((double) settings.getNameListSize() / newNumber);
+        return String.valueOf(offset);
+    }
+
+    private boolean isEditableAndFocused(Editable editable, EditText editText) {
+        return editable == editText.getEditableText() && editText.isFocused();
     }
 }
