@@ -92,13 +92,18 @@ public class ListInfo {
 
     public void setNameAmount(String name, int newAmount) {
         if (nameAmounts.containsKey(name)) {
-            if (newAmount != 0) {
-                nameAmounts.put(name, newAmount);
-            } else {
+            int currentAmount = nameAmounts.get(name);
+            if (newAmount == 0) {
                 nameAmounts.remove(name);
                 names.remove(name);
+                numInstances -= currentAmount;
+            } else if (newAmount > currentAmount) {
+                nameAmounts.put(name, newAmount);
+                numInstances += newAmount - currentAmount;
+            } else {
+                nameAmounts.put(name, newAmount);
+                numInstances -= currentAmount - newAmount;
             }
-            numInstances = newAmount;
         }
     }
 
