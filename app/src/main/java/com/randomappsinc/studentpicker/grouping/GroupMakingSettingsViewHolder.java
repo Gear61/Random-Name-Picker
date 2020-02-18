@@ -1,34 +1,33 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
-class GroupMakingSettingsViewHolder implements TextWatcher {
+class GroupMakingSettingsViewHolder {
 
     @BindView(R.id.number_of_names_in_list) TextView numberOfNamesInList;
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
 
     private GroupMakingSettings settings;
+    private MaterialDialog dialog;
 
-    GroupMakingSettingsViewHolder(View view, GroupMakingSettings settings) {
-        ButterKnife.bind(this, view);
+    GroupMakingSettingsViewHolder(MaterialDialog dialog, GroupMakingSettings settings) {
+        ButterKnife.bind(this, dialog.getCustomView());
         this.settings = settings;
+        this.dialog = dialog;
         numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()
                 .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
         namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
         numGroups.setText(String.valueOf(settings.getNumOfGroups()));
-
-        namesPerGroup.addTextChangedListener(this);
-        numGroups.addTextChangedListener(this);
     }
 
     void refreshListSizeSetting() {
@@ -76,34 +75,31 @@ class GroupMakingSettingsViewHolder implements TextWatcher {
         numGroups.clearFocus();
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        if (isEditableAndFocused(editable, namesPerGroup)) {
-            numGroups.setText(getOffset(namesPerGroup));
-        } else if (isEditableAndFocused(editable, numGroups)) {
-            namesPerGroup.setText(getOffset(numGroups));
+    @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterNamesPerGroupChanged() {
+        String namesNumber = namesPerGroup.getText().toString().trim();
+        if (namesPerGroup.isFocused() && isValid(namesNumber)) {
+            numGroups.setText(getOffset(namesNumber));
         }
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(namesNumber));
     }
 
-    private String getOffset(EditText editText) {
-        String inputtedNumber = editText.getText().toString().trim();
-        int newNumber = (inputtedNumber.isEmpty()) ? 0 :
-                Integer.parseInt(inputtedNumber);
-        if (newNumber <= 0) {
-            newNumber = editText.getContext().getResources()
-                    .getInteger(R.integer.default_number_of_names_per_group);
+    @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterGroupNumChanged() {
+        String groupsNumber = numGroups.getText().toString().trim();
+        if (numGroups.isFocused() && isValid(groupsNumber)) {
+            namesPerGroup.setText(getOffset(groupsNumber));
         }
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(groupsNumber));
+    }
+
+    private String getOffset(String inputtedNumber) {
+        int newNumber = Integer.parseInt(inputtedNumber);
         int offset = (int) Math.ceil((double) settings.getNameListSize() / newNumber);
         return String.valueOf(offset);
     }
 
-    private boolean isEditableAndFocused(Editable editable, EditText editText) {
-        return editable == editText.getEditableText() && editText.isFocused();
+    private boolean isValid(String inputText) {
+        return inputText.length() > 0 && Integer.parseInt(inputText) > 0;
     }
 }

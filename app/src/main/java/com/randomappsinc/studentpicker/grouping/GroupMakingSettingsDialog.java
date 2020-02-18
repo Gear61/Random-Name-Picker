@@ -25,7 +25,7 @@ class GroupMakingSettingsDialog {
                 .cancelable(false)
                 .build();
 
-        settingsHolder = new GroupMakingSettingsViewHolder(dialog.getCustomView(), settings);
+        settingsHolder = new GroupMakingSettingsViewHolder(dialog, settings);
     }
 
     void refreshSetting() {
