@@ -41,7 +41,7 @@
           You currently have %d copies of this name.
      </string>
 
-    <string name="names_deleted">%d instances of \"%s\" deleted from the list</string>
+    <string name="names_deleted">%d instances of \"%s\" deleted from the list.</string>
     <string name="multiple_renames_title">
         How many copies of %s do you want to change?
         You currently have %d copies of this name.
