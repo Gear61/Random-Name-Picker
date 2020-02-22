@@ -189,10 +189,9 @@ public class EditNameListFragment extends Fragment implements
         nameListDataManager.deleteName(getContext(), name, amountToDelete, listName);
         namesAdapter.removeNames(name, amountToDelete);
         if (amountToDelete == 1) {
-            String template = getString(R.string.deleted_name);
-            UIUtils.showSnackbar(parent, String.format(template, name));
+            UIUtils.showSnackbar(parent, getString(R.string.deleted_name, name));
         } else {
-            UIUtils.showSnackbar(parent, R.string.names_deleted);
+            UIUtils.showSnackbar(parent, getString(R.string.names_deleted, amountToDelete, name));
         }
     }
 
