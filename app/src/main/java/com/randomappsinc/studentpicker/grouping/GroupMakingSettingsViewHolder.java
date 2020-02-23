@@ -77,7 +77,7 @@ class GroupMakingSettingsViewHolder {
 
     @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterNamesPerGroupChanged() {
-        String namesNumber = namesPerGroup.getText().toString().trim();
+        String namesPerGroupInput = namesPerGroup.getText().toString().trim();
         if (namesPerGroup.isFocused() && isValid(namesNumber)) {
             numGroups.setText(getOffset(namesNumber));
         }
@@ -86,20 +86,22 @@ class GroupMakingSettingsViewHolder {
 
     @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterGroupNumChanged() {
-        String groupsNumber = numGroups.getText().toString().trim();
+        String numberOfGroupsInput = numGroups.getText().toString().trim();
         if (numGroups.isFocused() && isValid(groupsNumber)) {
             namesPerGroup.setText(getOffset(groupsNumber));
         }
         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(groupsNumber));
     }
 
-    private String getOffset(String inputtedNumber) {
+    // Given the number of names per group or number of groups, returns the corresponding number to use all the names
+    private String getMatchingNumber(String inputtedNumber) {
         int newNumber = Integer.parseInt(inputtedNumber);
         int offset = (int) Math.ceil((double) settings.getNameListSize() / newNumber);
         return String.valueOf(offset);
     }
 
-    private boolean isValid(String inputText) {
+    // Returns true if the inputted text is a positive number
+    private boolean isInputValid(String inputText) {
         return inputText.length() > 0 && Integer.parseInt(inputText) > 0;
     }
 }
