@@ -1,13 +1,15 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
 class GroupMakingSettingsViewHolder {
 
@@ -16,10 +18,12 @@ class GroupMakingSettingsViewHolder {
     @BindView(R.id.num_of_groups) EditText numGroups;
 
     private GroupMakingSettings settings;
+    private MaterialDialog dialog;
 
-    GroupMakingSettingsViewHolder(View view, GroupMakingSettings settings) {
-        ButterKnife.bind(this, view);
+    GroupMakingSettingsViewHolder(MaterialDialog dialog, GroupMakingSettings settings) {
+        ButterKnife.bind(this, dialog.getCustomView());
         this.settings = settings;
+        this.dialog = dialog;
         numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()
                 .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
         namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
@@ -69,5 +73,35 @@ class GroupMakingSettingsViewHolder {
             settings.setNumOfGroups(inputtedNumber);
         }
         numGroups.clearFocus();
+    }
+
+    @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterNamesPerGroupChanged() {
+        String namesPerGroupInput = namesPerGroup.getText().toString().trim();
+        if (namesPerGroup.isFocused() && isValid(namesNumber)) {
+            numGroups.setText(getOffset(namesNumber));
+        }
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(namesNumber));
+    }
+
+    @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void afterGroupNumChanged() {
+        String numberOfGroupsInput = numGroups.getText().toString().trim();
+        if (numGroups.isFocused() && isValid(groupsNumber)) {
+            namesPerGroup.setText(getOffset(groupsNumber));
+        }
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(groupsNumber));
+    }
+
+    // Given the number of names per group or number of groups, returns the corresponding number to use all the names
+    private String getMatchingNumber(String inputtedNumber) {
+        int newNumber = Integer.parseInt(inputtedNumber);
+        int offset = (int) Math.ceil((double) settings.getNameListSize() / newNumber);
+        return String.valueOf(offset);
+    }
+
+    // Returns true if the inputted text is a positive number
+    private boolean isInputValid(String inputText) {
+        return inputText.length() > 0 && Integer.parseInt(inputText) > 0;
     }
 }
