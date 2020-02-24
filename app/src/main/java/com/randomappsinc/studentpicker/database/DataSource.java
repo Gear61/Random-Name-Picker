@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -35,11 +36,55 @@ public class DataSource {
     }
 
     public List<ListDO> getNameLists() {
-        return new ArrayList<>();
+        List<ListDO> lists = new ArrayList<>();
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_LIST_NAME};
+        Cursor cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, null,
+                null, null, null, null);
+        while (cursor.moveToNext()) {
+            lists.add(new ListDO(cursor.getInt(0), cursor.getString(1)));
+        }
+        cursor.close();
+        close();
+        return lists;
     }
 
     public ListDO addNameList(String newListName) {
-        return new ListDO();
+        open();
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_LIST_NAME, newListName);
+        int result = (int) database.insert(MySQLiteHelper.LISTS_TABLE_NAME, null, values);
+        close();
+        return new ListDO(result, newListName);
+    }
+
+    public void deleteList(int listId) {
+        open();
+        String[] whereArgs = {String.valueOf(listId)};
+
+        // Delete the list
+        database.delete(
+                MySQLiteHelper.LISTS_TABLE_NAME,
+                MySQLiteHelper.COLUMN_ID + " = ?",
+                whereArgs);
+
+        // Delete the names in the list
+        database.delete(
+                MySQLiteHelper.NAMES_TABLE_NAME,
+                MySQLiteHelper.COLUMN_LIST_ID + " = ?",
+                whereArgs);
+
+        close();
+    }
+
+    public void renameList(ListDO updatedList) {
+        open();
+        ContentValues newValues = new ContentValues();
+        newValues.put(MySQLiteHelper.COLUMN_LIST_NAME, updatedList.getName());
+        String[] whereArgs = new String[] {String.valueOf(updatedList.getId())};
+        String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
+        database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+        close();
     }
 
     public ListInfo getListInfo(int listId) {
@@ -122,23 +167,6 @@ public class DataSource {
         cursor.close();
         close();
         return 0;
-    }
-
-    public void deleteList(int listId) {
-        open();
-        String[] whereArgs = {String.valueOf(listId)};
-        database.delete(MySQLiteHelper.TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
-        close();
-    }
-
-    public void renameList(ListDO listDO) {
-        open();
-        /* ContentValues newValues = new ContentValues();
-        newValues.put(MySQLiteHelper.COLUMN_LIST_NAME, newListName);
-        String[] whereArgs = new String[]{oldListName};
-        String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
-        database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs); */
-        close();
     }
 
     public List<String> getMatchingNames(String prefix) {
