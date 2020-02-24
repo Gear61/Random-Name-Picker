@@ -4,7 +4,6 @@
     <string name="no_lists_message">Type in a name above and click the + to create a list!</string>
     <string name="add_list_hint">List name</string>
     <string name="blank_list_name">List names cannot be blank.</string>
-    <string name="list_duplicate">You already have a name list named %s.</string>
 
     <!-- Common -->
     <string name="add_description">Add item</string>

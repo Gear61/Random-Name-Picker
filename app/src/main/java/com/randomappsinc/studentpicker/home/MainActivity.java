@@ -34,7 +34,6 @@ import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,8 +61,6 @@ public class MainActivity extends StandardActivity
     @BindView(R.id.plus_icon) ImageView plus;
     @BindView(R.id.import_text_file) FloatingActionButton importFile;
 
-    @BindString(R.string.list_duplicate) String listDuplicate;
-
     private PreferencesManager preferencesManager;
     private SpeechToTextManager speechToTextManager;
     private DataSource dataSource;
@@ -80,7 +77,7 @@ public class MainActivity extends StandardActivity
         speechToTextManager = new SpeechToTextManager(this, this);
         speechToTextManager.setListeningPrompt(R.string.list_name_speech_input_prompt);
         preferencesManager = new PreferencesManager(this);
-        renameListDialog = new RenameListDialog(this, this, preferencesManager);
+        renameListDialog = new RenameListDialog(this, this);
         deleteListDialog = new DeleteListDialog(this, this);
         dataSource = new DataSource(this);
         plus.setImageDrawable(new IconDrawable(this,
@@ -222,11 +219,7 @@ public class MainActivity extends StandardActivity
         String newList = newListInput.getText().toString().trim();
         if (newList.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        } else if (preferencesManager.getNameLists().contains(newList)) {
-            String dupeMessage = String.format(listDuplicate, newList);
-            UIUtils.showSnackbar(parent, dupeMessage);
         } else {
-            preferencesManager.addNameList(newList);
             newListInput.setText("");
 
             ListDO newListDO = dataSource.addNameList(newList);

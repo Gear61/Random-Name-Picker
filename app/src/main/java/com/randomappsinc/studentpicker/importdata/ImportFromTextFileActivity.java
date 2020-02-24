@@ -12,7 +12,6 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.io.BufferedReader;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,9 +28,6 @@ public class ImportFromTextFileActivity extends StandardActivity {
     @BindView(R.id.parent) View parent;
     @BindView(R.id.list_name) EditText listName;
     @BindView(R.id.names) EditText names;
-    @BindString(R.string.list_duplicate) String listDuplicate;
-
-    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +36,6 @@ public class ImportFromTextFileActivity extends StandardActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        preferencesManager = new PreferencesManager(this);
         extractNameListInfo();
     }
 
@@ -108,11 +102,7 @@ public class ImportFromTextFileActivity extends StandardActivity {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
-        } else if (preferencesManager.getNameLists().contains(newListName)) {
-            String dupeMessage = String.format(listDuplicate, newListName);
-            UIUtils.showSnackbar(parent, dupeMessage);
         } else {
-            preferencesManager.addNameList(newListName);
             DataSource dataSource = new DataSource(this);
             String[] allNames = names.getText().toString().split("\\r?\\n");
             for (String name : allNames) {
