@@ -1,11 +1,11 @@
 package com.randomappsinc.studentpicker.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
 
@@ -32,6 +32,14 @@ public class DataSource {
     // Terminate connection to database
     private void close() {
         dbHelper.close();
+    }
+
+    public List<ListDO> getNameLists() {
+        return new ArrayList<>();
+    }
+
+    public ListDO addNameList(String newListName) {
+        return new ListDO();
     }
 
     public ListInfo getListInfo(int listId) {
@@ -116,20 +124,20 @@ public class DataSource {
         return 0;
     }
 
-    public void deleteList(String listName) {
+    public void deleteList(int listId) {
         open();
-        String[] whereArgs = {listName};
+        String[] whereArgs = {String.valueOf(listId)};
         database.delete(MySQLiteHelper.TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();
     }
 
-    public void renameList(String oldListName, String newListName) {
+    public void renameList(ListDO listDO) {
         open();
-        ContentValues newValues = new ContentValues();
+        /* ContentValues newValues = new ContentValues();
         newValues.put(MySQLiteHelper.COLUMN_LIST_NAME, newListName);
         String[] whereArgs = new String[]{oldListName};
         String whereStatement = MySQLiteHelper.COLUMN_LIST_NAME + " = ?";
-        database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs);
+        database.update(MySQLiteHelper.TABLE_NAME, newValues, whereStatement, whereArgs); */
         close();
     }
 
