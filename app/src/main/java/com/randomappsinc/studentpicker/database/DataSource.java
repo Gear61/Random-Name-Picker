@@ -80,7 +80,7 @@ public class DataSource {
 
         open();
         if (currentAmount <= amount) {
-            String whereArgs[] = {listName, name};
+            String[] whereArgs = {listName, name};
             database.delete(MySQLiteHelper.TABLE_NAME,
                     MySQLiteHelper.COLUMN_LIST_NAME
                             + " = ? AND "
@@ -117,7 +117,7 @@ public class DataSource {
 
     public void deleteList(String listName) {
         open();
-        String whereArgs[] = {listName};
+        String[] whereArgs = {listName};
         database.delete(MySQLiteHelper.TABLE_NAME, MySQLiteHelper.COLUMN_LIST_NAME + " = ?", whereArgs);
         close();
     }
