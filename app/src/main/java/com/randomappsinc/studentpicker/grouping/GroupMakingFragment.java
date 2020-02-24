@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
-import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -33,9 +33,9 @@ import butterknife.Unbinder;
 
 public class GroupMakingFragment extends Fragment implements NameListDataManager.Listener {
 
-    public static GroupMakingFragment getInstance(String listName) {
+    public static GroupMakingFragment getInstance(int listId) {
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
+        bundle.putInt(Constants.LIST_ID_KEY, listId);
         GroupMakingFragment groupMakingFragment = new GroupMakingFragment();
         groupMakingFragment.setArguments(bundle);
         return groupMakingFragment;
@@ -63,9 +63,9 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
         View rootView = inflater.inflate(R.layout.group_maker, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        String listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
+        int listId = getArguments().getInt(Constants.LIST_ID_KEY, 0);
         dataSource = new DataSource(getContext());
-        listInfo = dataSource.getListInfo(listName);
+        listInfo = dataSource.getListInfo(listId);
         nameListDataManager.registerListener(this);
 
         groupsMakingListAdapter = new GroupMakingAdapter();
@@ -86,7 +86,8 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
 
     @Override
     public void onNameAdded(String name, int amount, String listName) {
-        listInfo.addNames(name, amount);
+        // TODO: Bring this back!!!
+        // listInfo.addNames(name, amount);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
@@ -100,12 +101,14 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
 
     @Override
     public void onNameChanged(String oldName, String newName, int amount, String listName) {
-        listInfo.renamePeople(oldName, newName, amount);
+        // TODO: Bring this back!!!
+        // listInfo.renamePeople(oldName, newName, amount);
     }
 
     @Override
     public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
-        listInfo = dataSource.getListInfo(listName);
+        // TODO: Bring this back!!!
+        // listInfo = dataSource.getListInfo(listName);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }

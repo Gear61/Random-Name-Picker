@@ -10,8 +10,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
-import com.randomappsinc.studentpicker.home.MainActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -45,13 +45,13 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String listName = getIntent().getStringExtra(MainActivity.LIST_NAME_KEY);
-        setTitle(listName);
+        int listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
+        setTitle("TODO: Replace me with list name!!!");
 
         preferencesManager = new PreferencesManager(this);
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
                 getSupportFragmentManager(),
-                listName,
+                listId,
                 listTabTitles);
         nameListPager.setOffscreenPageLimit(2);
         nameListPager.setAdapter(listTabsAdapter);

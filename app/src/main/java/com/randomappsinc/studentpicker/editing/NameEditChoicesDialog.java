@@ -1,27 +1,27 @@
 package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 /** Shows the options for a name on the editing page */
 public class NameEditChoicesDialog {
 
     public interface Listener {
-        void onRenameChosen(String name);
+        void onRenameChosen(NameDO nameDO);
 
-        void onDeleteChosen(String name);
+        void onDeleteChosen(NameDO nameDO);
 
-        void onDuplicationChosen(String name);
+        void onDuplicationChosen(NameDO nameDO);
     }
 
-    private String currentName;
+    private NameDO currentName;
     private String[] optionTemplates;
     private MaterialDialog dialog;
 
-    public NameEditChoicesDialog(Context context, final Listener listener) {
+    NameEditChoicesDialog(Context context, final Listener listener) {
         optionTemplates = new String[]{
                 context.getString(R.string.rename_person),
                 context.getString(R.string.delete_name),
@@ -30,30 +30,27 @@ public class NameEditChoicesDialog {
         dialog = new MaterialDialog.Builder(context)
                 // Need to set this here, because otherwise, we can't set it dynamically later on
                 .items(new String[]{})
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                listener.onRenameChosen(currentName);
-                                break;
-                            case 1:
-                                listener.onDeleteChosen(currentName);
-                                break;
-                            case 2:
-                                listener.onDuplicationChosen(currentName);
-                                break;
-                        }
+                .itemsCallback((dialog, view, which, text) -> {
+                    switch (which) {
+                        case 0:
+                            listener.onRenameChosen(currentName);
+                            break;
+                        case 1:
+                            listener.onDeleteChosen(currentName);
+                            break;
+                        case 2:
+                            listener.onDuplicationChosen(currentName);
+                            break;
                     }
                 })
                 .build();
     }
 
-    public void showChoices(String name) {
-        currentName = name;
+    void showChoices(NameDO nameDO) {
+        currentName = nameDO;
         String[] options = new String[optionTemplates.length];
         for (int i = 0; i < optionTemplates.length; i++) {
-            options[i] = String.format(optionTemplates[i], currentName);
+            options[i] = String.format(optionTemplates[i], currentName.getName());
         }
         dialog.setItems(options);
         dialog.show();

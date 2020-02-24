@@ -8,20 +8,21 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 public class RenameDialog {
 
     public interface Listener {
-        void onRenameSubmitted(String previousName, String newName, int amountToRename);
+        void onRenameSubmitted(int nameId, String previousName, String newName, int amountToRename);
     }
 
     private MaterialDialog renameAmountDialog;
     private MaterialDialog renamingDialog;
-    private String currentName;
+    private NameDO currentName;
     private int currentMaxAmount;
     private int amountToRename;
 
-    public RenameDialog(Context context, final Listener listener) {
+    RenameDialog(Context context, final Listener listener) {
         renameAmountDialog = new MaterialDialog.Builder(context)
                 .content(R.string.multiple_renames_title)
                 .inputType(InputType.TYPE_CLASS_NUMBER)
@@ -50,7 +51,7 @@ public class RenameDialog {
 
         renamingDialog = new MaterialDialog.Builder(context)
                 .title(R.string.change_name)
-                .input(context.getString(R.string.new_name), currentName, (dialog, input) -> {
+                .input(context.getString(R.string.new_name), currentName.getName(), (dialog, input) -> {
                     boolean submitEnabled = !(input.toString().trim().isEmpty() ||
                             input.toString().equals(currentName));
                     dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);
@@ -60,7 +61,7 @@ public class RenameDialog {
                 .onAny((dialog, which) -> {
                     if (which == DialogAction.POSITIVE) {
                         String newName = dialog.getInputEditText().getText().toString().trim();
-                        listener.onRenameSubmitted(currentName, newName, amountToRename);
+                        listener.onRenameSubmitted(currentName.getId(), currentName.getName(), newName, amountToRename);
                     } else if (which == DialogAction.NEUTRAL) {
                         renameAmountDialog.show();
                     }
@@ -68,18 +69,19 @@ public class RenameDialog {
                 .build();
     }
 
-    public void startRenamingProcess(String name, int maxAmount) {
-        currentName = name;
-        currentMaxAmount = maxAmount;
-        renamingDialog.getInputEditText().setText(name);
-        if (maxAmount > 1) {
+    void startRenamingProcess(NameDO nameDO) {
+        currentName = nameDO;
+        currentMaxAmount = nameDO.getAmount();
+        renamingDialog.getInputEditText().setText(nameDO.getName());
+        if (currentMaxAmount > 1) {
             renameAmountDialog.setActionButton(DialogAction.NEUTRAL, R.string.all_of_them);
-            renameAmountDialog.setContent(R.string.multiple_renames_title, "\"" + name + "\"", maxAmount);
+            renameAmountDialog.setContent(R.string.multiple_renames_title,
+                    "\"" + nameDO.getName() + "\"", currentMaxAmount);
             EditText input = renameAmountDialog.getInputEditText();
             if (input != null) {
-                input.setText(String.valueOf(maxAmount));
+                input.setText(String.valueOf(currentMaxAmount));
                 input.setFilters(new InputFilter[]
-                        {new InputFilter.LengthFilter(String.valueOf(maxAmount).length())});
+                        {new InputFilter.LengthFilter(String.valueOf(currentMaxAmount).length())});
             }
             renameAmountDialog.show();
         } else {

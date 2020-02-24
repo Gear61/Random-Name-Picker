@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +21,7 @@ import butterknife.OnClick;
 public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapter.NameViewHolder> {
 
     public interface Listener {
-        void showNameOptions(String name);
+        void showNameOptions(NameDO nameDO);
     }
 
     private ListInfo content;
@@ -28,18 +29,14 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
     private TextView numNames;
     private Listener listener;
 
-    EditNameListAdapter(TextView noContent, TextView numNames, String listName, Listener listener) {
+    EditNameListAdapter(TextView noContent, TextView numNames, int listId, Listener listener) {
         Context context = noContent.getContext();
         DataSource dataSource = new DataSource(context);
-        this.content = dataSource.getListInfo(listName);
+        this.content = dataSource.getListInfo(listId);
         this.noContent = noContent;
         this.numNames = numNames;
         this.listener = listener;
         setViews();
-    }
-
-    ListInfo getListInfo() {
-        return content;
     }
 
     private void setViews() {
@@ -58,8 +55,8 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         }
     }
 
-    void addNames(String name, int amount) {
-        content.addNames(name, amount);
+    void addNames(int nameId, String name, int amount) {
+        content.addNames(nameId, name, amount);
         notifyDataSetChanged();
         setViews();
     }
@@ -70,8 +67,8 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         setViews();
     }
 
-    void changeName(String oldName, String newName, int amount) {
-        content.renamePeople(oldName, newName, amount);
+    void changeName(int nameId, String oldName, String newName, int amount) {
+        content.renamePeople(nameId, oldName, newName, amount);
         notifyDataSetChanged();
     }
 
@@ -96,7 +93,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).hashCode();
+        return getNameAtPosition(position).hashCode();
     }
 
     @Override
@@ -104,7 +101,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         return content.getNumNames();
     }
 
-    private String getItem(int position) {
+    private String getNameAtPosition(int position) {
         return content.getName(position);
     }
 
@@ -122,7 +119,8 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
 
         @OnClick(R.id.parent)
         public void onClick(View v) {
-            listener.showNameOptions(getItem(getAdapterPosition()));
+            String name = getNameAtPosition(getAdapterPosition());
+            listener.showNameOptions(content.getNameInformation().get(name));
         }
     }
 }

@@ -54,14 +54,15 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
         notifyDataSetChanged();
     }
 
-    void addNames(String name, int amount) {
-        currentState.addNames(name, amount);
+    void addNames(int nameId, String name, int amount) {
+        currentState.addNames(nameId, name, amount);
         notifyDataSetChanged();
     }
 
     void addNameMap(Map<String, Integer> nameAmounts) {
         for (String name : nameAmounts.keySet()) {
-            currentState.addNames(name, nameAmounts.get(name));
+            // TODO: Put this back!!!
+            // currentState.addNames(name, nameAmounts.get(name));
         }
         notifyDataSetChanged();
     }
@@ -72,7 +73,8 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
     }
 
     void changeNames(String oldName, String newName, int amount) {
-        currentState.renamePeople(oldName, newName, amount);
+        // TODO: Put this back!!!
+        // currentState.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
     }
 
