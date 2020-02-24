@@ -48,17 +48,20 @@ public class NameListDataManager {
         listeners.remove(listener);
     }
 
-    public void addName(Context context, String name, int amount, String listName) {
+    public int addName(Context context, String name, int amount, String listName) {
         DataSource dataSource = new DataSource(context);
-        dataSource.addNames(name, listName, amount);
+        // TODO: Bring this back!!!
+        // dataSource.addNames(name, listName, amount);
         for (Listener listener : listeners) {
             listener.onNameAdded(name, amount, listName);
         }
+        return 1;
     }
 
     public void deleteName(Context context, String name, int amount, String listName) {
         DataSource dataSource = new DataSource(context);
-        dataSource.removeNames(name, listName, amount);
+        // TODO: Bring this back!!!
+        // dataSource.removeNames(name, listName, amount);
         for (Listener listener : listeners) {
             listener.onNameDeleted(name, amount, listName);
         }
@@ -66,18 +69,21 @@ public class NameListDataManager {
 
     public void changeName(Context context, String oldName, String newName, int amount, String listName) {
         DataSource dataSource = new DataSource(context);
-        dataSource.renamePeople(oldName, newName, listName, amount);
+        // TODO: Bring this back!!!
+        // dataSource.renamePeople(oldName, newName, listName, amount);
         for (Listener listener : listeners) {
             listener.onNameChanged(oldName, newName, amount, listName);
         }
     }
 
-    public ListInfo importNameLists(Context context, String receivingList, List<String> givingLists) {
+    public ListInfo importNameLists(Context context, int receivingListId, List<Integer> givingLists) {
         DataSource dataSource = new DataSource(context);
-        Map<String, Integer> change = dataSource.importNamesIntoList(receivingList, givingLists);
+        // TODO: Bring this back!!!
+        Map<String, Integer> change = dataSource.importNamesIntoList(receivingListId, givingLists);
         for (Listener listener : listeners) {
-            listener.onNameListsImported(change, receivingList);
+            // listener.onNameListsImported(change, receivingListId);
         }
-        return dataSource.getListInfo(receivingList);
+        // TODO: Use real ID
+        return dataSource.getListInfo(1);
     }
 }

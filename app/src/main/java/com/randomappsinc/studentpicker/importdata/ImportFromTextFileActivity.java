@@ -82,7 +82,8 @@ public class ImportFromTextFileActivity extends StandardActivity {
                 }
                 loadUI(listNameText, namesText.toString());
             } catch (IOException exception) {
-                runOnUiThread(() -> UIUtils.showLongToast(R.string.load_file_fail, getApplicationContext()));
+                runOnUiThread(() -> UIUtils.showLongToast(
+                        R.string.load_file_fail, getApplicationContext()));
                 try {
                     if (inputStream != null) {
                         inputStream.close();
@@ -117,7 +118,8 @@ public class ImportFromTextFileActivity extends StandardActivity {
             for (String name : allNames) {
                 String cleanName = name.trim();
                 if (!cleanName.isEmpty()) {
-                    dataSource.addNames(cleanName, newListName, 1);
+                    // TODO: Bring this back!!!
+                    // dataSource.addNames(cleanName, newListName, 1);
                 }
             }
             UIUtils.showShortToast(R.string.import_success, this);

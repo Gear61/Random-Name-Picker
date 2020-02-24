@@ -47,8 +47,6 @@ public class MainActivity extends StandardActivity
         implements NameListsAdapter.Delegate, RenameListDialog.Listener,
         DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
-    public static final String LIST_NAME_KEY = "listName";
-
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
     private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
 
@@ -179,7 +177,7 @@ public class MainActivity extends StandardActivity
     public void onItemClick(int position) {
         Intent intent = new Intent(this, ListActivity.class);
         String listName = nameListsAdapter.getItem(position);
-        intent.putExtra(LIST_NAME_KEY, listName);
+        intent.putExtra(Constants.LIST_ID_KEY, listName);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
@@ -233,7 +231,7 @@ public class MainActivity extends StandardActivity
             nameListsAdapter.addList(newList);
 
             Intent intent = new Intent(this, ListActivity.class);
-            intent.putExtra(LIST_NAME_KEY, newList);
+            intent.putExtra(Constants.LIST_ID_KEY, newList);
             intent.putExtra(START_ON_EDIT_PAGE, true);
             startActivity(intent);
         }

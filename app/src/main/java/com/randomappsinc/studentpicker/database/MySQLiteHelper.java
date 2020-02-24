@@ -57,7 +57,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         public final String name;
         public final int amount;
 
-        public NameInfoPod(String listName, String name, int amount) {
+        NameInfoPod(String listName, String name, int amount) {
             this.listName = listName;
             this.name = name;
             this.amount = amount;
