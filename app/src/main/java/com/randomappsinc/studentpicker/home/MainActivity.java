@@ -27,6 +27,7 @@ import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
+import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.settings.SettingsActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -88,7 +89,7 @@ public class MainActivity extends StandardActivity
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));
 
-        nameListsAdapter = new NameListsAdapter(this, preferencesManager.getNameLists());
+        nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists());
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(this));
 
@@ -174,35 +175,34 @@ public class MainActivity extends StandardActivity
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(ListDO listDO) {
         Intent intent = new Intent(this, ListActivity.class);
-        String listName = nameListsAdapter.getItem(position);
-        intent.putExtra(Constants.LIST_ID_KEY, listName);
+        intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
     @Override
-    public void onItemEditClick(int position, String listName) {
-        renameListDialog.show(position, listName);
+    public void onItemEditClick(int position, ListDO listDO) {
+        renameListDialog.show(position, listDO);
     }
 
     @Override
-    public void onRenameListConfirmed(int position, String newListName) {
-        dataSource.renameList(nameListsAdapter.getItem(position), newListName);
-        preferencesManager.renameList(nameListsAdapter.getItem(position), newListName);
-        nameListsAdapter.renameItem(position, newListName);
+    public void onRenameListConfirmed(int position, ListDO updatedList) {
+        dataSource.renameList(updatedList);
+        preferencesManager.renameList(nameListsAdapter.getItem(position).getName(), updatedList.getName());
+        nameListsAdapter.renameItem(position, updatedList.getName());
     }
 
     @Override
-    public void onItemDeleteClick(int position, String listName) {
-        deleteListDialog.presentForList(position, listName);
+    public void onItemDeleteClick(int position, ListDO listDO) {
+        deleteListDialog.presentForList(position, listDO);
     }
 
     @Override
-    public void onDeleteListConfirmed(int position) {
-        dataSource.deleteList(nameListsAdapter.getItem(position));
-        preferencesManager.removeNameList(nameListsAdapter.getItem(position));
+    public void onDeleteListConfirmed(int position, ListDO listDO) {
+        dataSource.deleteList(listDO.getId());
+        preferencesManager.removeNameList(listDO.getName());
         nameListsAdapter.deleteItem(position);
     }
 
@@ -228,10 +228,12 @@ public class MainActivity extends StandardActivity
         } else {
             preferencesManager.addNameList(newList);
             newListInput.setText("");
-            nameListsAdapter.addList(newList);
+
+            ListDO newListDO = dataSource.addNameList(newList);
+            nameListsAdapter.addList(newListDO);
 
             Intent intent = new Intent(this, ListActivity.class);
-            intent.putExtra(Constants.LIST_ID_KEY, newList);
+            intent.putExtra(Constants.LIST_ID_KEY, newListDO.getId());
             intent.putExtra(START_ON_EDIT_PAGE, true);
             startActivity(intent);
         }
@@ -308,7 +310,7 @@ public class MainActivity extends StandardActivity
                 break;
             case SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    nameListsAdapter.refresh(preferencesManager.getNameLists());
+                    nameListsAdapter.refresh(dataSource.getNameLists());
                 }
                 break;
         }
