@@ -24,7 +24,7 @@ import butterknife.OnPageChange;
 
 public class ListActivity extends StandardActivity implements ShakeDetector.Listener {
 
-    private static final int EDIT_NAME_LIST_PAGE_POSITION = 1;
+    private static final int EDIT_NAME_LIST_PAGE_POSITION = 2;
     public static final String START_ON_EDIT_PAGE = "startOnEditPage";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -53,6 +53,7 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
                 getSupportFragmentManager(),
                 listName,
                 listTabTitles);
+        nameListPager.setOffscreenPageLimit(2);
         nameListPager.setAdapter(listTabsAdapter);
         if (getIntent().getBooleanExtra(START_ON_EDIT_PAGE, false)) {
             nameListPager.setCurrentItem(EDIT_NAME_LIST_PAGE_POSITION);

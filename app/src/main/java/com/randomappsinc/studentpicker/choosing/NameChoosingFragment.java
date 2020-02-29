@@ -69,6 +69,7 @@ public class NameChoosingFragment extends Fragment
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
     private PreferencesManager preferencesManager;
+    private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
     private ListInfo listInfo;
     private Unbinder unbinder;
@@ -101,6 +102,7 @@ public class NameChoosingFragment extends Fragment
         }
         setViews();
 
+        nameChoosingHistoryManager = new NameChoosingHistoryManager(listInfo, context);
         nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
         namesList.setAdapter(nameChoosingAdapter);
 
@@ -131,6 +133,7 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onNameRemoved() {
         setViews();
+        cacheListState();
     }
 
     private void setViews() {
@@ -158,6 +161,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNames(name, amount);
             setViews();
+            cacheListState();
         }
     }
 
@@ -166,6 +170,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.removeNames(name, amount);
             setViews();
+            cacheListState();
         }
     }
 
@@ -173,6 +178,7 @@ public class NameChoosingFragment extends Fragment
     public void onNameChanged(String oldName, String newName, int amount, String listName) {
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.changeNames(oldName, newName, amount);
+            cacheListState();
         }
     }
 
@@ -181,6 +187,7 @@ public class NameChoosingFragment extends Fragment
         if (this.listName.equals(listName)) {
             nameChoosingAdapter.addNameMap(nameAmounts);
             setViews();
+            cacheListState();
         }
     }
 
@@ -199,7 +206,6 @@ public class NameChoosingFragment extends Fragment
                 return;
             }
             canShowPresentationScreen = false;
-            cacheListState();
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
@@ -219,6 +225,9 @@ public class NameChoosingFragment extends Fragment
             if (settings.getAutomaticTts()) {
                 sayNames(chosenNames);
             }
+        }
+        if (!settings.getWithReplacement()) {
+            cacheListState();
         }
     }
 
@@ -255,31 +264,6 @@ public class NameChoosingFragment extends Fragment
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
-    private void showNamesHistory() {
-        final String namesHistory = listInfo.getNameHistoryFormatted();
-        if (!namesHistory.isEmpty()) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.chosen_names_history)
-                    .content(namesHistory)
-                    .positiveText(android.R.string.yes)
-                    .neutralText(R.string.clear)
-                    .negativeText(R.string.copy_text)
-                    .onNeutral((dialog, which) -> {
-                        listInfo.clearNameHistory();
-                        UIUtils.showShortToast(R.string.name_history_cleared, getContext());
-                    })
-                    .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
-                            namesHistory,
-                            null,
-                            0,
-                            true,
-                            getContext()))
-                    .show();
-        } else {
-            UIUtils.showLongToast(R.string.empty_names_history, getContext());
-        }
-    }
-
     private void cacheListState() {
         preferencesManager.setNameListState(listName, listInfo, settings);
     }
@@ -288,12 +272,6 @@ public class NameChoosingFragment extends Fragment
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        cacheListState();
     }
 
     @Override
@@ -318,13 +296,14 @@ public class NameChoosingFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.show_names_history:
-                showNamesHistory();
+                nameChoosingHistoryManager.maybeShowNamesHistory();
                 return true;
             case R.id.settings:
                 settingsDialog.show();
                 return true;
             case R.id.reset:
                 listInfo = dataSource.getListInfo(listName);
+                cacheListState();
                 nameChoosingAdapter.refreshList(listInfo);
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, getContext());

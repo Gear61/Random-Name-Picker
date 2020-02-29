@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".grouping.GroupMakingFragment"
+    >
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/no_groups"
+        android:text="@string/no_groups_created_message"
+        android:visibility="visible"
+        style="@style/empty_state_text"
+        />
+
+    <TextView
+        android:id="@+id/make_groups"
+        android:text="@string/make_groups"
+        android:layout_alignParentBottom="true"
+        style="@style/button"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groups_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_above="@id/make_groups"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:clipToPadding="false"
+        />
+</RelativeLayout>

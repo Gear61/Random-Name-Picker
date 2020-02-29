@@ -58,8 +58,7 @@ public class PreferencesManager {
         return getNameLists().contains(listName);
     }
 
-    public boolean getFirstTimeUser()
-    {
+    public boolean getFirstTimeUser() {
         return prefs.getBoolean(FIRST_TIME_KEY, true);
     }
 

@@ -10,7 +10,7 @@
     <string name="no_name_lists_to_import">You do not have any lists to import names from.</string>
     <string name="names_successfully_imported">Names successfully imported.</string>
     <string name="added_name">Added \"%s\"</string>
-    <string name="deleted_name">Deleted \"%s\"</string>
+    <string name="deleted_name">\"%s\" deleted from the list.</string>
 
     <!-- Name options -->
     <string name="list_icon">{ion-android-list}</string>
@@ -44,10 +44,18 @@
     <string name="confirm_name_deletion">Confirm Name Deletion</string>
     <string name="confirm_name_delete">Are you sure you want to remove \"%s\" from this name list?</string>
 
-    <string name="multiple_deletions_title">How many copies of this name do you want to delete?</string>
-    <string name="names_deleted">Name(s) deleted.</string>
+    <string name="multiple_deletions_title">
+          How many copies of %s do you want to delete?
+          You currently have %d copies of this name.
+     </string>
 
-    <string name="multiple_renames_title">How many copies of this name do you want to change?</string>
+    <string name="names_deleted">%d instances of \"%s\" deleted from the list.</string>
+    <string name="multiple_renames_title">
+        How many copies of %s do you want to change?
+        You currently have %d copies of this name.
+    </string>
+  
     <string name="next">Next</string>
     <string name="back">Back</string>
+    <string name="all_of_them">All of them</string>
 </resources>

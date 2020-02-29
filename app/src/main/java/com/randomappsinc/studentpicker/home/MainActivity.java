@@ -84,7 +84,8 @@ public class MainActivity extends StandardActivity
         renameListDialog = new RenameListDialog(this, this, preferencesManager);
         deleteListDialog = new DeleteListDialog(this, this);
         dataSource = new DataSource(this);
-        plus.setImageDrawable(new IconDrawable(this, IoniconsIcons.ion_android_add).colorRes(R.color.white));
+        plus.setImageDrawable(new IconDrawable(this,
+                IoniconsIcons.ion_android_add).colorRes(R.color.white));
         importFile.setImageDrawable(new IconDrawable(
                 this,
                 IoniconsIcons.ion_android_upload).colorRes(R.color.white));

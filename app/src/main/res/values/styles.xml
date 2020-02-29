@@ -81,5 +81,4 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_from_top</item>
     </style>
-
 </resources>

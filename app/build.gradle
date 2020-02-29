@@ -4,8 +4,8 @@ android {
     compileSdkVersion 29
 
     def versionMajor = 3
-    def versionMinor = 10
-    def versionPatch = 2
+    def versionMinor = 11
+    def versionPatch = 1
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.jakewharton:butterknife:10.2.0'
