@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.grouping;
 
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ class GroupMakingSettingsViewHolder {
     @BindView(R.id.number_of_names_in_list) TextView numberOfNamesInList;
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
+    @BindView(R.id.groups_warning_message) TextView warningMessage;
 
     private GroupMakingSettings settings;
     private MaterialDialog dialog;
@@ -98,8 +100,16 @@ class GroupMakingSettingsViewHolder {
     // Given the number of names per group or number of groups, returns the corresponding number to use all the names
     private String getMatchingNumber(String inputtedNumber) {
         int newNumber = Integer.parseInt(inputtedNumber);
-        int offset = (int) Math.ceil((double) settings.getNameListSize() / newNumber);
-        return String.valueOf(offset);
+        double offset = (double) settings.getNameListSize() / newNumber;
+        checkGroupBalance(offset);
+        int matchingNumber = (int) Math.ceil(offset);
+        return String.valueOf(matchingNumber);
+    }
+
+    // check if the groups have the same names quantity
+    private void checkGroupBalance(double ratio) {
+        int warningMessageVisibility = ratio % 1 > 0 ? View.VISIBLE : View.GONE;
+        warningMessage.setVisibility(warningMessageVisibility);
     }
 
     // Returns true if the inputted text is a positive number
