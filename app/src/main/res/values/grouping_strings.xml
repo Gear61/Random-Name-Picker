@@ -12,4 +12,6 @@
     <string name="num_of_names_in_group"># of names per group:</string>
     <string name="num_of_groups"># of groups:</string>
     <string name="group_number">Group # %d</string>
+    <string name="group_no_names_error_message">You have no names in the list to make groups with.</string>
+    <string name="groups_warning_message">This setting will create an uneven groups.</string>
 </resources>

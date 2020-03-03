@@ -63,4 +63,17 @@
             style="@style/two_number_setting"
             />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/groups_warning_message"
+        android:text="@string/groups_warning_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
 </LinearLayout>
