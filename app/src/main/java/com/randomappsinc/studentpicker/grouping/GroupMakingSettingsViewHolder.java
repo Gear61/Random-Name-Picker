@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.grouping;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -10,6 +11,7 @@ import com.randomappsinc.studentpicker.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnTextChanged;
 
 class GroupMakingSettingsViewHolder {
@@ -18,9 +20,12 @@ class GroupMakingSettingsViewHolder {
     @BindView(R.id.num_of_names_per_group) EditText namesPerGroup;
     @BindView(R.id.num_of_groups) EditText numGroups;
     @BindView(R.id.groups_warning_message) TextView warningMessage;
+    @BindView(R.id.autocomplete) CheckBox autocomplete;
 
     private GroupMakingSettings settings;
     private MaterialDialog dialog;
+    private String namesPerGroupInput;
+    private String numberOfGroupsInput;
 
     GroupMakingSettingsViewHolder(MaterialDialog dialog, GroupMakingSettings settings) {
         ButterKnife.bind(this, dialog.getCustomView());
@@ -77,43 +82,64 @@ class GroupMakingSettingsViewHolder {
         numGroups.clearFocus();
     }
 
+    @OnCheckedChanged(R.id.autocomplete)
+    void onAutocompleteSelected(boolean checked) {
+        if (checked) {
+            if (isInputValid()) {
+                namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
+            }
+        }
+    }
+
     @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterNamesPerGroupChanged() {
-        String namesPerGroupInput = namesPerGroup.getText().toString().trim();
-        boolean isInputValid = isInputValid(namesPerGroupInput);
-        if (namesPerGroup.isFocused() && isInputValid) {
+        namesPerGroupInput = namesPerGroup.getText().toString().trim();
+        boolean isInputValid = isInputValid();
+        if (namesPerGroup.isFocused() && isInputValid && autocomplete.isChecked()) {
             numGroups.setText(getMatchingNumber(namesPerGroupInput));
         }
         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid);
+        maybeShowUnevenGroupsWarning();
     }
 
     @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterGroupNumChanged() {
-        String numberOfGroupsInput = numGroups.getText().toString().trim();
-        boolean isInputValid = isInputValid(numberOfGroupsInput);
-        if (numGroups.isFocused() && isInputValid) {
+        numberOfGroupsInput = numGroups.getText().toString().trim();
+        boolean isInputValid = isInputValid();
+        if (numGroups.isFocused() && isInputValid && autocomplete.isChecked()) {
             namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
         }
         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid);
+        maybeShowUnevenGroupsWarning();
     }
 
     // Given the number of names per group or number of groups, returns the corresponding number to use all the names
     private String getMatchingNumber(String inputtedNumber) {
         int newNumber = Integer.parseInt(inputtedNumber);
         double offset = (double) settings.getNameListSize() / newNumber;
-        checkGroupBalance(offset);
         int matchingNumber = (int) Math.ceil(offset);
         return String.valueOf(matchingNumber);
     }
 
-    // check if the groups have the same names quantity
-    private void checkGroupBalance(double ratio) {
-        int warningMessageVisibility = ratio % 1 > 0 ? View.VISIBLE : View.GONE;
-        warningMessage.setVisibility(warningMessageVisibility);
+    // show warning if the groups don't have the same names quantity
+    private void maybeShowUnevenGroupsWarning() {
+        if (!isInputValid()) {
+            return;
+        }
+        int namesNumber = Integer.parseInt(namesPerGroupInput);
+        int groupsNumber = Integer.parseInt(numberOfGroupsInput);
+        int totalNumber = namesNumber * groupsNumber;
+        if (totalNumber > settings.getNameListSize()) {
+            warningMessage.setVisibility(View.VISIBLE);
+        } else {
+            warningMessage.setVisibility(View.GONE);
+        }
     }
 
     // Returns true if the inputted text is a positive number
-    private boolean isInputValid(String inputText) {
-        return inputText.length() > 0 && Integer.parseInt(inputText) > 0;
+    private boolean isInputValid() {
+        return (namesPerGroupInput != null && numberOfGroupsInput != null)
+                && (namesPerGroupInput.length() > 0 && Integer.parseInt(namesPerGroupInput) > 0)
+                && (numberOfGroupsInput.length() > 0 && Integer.parseInt(numberOfGroupsInput) > 0);
     }
 }

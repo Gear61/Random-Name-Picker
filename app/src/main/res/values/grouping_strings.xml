@@ -13,5 +13,7 @@
     <string name="num_of_groups"># of groups:</string>
     <string name="group_number">Group # %d</string>
     <string name="group_no_names_error_message">You have no names in the list to make groups with.</string>
-    <string name="groups_warning_message">This setting will create an uneven groups.</string>
+    <string name="groups_warning_message">These settings will create uneven groups.</string>
+    <string name="groups_autocomplete_settings">Autocomplete settings to use all names.</string>
+    <string name="groups_note_settings">Note: This may change the current settings.</string>
 </resources>
