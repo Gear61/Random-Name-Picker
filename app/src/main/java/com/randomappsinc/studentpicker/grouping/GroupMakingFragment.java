@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -114,7 +113,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     @OnClick(R.id.make_groups)
     void makeGroups() {
         if (listInfo.getNumNames() == 0) {
-        UIUtils.showLongToast(R.string.group_no_names_error_message,getContext());
+            UIUtils.showLongToast(R.string.group_no_names_error_message, getContext());
             return;
         }
 

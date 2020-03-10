@@ -20,7 +20,7 @@
         <item name="android:paddingLeft">7dp</item>
         <item name="android:paddingRight">7dp</item>
         <item name="android:background">@drawable/text_input_border</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">15dp</item>
         <item name="android:maxLength">2</item>
     </style>
 </resources>
