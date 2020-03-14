@@ -107,6 +107,28 @@ public class DataSource {
         return new ListInfo(null, names, amount, new ArrayList<>());
     }
 
+    public void addNameIntoNewList(String name, int listId) {
+        int currentAmount = getAmountWithName(name);
+
+        open();
+        if (currentAmount == 0) {
+            ContentValues values = new ContentValues();
+            values.put(MySQLiteHelper.COLUMN_LIST_ID, listId);
+            values.put(MySQLiteHelper.NAMES_TABLE_NAME, name);
+            values.put(MySQLiteHelper.COLUMN_NAME_COUNT, 1);
+            database.insert(MySQLiteHelper.NAMES_TABLE_NAME, null, values);
+        } else {
+            ContentValues newValues = new ContentValues();
+            newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount + 1);
+            String[] whereArgs = new String[] {String.valueOf(listId), name};
+            String whereStatement = MySQLiteHelper.COLUMN_LIST_ID
+                    + " = ? AND "
+                    + MySQLiteHelper.COLUMN_NAME + " = ?";
+            database.update(MySQLiteHelper.NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
+        }
+        close();
+    }
+
     public void addNames(int nameId, int listId, int amount) {
         int currentAmount = getAmount(nameId);
 
@@ -169,6 +191,23 @@ public class DataSource {
         return 0;
     }
 
+    private int getAmountWithName(String name) {
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_NAME_COUNT};
+        String selection = MySQLiteHelper.COLUMN_LIST_NAME
+                + " = ? AND "
+                + MySQLiteHelper.COLUMN_PERSON_NAME + " = ?";
+        String[] selectionArgs = {name};
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_NAME, columns, selection,
+                selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        close();
+        return 0;
+    }
+
     public List<String> getMatchingNames(String prefix) {
         List<String> matchingNames = new ArrayList<>();
         open();
@@ -214,7 +253,7 @@ public class DataSource {
             Map<String, NameDO> namesToImport = getListInfo(listId).getNameInformation();
             for (String name : namesToImport.keySet()) {
                 // TODO: Bring this back!!!
-                // addNames(name, receivingListId, namesToImport.get(name).getAmount());
+                // addNameIntoNewList(name, receivingListId, namesToImport.get(name).getAmount());
                 if (nameAmounts.containsKey(name)) {
                     int currentAmount = nameAmounts.get(name);
                     nameAmounts.put(name, currentAmount + namesToImport.get(name).getAmount());
@@ -228,6 +267,6 @@ public class DataSource {
 
     void renamePeople(String oldName, String newName, int listId, int amount) {
         /* removeNames(oldName, listId, amount);
-        addNames(newName, listId, amount); */
+        addNameIntoNewList(newName, listId, amount); */
     }
 }

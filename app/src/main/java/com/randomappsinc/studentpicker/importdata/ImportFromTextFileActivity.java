@@ -12,6 +12,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.io.BufferedReader;
@@ -104,12 +105,13 @@ public class ImportFromTextFileActivity extends StandardActivity {
             UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
         } else {
             DataSource dataSource = new DataSource(this);
+            ListDO newList = dataSource.addNameList(newListName);
+
             String[] allNames = names.getText().toString().split("\\r?\\n");
             for (String name : allNames) {
                 String cleanName = name.trim();
                 if (!cleanName.isEmpty()) {
-                    // TODO: Bring this back!!!
-                    // dataSource.addNames(cleanName, newListName, 1);
+                    dataSource.addNameIntoNewList(cleanName, newList.getId());
                 }
             }
             UIUtils.showShortToast(R.string.import_success, this);

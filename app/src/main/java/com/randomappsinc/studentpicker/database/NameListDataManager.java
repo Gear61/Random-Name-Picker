@@ -51,7 +51,7 @@ public class NameListDataManager {
     public int addName(Context context, String name, int amount, String listName) {
         DataSource dataSource = new DataSource(context);
         // TODO: Bring this back!!!
-        // dataSource.addNames(name, listName, amount);
+        // dataSource.addNameIntoNewList(name, listName, amount);
         for (Listener listener : listeners) {
             listener.onNameAdded(name, amount, listName);
         }

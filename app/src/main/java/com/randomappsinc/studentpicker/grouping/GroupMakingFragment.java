@@ -87,7 +87,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     @Override
     public void onNameAdded(String name, int amount, String listName) {
         // TODO: Bring this back!!!
-        // listInfo.addNames(name, amount);
+        // listInfo.addNameIntoNewList(name, amount);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }

@@ -62,7 +62,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
     void addNameMap(Map<String, Integer> nameAmounts) {
         for (String name : nameAmounts.keySet()) {
             // TODO: Put this back!!!
-            // currentState.addNames(name, nameAmounts.get(name));
+            // currentState.addNameIntoNewList(name, nameAmounts.get(name));
         }
         notifyDataSetChanged();
     }
