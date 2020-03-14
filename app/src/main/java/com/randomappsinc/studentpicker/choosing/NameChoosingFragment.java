@@ -162,7 +162,7 @@ public class NameChoosingFragment extends Fragment
     public void onNameAdded(String name, int amount, String listName) {
         if (this.listName.equals(listName)) {
             // TODO: Put this back!!!
-            // nameChoosingAdapter.addNames(name, amount);
+            // nameChoosingAdapter.addNameIntoNewList(name, amount);
             setViews();
             cacheListState();
         }
