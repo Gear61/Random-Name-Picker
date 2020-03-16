@@ -119,6 +119,7 @@ public class EditNameListFragment extends Fragment implements
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
+            nameListDataManager.addName(getContext(), newName, 1, listId);
             List<NameDO> names = dataSource.getNamesInList(listId);
             namesAdapter.setNameList(names);
             String template = getString(R.string.added_name);

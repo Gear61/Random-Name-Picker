@@ -125,7 +125,7 @@ public class DataSource {
     public ListInfo getListInfo(int listId) {
         Map<String, Integer> nameAmounts = new HashMap<>();
         List<String> names = new ArrayList<>();
-        int amount = 0;
+        int totalAmountOfNames = 0;
         open();
         String[] columns = {MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
         String selection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
@@ -136,13 +136,13 @@ public class DataSource {
             String name = cursor.getString(0);
             int nameAmount = cursor.getInt(1);
 
-            nameAmounts.put(name, amount);
+            nameAmounts.put(name, nameAmount);
             names.add(name);
-            amount += nameAmount;
+            totalAmountOfNames += nameAmount;
         }
         cursor.close();
         close();
-        return new ListInfo(nameAmounts, names, amount, new ArrayList<>());
+        return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
     }
 
     public void addNameIntoNewList(String name, int listId) {
@@ -167,7 +167,7 @@ public class DataSource {
         close();
     }
 
-    public void addNames(String name, int listId, int amount) {
+    void addNames(String name, int amount, int listId) {
         int currentAmount = getAmountOfName(name, listId);
 
         open();
@@ -211,22 +211,6 @@ public class DataSource {
         close();
     }
 
-    private int getAmount(String name, int listId) {
-        open();
-        String[] columns = {MySQLiteHelper.COLUMN_NAME_COUNT};
-        String selection = MySQLiteHelper.COLUMN_NAME + " = ? AND "
-                + MySQLiteHelper.COLUMN_LIST_ID + " = ?";
-        String[] selectionArgs = {name, String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
-                selectionArgs, null, null, null);
-        if (cursor.moveToFirst()) {
-            return cursor.getInt(0);
-        }
-        cursor.close();
-        close();
-        return 0;
-    }
-
     private int getAmountOfName(String name, int listId) {
         open();
         String[] columns = {MySQLiteHelper.COLUMN_NAME_COUNT};
@@ -247,10 +231,10 @@ public class DataSource {
     public List<String> getMatchingNames(String prefix) {
         List<String> matchingNames = new ArrayList<>();
         open();
-        Cursor cursor = database.rawQuery("SELECT DISTINCT " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY +
-                " FROM " + MySQLiteHelper.LEGACY_TABLE_NAME + " WHERE " +
-                MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY + " like ? COLLATE NOCASE " +
-                "ORDER BY " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY + " ASC", new String[] {prefix + "%"});
+        Cursor cursor = database.rawQuery("SELECT DISTINCT " + MySQLiteHelper.COLUMN_NAME +
+                " FROM " + MySQLiteHelper.NAMES_TABLE_NAME + " WHERE " +
+                MySQLiteHelper.COLUMN_NAME + " like ? COLLATE NOCASE " +
+                "ORDER BY " + MySQLiteHelper.COLUMN_NAME + " ASC", new String[] {prefix + "%"});
         while (cursor.moveToNext()) {
             matchingNames.add(cursor.getString(0));
         }
@@ -260,7 +244,7 @@ public class DataSource {
     }
 
     void renamePeople(String oldName, String newName, int listId, int amount) {
-        removeNames(oldName, listId, amount);
-        addNames(newName, listId, amount);
+        removeNames(oldName, amount, listId);
+        addNames(newName, amount, listId);
     }
 }

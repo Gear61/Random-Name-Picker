@@ -44,7 +44,7 @@ public class NameListDataManager {
 
     public void addName(Context context, String name, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
-        dataSource.addNames(name, listId, amount);
+        dataSource.addNames(name, amount, listId);
         for (Listener listener : listeners) {
             listener.onNameAdded(name, amount, listId);
         }
@@ -52,7 +52,7 @@ public class NameListDataManager {
 
     public void deleteName(Context context, String name, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
-        dataSource.removeNames(name, listId, amount);
+        dataSource.removeNames(name, amount, listId);
         for (Listener listener : listeners) {
             listener.onNameDeleted(name, amount, listId);
         }

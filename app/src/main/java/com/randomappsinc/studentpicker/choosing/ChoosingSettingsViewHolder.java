@@ -35,7 +35,7 @@ public class ChoosingSettingsViewHolder {
     }
 
     private void syncCheckboxesWithSettings() {
-        UIUtils.setCheckedImmediately(presentationMode, settings.getPresentationMode());
+        UIUtils.setCheckedImmediately(presentationMode, settings.isPresentationModeEnabled());
         UIUtils.setCheckedImmediately(withReplacement, settings.getWithReplacement());
         UIUtils.setCheckedImmediately(automaticTts, settings.getAutomaticTts());
         UIUtils.setCheckedImmediately(showAsList, settings.getShowAsList());

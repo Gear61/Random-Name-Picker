@@ -49,6 +49,7 @@ public class PresentationActivity extends StandardActivity
 
     private PreferencesManager preferencesManager;
     private MediaPlayer player;
+
     private String listName;
     private ListInfo listState;
     private ChoosingSettings settings;
