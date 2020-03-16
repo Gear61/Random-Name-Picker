@@ -85,23 +85,23 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
 
     @Override
     public void onNameAdded(String name, int amount, int listId) {
-        // TODO: Use real ID!
-        listInfo.addNames(1, name, amount);
+        listInfo = dataSource.getListInfo(listId);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
     public void onNameDeleted(String name, int amount, int listId) {
-        listInfo.removeNames(name, amount);
+        listInfo = dataSource.getListInfo(listId);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
     public void onNameChanged(String oldName, String newName, int amount, int listId) {
-        // TODO: Bring this back!!!
-        listInfo.renamePeople(oldName, newName, amount);
+        listInfo = dataSource.getListInfo(listId);
+        settings.setNameListSize(listInfo.getNumInstances());
+        settingsDialog.refreshSetting();
     }
 
     @OnClick(R.id.make_groups)
