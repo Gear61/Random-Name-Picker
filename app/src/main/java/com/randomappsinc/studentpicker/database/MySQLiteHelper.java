@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.randomappsinc.studentpicker.init.MyApplication;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -19,8 +18,8 @@ import java.util.Set;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // LEGACY fields (everything in 1 table)
-    static final String LEGACY_TABLE_NAME = "Students";
-    static final String COLUMN_PERSON_NAME_LEGACY = "student_name";
+    private static final String LEGACY_TABLE_NAME = "Students";
+    private static final String COLUMN_PERSON_NAME_LEGACY = "student_name";
 
     // NEW table names
     static final String LISTS_TABLE_NAME = "Lists";
@@ -99,8 +98,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 }
             }
         } else if (oldVersion == 2) {
-            Log.d("Database Migration", "Upgrading from v2 to v3");
-
             database.execSQL(CREATE_LISTS_TABLE_QUERY);
             database.execSQL(CREATE_NAMES_TABLE_QUERY);
 
@@ -113,7 +110,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_LIST_NAME, listName);
                 int result = (int) database.insert(LISTS_TABLE_NAME, null, values);
                 listNamesToIdsMap.put(listName, result);
-                Log.d("Database Migration", "List name: " + listName + " || ID: " + result);
             }
 
             List<NameInfoPod> namesToMigrate = new ArrayList<>();
@@ -133,10 +129,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_LIST_ID, listNamesToIdsMap.get(nameInfoPod.listName));
                 values.put(COLUMN_NAME, nameInfoPod.name);
                 values.put(COLUMN_NAME_COUNT, nameInfoPod.amount);
-                int result = (int) database.insert(NAMES_TABLE_NAME, null, values);
-                Log.d("Database Migration", "List name: " + nameInfoPod.listName
-                        + " || Name: " + nameInfoPod.name + " || Amount: " + nameInfoPod.amount
-                        + " || ID: " + result);
+                database.insert(NAMES_TABLE_NAME, null, values);
             }
         }
     }
