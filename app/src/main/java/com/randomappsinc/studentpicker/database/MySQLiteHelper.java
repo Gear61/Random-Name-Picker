@@ -19,8 +19,8 @@ import java.util.Set;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // LEGACY fields (everything in 1 table)
-    static final String TABLE_NAME = "Students";
-    static final String COLUMN_PERSON_NAME = "student_name";
+    static final String LEGACY_TABLE_NAME = "Students";
+    static final String COLUMN_PERSON_NAME_LEGACY = "student_name";
 
     // NEW table names
     static final String LISTS_TABLE_NAME = "Lists";
@@ -39,7 +39,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // Updates
     // V2
-    private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + TABLE_NAME +
+    private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + LEGACY_TABLE_NAME +
             " ADD COLUMN " + COLUMN_NAME_COUNT + " INTEGER;";
 
     // Updates
@@ -52,7 +52,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
 
     // Struct for migration
-    private class NameInfoPod {
+    private static class NameInfoPod {
         public final String listName;
         public final String name;
         public final int amount;
@@ -86,16 +86,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
 
             database.execSQL(ADD_COUNT_COLUMN);
-            database.execSQL("DELETE FROM " + TABLE_NAME);
+            database.execSQL("DELETE FROM " + LEGACY_TABLE_NAME);
 
             for (String listName : oldData.keySet()) {
                 Map<String, Integer> listData = oldData.get(listName);
                 for (String name : listData.keySet()) {
                     ContentValues values = new ContentValues();
                     values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
-                    values.put(MySQLiteHelper.COLUMN_PERSON_NAME, name);
+                    values.put(MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY, name);
                     values.put(MySQLiteHelper.COLUMN_NAME_COUNT, listData.get(name));
-                    database.insert(MySQLiteHelper.TABLE_NAME, null, values);
+                    database.insert(MySQLiteHelper.LEGACY_TABLE_NAME, null, values);
                 }
             }
         } else if (oldVersion == 2) {
@@ -117,11 +117,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
 
             List<NameInfoPod> namesToMigrate = new ArrayList<>();
-            Cursor nameInfoCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+            Cursor nameInfoCursor = database.rawQuery("SELECT * FROM " + LEGACY_TABLE_NAME, null);
             if (nameInfoCursor.moveToFirst()){
                 do {
                     String listName = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_LIST_NAME));
-                    String name = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME));
+                    String name = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME_LEGACY));
                     int amount = nameInfoCursor.getInt(nameInfoCursor.getColumnIndex(COLUMN_NAME_COUNT));
                     namesToMigrate.add(new NameInfoPod(listName, name, amount));
                 } while(nameInfoCursor.moveToNext());
@@ -147,7 +147,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
         Cursor cursor = database.query(
                 true,
-                MySQLiteHelper.TABLE_NAME,
+                MySQLiteHelper.LEGACY_TABLE_NAME,
                 columns,
                 null,
                 null,
@@ -165,10 +165,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // V1 -> V2 upgrade, save legacy data
     private Map<String, Integer> getNameCountsLegacy(SQLiteDatabase database, String listName) {
         Map<String, Integer> names = new HashMap<>();
-        Cursor cursor = database.rawQuery("SELECT " + MySQLiteHelper.COLUMN_PERSON_NAME +
-                ", COUNT() FROM " + MySQLiteHelper.TABLE_NAME + " WHERE " +
+        Cursor cursor = database.rawQuery("SELECT " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY +
+                ", COUNT() FROM " + MySQLiteHelper.LEGACY_TABLE_NAME + " WHERE " +
                 MySQLiteHelper.COLUMN_LIST_NAME + " = ? " +
-                "GROUP BY " + MySQLiteHelper.COLUMN_PERSON_NAME, new String[] {listName});
+                "GROUP BY " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY, new String[] {listName});
         while (cursor.moveToNext()) {
             names.put(cursor.getString(0), cursor.getInt(1));
         }

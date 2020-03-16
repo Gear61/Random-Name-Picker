@@ -32,7 +32,6 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,8 +63,8 @@ public class NameChoosingFragment extends Fragment
 
     private ChoicesDisplayDialog choicesDisplayDialog;
     private boolean canShowPresentationScreen;
-    private int listId;
     private String listName;
+    private int listId;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
@@ -86,8 +85,11 @@ public class NameChoosingFragment extends Fragment
         View rootView = inflater.inflate(R.layout.name_choosing, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        listName = getArguments().getString(Constants.LIST_ID_KEY, "");
         Context context = rootView.getContext();
+        dataSource = new DataSource(context);
+
+        listId = getArguments().getInt(Constants.LIST_ID_KEY);
+        listName = dataSource.getListName(listId);
         namesList.addItemDecoration(new SimpleDividerItemDecoration(context));
 
         nameListDataManager.registerListener(this);
@@ -95,12 +97,11 @@ public class NameChoosingFragment extends Fragment
 
         textToSpeechManager = new TextToSpeechManager(context, this);
         preferencesManager = new PreferencesManager(context);
-        dataSource = new DataSource(context);
+
 
         listInfo = preferencesManager.getNameListState(listName);
         if (listInfo == null) {
-            // TODO: Put this back!!!
-            // listInfo = dataSource.getListInfo(listName);
+            listInfo = dataSource.getListInfo(listId);
         }
         setViews();
 
@@ -159,39 +160,24 @@ public class NameChoosingFragment extends Fragment
     }
 
     @Override
-    public void onNameAdded(String name, int amount, String listName) {
-        if (this.listName.equals(listName)) {
-            // TODO: Put this back!!!
-            // nameChoosingAdapter.addNameIntoNewList(name, amount);
-            setViews();
-            cacheListState();
-        }
+    public void onNameAdded(String name, int amount, int listId) {
+        // TODO: Use real ID!!!
+        nameChoosingAdapter.addNames(1, name, amount);
+        setViews();
+        cacheListState();
     }
 
     @Override
-    public void onNameDeleted(String name, int amount, String listName) {
-        if (this.listName.equals(listName)) {
-            nameChoosingAdapter.removeNames(name, amount);
-            setViews();
-            cacheListState();
-        }
+    public void onNameDeleted(String name, int amount, int listId) {
+        nameChoosingAdapter.removeNames(name, amount);
+        setViews();
+        cacheListState();
     }
 
     @Override
-    public void onNameChanged(String oldName, String newName, int amount, String listName) {
-        if (this.listName.equals(listName)) {
-            nameChoosingAdapter.changeNames(oldName, newName, amount);
-            cacheListState();
-        }
-    }
-
-    @Override
-    public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
-        if (this.listName.equals(listName)) {
-            nameChoosingAdapter.addNameMap(nameAmounts);
-            setViews();
-            cacheListState();
-        }
+    public void onNameChanged(String oldName, String newName, int amount, int listId) {
+        nameChoosingAdapter.changeNames(oldName, newName, amount);
+        cacheListState();
     }
 
     @Override
@@ -210,7 +196,7 @@ public class NameChoosingFragment extends Fragment
             }
             canShowPresentationScreen = false;
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
-            intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
+            intent.putExtra(PresentationActivity.LIST_NAME_KEY, "");
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
             startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {
