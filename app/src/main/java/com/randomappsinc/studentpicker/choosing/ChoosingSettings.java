@@ -12,7 +12,7 @@ public class ChoosingSettings {
         this.numNamesToChoose = 1;
     }
 
-    public boolean getPresentationMode() {
+    public boolean isPresentationModeEnabled() {
         return presentationMode;
     }
 

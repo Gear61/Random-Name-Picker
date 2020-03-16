@@ -36,7 +36,6 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         this.numNames = numNames;
         this.listener = listener;
         setNameList(nameList);
-        setViews();
     }
 
     private void setViews() {
@@ -60,10 +59,11 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         }
     }
 
-    public void setNameList(List<NameDO> nameList) {
+    void setNameList(List<NameDO> nameList) {
         names = nameList;
         Collections.sort(nameList, (name1, name2) -> name1.getName().compareTo(name2.getName()));
         notifyDataSetChanged();
+        setViews();
     }
 
     @NonNull

@@ -189,13 +189,13 @@ public class NameChoosingFragment extends Fragment
         if (listInfo.getNumNames() == 0) {
             return;
         }
-        if (settings.getPresentationMode()) {
+        if (settings.isPresentationModeEnabled()) {
             if (!canShowPresentationScreen) {
                 return;
             }
             canShowPresentationScreen = false;
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
-            intent.putExtra(PresentationActivity.LIST_NAME_KEY, "");
+            intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
             startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {

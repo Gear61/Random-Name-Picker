@@ -48,7 +48,7 @@ class JSONUtils {
             nameListJson.put(ALREADY_CHOSEN_NAMES_KEY, alreadyChosenNamesArray);
 
             JSONObject settings = new JSONObject();
-            settings.put(PRESENTATION_MODE_KEY, choosingSettings.getPresentationMode());
+            settings.put(PRESENTATION_MODE_KEY, choosingSettings.isPresentationModeEnabled());
             settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
             settings.put(AUTOMATIC_TTS_KEY, choosingSettings.getAutomaticTts());
             settings.put(SHOW_AS_LIST_KEY, choosingSettings.getShowAsList());
