@@ -49,6 +49,7 @@ public class PresentationActivity extends StandardActivity
 
     private PreferencesManager preferencesManager;
     private MediaPlayer player;
+
     private String listName;
     private ListInfo listState;
     private ChoosingSettings settings;
@@ -233,11 +234,8 @@ public class PresentationActivity extends StandardActivity
 
     @Override
     public void finish() {
-        // If we are choosing without replacement, then the choosing page has been mutating the list
-        // and the changes need to be saved
-        if (!settings.getWithReplacement()) {
-            preferencesManager.setNameListState(listName, listState, settings);
-        }
+        // Make sure that we persist the choosing state, since name history will always change at least
+        preferencesManager.setNameListState(listName, listState, settings);
         super.finish();
     }
 

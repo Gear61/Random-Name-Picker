@@ -10,7 +10,7 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChoosingSettingsViewHolder {
+class ChoosingSettingsViewHolder {
 
     @BindView(R.id.presentation_mode) CheckBox presentationMode;
     @BindView(R.id.with_replacement) CheckBox withReplacement;
@@ -20,7 +20,7 @@ public class ChoosingSettingsViewHolder {
 
     private ChoosingSettings settings;
 
-    public ChoosingSettingsViewHolder(View view, ChoosingSettings settings) {
+    ChoosingSettingsViewHolder(View view, ChoosingSettings settings) {
         ButterKnife.bind(this, view);
 
         this.settings = settings;
@@ -28,20 +28,20 @@ public class ChoosingSettingsViewHolder {
         numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
     }
 
-    public void revertSettings() {
+    void revertSettings() {
         syncCheckboxesWithSettings();
         numChosen.setText(String.valueOf(settings.getNumNamesToChoose()));
         numChosen.clearFocus();
     }
 
     private void syncCheckboxesWithSettings() {
-        UIUtils.setCheckedImmediately(presentationMode, settings.getPresentationMode());
+        UIUtils.setCheckedImmediately(presentationMode, settings.isPresentationModeEnabled());
         UIUtils.setCheckedImmediately(withReplacement, settings.getWithReplacement());
         UIUtils.setCheckedImmediately(automaticTts, settings.getAutomaticTts());
         UIUtils.setCheckedImmediately(showAsList, settings.getShowAsList());
     }
 
-    public void applySettings() {
+    void applySettings() {
         settings.setPresentationMode(presentationMode.isChecked());
         settings.setWithReplacement(withReplacement.isChecked());
         settings.setAutomaticTts(automaticTts.isChecked());

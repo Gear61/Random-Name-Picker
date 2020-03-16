@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.models.ListDO;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,35 +22,42 @@ import butterknife.OnClick;
 
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
+    private final Comparator<ListDO> LIST_SORTER =
+            (listOne, listTwo) -> listOne.getName().compareTo(listTwo.getName());
+
     public interface Delegate {
-        void onItemClick(int position);
+        void onItemClick(ListDO listDO);
 
-        void onItemEditClick(int position, String listName);
+        void onItemEditClick(int position, ListDO listDO);
 
-        void onItemDeleteClick(int position, String listName);
+        void onItemDeleteClick(int position, ListDO listDO);
 
         void setNoContent();
     }
 
-    private List<String> nameLists = new ArrayList<>();
+    private List<ListDO> nameLists = new ArrayList<>();
     private Delegate delegate;
 
-    NameListsAdapter(Delegate delegate, Set<String> initialNameLists) {
+    NameListsAdapter(Delegate delegate, List<ListDO> initialNameLists) {
         this.delegate = delegate;
         this.nameLists.addAll(initialNameLists);
-        Collections.sort(nameLists);
+        Collections.sort(nameLists, LIST_SORTER);
     }
 
-    void refresh(Set<String> newNameLists) {
+    void refresh(List<ListDO> newNameLists) {
         nameLists.clear();
         nameLists.addAll(newNameLists);
-        Collections.sort(nameLists);
+        Collections.sort(nameLists, LIST_SORTER);
         notifyDataSetChanged();
+    }
+
+    ListDO getItem(int position) {
+        return nameLists.get(position);
     }
 
     @NonNull
     @Override
-    public NameListsAdapter.NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.names_list_item, parent, false);
         return new NameListViewHolder(view);
@@ -65,19 +73,15 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return nameLists.size();
     }
 
-    void addList(String newList) {
-        nameLists.add(newList);
-        Collections.sort(nameLists);
+    void addList(ListDO listDO) {
+        nameLists.add(listDO);
+        Collections.sort(nameLists, LIST_SORTER);
         notifyDataSetChanged();
         delegate.setNoContent();
     }
 
-    String getItem(int position) {
-        return nameLists.get(position);
-    }
-
     void renameItem(int position, String newName) {
-        nameLists.set(position, newName);
+        nameLists.get(position).setName(newName);
         notifyItemChanged(position);
     }
 
@@ -97,24 +101,24 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         }
 
         void loadList(int position) {
-            this.listName.setText(getItem(position));
+            this.listName.setText(nameLists.get(position).getName());
         }
 
         @OnClick(R.id.edit_icon)
         void renameList() {
-            String listName = nameLists.get(getAdapterPosition());
-            delegate.onItemEditClick(getAdapterPosition(), listName);
+            ListDO listDO = nameLists.get(getAdapterPosition());
+            delegate.onItemEditClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @OnClick(R.id.delete_icon)
         void deleteList() {
-            String listName = nameLists.get(getAdapterPosition());
-            delegate.onItemDeleteClick(getAdapterPosition(), listName);
+            ListDO listDO = nameLists.get(getAdapterPosition());
+            delegate.onItemDeleteClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @Override
         public void onClick(View v) {
-            delegate.onItemClick(getAdapterPosition());
+            delegate.onItemClick(nameLists.get(getAdapterPosition()));
         }
     }
 }

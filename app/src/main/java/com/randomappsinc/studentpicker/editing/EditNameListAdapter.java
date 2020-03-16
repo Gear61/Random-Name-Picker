@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,63 +22,46 @@ import butterknife.OnClick;
 public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapter.NameViewHolder> {
 
     public interface Listener {
-        void showNameOptions(String name);
+        void showNameOptions(NameDO nameDO);
     }
 
-    private ListInfo content;
+    private List<NameDO> names;
     private TextView noContent;
     private TextView numNames;
     private Listener listener;
 
-    EditNameListAdapter(TextView noContent, TextView numNames, String listName, Listener listener) {
-        Context context = noContent.getContext();
-        DataSource dataSource = new DataSource(context);
-        this.content = dataSource.getListInfo(listName);
+    EditNameListAdapter(TextView noContent, TextView numNames, List<NameDO> nameList, Listener listener) {
+        this.names = nameList;
         this.noContent = noContent;
         this.numNames = numNames;
         this.listener = listener;
-        setViews();
-    }
-
-    ListInfo getListInfo() {
-        return content;
+        setNameList(nameList);
     }
 
     private void setViews() {
-        if (content.getNumInstances() == 0) {
+        if (names.size() == 0) {
             numNames.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
+            int numInstances = 0;
+            for (NameDO nameDO : names) {
+                numInstances += nameDO.getAmount();
+            }
+
             noContent.setVisibility(View.GONE);
             Context context = noContent.getContext();
-            String names = content.getNumInstances() == 1
+            String names = numInstances == 1
                     ? context.getString(R.string.single_name)
                     : context.getString(R.string.plural_names);
-            String numNamesText = (content.getNumInstances()) + names;
+            String numNamesText = numInstances + names;
             numNames.setText(numNamesText);
             numNames.setVisibility(View.VISIBLE);
         }
     }
 
-    void addNames(String name, int amount) {
-        content.addNames(name, amount);
-        notifyDataSetChanged();
-        setViews();
-    }
-
-    void removeNames(String name, int amount) {
-        content.removeNames(name, amount);
-        notifyDataSetChanged();
-        setViews();
-    }
-
-    void changeName(String oldName, String newName, int amount) {
-        content.renamePeople(oldName, newName, amount);
-        notifyDataSetChanged();
-    }
-
-    void importNamesFromList(ListInfo updatedListInfo) {
-        content = updatedListInfo;
+    void setNameList(List<NameDO> nameList) {
+        names = nameList;
+        Collections.sort(nameList, (name1, name2) -> name1.getName().compareTo(name2.getName()));
         notifyDataSetChanged();
         setViews();
     }
@@ -96,20 +81,16 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).hashCode();
+        return names.get(position).hashCode();
     }
 
     @Override
     public int getItemCount() {
-        return content.getNumNames();
+        return names.size();
     }
 
-    private String getItem(int position) {
-        return content.getName(position);
-    }
-
-    class NameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        @BindView(R.id.person_name) TextView name;
+    class NameViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.person_name) TextView nameTextView;
 
         private NameViewHolder(View view) {
             super(view);
@@ -117,12 +98,16 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         }
 
         private void loadName(int position) {
-            name.setText(content.getNameText(position));
+            String name = names.get(position).getName();
+            int amount = names.get(position).getAmount();
+            String nameText = amount == 1 ? name : name + " (" + amount + ")";
+
+            nameTextView.setText(nameText);
         }
 
         @OnClick(R.id.parent)
-        public void onClick(View v) {
-            listener.showNameOptions(getItem(getAdapterPosition()));
+        void onClick() {
+            listener.showNameOptions(names.get(getAdapterPosition()));
         }
     }
 }

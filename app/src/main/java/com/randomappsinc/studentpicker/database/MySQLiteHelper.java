@@ -6,33 +6,62 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.randomappsinc.studentpicker.init.MyApplication;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    // Table name
-    public static final String TABLE_NAME = "Students";
+    // LEGACY fields (everything in 1 table)
+    private static final String LEGACY_TABLE_NAME = "Students";
+    private static final String COLUMN_PERSON_NAME_LEGACY = "student_name";
+
+    // NEW table names
+    static final String LISTS_TABLE_NAME = "Lists";
+    static final String NAMES_TABLE_NAME = "Names";
 
     // COLUMNS
-    public static final String COLUMN_LIST_NAME = "list_name";
-    public static final String COLUMN_PERSON_NAME = "student_name";
-    public static final String COLUMN_NAME_COUNT = "name_count";
+    static final String COLUMN_ID = "id";
+    static final String COLUMN_LIST_ID = "list_id";
+    static final String COLUMN_LIST_NAME = "list_name";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_NAME_COUNT = "name_count";
 
     // Some random things fed to a super's method
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 2;
-
-    // Database creation sql statements
-    private static final String STUDENTS_CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" + COLUMN_LIST_NAME
-            + " TEXT, " + COLUMN_PERSON_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
+    private static final int DATABASE_VERSION = 3;
 
     // Updates
     // V2
-    private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + TABLE_NAME +
+    private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + LEGACY_TABLE_NAME +
             " ADD COLUMN " + COLUMN_NAME_COUNT + " INTEGER;";
+
+    // Updates
+    // V3
+    private static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + LISTS_TABLE_NAME +
+            "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_NAME + " TEXT);";
+
+    private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + NAMES_TABLE_NAME +
+            "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_ID + " INTEGER, " +
+            COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
+
+    // Struct for migration
+    private static class NameInfoPod {
+        final String listName;
+        public final String name;
+        public final int amount;
+
+        NameInfoPod(String listName, String name, int amount) {
+            this.listName = listName;
+            this.name = name;
+            this.amount = amount;
+        }
+    }
 
     MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,7 +69,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(STUDENTS_CREATE);
+        database.execSQL(CREATE_LISTS_TABLE_QUERY);
+        database.execSQL(CREATE_NAMES_TABLE_QUERY);
     }
 
     @Override
@@ -48,24 +78,58 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if (oldVersion == 1) {
             List<String> nonEmptyLists = getNonEmptyLists(database);
 
-            // List name -> (Name -> Count)
+            // List name -> (NameDO -> Count)
             Map<String, Map<String, Integer>> oldData = new HashMap<>();
             for (String listName : nonEmptyLists) {
                 oldData.put(listName, getNameCountsLegacy(database, listName));
             }
 
             database.execSQL(ADD_COUNT_COLUMN);
-            database.execSQL("DELETE FROM " + TABLE_NAME);
+            database.execSQL("DELETE FROM " + LEGACY_TABLE_NAME);
 
             for (String listName : oldData.keySet()) {
                 Map<String, Integer> listData = oldData.get(listName);
                 for (String name : listData.keySet()) {
                     ContentValues values = new ContentValues();
                     values.put(MySQLiteHelper.COLUMN_LIST_NAME, listName);
-                    values.put(MySQLiteHelper.COLUMN_PERSON_NAME, name);
+                    values.put(MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY, name);
                     values.put(MySQLiteHelper.COLUMN_NAME_COUNT, listData.get(name));
-                    database.insert(MySQLiteHelper.TABLE_NAME, null, values);
+                    database.insert(MySQLiteHelper.LEGACY_TABLE_NAME, null, values);
                 }
+            }
+        } else if (oldVersion == 2) {
+            database.execSQL(CREATE_LISTS_TABLE_QUERY);
+            database.execSQL(CREATE_NAMES_TABLE_QUERY);
+
+            PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
+            Set<String> listNames = preferencesManager.getNameLists();
+
+            Map<String, Integer> listNamesToIdsMap = new HashMap<>();
+            for (String listName : listNames) {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_LIST_NAME, listName);
+                int result = (int) database.insert(LISTS_TABLE_NAME, null, values);
+                listNamesToIdsMap.put(listName, result);
+            }
+
+            List<NameInfoPod> namesToMigrate = new ArrayList<>();
+            Cursor nameInfoCursor = database.rawQuery("SELECT * FROM " + LEGACY_TABLE_NAME, null);
+            if (nameInfoCursor.moveToFirst()){
+                do {
+                    String listName = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_LIST_NAME));
+                    String name = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME_LEGACY));
+                    int amount = nameInfoCursor.getInt(nameInfoCursor.getColumnIndex(COLUMN_NAME_COUNT));
+                    namesToMigrate.add(new NameInfoPod(listName, name, amount));
+                } while (nameInfoCursor.moveToNext());
+            }
+            nameInfoCursor.close();
+
+            for (NameInfoPod nameInfoPod : namesToMigrate) {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_LIST_ID, listNamesToIdsMap.get(nameInfoPod.listName));
+                values.put(COLUMN_NAME, nameInfoPod.name);
+                values.put(COLUMN_NAME_COUNT, nameInfoPod.amount);
+                database.insert(NAMES_TABLE_NAME, null, values);
             }
         }
     }
@@ -76,7 +140,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String[] columns = {MySQLiteHelper.COLUMN_LIST_NAME};
         Cursor cursor = database.query(
                 true,
-                MySQLiteHelper.TABLE_NAME,
+                MySQLiteHelper.LEGACY_TABLE_NAME,
                 columns,
                 null,
                 null,
@@ -94,10 +158,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // V1 -> V2 upgrade, save legacy data
     private Map<String, Integer> getNameCountsLegacy(SQLiteDatabase database, String listName) {
         Map<String, Integer> names = new HashMap<>();
-        Cursor cursor = database.rawQuery("SELECT " + MySQLiteHelper.COLUMN_PERSON_NAME +
-                ", COUNT() FROM " + MySQLiteHelper.TABLE_NAME + " WHERE " +
+        Cursor cursor = database.rawQuery("SELECT " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY +
+                ", COUNT() FROM " + MySQLiteHelper.LEGACY_TABLE_NAME + " WHERE " +
                 MySQLiteHelper.COLUMN_LIST_NAME + " = ? " +
-                "GROUP BY " + MySQLiteHelper.COLUMN_PERSON_NAME, new String[] {listName});
+                "GROUP BY " + MySQLiteHelper.COLUMN_PERSON_NAME_LEGACY, new String[] {listName});
         while (cursor.moveToNext()) {
             names.put(cursor.getString(0), cursor.getInt(1));
         }

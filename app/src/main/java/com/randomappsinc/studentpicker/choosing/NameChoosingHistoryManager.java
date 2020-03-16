@@ -8,25 +8,30 @@ import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
-public class NameChoosingHistoryManager {
+import java.util.List;
 
-    private ListInfo listInfo;
+class NameChoosingHistoryManager {
+
+    interface Delegate {
+        ListInfo getListInfo();
+    }
+
+    private Delegate delegate;
     private MaterialDialog dialog;
 
-    NameChoosingHistoryManager(ListInfo listInfo, Context context) {
-        this.listInfo = listInfo;
-
+    NameChoosingHistoryManager(Delegate delegate, Context context) {
+        this.delegate = delegate;
         dialog = new MaterialDialog.Builder(context)
                 .title(R.string.chosen_names_history)
                 .positiveText(R.string.okay)
                 .neutralText(R.string.clear)
                 .negativeText(R.string.copy_text)
                 .onNeutral((dialog, which) -> {
-                    listInfo.clearNameHistory();
+                    delegate.getListInfo().clearNameHistory();
                     UIUtils.showShortToast(R.string.name_history_cleared, dialog.getContext());
                 })
                 .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
-                        listInfo.getNameHistoryFormatted(),
+                        getFormattedNameHistory(),
                         null,
                         0,
                         true,
@@ -35,12 +40,24 @@ public class NameChoosingHistoryManager {
     }
 
     void maybeShowNamesHistory() {
-        String namesHistory = listInfo.getNameHistoryFormatted();
+        String namesHistory = getFormattedNameHistory();
         if (!namesHistory.isEmpty()) {
             dialog.setContent(namesHistory);
             dialog.show();
         } else {
             UIUtils.showLongToast(R.string.empty_names_history, dialog.getContext());
         }
+    }
+
+    private String getFormattedNameHistory() {
+        List<String> nameHistory = delegate.getListInfo().getNameHistory();
+        StringBuilder namesHistory = new StringBuilder();
+        for (int i = 0; i < nameHistory.size(); i++) {
+            if (i != 0) {
+                namesHistory.append("\n");
+            }
+            namesHistory.append(nameHistory.get(i));
+        }
+        return namesHistory.toString();
     }
 }

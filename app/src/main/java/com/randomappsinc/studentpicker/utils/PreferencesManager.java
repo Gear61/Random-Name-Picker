@@ -19,7 +19,6 @@ public class PreferencesManager {
     private static final String NUM_APP_OPENS = "numAppOpens";
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
-    private static final String SHAKE_IS_NEW = "shakeIsNew";
     private static final String SHAKE_ENABLED = "shakeEnabled";
 
     public PreferencesManager(Context context) {
@@ -30,32 +29,12 @@ public class PreferencesManager {
         return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
     }
 
-    private void setNameLists(Set<String> studentLists) {
-        prefs.edit().remove(STUDENT_LISTS_KEY).apply();
-        prefs.edit().putStringSet(STUDENT_LISTS_KEY, studentLists).apply();
-    }
-
-    public void addNameList(String newList) {
-        Set<String> currentLists = getNameLists();
-        currentLists.add(newList);
-        setNameLists(currentLists);
-    }
-
     public void removeNameList(String deletedList) {
-        Set<String> currentLists = getNameLists();
-        currentLists.remove(deletedList);
-        setNameLists(currentLists);
         removeNamesListCache(deletedList);
     }
 
     public void renameList(String oldName, String newName) {
         moveNamesListCache(oldName, newName);
-        removeNameList(oldName);
-        addNameList(newName);
-    }
-
-    public boolean doesListExist(String listName) {
-        return getNameLists().contains(listName);
     }
 
     public boolean getFirstTimeUser() {
@@ -111,18 +90,11 @@ public class PreferencesManager {
     public void setPresentationTextColor(int newColor) {
         prefs.edit().putInt(PRESENTATION_TEXT_COLOR_KEY, newColor).apply();
     }
-
-    public boolean shouldShowShake() {
-        boolean shouldShowShake = prefs.getBoolean(SHAKE_IS_NEW, true);
-        prefs.edit().putBoolean(SHAKE_IS_NEW, false).apply();
-        return shouldShowShake;
-    }
-
     public void setShakeEnabled(boolean shakeEnabled) {
         prefs.edit().putBoolean(SHAKE_ENABLED, shakeEnabled).apply();
     }
 
     public boolean isShakeEnabled() {
-        return prefs.getBoolean(SHAKE_ENABLED, true);
+        return prefs.getBoolean(SHAKE_ENABLED, false);
     }
 }

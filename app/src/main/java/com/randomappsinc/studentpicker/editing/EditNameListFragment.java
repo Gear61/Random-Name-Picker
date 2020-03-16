@@ -23,11 +23,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
-import com.randomappsinc.studentpicker.home.MainActivity;
-import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
@@ -41,14 +41,13 @@ import butterknife.Unbinder;
 
 public class EditNameListFragment extends Fragment implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, MergeNameListsDialog.Listener, SpeechToTextManager.Listener,
-        EditNameListAdapter.Listener {
+        DuplicationDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
-    public static EditNameListFragment getInstance(String listName) {
+    public static EditNameListFragment getInstance(int listId) {
         Bundle bundle = new Bundle();
-        bundle.putString(MainActivity.LIST_NAME_KEY, listName);
+        bundle.putInt(Constants.LIST_ID_KEY, listId);
         EditNameListFragment editNameListFragment = new EditNameListFragment();
         editNameListFragment.setArguments(bundle);
         return editNameListFragment;
@@ -63,13 +62,12 @@ public class EditNameListFragment extends Fragment implements
 
     private EditNameListAdapter namesAdapter;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
-    private String listName;
+    private int listId;
+    private DataSource dataSource;
     private NameEditChoicesDialog nameEditChoicesDialog;
     private RenameDialog renameDialog;
     private DeleteNameDialog deleteNameDialog;
     private DuplicationDialog duplicationDialog;
-    private MergeNameListsDialog mergeNameListsDialog;
-    private String[] importCandidates;
     private SpeechToTextManager speechToTextManager;
     private Unbinder unbinder;
 
@@ -91,15 +89,15 @@ public class EditNameListFragment extends Fragment implements
                 getActivity(),
                 IoniconsIcons.ion_android_add).colorRes(R.color.white));
 
-        listName = getArguments().getString(MainActivity.LIST_NAME_KEY, "");
-        DataSource dataSource = new DataSource(getContext());
-        importCandidates = dataSource.getAllNameListsMinusCurrent(listName);
+        listId = getArguments().getInt(Constants.LIST_ID_KEY, 0);
+        dataSource = new DataSource(getContext());
         noContent.setText(R.string.no_names_for_edit);
 
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
 
-        namesAdapter = new EditNameListAdapter(noContent, numNames, listName, this);
+        List<NameDO> names = dataSource.getNamesInList(listId);
+        namesAdapter = new EditNameListAdapter(noContent, numNames, names, this);
         namesList.setAdapter(namesAdapter);
         namesList.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         return rootView;
@@ -112,7 +110,6 @@ public class EditNameListFragment extends Fragment implements
         renameDialog = new RenameDialog(getActivity(), this);
         deleteNameDialog = new DeleteNameDialog(getActivity(), this);
         duplicationDialog = new DuplicationDialog(getActivity(), this);
-        mergeNameListsDialog = new MergeNameListsDialog(getActivity(), this, importCandidates);
     }
 
     @OnClick(R.id.add_item)
@@ -122,16 +119,17 @@ public class EditNameListFragment extends Fragment implements
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
-            nameListDataManager.addName(getContext(), newName, 1, listName);
-            namesAdapter.addNames(newName, 1);
+            nameListDataManager.addName(getContext(), newName, 1, listId);
+            List<NameDO> names = dataSource.getNamesInList(listId);
+            namesAdapter.setNameList(names);
             String template = getString(R.string.added_name);
             UIUtils.showSnackbar(parent, String.format(template, newName));
         }
     }
 
     @Override
-    public void showNameOptions(final String name) {
-        nameEditChoicesDialog.showChoices(name);
+    public void showNameOptions(NameDO nameDO) {
+        nameEditChoicesDialog.showChoices(nameDO);
     }
 
     @OnClick(R.id.voice_entry_icon)
@@ -160,34 +158,32 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onRenameChosen(String name) {
-        ListInfo listInfo = namesAdapter.getListInfo();
-        int currentAmount = listInfo.getInstancesOfName(name);
-        renameDialog.startRenamingProcess(name, currentAmount);
+    public void onRenameChosen(NameDO nameDO) {
+        renameDialog.startRenamingProcess(nameDO);
     }
 
     @Override
-    public void onDeleteChosen(String name) {
-        ListInfo listInfo = namesAdapter.getListInfo();
-        int currentAmount = listInfo.getInstancesOfName(name);
-        deleteNameDialog.startDeletionProcess(name, currentAmount);
+    public void onDeleteChosen(NameDO nameDO) {
+        deleteNameDialog.startDeletionProcess(nameDO);
     }
 
     @Override
-    public void onDuplicationChosen(String name) {
-        duplicationDialog.show(name);
+    public void onDuplicationChosen(NameDO nameDO) {
+        duplicationDialog.show(nameDO);
     }
 
     @Override
-    public void onRenameSubmitted(String previousName, String newName, int amountToRename) {
-        nameListDataManager.changeName(getContext(), previousName, newName, amountToRename, listName);
-        namesAdapter.changeName(previousName, newName, amountToRename);
+    public void onRenameSubmitted(int nameId, String previousName, String newName, int amountToRename) {
+        nameListDataManager.changeName(getContext(), previousName, newName, amountToRename, listId);
+        List<NameDO> names = dataSource.getNamesInList(listId);
+        namesAdapter.setNameList(names);
     }
 
     @Override
     public void onDeletionSubmitted(String name, int amountToDelete) {
-        nameListDataManager.deleteName(getContext(), name, amountToDelete, listName);
-        namesAdapter.removeNames(name, amountToDelete);
+        nameListDataManager.deleteName(getContext(), name, amountToDelete, listId);
+        List<NameDO> names = dataSource.getNamesInList(listId);
+        namesAdapter.setNameList(names);
         if (amountToDelete == 1) {
             UIUtils.showSnackbar(parent, getString(R.string.deleted_name, name));
         } else {
@@ -196,17 +192,11 @@ public class EditNameListFragment extends Fragment implements
     }
 
     @Override
-    public void onDuplicationSubmitted(String name, int amountToAdd) {
-        nameListDataManager.addName(getContext(), name, amountToAdd, listName);
-        namesAdapter.addNames(name, amountToAdd);
+    public void onDuplicationSubmitted(int nameId, String name, int amountToAdd) {
+        nameListDataManager.addName(getContext(), name, amountToAdd, listId);
+        List<NameDO> names = dataSource.getNamesInList(listId);
+        namesAdapter.setNameList(names);
         UIUtils.showSnackbar(parent, R.string.clones_added);
-    }
-
-    @Override
-    public void onMergeSubmitted(List<String> listsToMergeIn) {
-        ListInfo updatedListState = nameListDataManager.importNameLists(getContext(), listName, listsToMergeIn);
-        namesAdapter.importNamesFromList(updatedListState);
-        UIUtils.showSnackbar(parent, getString(R.string.names_successfully_imported));
     }
 
     @Override
@@ -234,23 +224,14 @@ public class EditNameListFragment extends Fragment implements
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_name_list_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.import_names, IoniconsIcons.ion_android_upload, getActivity());
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.import_names:
-                if (importCandidates.length == 0) {
-                    UIUtils.showSnackbar(parent, getString(R.string.no_name_lists_to_import));
-                } else {
-                    mergeNameListsDialog.show();
-                }
-                return true;
-            case android.R.id.home:
-                getActivity().finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
