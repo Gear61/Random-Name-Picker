@@ -235,9 +235,8 @@ public class NameChoosingFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // If we are choosing without replacement, then presentation mode has mutated the choosing state
-        // and we need to update the list
-        if (requestCode == PRESENTATION_MODE_REQUEST_CODE && !settings.getWithReplacement()) {
+        // Presentation mode mutates the choosing state, so trigger a refresh here
+        if (requestCode == PRESENTATION_MODE_REQUEST_CODE) {
             listInfo = preferencesManager.getNameListState(listName);
             nameChoosingAdapter.refreshList(listInfo);
             setViews();
