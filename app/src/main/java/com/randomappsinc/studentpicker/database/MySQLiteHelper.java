@@ -53,7 +53,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // Struct for migration
     private static class NameInfoPod {
-        public final String listName;
+        final String listName;
         public final String name;
         public final int amount;
 
@@ -124,7 +124,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     String name = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME_LEGACY));
                     int amount = nameInfoCursor.getInt(nameInfoCursor.getColumnIndex(COLUMN_NAME_COUNT));
                     namesToMigrate.add(new NameInfoPod(listName, name, amount));
-                } while(nameInfoCursor.moveToNext());
+                } while (nameInfoCursor.moveToNext());
             }
             nameInfoCursor.close();
 
