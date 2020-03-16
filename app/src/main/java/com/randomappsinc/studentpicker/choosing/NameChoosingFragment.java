@@ -40,7 +40,8 @@ import butterknife.Unbinder;
 
 public class NameChoosingFragment extends Fragment
         implements ChoicesDisplayDialog.Listener, NameListDataManager.Listener,
-        ShakeManager.Listener, TextToSpeechManager.Listener, NameChoosingAdapter.Listener {
+        ShakeManager.Listener, TextToSpeechManager.Listener, NameChoosingAdapter.Listener,
+        NameChoosingHistoryManager.Delegate {
 
     private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
 
@@ -105,7 +106,7 @@ public class NameChoosingFragment extends Fragment
         }
         setViews();
 
-        nameChoosingHistoryManager = new NameChoosingHistoryManager(listInfo, context);
+        nameChoosingHistoryManager = new NameChoosingHistoryManager(this, context);
         nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
         namesList.setAdapter(nameChoosingAdapter);
 
@@ -132,6 +133,11 @@ public class NameChoosingFragment extends Fragment
 
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
+    }
+
+    @Override
+    public ListInfo getListInfo() {
+        return listInfo;
     }
 
     @Override

@@ -16,7 +16,11 @@ public class ListInfo {
     private int numInstances;
     private List<String> nameHistory;
 
-    public ListInfo(Map<String, Integer> nameToAmount, List<String> uniqueNames, int numInstances, List<String> history) {
+    public ListInfo(
+            Map<String, Integer> nameToAmount,
+            List<String> uniqueNames,
+            int numInstances,
+            List<String> history) {
         this.nameAmounts = nameToAmount;
         this.uniqueNames = uniqueNames;
         this.numInstances = numInstances;
@@ -37,17 +41,6 @@ public class ListInfo {
 
     public void clearNameHistory() {
         nameHistory.clear();
-    }
-
-    public String getNameHistoryFormatted() {
-        StringBuilder namesHistory = new StringBuilder();
-        for (int i = 0; i < nameHistory.size(); i++) {
-            if (i != 0) {
-                namesHistory.append("\n");
-            }
-            namesHistory.append(nameHistory.get(i));
-        }
-        return namesHistory.toString();
     }
 
     private List<String> getLongList() {
