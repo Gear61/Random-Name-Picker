@@ -85,7 +85,7 @@ public class ListInfo {
 
     public void renamePeople(String oldName, String newName, int amount) {
         removeNames(oldName, amount);
-        // addNames(nameId, newName, amount);
+        addNames(newName, amount);
     }
 
     public String getName(int position) {
