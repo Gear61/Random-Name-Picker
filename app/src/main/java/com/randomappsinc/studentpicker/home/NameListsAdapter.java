@@ -107,13 +107,13 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         @OnClick(R.id.edit_icon)
         void renameList() {
             ListDO listDO = nameLists.get(getAdapterPosition());
-            delegate.onItemEditClick(getAdapterPosition(), listDO);
+            delegate.onItemEditClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @OnClick(R.id.delete_icon)
         void deleteList() {
             ListDO listDO = nameLists.get(getAdapterPosition());
-            delegate.onItemDeleteClick(getAdapterPosition(), listDO);
+            delegate.onItemDeleteClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @Override
