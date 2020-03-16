@@ -102,10 +102,8 @@ public class DataSource {
         close();
     }
 
-    public ListInfo getListInfo(int listId) {
-        Map<String, NameDO> nameAmounts = new HashMap<>();
-        List<String> names = new ArrayList<>();
-        int amount = 0;
+    public List<NameDO> getNamesInList(int listId) {
+        List<NameDO> nameDOs = new ArrayList<>();
         open();
         String[] columns = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
         String selection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
@@ -117,7 +115,28 @@ public class DataSource {
             String name = cursor.getString(1);
             int nameAmount = cursor.getInt(2);
 
-            nameAmounts.put(cursor.getString(1), new NameDO(nameId, name, nameAmount));
+            nameDOs.add(new NameDO(nameId, name, nameAmount));
+        }
+        cursor.close();
+        close();
+        return nameDOs;
+    }
+
+    public ListInfo getListInfo(int listId) {
+        Map<String, Integer> nameAmounts = new HashMap<>();
+        List<String> names = new ArrayList<>();
+        int amount = 0;
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
+        String selection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(listId)};
+        Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
+                selectionArgs, null, null, MySQLiteHelper.COLUMN_NAME + " ASC");
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            int nameAmount = cursor.getInt(1);
+
+            nameAmounts.put(name, amount);
             names.add(name);
             amount += nameAmount;
         }

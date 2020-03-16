@@ -11,24 +11,24 @@ import java.util.Map;
 /** Represents the choosing state of a name list */
 public class ListInfo {
 
-    private Map<String, NameDO> nameInformation;
-    private List<String> names;
+    private Map<String, Integer> nameAmounts;
+    private List<String> uniqueNames;
     private int numInstances;
     private List<String> nameHistory;
 
-    public ListInfo(Map<String, NameDO> nameInformation, List<String> names, int numInstances, List<String> history) {
-        this.nameInformation = nameInformation;
-        this.names = names;
+    public ListInfo(Map<String, Integer> nameToAmount, List<String> uniqueNames, int numInstances, List<String> history) {
+        this.nameAmounts = nameToAmount;
+        this.uniqueNames = uniqueNames;
         this.numInstances = numInstances;
         this.nameHistory = history;
     }
 
-    public Map<String, NameDO> getNameInformation() {
-        return nameInformation;
+    public Map<String, Integer> getNameAmounts() {
+        return nameAmounts;
     }
 
-    public List<String> getNames() {
-        return names;
+    public List<String> getUniqueNames() {
+        return uniqueNames;
     }
 
     public List<String> getNameHistory() {
@@ -52,8 +52,8 @@ public class ListInfo {
 
     private List<String> getLongList() {
         List<String> longList = new ArrayList<>();
-        for (String name : names) {
-            int amount = nameInformation.get(name).getAmount();
+        for (String name : uniqueNames) {
+            int amount = nameAmounts.get(name);
             for (int i = 0; i < amount; i++) {
                 longList.add(name);
             }
@@ -61,33 +61,30 @@ public class ListInfo {
         return longList;
     }
 
-    public void addNames(int nameId, String name, int amount) {
-        if (nameInformation.containsKey(name)) {
-            NameDO nameDO = nameInformation.get(name);
-            int currentAmount = nameDO.getAmount();
-            nameDO.setAmount(currentAmount + amount);
+    public void addNames(String name, int amount) {
+        if (nameAmounts.containsKey(name)) {
+            int currentAmount = nameAmounts.get(name);
+            nameAmounts.put(name, currentAmount + amount);
         } else {
-            NameDO newName = new NameDO(nameId, name, amount);
-            nameInformation.put(name, newName);
-            names.add(name);
-            Collections.sort(names);
+            nameAmounts.put(name, amount);
+            uniqueNames.add(name);
+            Collections.sort(uniqueNames);
         }
         numInstances += amount;
     }
 
     public void removeNames(String name, int amount) {
-        if (nameInformation.containsKey(name)) {
-            NameDO nameInfo = nameInformation.get(name);
-            int currentAmount = nameInfo.getAmount();
+        if (nameAmounts.containsKey(name)) {
+            int currentAmount = nameAmounts.get(name);
             if (currentAmount - amount <= 0) {
-                nameInformation.remove(name);
-                names.remove(name);
+                nameAmounts.remove(name);
+                uniqueNames.remove(name);
 
                 // If we're removing more instances than there currently are, make sure
                 // we remove the current amount instead so we don't go negative
                 numInstances -= currentAmount;
             } else {
-                nameInfo.setAmount(currentAmount - amount);
+                nameAmounts.put(name, currentAmount - amount);
                 numInstances -= amount;
             }
         }
@@ -99,17 +96,17 @@ public class ListInfo {
     }
 
     public String getName(int position) {
-        return names.get(position);
+        return uniqueNames.get(position);
     }
 
     public String getNameText(int position) {
-        String name = names.get(position);
-        int amount = nameInformation.get(name).getAmount();
+        String name = uniqueNames.get(position);
+        int amount = nameAmounts.get(name);
         return amount == 1 ? name : name + " (" + amount + ")";
     }
 
     public int getNumNames() {
-        return names.size();
+        return uniqueNames.size();
     }
 
     public int getNumInstances() {
@@ -118,7 +115,7 @@ public class ListInfo {
 
     public void removeAllInstancesOfName(int position) {
         String name = getName(position);
-        int amount = nameInformation.get(name).getAmount();
+        int amount = nameAmounts.get(name);
         removeNames(name, amount);
     }
 

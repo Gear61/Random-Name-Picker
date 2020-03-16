@@ -2,7 +2,6 @@ package com.randomappsinc.studentpicker.utils;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
-import com.randomappsinc.studentpicker.models.NameDO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +31,9 @@ class JSONUtils {
 
             // Store current names in list
             JSONArray namesArray = new JSONArray();
-            Map<String, NameDO> nameAmounts = currentState.getNameInformation();
-            for (String name : currentState.getNames()) {
-                int amount = nameAmounts.get(name).getAmount();
+            Map<String, Integer> nameAmounts = currentState.getNameAmounts();
+            for (String name : currentState.getUniqueNames()) {
+                int amount = nameAmounts.get(name);
                 for (int i = 0; i < amount; i++) {
                     namesArray.put(name);
                 }
@@ -96,8 +95,7 @@ class JSONUtils {
         }
         catch (JSONException ignored) {}
 
-        // TODO: Fix this to not use NULL!
-        return new ListInfo(null, names, numNames, alreadyChosenNames);
+        return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
     }
 
     // Given a serialized JSON "cache" string of a name list, extracts the choosing settings
