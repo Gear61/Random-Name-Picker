@@ -32,7 +32,7 @@ class JSONUtils {
             // Store current names in list
             JSONArray namesArray = new JSONArray();
             Map<String, Integer> nameAmounts = currentState.getNameAmounts();
-            for (String name : currentState.getNames()) {
+            for (String name : currentState.getUniqueNames()) {
                 int amount = nameAmounts.get(name);
                 for (int i = 0; i < amount; i++) {
                     namesArray.put(name);
@@ -48,7 +48,7 @@ class JSONUtils {
             nameListJson.put(ALREADY_CHOSEN_NAMES_KEY, alreadyChosenNamesArray);
 
             JSONObject settings = new JSONObject();
-            settings.put(PRESENTATION_MODE_KEY, choosingSettings.getPresentationMode());
+            settings.put(PRESENTATION_MODE_KEY, choosingSettings.isPresentationModeEnabled());
             settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
             settings.put(AUTOMATIC_TTS_KEY, choosingSettings.getAutomaticTts());
             settings.put(SHOW_AS_LIST_KEY, choosingSettings.getShowAsList());
@@ -94,6 +94,7 @@ class JSONUtils {
             }
         }
         catch (JSONException ignored) {}
+
         return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
     }
 
@@ -108,8 +109,7 @@ class JSONUtils {
             settings.setPresentationMode(settingsJson.getBoolean(PRESENTATION_MODE_KEY));
             settings.setAutomaticTts(settingsJson.getBoolean(AUTOMATIC_TTS_KEY));
             settings.setShowAsList(settingsJson.getBoolean(SHOW_AS_LIST_KEY));
-        } catch (JSONException ignored) {
-        }
+        } catch (JSONException ignored) {}
         return settings;
     }
 }

@@ -2,24 +2,18 @@ package com.randomappsinc.studentpicker.database;
 
 import android.content.Context;
 
-import com.randomappsinc.studentpicker.models.ListInfo;
-
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /** Singleton to help maintain the state of the name choosing page */
 public class NameListDataManager {
 
     public interface Listener {
-        void onNameAdded(String name, int amount, String listName);
+        void onNameAdded(String name, int amount, int listId);
 
-        void onNameDeleted(String name, int amount, String listName);
+        void onNameDeleted(String name, int amount, int listId);
 
-        void onNameChanged(String oldName, String newName, int amount, String listName);
-
-        void onNameListsImported(Map<String, Integer> nameAmounts, String listName);
+        void onNameChanged(String oldName, String newName, int amount, int listId);
     }
 
     private static NameListDataManager instance;
@@ -48,36 +42,27 @@ public class NameListDataManager {
         listeners.remove(listener);
     }
 
-    public void addName(Context context, String name, int amount, String listName) {
+    public void addName(Context context, String name, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
-        dataSource.addNames(name, listName, amount);
+        dataSource.addNames(name, amount, listId);
         for (Listener listener : listeners) {
-            listener.onNameAdded(name, amount, listName);
+            listener.onNameAdded(name, amount, listId);
         }
     }
 
-    public void deleteName(Context context, String name, int amount, String listName) {
+    public void deleteName(Context context, String name, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
-        dataSource.removeNames(name, listName, amount);
+        dataSource.removeNames(name, amount, listId);
         for (Listener listener : listeners) {
-            listener.onNameDeleted(name, amount, listName);
+            listener.onNameDeleted(name, amount, listId);
         }
     }
 
-    public void changeName(Context context, String oldName, String newName, int amount, String listName) {
+    public void changeName(Context context, String oldName, String newName, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
-        dataSource.renamePeople(oldName, newName, listName, amount);
+        dataSource.renamePeople(oldName, newName, listId, amount);
         for (Listener listener : listeners) {
-            listener.onNameChanged(oldName, newName, amount, listName);
+            listener.onNameChanged(oldName, newName, amount, listId);
         }
-    }
-
-    public ListInfo importNameLists(Context context, String receivingList, List<String> givingLists) {
-        DataSource dataSource = new DataSource(context);
-        Map<String, Integer> change = dataSource.importNamesIntoList(receivingList, givingLists);
-        for (Listener listener : listeners) {
-            listener.onNameListsImported(change, receivingList);
-        }
-        return dataSource.getListInfo(receivingList);
     }
 }

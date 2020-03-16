@@ -8,6 +8,7 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 public class DeleteNameDialog {
 
@@ -17,19 +18,19 @@ public class DeleteNameDialog {
 
     private MaterialDialog deleteManyDialog;
     private MaterialDialog confirmSingleDeletionDialog;
-    private String currentName;
+    private NameDO currentName;
     private int currentMaxAmount;
     private int amountToDelete;
     private String confirmTemplate;
 
-    public DeleteNameDialog(Context context, final Listener listener) {
+    DeleteNameDialog(Context context, final Listener listener) {
         confirmTemplate = context.getString(R.string.confirm_name_delete);
         confirmSingleDeletionDialog = new MaterialDialog.Builder(context)
                 .title(R.string.confirm_name_deletion)
                 .content("")
                 .negativeText(android.R.string.no)
                 .positiveText(android.R.string.yes)
-                .onPositive((dialog, which) -> listener.onDeletionSubmitted(currentName, amountToDelete))
+                .onPositive((dialog, which) -> listener.onDeletionSubmitted(currentName.getName(), amountToDelete))
                 .build();
         deleteManyDialog = new MaterialDialog.Builder(context)
                 .content(R.string.multiple_deletions_title)
@@ -44,29 +45,30 @@ public class DeleteNameDialog {
                     dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
                 })
                 .onNeutral((dialog, which) -> {
-                    listener.onDeletionSubmitted(currentName, currentMaxAmount);
+                    listener.onDeletionSubmitted(currentName.getName(), currentMaxAmount);
                 })
                 .alwaysCallInputCallback()
                 .negativeText(android.R.string.no)
                 .positiveText(R.string.delete)
                 .onPositive((dialog, which) -> {
                     int numCopies = Integer.parseInt(dialog.getInputEditText().getText().toString().trim());
-                    listener.onDeletionSubmitted(currentName, numCopies);
+                    listener.onDeletionSubmitted(currentName.getName(), numCopies);
                 })
                 .build();
     }
 
-    public void startDeletionProcess(String name, int maxAmount) {
-        currentName = name;
-        currentMaxAmount = maxAmount;
-        if (maxAmount > 1) {
+    void startDeletionProcess(NameDO nameDO) {
+        currentName = nameDO;
+        currentMaxAmount = currentName.getAmount();
+        if (currentMaxAmount > 1) {
             deleteManyDialog.setActionButton(DialogAction.NEUTRAL, R.string.all_of_them);
-            deleteManyDialog.setContent(R.string.multiple_deletions_title, "\"" + name + "\"", maxAmount);
+            deleteManyDialog.setContent(R.string.multiple_deletions_title,
+                    "\"" + currentName.getName() + "\"", currentMaxAmount);
             EditText input = deleteManyDialog.getInputEditText();
             if (input != null) {
-                input.setText(String.valueOf(maxAmount));
+                input.setText(String.valueOf(currentMaxAmount));
                 input.setFilters(new InputFilter[]
-                        {new InputFilter.LengthFilter(String.valueOf(maxAmount).length())});
+                        {new InputFilter.LengthFilter(String.valueOf(currentMaxAmount).length())});
             }
             deleteManyDialog.show();
         } else {

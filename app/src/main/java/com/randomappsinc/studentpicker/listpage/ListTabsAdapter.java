@@ -12,12 +12,12 @@ import com.randomappsinc.studentpicker.grouping.GroupMakingFragment;
 public class ListTabsAdapter extends FragmentStatePagerAdapter {
 
     private final String[] tabTitles;
-    private final String listName;
+    private final int listId;
 
-    ListTabsAdapter(FragmentManager fragmentManager, String listName, String[] tabTitles) {
+    ListTabsAdapter(FragmentManager fragmentManager, int listId, String[] tabTitles) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.tabTitles = tabTitles;
-        this.listName = listName;
+        this.listId = listId;
     }
 
     @Override
@@ -30,11 +30,11 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return NameChoosingFragment.getInstance(listName);
+                return NameChoosingFragment.getInstance(listId);
             case 1:
-                return GroupMakingFragment.getInstance(listName);
+                return GroupMakingFragment.getInstance(listId);
             case 2:
-                return EditNameListFragment.getInstance(listName);
+                return EditNameListFragment.getInstance(listId);
             default:
                 throw new IllegalArgumentException("There should only be 3 tabs!");
         }

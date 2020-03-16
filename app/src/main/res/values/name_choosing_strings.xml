@@ -43,12 +43,5 @@
     <string name="say_names">Say names</string>
     <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
 
-    <string name="shake_it">Shake It!</string>
-    <string name="shake_now_supported">
-        Tired of clicking buttons? Don\'t worry, Random Name Picker has got you covered!
-        You can now shake your device to choose names! Don\'t like this feature?
-        Then turn it off in the settings! Happy shaking!
-    </string>
-
     <string name="list_reset_confirmation">List reset and all names restored.</string>
 </resources>

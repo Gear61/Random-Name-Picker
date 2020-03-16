@@ -12,13 +12,17 @@ import java.util.Map;
 public class ListInfo {
 
     private Map<String, Integer> nameAmounts;
-    private List<String> names;
+    private List<String> uniqueNames;
     private int numInstances;
     private List<String> nameHistory;
 
-    public ListInfo(Map<String, Integer> nameAmounts, List<String> names, int numInstances, List<String> history) {
-        this.nameAmounts = nameAmounts;
-        this.names = names;
+    public ListInfo(
+            Map<String, Integer> nameToAmount,
+            List<String> uniqueNames,
+            int numInstances,
+            List<String> history) {
+        this.nameAmounts = nameToAmount;
+        this.uniqueNames = uniqueNames;
         this.numInstances = numInstances;
         this.nameHistory = history;
     }
@@ -27,8 +31,8 @@ public class ListInfo {
         return nameAmounts;
     }
 
-    public List<String> getNames() {
-        return names;
+    public List<String> getUniqueNames() {
+        return uniqueNames;
     }
 
     public List<String> getNameHistory() {
@@ -39,20 +43,9 @@ public class ListInfo {
         nameHistory.clear();
     }
 
-    public String getNameHistoryFormatted() {
-        StringBuilder namesHistory = new StringBuilder();
-        for (int i = 0; i < nameHistory.size(); i++) {
-            if (i != 0) {
-                namesHistory.append("\n");
-            }
-            namesHistory.append(nameHistory.get(i));
-        }
-        return namesHistory.toString();
-    }
-
     private List<String> getLongList() {
         List<String> longList = new ArrayList<>();
-        for (String name : names) {
+        for (String name : uniqueNames) {
             int amount = nameAmounts.get(name);
             for (int i = 0; i < amount; i++) {
                 longList.add(name);
@@ -64,11 +57,11 @@ public class ListInfo {
     public void addNames(String name, int amount) {
         if (nameAmounts.containsKey(name)) {
             int currentAmount = nameAmounts.get(name);
-            nameAmounts.put(name, amount + currentAmount);
+            nameAmounts.put(name, currentAmount + amount);
         } else {
             nameAmounts.put(name, amount);
-            names.add(name);
-            Collections.sort(names);
+            uniqueNames.add(name);
+            Collections.sort(uniqueNames);
         }
         numInstances += amount;
     }
@@ -78,7 +71,7 @@ public class ListInfo {
             int currentAmount = nameAmounts.get(name);
             if (currentAmount - amount <= 0) {
                 nameAmounts.remove(name);
-                names.remove(name);
+                uniqueNames.remove(name);
 
                 // If we're removing more instances than there currently are, make sure
                 // we remove the current amount instead so we don't go negative
@@ -96,17 +89,17 @@ public class ListInfo {
     }
 
     public String getName(int position) {
-        return names.get(position);
+        return uniqueNames.get(position);
     }
 
     public String getNameText(int position) {
-        String name = names.get(position);
+        String name = uniqueNames.get(position);
         int amount = nameAmounts.get(name);
         return amount == 1 ? name : name + " (" + amount + ")";
     }
 
     public int getNumNames() {
-        return names.size();
+        return uniqueNames.size();
     }
 
     public int getNumInstances() {
@@ -151,9 +144,5 @@ public class ListInfo {
             listOfGroupsOfNames.add(listOfNames);
         }
         return listOfGroupsOfNames;
-    }
-
-    public int getInstancesOfName(String name) {
-        return nameAmounts.get(name);
     }
 }
