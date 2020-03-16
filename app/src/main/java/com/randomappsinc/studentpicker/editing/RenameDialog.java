@@ -18,7 +18,7 @@ public class RenameDialog {
 
     private MaterialDialog renameAmountDialog;
     private MaterialDialog renamingDialog;
-    private NameDO currentName;
+    private NameDO currentName = new NameDO();
     private int currentMaxAmount;
     private int amountToRename;
 

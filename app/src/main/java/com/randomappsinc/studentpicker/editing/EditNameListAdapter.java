@@ -68,14 +68,8 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
     }
 
     void changeName(int nameId, String oldName, String newName, int amount) {
-        content.renamePeople(nameId, oldName, newName, amount);
+        content.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
-    }
-
-    void importNamesFromList(ListInfo updatedListInfo) {
-        content = updatedListInfo;
-        notifyDataSetChanged();
-        setViews();
     }
 
     @NonNull

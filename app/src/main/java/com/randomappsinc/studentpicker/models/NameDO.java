@@ -7,20 +7,20 @@ public class NameDO {
     private String name;
     private int amount;
 
+    public NameDO() {}
+
+    public NameDO(int id, String name, int amount) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+    }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getListId() {
-        return listId;
-    }
-
-    public void setListId(int listId) {
-        this.listId = listId;
     }
 
     public String getName() {

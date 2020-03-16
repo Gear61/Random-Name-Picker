@@ -67,10 +67,7 @@ public class ListInfo {
             int currentAmount = nameDO.getAmount();
             nameDO.setAmount(currentAmount + amount);
         } else {
-            NameDO newName = new NameDO();
-            newName.setId(nameId);
-            newName.setName(name);
-            newName.setAmount(amount);
+            NameDO newName = new NameDO(nameId, name, amount);
             nameInformation.put(name, newName);
             names.add(name);
             Collections.sort(names);
@@ -96,9 +93,9 @@ public class ListInfo {
         }
     }
 
-    public void renamePeople(int nameId, String oldName, String newName, int amount) {
+    public void renamePeople(String oldName, String newName, int amount) {
         removeNames(oldName, amount);
-        addNames(nameId, newName, amount);
+        // addNames(nameId, newName, amount);
     }
 
     public String getName(int position) {

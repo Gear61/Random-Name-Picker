@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -45,7 +46,8 @@ public class ListActivity extends StandardActivity implements ShakeDetector.List
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
-        setTitle("TODO: Replace me with list name!!!");
+        DataSource dataSource = new DataSource(this);
+        setTitle(dataSource.getListName(listId));
 
         preferencesManager = new PreferencesManager(this);
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(

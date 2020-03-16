@@ -24,7 +24,6 @@ import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,32 +84,24 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     }
 
     @Override
-    public void onNameAdded(String name, int amount, String listName) {
-        // TODO: Bring this back!!!
-        // listInfo.addNameIntoNewList(name, amount);
+    public void onNameAdded(String name, int amount, int listId) {
+        // TODO: Use real ID!
+        listInfo.addNames(1, name, amount);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
-    public void onNameDeleted(String name, int amount, String listName) {
+    public void onNameDeleted(String name, int amount, int listId) {
         listInfo.removeNames(name, amount);
         settings.setNameListSize(listInfo.getNumInstances());
         settingsDialog.refreshSetting();
     }
 
     @Override
-    public void onNameChanged(String oldName, String newName, int amount, String listName) {
+    public void onNameChanged(String oldName, String newName, int amount, int listId) {
         // TODO: Bring this back!!!
-        // listInfo.renamePeople(oldName, newName, amount);
-    }
-
-    @Override
-    public void onNameListsImported(Map<String, Integer> nameAmounts, String listName) {
-        // TODO: Bring this back!!!
-        // listInfo = dataSource.getListInfo(listName);
-        settings.setNameListSize(listInfo.getNumInstances());
-        settingsDialog.refreshSetting();
+        listInfo.renamePeople(oldName, newName, amount);
     }
 
     @OnClick(R.id.make_groups)
