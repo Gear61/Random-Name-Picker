@@ -122,6 +122,7 @@ public class NameChoosingFragment extends Fragment
                 .negativeText(android.R.string.no)
                 .onPositive((dialog, which) -> {
                     settingsHolder.applySettings();
+                    cacheListState();
                     UIUtils.showShortToast(R.string.settings_applied, getContext());
                 })
                 .onNegative((dialog, which) -> settingsHolder.revertSettings())
