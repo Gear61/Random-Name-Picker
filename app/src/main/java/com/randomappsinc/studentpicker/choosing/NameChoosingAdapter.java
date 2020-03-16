@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,16 +52,8 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
         notifyDataSetChanged();
     }
 
-    void addNames(int nameId, String name, int amount) {
-        currentState.addNames(nameId, name, amount);
-        notifyDataSetChanged();
-    }
-
-    void addNameMap(Map<String, Integer> nameAmounts) {
-        for (String name : nameAmounts.keySet()) {
-            // TODO: Put this back!!!
-            // currentState.addNameIntoNewList(name, nameAmounts.get(name));
-        }
+    void addNames(String name, int amount) {
+        currentState.addNames(name, amount);
         notifyDataSetChanged();
     }
 
@@ -73,8 +63,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
     }
 
     void changeNames(String oldName, String newName, int amount) {
-        // TODO: Put this back!!!
-        // currentState.renamePeople(oldName, newName, amount);
+        currentState.renamePeople(oldName, newName, amount);
         notifyDataSetChanged();
     }
 

@@ -42,13 +42,12 @@ public class NameListDataManager {
         listeners.remove(listener);
     }
 
-    public int addName(Context context, String name, int amount, int listId) {
+    public void addName(Context context, String name, int amount, int listId) {
         DataSource dataSource = new DataSource(context);
         dataSource.addNames(name, listId, amount);
         for (Listener listener : listeners) {
             listener.onNameAdded(name, amount, listId);
         }
-        return 1;
     }
 
     public void deleteName(Context context, String name, int amount, int listId) {

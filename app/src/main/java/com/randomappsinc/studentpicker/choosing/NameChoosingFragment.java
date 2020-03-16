@@ -161,8 +161,7 @@ public class NameChoosingFragment extends Fragment
 
     @Override
     public void onNameAdded(String name, int amount, int listId) {
-        // TODO: Use real ID!!!
-        nameChoosingAdapter.addNames(1, name, amount);
+        nameChoosingAdapter.addNames(name, amount);
         setViews();
         cacheListState();
     }
