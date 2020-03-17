@@ -111,7 +111,7 @@ public class ImportFromTextFileActivity extends StandardActivity {
             for (String name : allNames) {
                 String cleanName = name.trim();
                 if (!cleanName.isEmpty()) {
-                    dataSource.addNameIntoNewList(cleanName, newList.getId());
+                    dataSource.addNames(cleanName, 1, newList.getId());
                 }
             }
             UIUtils.showShortToast(R.string.import_success, this);

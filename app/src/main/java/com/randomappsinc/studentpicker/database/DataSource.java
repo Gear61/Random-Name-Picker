@@ -145,29 +145,7 @@ public class DataSource {
         return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
     }
 
-    public void addNameIntoNewList(String name, int listId) {
-        int currentAmount = getAmountOfName(name, listId);
-
-        open();
-        if (currentAmount == 0) {
-            ContentValues values = new ContentValues();
-            values.put(MySQLiteHelper.COLUMN_LIST_ID, listId);
-            values.put(MySQLiteHelper.NAMES_TABLE_NAME, name);
-            values.put(MySQLiteHelper.COLUMN_NAME_COUNT, 1);
-            database.insert(MySQLiteHelper.NAMES_TABLE_NAME, null, values);
-        } else {
-            ContentValues newValues = new ContentValues();
-            newValues.put(MySQLiteHelper.COLUMN_NAME_COUNT, currentAmount + 1);
-            String[] whereArgs = new String[] {String.valueOf(listId), name};
-            String whereStatement = MySQLiteHelper.COLUMN_LIST_ID
-                    + " = ? AND "
-                    + MySQLiteHelper.COLUMN_NAME + " = ?";
-            database.update(MySQLiteHelper.NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
-        }
-        close();
-    }
-
-    void addNames(String name, int amount, int listId) {
+    public void addNames(String name, int amount, int listId) {
         int currentAmount = getAmountOfName(name, listId);
 
         open();
