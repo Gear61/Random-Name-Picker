@@ -76,10 +76,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        settings = new GroupMakingSettings(
-                listInfo.getNumInstances(),
-                getResources().getInteger(R.integer.default_number_of_names_per_group),
-                getResources().getInteger(R.integer.default_number_of_groups));
+        settings = new GroupMakingSettings(listInfo.getNumInstances());
         settingsDialog = new GroupMakingSettingsDialog(getActivity(), settings);
     }
 

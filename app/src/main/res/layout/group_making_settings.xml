@@ -2,10 +2,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    tools:ignore="SpUsage"
     >
 
     <TextView
@@ -70,9 +72,7 @@
         android:text="@string/groups_warning_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_margin="4dp"
         android:textSize="15dp"
         android:textColor="@color/red"
         android:visibility="gone"
@@ -83,13 +83,5 @@
         android:text="@string/groups_autocomplete_settings"
         app:buttonTint="@color/checkbox_box_color"
         style="@style/setting_checkbox"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/groups_note_settings"
-        android:layout_marginStart="32dp"
-        android:textSize="13dp"
         />
 </LinearLayout>

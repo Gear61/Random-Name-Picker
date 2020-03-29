@@ -29,7 +29,7 @@ class GroupMakingSettingsViewHolder {
         ButterKnife.bind(this, dialog.getCustomView());
         this.settings = settings;
         this.dialog = dialog;
-        numberOfNamesInList.setText(numberOfNamesInList.getContext().getResources()
+        numberOfNamesInList.setText(numberOfNamesInList.getContext()
                 .getString(R.string.grouping_settings_number_of_names_in_list, settings.getNameListSize()));
         namesPerGroup.setText(String.valueOf(settings.getNumOfNamesPerGroup()));
         numGroups.setText(String.valueOf(settings.getNumOfGroups()));
@@ -82,32 +82,46 @@ class GroupMakingSettingsViewHolder {
 
     @OnCheckedChanged(R.id.autocomplete)
     void onAutocompleteSelected(boolean checked) {
-        String numberOfGroupsInput = numGroups.getText().toString().trim();
-        if (checked && isInputValid(numberOfGroupsInput)) {
-            namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
+        if (checked) {
+            String numberOfGroupsInput = numGroups.getText().toString().trim();
+            if (isInputValid(numberOfGroupsInput)) {
+                namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
+                return;
+            }
+
+            String namesPerGroupInput = namesPerGroup.getText().toString().trim();
+            if (isInputValid(namesPerGroupInput)) {
+                numGroups.setText(getMatchingNumber(namesPerGroupInput));
+            }
         }
     }
 
     @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterNamesPerGroupChanged() {
         String namesPerGroupInput = namesPerGroup.getText().toString().trim();
-        boolean isInputValid = isInputValid(namesPerGroupInput);
-        if (namesPerGroup.isFocused() && isInputValid && autocomplete.isChecked()) {
+        if (namesPerGroup.isFocused() && isInputValid(namesPerGroupInput) && autocomplete.isChecked()) {
             numGroups.setText(getMatchingNumber(namesPerGroupInput));
         }
-        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid);
-        maybeShowUnevenGroupsWarning();
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(areInputsValid());
+
+        // Prevent error from showing up at the initial load, since that can be overwhelming to the user
+        if (namesPerGroup.isFocused()) {
+            maybeShowUnevenGroupsWarning();
+        }
     }
 
     @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterGroupNumChanged() {
         String numberOfGroupsInput = numGroups.getText().toString().trim();
-        boolean isInputValid = isInputValid(numberOfGroupsInput);
-        if (numGroups.isFocused() && isInputValid && autocomplete.isChecked()) {
+        if (numGroups.isFocused() && isInputValid(numberOfGroupsInput) && autocomplete.isChecked()) {
             namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
         }
-        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid);
-        maybeShowUnevenGroupsWarning();
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(areInputsValid());
+
+        // Prevent error from showing up at the initial load, since that can be overwhelming to the user
+        if (numGroups.isFocused()) {
+            maybeShowUnevenGroupsWarning();
+        }
     }
 
     // Given the number of names per group or number of groups, returns the corresponding number to use all the names
@@ -122,12 +136,15 @@ class GroupMakingSettingsViewHolder {
         if (!areInputsValid()) {
             return;
         }
-        String namesPerGroupInput = namesPerGroup.getText().toString().trim();
-        String numberOfGroupsInput = numGroups.getText().toString().trim();
-        int namesNumber = Integer.parseInt(namesPerGroupInput);
-        int groupsNumber = Integer.parseInt(numberOfGroupsInput);
-        int totalNumber = namesNumber * groupsNumber;
-        if (totalNumber > settings.getNameListSize()) {
+        String namesPerGroupInput = this.namesPerGroup.getText().toString().trim();
+        String numberOfGroupsInput = this.numGroups.getText().toString().trim();
+        int namesPerGroup = Integer.parseInt(namesPerGroupInput);
+        int numGroups = Integer.parseInt(numberOfGroupsInput);
+        int totalNumber = namesPerGroup * numGroups;
+
+        // It's possible that the settings are too much for the list to handle (5 groups of 2 for 8 names total),
+        // but the groups will still be even. So we need to modulo the number of names by the names per group as well
+        if (totalNumber > settings.getNameListSize() && settings.getNameListSize() % namesPerGroup != 0) {
             warningMessage.setVisibility(View.VISIBLE);
         } else {
             warningMessage.setVisibility(View.GONE);
@@ -136,14 +153,12 @@ class GroupMakingSettingsViewHolder {
 
     // Returns true if the inputted text is a positive number
     private boolean isInputValid(String inputText) {
-        return areInputsValid() ||
-                (autocomplete.isChecked() && inputText.length() > 0 && Integer.parseInt(inputText) > 0);
+        return inputText.length() > 0 && Integer.parseInt(inputText) > 0;
     }
 
     private boolean areInputsValid() {
         String namesPerGroupInput = namesPerGroup.getText().toString().trim();
         String numberOfGroupsInput = numGroups.getText().toString().trim();
-        return ((namesPerGroupInput.length() > 0 && numberOfGroupsInput.length() > 0)
-                && (Integer.parseInt(namesPerGroupInput) > 0 && Integer.parseInt(numberOfGroupsInput) > 0));
+        return isInputValid(namesPerGroupInput) && isInputValid(numberOfGroupsInput);
     }
 }

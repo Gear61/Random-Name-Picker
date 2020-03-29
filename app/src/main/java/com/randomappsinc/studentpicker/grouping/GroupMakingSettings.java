@@ -2,14 +2,20 @@ package com.randomappsinc.studentpicker.grouping;
 
 class GroupMakingSettings {
 
+    private static final int DEFAULT_NAMES_PER_GROUP = 2;
+
     private int nameListSize;
     private int numOfNamesPerGroup;
     private int numOfGroups;
 
-    GroupMakingSettings(int nameListSize, int numOfNamesPerGroup, int numOfGroups) {
+    GroupMakingSettings(int nameListSize) {
         this.nameListSize = nameListSize;
-        this.numOfNamesPerGroup = numOfNamesPerGroup;
-        this.numOfGroups = numOfGroups;
+        this.numOfNamesPerGroup = DEFAULT_NAMES_PER_GROUP;
+
+        int numGroupsToFill = nameListSize / DEFAULT_NAMES_PER_GROUP;
+        numOfGroups = (nameListSize % DEFAULT_NAMES_PER_GROUP) > 0
+                ? numGroupsToFill + 1
+                : numGroupsToFill;
     }
 
     int getNumOfNamesPerGroup() {
