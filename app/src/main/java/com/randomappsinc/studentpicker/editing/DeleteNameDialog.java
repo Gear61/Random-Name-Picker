@@ -73,7 +73,7 @@ public class DeleteNameDialog {
             deleteManyDialog.show();
         } else {
             amountToDelete = 1;
-            confirmSingleDeletionDialog.setContent(String.format(confirmTemplate, currentName));
+            confirmSingleDeletionDialog.setContent(String.format(confirmTemplate, currentName.getName()));
             confirmSingleDeletionDialog.show();
         }
     }
