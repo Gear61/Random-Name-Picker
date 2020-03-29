@@ -107,6 +107,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     @OnClick(R.id.make_groups)
     void makeGroups() {
         if (listInfo.getNumNames() == 0) {
+            UIUtils.showLongToast(R.string.group_no_names_error_message, getContext());
             return;
         }
 
