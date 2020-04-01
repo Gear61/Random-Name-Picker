@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/top_rounded_blue_background"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    >
+
+    <View
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp"
+        android:layout_width="60dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_white_rectangle"
+        />
+
+    <LinearLayout
+        android:id="@+id/sheet_create_name_list"
+        style="@style/add_bottom_sheet_option_container"
+        >
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:text="@string/add_circle_icon"
+            style="@style/add_bottom_sheet_icon"
+            />
+
+        <TextView
+            android:text="@string/create_name_list"
+            style="@style/add_bottom_sheet_text"
+            />
+    </LinearLayout>
+
+    <View style="@style/white_horizontal_divider"/>
+
+    <LinearLayout
+        android:id="@+id/sheet_import_from_txt"
+        style="@style/add_bottom_sheet_option_container"
+        >
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:text="@string/document_icon"
+            style="@style/add_bottom_sheet_icon"
+            />
+
+        <TextView
+            android:text="@string/import_from_txt_file"
+            style="@style/add_bottom_sheet_text"
+            />
+    </LinearLayout>
+</LinearLayout>

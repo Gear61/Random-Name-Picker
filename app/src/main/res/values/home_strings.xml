@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_icon">{ion-android-home}</string>
+    <string name="settings_icon">{ion-android-settings}</string>
+    <string name="document_icon">{ion-document-text}</string>
+    <string name="add_circle_icon">{ion-android-add-circle}</string>
+    <string name="create_name_list">Create name list</string>
+    <string name="import_from_txt_file">Import from .txt file</string>
+</resources>
