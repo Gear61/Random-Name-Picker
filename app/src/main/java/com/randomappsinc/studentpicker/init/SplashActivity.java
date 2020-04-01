@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.randomappsinc.studentpicker.home.MainActivity;
+import com.randomappsinc.studentpicker.home.HomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 }
