@@ -27,6 +27,9 @@
     <string name="confirm_deletion_title">Confirm List Deletion</string>
     <string name="confirm_deletion_message">Are you sure you want to delete your name list %s?</string>
     <string name="name_input_with_speech_prompt">Tell us what name you want to add</string>
+    <string name="create_new_list_title">Create New List</string>
+    <string name="create_list_hint">List name</string>
+    <string name="create">Create</string>
     <string name="new_list_name">New list name</string>
     <string name="new_name">New name</string>
     <string name="change_name">Change Name</string>
