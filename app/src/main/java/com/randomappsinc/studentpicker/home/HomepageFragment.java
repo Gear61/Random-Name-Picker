@@ -1,8 +1,6 @@
 package com.randomappsinc.studentpicker.home;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -23,6 +20,7 @@ import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class HomepageFragment extends Fragment implements
@@ -32,9 +30,6 @@ public class HomepageFragment extends Fragment implements
     public static HomepageFragment getInstance() {
         return new HomepageFragment();
     }
-
-    private static final int IMPORT_FILE_REQUEST_CODE = 1;
-    private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
 
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noContent;
@@ -71,10 +66,21 @@ public class HomepageFragment extends Fragment implements
         setNoContent();
     }
 
+    @OnClick(R.id.create_name_list_button)
+    public void createNameList() {
+        ((HomeActivity) getActivity()).createNameList();
+    }
+
+    @OnClick(R.id.import_from_txt_button)
+    public void importFromTextFile() {
+        ((HomeActivity) getActivity()).importFromTextFile();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         nameListsAdapter.refresh(dataSource.getNameLists());
+        setNoContent();
     }
 
     @Override
@@ -117,34 +123,6 @@ public class HomepageFragment extends Fragment implements
         } else {
             noContent.setVisibility(View.GONE);
             lists.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case IMPORT_FILE_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-                    Uri uri = data.getData();
-
-                    // Persist ability to read from this file
-                    int takeFlags = data.getFlags()
-                            & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    getContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
-
-                    String uriString = uri.toString();
-                    Intent intent = new Intent(getActivity(), ImportFromTextFileActivity.class);
-                    intent.putExtra(Constants.FILE_URI_KEY, uriString);
-                    startActivityForResult(intent, SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE);
-                }
-                break;
-            case SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    nameListsAdapter.refresh(dataSource.getNameLists());
-                }
-                break;
         }
     }
 

@@ -137,7 +137,7 @@ public class HomeActivity extends StandardActivity implements
     }
 
     @OnClick(R.id.sheet_import_from_txt)
-    public void importFromTxt() {
+    public void importFromTextFile() {
         hideBottomSheet();
         Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
