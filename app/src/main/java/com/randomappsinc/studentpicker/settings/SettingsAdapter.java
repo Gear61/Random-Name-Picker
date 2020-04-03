@@ -24,15 +24,13 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         void onItemClick(int position);
     }
 
-    @NonNull private ItemSelectionListener itemSelectionListener;
-    private Context context;
+    private @NonNull ItemSelectionListener itemSelectionListener;
     private String[] options;
     private String[] icons;
     private PreferencesManager preferencesManager;
 
     SettingsAdapter(Context context, @NonNull ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
-        this.context = context;
         this.options = context.getResources().getStringArray(R.array.settings_options);
         this.icons = context.getResources().getStringArray(R.array.settings_icons);
         this.preferencesManager = new PreferencesManager(context);
@@ -41,7 +39,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     @Override
     @NonNull
     public SettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.settings_list_item,
                 parent,
                 false);
