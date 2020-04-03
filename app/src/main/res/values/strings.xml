@@ -24,36 +24,11 @@
     <string name="speech_to_text_listening_mic_icon">{ion-android-microphone 40dp #FFFFFF}</string>
     <string name="speech_to_text_retry_mic_icon">{ion-android-microphone 40dp #1976D2}</string>
 
-    <string name="welcome">Welcome</string>
-    <string name="view_tutorial">View tutorial</string>
-    <string name="tutorial_prompt">
-        Would you like to view a very short tutorial on how to use this app?
-        You can review it at any time by clicking the info button in the toolbar above.
-    </string>
-    <string name="accept_tutorial">Yes please!</string>
     <string name="no_im_good">No, I\'m good</string>
-
-    <string name="got_it">GOT IT</string>
-    <string name="add_name_list_explanation">
-        To create a new name list, type its name into the bar on the left and click this button.
-        After that, it will appear below.
-        Click on any name list to open its edit list/choose names page.
-    </string>
 
     <string name="need_record_audio">
         In order to use speech to text functionality you need to give this app access to your device\'s microphone.
         Would you like to do that?
-    </string>
-    <string name="import_explanation">
-        This app can import name lists quickly and seamlessly from .txt files on your device
-        (names in the files must be new-line separated).
-        To do this, click this upload button at any time.
-    </string>
-
-    <string name="welcome_string">
-        And that\'s it! Thank you for downloading this app; I hope it serves you well!
-        If you need more help or have ideas on how to make this app more awesome,
-        please use the send feedback option in the settings menu to tell me!
     </string>
 
     <string name="please_rate">
