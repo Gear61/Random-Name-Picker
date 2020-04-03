@@ -13,7 +13,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
+import com.randomappsinc.studentpicker.listpage.ListActivity;
+import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -22,7 +25,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends StandardActivity implements BottomNavigationView.Listener {
+import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
+
+public class HomeActivity extends StandardActivity implements
+        BottomNavigationView.Listener, CreateListDialog.Listener {
 
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
 
@@ -30,7 +36,9 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
     @BindView(R.id.bottom_sheet) View bottomSheet;
 
     private HomepageFragmentController navigationController;
-    protected BottomSheetBehavior bottomSheetBehavior;
+    private CreateListDialog createListDialog;
+    private BottomSheetBehavior bottomSheetBehavior;
+    private DataSource dataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,19 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
         if (preferencesManager.rememberAppOpen() == 5) {
             showPleaseRateDialog();
         }
+
+        createListDialog = new CreateListDialog(this, this);
+        dataSource = new DataSource(this);
+    }
+
+    @Override
+    public void onCreateNewListConfirmed(String newListName) {
+        ListDO newListDO = dataSource.addNameList(newListName);
+
+        Intent intent = new Intent(this, ListActivity.class);
+        intent.putExtra(Constants.LIST_ID_KEY, newListDO.getId());
+        intent.putExtra(START_ON_EDIT_PAGE, true);
+        startActivity(intent);
     }
 
     private void showPleaseRateDialog() {
@@ -112,6 +133,7 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
     @OnClick(R.id.sheet_create_name_list)
     public void createNameList() {
         hideBottomSheet();
+        createListDialog.show();
     }
 
     @OnClick(R.id.sheet_import_from_txt)
