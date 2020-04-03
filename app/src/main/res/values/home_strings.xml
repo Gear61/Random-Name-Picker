@@ -5,5 +5,5 @@
     <string name="document_icon">{ion-document-text}</string>
     <string name="add_circle_icon">{ion-android-add-circle}</string>
     <string name="create_name_list">Create name list</string>
-    <string name="import_from_txt_file">Import from .txt file</string>
+    <string name="import_from_txt_file">Import list from .txt file</string>
 </resources>
