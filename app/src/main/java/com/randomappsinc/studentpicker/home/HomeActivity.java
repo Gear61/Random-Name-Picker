@@ -1,13 +1,20 @@
 package com.randomappsinc.studentpicker.home;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
+import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
 
@@ -16,6 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HomeActivity extends StandardActivity implements BottomNavigationView.Listener {
+
+    private static final int IMPORT_FILE_REQUEST_CODE = 1;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
@@ -50,6 +59,28 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
             }
         });
         bottomNavigation.setListener(this);
+
+        PreferencesManager preferencesManager = new PreferencesManager(this);
+        if (preferencesManager.rememberAppOpen() == 5) {
+            showPleaseRateDialog();
+        }
+    }
+
+    private void showPleaseRateDialog() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.please_rate)
+                .negativeText(R.string.no_im_good)
+                .positiveText(R.string.will_rate)
+                .onPositive((dialog, which) -> {
+                    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
+                        UIUtils.showLongToast(R.string.play_store_error, this);
+                        return;
+                    }
+                    startActivity(intent);
+                })
+                .show();
     }
 
     @Override
@@ -86,10 +117,35 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
     @OnClick(R.id.sheet_import_from_txt)
     public void importFromTxt() {
         hideBottomSheet();
+        Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        txtFileIntent.setType("text/*");
+        startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
     }
 
     private void hideBottomSheet() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomNavigation.setIsAddSheetExpanded(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMPORT_FILE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                Uri uri = data.getData();
+
+                // Persist ability to read from this file
+                int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+                String uriString = uri.toString();
+                Intent intent = new Intent(this, ImportFromTextFileActivity.class);
+                intent.putExtra(Constants.FILE_URI_KEY, uriString);
+                startActivity(intent);
+            }
+        }
     }
 }
