@@ -41,4 +41,36 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/white</item>
     </style>
+
+    <style name="no_lists_option_card">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardCornerRadius">3dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">8dp</item>
+    </style>
+
+    <style name="home_empty_state_option_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="home_empty_state_icon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:textColor">@color/app_blue</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="home_empty_state_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:textSize">17dp</item>
+    </style>
 </resources>
