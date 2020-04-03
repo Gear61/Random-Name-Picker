@@ -20,6 +20,7 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
 
+    private HomepageFragmentController navigationController;
     protected BottomSheetBehavior bottomSheetBehavior;
 
     @Override
@@ -27,6 +28,9 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        navigationController = new HomepageFragmentController(getSupportFragmentManager(), R.id.container);
+        navigationController.loadHomeInitially();
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -52,6 +56,7 @@ public class HomeActivity extends StandardActivity implements BottomNavigationVi
     public void onNavItemSelected(int viewId) {
         UIUtils.hideKeyboard(this);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        navigationController.onNavItemSelected(viewId);
 
         switch (viewId) {
             case R.id.home:
