@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,7 +37,7 @@ public class HomepageFragment extends Fragment implements
     private static final int SAVE_TXT_FILE_LIST_IMPORT_REQUEST_CODE = 2;
 
     @BindView(R.id.user_lists) RecyclerView lists;
-    @BindView(R.id.no_content) TextView noContent;
+    @BindView(R.id.no_content) View noContent;
 
     private PreferencesManager preferencesManager;
     private DataSource dataSource;

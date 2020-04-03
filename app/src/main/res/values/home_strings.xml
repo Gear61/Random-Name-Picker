@@ -6,4 +6,13 @@
     <string name="add_circle_icon">{ion-android-add-circle}</string>
     <string name="create_name_list">Create name list</string>
     <string name="import_from_txt_file">Import list from .txt file</string>
+
+    <string name="homepage_empty_text">
+        Welcome to Random Name Picker!
+        Here\'s how you can start adding name lists:
+    </string>
+
+    <string name="home_add_options_info_text">
+        You can also find all of these options by tapping the {ion-android-add-circle} button at the bottom.
+    </string>
 </resources>
