@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    tools:ignore="SpUsage"
+    >
+
+    <EditText
+        android:id="@+id/search_input"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:hint="@string/search"
+        android:textSize="17dp"
+        android:background="@drawable/search_box_border"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:text="@string/search_icon"
+        android:layout_gravity="start|center_vertical"
+        style="@style/search_icon"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/clear_search"
+        android:text="@string/clear_icon"
+        android:layout_gravity="end|center_vertical"
+        android:visibility="gone"
+        style="@style/search_icon"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/voice_search"
+        android:text="@string/voice_icon"
+        android:layout_gravity="end|center_vertical"
+        style="@style/search_icon"
+        />
+</FrameLayout>

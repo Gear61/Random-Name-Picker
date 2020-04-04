@@ -23,7 +23,7 @@ import butterknife.OnClick;
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
     private final Comparator<ListDO> LIST_SORTER =
-            (listOne, listTwo) -> listOne.getName().compareTo(listTwo.getName());
+            (listOne, listTwo) -> listOne.getName().toLowerCase().compareTo(listTwo.getName().toLowerCase());
 
     public interface Delegate {
         void onItemClick(ListDO listDO);
@@ -35,24 +35,43 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         void setNoContent();
     }
 
-    private List<ListDO> nameLists = new ArrayList<>();
+    private List<ListDO> allNameLists = new ArrayList<>();
+    private List<ListDO> filteredLists = new ArrayList<>();
+    private String searchTerm = "";
     private Delegate delegate;
 
     NameListsAdapter(Delegate delegate, List<ListDO> initialNameLists) {
         this.delegate = delegate;
-        this.nameLists.addAll(initialNameLists);
-        Collections.sort(nameLists, LIST_SORTER);
+        this.allNameLists.addAll(initialNameLists);
+        this.filteredLists.addAll(initialNameLists);
+        Collections.sort(filteredLists, LIST_SORTER);
     }
 
     void refresh(List<ListDO> newNameLists) {
-        nameLists.clear();
-        nameLists.addAll(newNameLists);
-        Collections.sort(nameLists, LIST_SORTER);
+        allNameLists.clear();
+        allNameLists.addAll(newNameLists);
+        filter(searchTerm);
+        notifyDataSetChanged();
+    }
+
+    void filter(String searchTerm) {
+        this.searchTerm = searchTerm;
+        filteredLists.clear();
+        if (searchTerm.isEmpty()) {
+            filteredLists.addAll(allNameLists);
+        } else {
+            for (ListDO listDO : allNameLists) {
+                if (listDO.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
+                    filteredLists.add(listDO);
+                }
+            }
+        }
+        Collections.sort(filteredLists, LIST_SORTER);
         notifyDataSetChanged();
     }
 
     ListDO getItem(int position) {
-        return nameLists.get(position);
+        return filteredLists.get(position);
     }
 
     @NonNull
@@ -70,23 +89,17 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     @Override
     public int getItemCount() {
-        return nameLists.size();
-    }
-
-    void addList(ListDO listDO) {
-        nameLists.add(listDO);
-        Collections.sort(nameLists, LIST_SORTER);
-        notifyDataSetChanged();
-        delegate.setNoContent();
+        return filteredLists.size();
     }
 
     void renameItem(int position, String newName) {
-        nameLists.get(position).setName(newName);
+        filteredLists.get(position).setName(newName);
         notifyItemChanged(position);
     }
 
     void deleteItem(int position) {
-        nameLists.remove(position);
+        ListDO removedList = filteredLists.remove(position);
+        allNameLists.remove(removedList);
         notifyItemRemoved(position);
         delegate.setNoContent();
     }
@@ -101,24 +114,24 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         }
 
         void loadList(int position) {
-            this.listName.setText(nameLists.get(position).getName());
+            this.listName.setText(filteredLists.get(position).getName());
         }
 
         @OnClick(R.id.edit_icon)
         void renameList() {
-            ListDO listDO = nameLists.get(getAdapterPosition());
+            ListDO listDO = filteredLists.get(getAdapterPosition());
             delegate.onItemEditClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @OnClick(R.id.delete_icon)
         void deleteList() {
-            ListDO listDO = nameLists.get(getAdapterPosition());
+            ListDO listDO = filteredLists.get(getAdapterPosition());
             delegate.onItemDeleteClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @Override
         public void onClick(View v) {
-            delegate.onItemClick(nameLists.get(getAdapterPosition()));
+            delegate.onItemClick(filteredLists.get(getAdapterPosition()));
         }
     }
 }
