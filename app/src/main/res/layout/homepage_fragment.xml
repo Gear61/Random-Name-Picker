@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/focal_point"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
+
+    <include
+        android:id="@+id/search_bar"
+        layout="@layout/search_bar"
+        />
 
     <LinearLayout
         android:id="@+id/no_content"
@@ -78,8 +87,6 @@
         android:id="@+id/user_lists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="88dp"
-        android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
-</FrameLayout>
+</LinearLayout>

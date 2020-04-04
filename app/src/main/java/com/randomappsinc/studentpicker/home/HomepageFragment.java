@@ -2,9 +2,11 @@ package com.randomappsinc.studentpicker.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,15 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class HomepageFragment extends Fragment implements
@@ -31,6 +36,11 @@ public class HomepageFragment extends Fragment implements
         return new HomepageFragment();
     }
 
+    @BindView(R.id.focal_point) View focusSink;
+    @BindView(R.id.search_bar) View searchBar;
+    @BindView(R.id.search_input) EditText searchInput;
+    @BindView(R.id.voice_search) View voiceSearch;
+    @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noContent;
 
@@ -39,6 +49,7 @@ public class HomepageFragment extends Fragment implements
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
     private DeleteListDialog deleteListDialog;
+    private SpeechToTextManager speechToTextManager;
     private Unbinder unbinder;
 
     @Override
@@ -63,7 +74,31 @@ public class HomepageFragment extends Fragment implements
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
+        // When the user is scrolling to browse flashcards, close the soft keyboard
+        lists.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    UIUtils.hideKeyboard(getActivity());
+                    focusSink.requestFocus();
+                }
+            }
+        });
+
         setNoContent();
+    }
+
+    @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void afterTextChanged(Editable input) {
+        nameListsAdapter.filter(input.toString());
+        voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
+        clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
+    }
+
+    @OnClick(R.id.clear_search)
+    public void clearSearch() {
+        searchInput.setText("");
     }
 
     @OnClick(R.id.create_name_list_button)
@@ -79,6 +114,7 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
+        focusSink.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists());
         setNoContent();
     }
@@ -118,10 +154,12 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void setNoContent() {
         if (nameListsAdapter.getItemCount() == 0) {
+            searchBar.setVisibility(View.GONE);
             lists.setVisibility(View.GONE);
             noContent.setVisibility(View.VISIBLE);
         } else {
             noContent.setVisibility(View.GONE);
+            searchBar.setVisibility(View.VISIBLE);
             lists.setVisibility(View.VISIBLE);
         }
     }
