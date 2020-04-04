@@ -19,6 +19,7 @@ public class MyApplication extends Application {
                 .with(new FontAwesomeModule());
     }
 
+    @Deprecated
     public static Context getAppContext() {
         return context;
     }
