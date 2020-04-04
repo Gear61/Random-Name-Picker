@@ -42,7 +42,7 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.user_lists) RecyclerView lists;
-    @BindView(R.id.no_content) View noContent;
+    @BindView(R.id.no_content) View noListsAtAll;
 
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
@@ -152,14 +152,21 @@ public class HomepageFragment extends Fragment implements
 
     @Override
     public void setNoContent() {
-        if (nameListsAdapter.getItemCount() == 0) {
+        if (dataSource.getNumLists() == 0L) {
             searchBar.setVisibility(View.GONE);
             lists.setVisibility(View.GONE);
-            noContent.setVisibility(View.VISIBLE);
+            // noSetsMatch.setVisibility(View.GONE);
+            noListsAtAll.setVisibility(View.VISIBLE);
         } else {
-            noContent.setVisibility(View.GONE);
+            noListsAtAll.setVisibility(View.GONE);
             searchBar.setVisibility(View.VISIBLE);
-            lists.setVisibility(View.VISIBLE);
+            if (nameListsAdapter.getItemCount() == 0) {
+                lists.setVisibility(View.GONE);
+                // noSetsMatch.setVisibility(View.VISIBLE);
+            } else {
+                // noSetsMatch.setVisibility(View.GONE);
+                lists.setVisibility(View.VISIBLE);
+            }
         }
     }
 

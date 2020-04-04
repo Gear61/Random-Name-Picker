@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
@@ -49,6 +50,14 @@ public class DataSource {
         cursor.close();
         close();
         return "";
+    }
+
+    public long getNumLists() {
+        open();
+        long numLists = DatabaseUtils.queryNumEntries(
+                database, MySQLiteHelper.LISTS_TABLE_NAME, null, null);
+        close();
+        return numLists;
     }
 
     public List<ListDO> getNameLists(String searchTerm) {
