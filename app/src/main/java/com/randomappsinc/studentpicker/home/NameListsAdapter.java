@@ -35,43 +35,24 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         void setNoContent();
     }
 
-    private List<ListDO> allNameLists = new ArrayList<>();
-    private List<ListDO> filteredLists = new ArrayList<>();
-    private String searchTerm = "";
+    private List<ListDO> nameLists = new ArrayList<>();
     private Delegate delegate;
 
     NameListsAdapter(Delegate delegate, List<ListDO> initialNameLists) {
         this.delegate = delegate;
-        this.allNameLists.addAll(initialNameLists);
-        this.filteredLists.addAll(initialNameLists);
-        Collections.sort(filteredLists, LIST_SORTER);
+        this.nameLists.addAll(initialNameLists);
+        Collections.sort(nameLists, LIST_SORTER);
     }
 
     void refresh(List<ListDO> newNameLists) {
-        allNameLists.clear();
-        allNameLists.addAll(newNameLists);
-        filter(searchTerm);
-        notifyDataSetChanged();
-    }
-
-    void filter(String searchTerm) {
-        this.searchTerm = searchTerm;
-        filteredLists.clear();
-        if (searchTerm.isEmpty()) {
-            filteredLists.addAll(allNameLists);
-        } else {
-            for (ListDO listDO : allNameLists) {
-                if (listDO.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
-                    filteredLists.add(listDO);
-                }
-            }
-        }
-        Collections.sort(filteredLists, LIST_SORTER);
+        nameLists.clear();
+        nameLists.addAll(newNameLists);
+        Collections.sort(nameLists, LIST_SORTER);
         notifyDataSetChanged();
     }
 
     ListDO getItem(int position) {
-        return filteredLists.get(position);
+        return nameLists.get(position);
     }
 
     @NonNull
@@ -89,17 +70,16 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     @Override
     public int getItemCount() {
-        return filteredLists.size();
+        return nameLists.size();
     }
 
     void renameItem(int position, String newName) {
-        filteredLists.get(position).setName(newName);
+        nameLists.get(position).setName(newName);
         notifyItemChanged(position);
     }
 
     void deleteItem(int position) {
-        ListDO removedList = filteredLists.remove(position);
-        allNameLists.remove(removedList);
+        nameLists.remove(position);
         notifyItemRemoved(position);
         delegate.setNoContent();
     }
@@ -114,24 +94,24 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         }
 
         void loadList(int position) {
-            this.listName.setText(filteredLists.get(position).getName());
+            this.listName.setText(nameLists.get(position).getName());
         }
 
         @OnClick(R.id.edit_icon)
         void renameList() {
-            ListDO listDO = filteredLists.get(getAdapterPosition());
+            ListDO listDO = nameLists.get(getAdapterPosition());
             delegate.onItemEditClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @OnClick(R.id.delete_icon)
         void deleteList() {
-            ListDO listDO = filteredLists.get(getAdapterPosition());
+            ListDO listDO = nameLists.get(getAdapterPosition());
             delegate.onItemDeleteClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @Override
         public void onClick(View v) {
-            delegate.onItemClick(filteredLists.get(getAdapterPosition()));
+            delegate.onItemClick(nameLists.get(getAdapterPosition()));
         }
     }
 }

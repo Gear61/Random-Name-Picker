@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -50,12 +51,18 @@ public class DataSource {
         return "";
     }
 
-    public List<ListDO> getNameLists() {
+    public List<ListDO> getNameLists(String searchTerm) {
         List<ListDO> lists = new ArrayList<>();
         open();
-        String[] columns = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_LIST_NAME};
-        Cursor cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, null,
-                null, null, null, null);
+        Cursor cursor;
+        if (TextUtils.isEmpty(searchTerm)) {
+            String[] columns = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_LIST_NAME};
+            cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, null,
+                    null, null, null, null);
+        } else {
+            cursor = database.rawQuery("SELECT * FROM " + MySQLiteHelper.LISTS_TABLE_NAME + " WHERE " +
+                    MySQLiteHelper.COLUMN_LIST_NAME + " like ? COLLATE NOCASE", new String[] {searchTerm + "%"});
+        }
         while (cursor.moveToNext()) {
             lists.add(new ListDO(cursor.getInt(0), cursor.getString(1)));
         }
