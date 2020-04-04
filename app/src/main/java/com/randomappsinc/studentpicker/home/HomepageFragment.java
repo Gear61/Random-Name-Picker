@@ -70,7 +70,7 @@ public class HomepageFragment extends Fragment implements
         deleteListDialog = new DeleteListDialog(this, getContext());
         dataSource = new DataSource(getContext());
 
-        nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists());
+        nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists(""));
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
@@ -91,7 +91,7 @@ public class HomepageFragment extends Fragment implements
 
     @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
-        nameListsAdapter.filter(input.toString());
+        nameListsAdapter.refresh(dataSource.getNameLists(input.toString()));
         voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
@@ -114,8 +114,7 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        focusSink.requestFocus();
-        nameListsAdapter.refresh(dataSource.getNameLists());
+        nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
     }
 
