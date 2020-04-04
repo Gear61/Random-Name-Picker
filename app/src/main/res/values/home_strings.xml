@@ -15,4 +15,6 @@
     <string name="home_add_options_info_text">
         You can also find all of these options by tapping the {ion-android-add-circle} button at the bottom.
     </string>
+
+    <string name="no_lists_search">You do not have any lists that match your search.</string>
 </resources>
