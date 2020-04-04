@@ -34,7 +34,7 @@ public class HomepageFragment extends Fragment implements
         NameListsAdapter.Delegate, RenameListDialog.Listener,
         DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
-    public static HomepageFragment getInstance() {
+    static HomepageFragment getInstance() {
         return new HomepageFragment();
     }
 
@@ -58,7 +58,8 @@ public class HomepageFragment extends Fragment implements
     private Unbinder unbinder;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.homepage_fragment,
                 container,
@@ -97,7 +98,7 @@ public class HomepageFragment extends Fragment implements
     }
 
     @OnClick(R.id.voice_search)
-    public void searchWithVoice() {
+    void searchWithVoice() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, getContext())) {
             speechToTextManager.startSpeechToTextFlow();
         } else {
@@ -112,7 +113,7 @@ public class HomepageFragment extends Fragment implements
     }
 
     @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    public void afterTextChanged(Editable input) {
+    void afterTextChanged(Editable input) {
         nameListsAdapter.refresh(dataSource.getNameLists(input.toString()));
         setNoContent();
         voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
@@ -120,23 +121,24 @@ public class HomepageFragment extends Fragment implements
     }
 
     @OnClick(R.id.clear_search)
-    public void clearSearch() {
+    void clearSearch() {
         searchInput.setText("");
     }
 
     @OnClick(R.id.create_name_list_button)
-    public void createNameList() {
+    void createNameList() {
         ((HomeActivity) getActivity()).createNameList();
     }
 
     @OnClick(R.id.import_from_txt_button)
-    public void importFromTextFile() {
+    void importFromTextFile() {
         ((HomeActivity) getActivity()).importFromTextFile();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        focusSink.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
     }
