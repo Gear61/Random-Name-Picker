@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.home;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
@@ -30,11 +32,13 @@ import butterknife.Unbinder;
 
 public class HomepageFragment extends Fragment implements
         NameListsAdapter.Delegate, RenameListDialog.Listener,
-        DeleteListDialog.Listener {
+        DeleteListDialog.Listener, SpeechToTextManager.Listener {
 
     public static HomepageFragment getInstance() {
         return new HomepageFragment();
     }
+
+    private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
     @BindView(R.id.focal_point) View focusSink;
     @BindView(R.id.search_bar) View searchBar;
@@ -74,6 +78,7 @@ public class HomepageFragment extends Fragment implements
         nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists(""));
         lists.setAdapter(nameListsAdapter);
         lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        setNoContent();
 
         // When the user is scrolling to browse flashcards, close the soft keyboard
         lists.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -87,7 +92,23 @@ public class HomepageFragment extends Fragment implements
             }
         });
 
-        setNoContent();
+        speechToTextManager = new SpeechToTextManager(getContext(), this);
+        speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
+    }
+
+    @OnClick(R.id.voice_search)
+    public void searchWithVoice() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, getContext())) {
+            speechToTextManager.startSpeechToTextFlow();
+        } else {
+            PermissionUtils.requestPermission(
+                    this, Manifest.permission.RECORD_AUDIO, RECORD_AUDIO_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onTextSpoken(String spokenText) {
+        searchInput.setText(spokenText);
     }
 
     @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
