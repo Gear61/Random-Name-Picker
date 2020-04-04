@@ -170,10 +170,4 @@ public class HomeActivity extends StandardActivity implements
             }
         }
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        createListDialog.cleanUp();
-    }
 }

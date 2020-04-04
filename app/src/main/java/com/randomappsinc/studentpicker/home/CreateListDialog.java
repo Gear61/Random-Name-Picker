@@ -14,11 +14,8 @@ public class CreateListDialog {
     }
 
     private MaterialDialog adderDialog;
-    protected Listener listener;
 
     CreateListDialog(Context context, Listener listener) {
-        this.listener = listener;
-
         adderDialog = new MaterialDialog.Builder(context)
                 .title(R.string.create_new_list_title)
                 .alwaysCallInputCallback()
@@ -42,9 +39,5 @@ public class CreateListDialog {
     public void show() {
         adderDialog.getInputEditText().setText("");
         adderDialog.show();
-    }
-
-    public void cleanUp() {
-        listener = null;
     }
 }
