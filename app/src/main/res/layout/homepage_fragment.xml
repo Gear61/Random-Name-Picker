@@ -15,6 +15,12 @@
         layout="@layout/search_bar"
         />
 
+    <TextView
+        android:id="@+id/no_lists_match"
+        android:text="@string/no_lists_search"
+        style="@style/empty_state_text"
+        />
+
     <LinearLayout
         android:id="@+id/no_content"
         android:layout_width="match_parent"

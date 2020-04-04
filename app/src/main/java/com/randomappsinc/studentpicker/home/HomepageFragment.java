@@ -39,6 +39,7 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.focal_point) View focusSink;
     @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.search_input) EditText searchInput;
+    @BindView(R.id.no_lists_match) View noListsMatch;
     @BindView(R.id.voice_search) View voiceSearch;
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.user_lists) RecyclerView lists;
@@ -92,6 +93,7 @@ public class HomepageFragment extends Fragment implements
     @OnTextChanged(value = R.id.search_input, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void afterTextChanged(Editable input) {
         nameListsAdapter.refresh(dataSource.getNameLists(input.toString()));
+        setNoContent();
         voiceSearch.setVisibility(input.length() == 0 ? View.VISIBLE : View.GONE);
         clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
@@ -155,16 +157,16 @@ public class HomepageFragment extends Fragment implements
         if (dataSource.getNumLists() == 0L) {
             searchBar.setVisibility(View.GONE);
             lists.setVisibility(View.GONE);
-            // noSetsMatch.setVisibility(View.GONE);
+            noListsMatch.setVisibility(View.GONE);
             noListsAtAll.setVisibility(View.VISIBLE);
         } else {
             noListsAtAll.setVisibility(View.GONE);
             searchBar.setVisibility(View.VISIBLE);
             if (nameListsAdapter.getItemCount() == 0) {
                 lists.setVisibility(View.GONE);
-                // noSetsMatch.setVisibility(View.VISIBLE);
+                noListsMatch.setVisibility(View.VISIBLE);
             } else {
-                // noSetsMatch.setVisibility(View.GONE);
+                noListsMatch.setVisibility(View.GONE);
                 lists.setVisibility(View.VISIBLE);
             }
         }
