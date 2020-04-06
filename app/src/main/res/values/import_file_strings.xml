@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="import_intro">Here are the contents of the .txt file you imported.
+    <string name="import_intro">
+        Here are the contents of the .txt file you imported.
         After you make sure that everything is right (one name per line),
-        hit the \"Add name list\" button.</string>
+        hit the \"Save\" button.
+    </string>
     <string name="import_name_list">Import Name List</string>
     <string name="names">Names</string>
     <string name="add_name_list">Add name list</string>
     <string name="load_file_fail">We failed to load the contents of your .txt file.</string>
-    <string name="invalid_file">This app can only import .txt files.</string>
     <string name="import_success">Name list successfully imported.</string>
 </resources>

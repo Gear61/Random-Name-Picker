@@ -54,8 +54,8 @@
 
     <string name="okay">OK</string>
     <string name="cancel">Cancel</string>
-
     <string name="search">Search</string>
+    <string name="save">Save</string>
 
     <string name="clear_icon">{ion-android-close}</string>
     <string name="search_icon">{ion-android-search}</string>

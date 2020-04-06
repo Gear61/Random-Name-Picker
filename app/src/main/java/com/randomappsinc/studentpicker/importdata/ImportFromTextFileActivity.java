@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.importdata;
 
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,8 +8,12 @@ import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -26,9 +31,11 @@ import butterknife.OnClick;
 
 public class ImportFromTextFileActivity extends StandardActivity {
 
-    @BindView(R.id.parent) View parent;
     @BindView(R.id.list_name) EditText listName;
     @BindView(R.id.names) EditText names;
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
+
+    private BannerAdManager bannerAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +43,16 @@ public class ImportFromTextFileActivity extends StandardActivity {
         setContentView(R.layout.import_name_list);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        bannerAdManager = new BannerAdManager(bannerAdContainer);
+        bannerAdManager.maybeLoadAd();
 
         extractNameListInfo();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     private void extractNameListInfo() {
@@ -98,11 +113,11 @@ public class ImportFromTextFileActivity extends StandardActivity {
         });
     }
 
-    @OnClick(R.id.add_list)
+    @OnClick(R.id.save)
     public void importNameList() {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
-            UIUtils.showSnackbar(parent, getString(R.string.blank_list_name));
+            UIUtils.showLongToast(R.string.blank_list_name, this);
         } else {
             DataSource dataSource = new DataSource(this);
             ListDO newList = dataSource.addNameList(newListName);
@@ -115,7 +130,6 @@ public class ImportFromTextFileActivity extends StandardActivity {
                 }
             }
             UIUtils.showShortToast(R.string.import_success, this);
-            setResult(RESULT_OK);
             finish();
         }
     }
