@@ -26,7 +26,6 @@ public class BannerAdManager extends AdListener {
     public BannerAdManager(ViewGroup adContainerView) {
         this.adContainerView = adContainerView;
         this.preferencesManager = new PreferencesManager(adContainerView.getContext());
-        maybeSetUpAd();
     }
 
     private void maybeSetUpAd() {
@@ -60,6 +59,12 @@ public class BannerAdManager extends AdListener {
             adView.animate()
                     .alpha(1f)
                     .setDuration(adView.getResources().getInteger(R.integer.default_anim_length));
+        }
+    }
+
+    public void onResume() {
+        if (adView == null) {
+            maybeSetUpAd();
         }
     }
 

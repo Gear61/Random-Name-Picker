@@ -1,12 +1,14 @@
 package com.randomappsinc.studentpicker.settings;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -34,6 +37,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     private static final String OTHER_APPS_URL = "https://play.google.com/store/apps/dev?id=9093438553713389916";
     private static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
+    @BindView(R.id.settings_root) LinearLayout rootView;
     @BindView(R.id.settings_options) RecyclerView settingsOptions;
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
@@ -41,6 +45,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private PreferencesManager preferencesManager;
+    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     @Override
@@ -62,6 +67,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
         itemDecorator.setDrawable(lineDivider);
         settingsOptions.addItemDecoration(itemDecorator);
         settingsOptions.setAdapter(new SettingsAdapter(getContext(), this));
+        bannerAdManager = new BannerAdManager(rootView);
     }
 
     @Override
@@ -99,6 +105,18 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bannerAdManager.onResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override
