@@ -20,6 +20,7 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_ENABLED = "shakeEnabled";
+    private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
@@ -35,14 +36,6 @@ public class PreferencesManager {
 
     public void renameList(String oldName, String newName) {
         moveNamesListCache(oldName, newName);
-    }
-
-    public boolean getFirstTimeUser() {
-        return prefs.getBoolean(FIRST_TIME_KEY, true);
-    }
-
-    public void setFirstTimeUser(boolean firstTimeUser) {
-        prefs.edit().putBoolean(FIRST_TIME_KEY, firstTimeUser).apply();
     }
 
     public void setNameListState(String listName, ListInfo currentState, ChoosingSettings settings) {
@@ -96,5 +89,13 @@ public class PreferencesManager {
 
     public boolean isShakeEnabled() {
         return prefs.getBoolean(SHAKE_ENABLED, false);
+    }
+
+    public void setShouldShowAds(boolean shouldShowAds) {
+        prefs.edit().putBoolean(SHOULD_SHOW_ADS_KEY, shouldShowAds).apply();
+    }
+
+    public boolean shouldShowAds() {
+        return prefs.getBoolean(SHOULD_SHOW_ADS_KEY, true);
     }
 }
