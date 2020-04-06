@@ -35,12 +35,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
+                android:hint="@string/loading"
                 android:importantForAutofill="no"
                 android:padding="8dp"
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:background="@drawable/rounded_blue_rectangle_border"
-                android:hint="@string/add_list_hint"
                 />
 
             <EditText
@@ -51,10 +51,10 @@
                 android:minLines="6"
                 android:scrollbars="vertical"
                 android:inputType="textCapWords|textMultiLine"
+                android:hint="@string/loading"
                 android:importantForAutofill="no"
                 android:gravity="top|start"
                 android:padding="8dp"
-                android:hint="@string/names"
                 android:background="@drawable/rounded_blue_rectangle_border"
                 />
         </LinearLayout>
