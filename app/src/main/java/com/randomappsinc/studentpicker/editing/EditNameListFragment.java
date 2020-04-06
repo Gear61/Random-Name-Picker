@@ -2,8 +2,8 @@ package com.randomappsinc.studentpicker.editing;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -59,6 +61,7 @@ public class EditNameListFragment extends Fragment implements
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.content_list) RecyclerView namesList;
     @BindView(R.id.plus_icon) ImageView plus;
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     private EditNameListAdapter namesAdapter;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
@@ -69,6 +72,7 @@ public class EditNameListFragment extends Fragment implements
     private DeleteNameDialog deleteNameDialog;
     private DuplicationDialog duplicationDialog;
     private SpeechToTextManager speechToTextManager;
+    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     @Override
@@ -79,11 +83,9 @@ public class EditNameListFragment extends Fragment implements
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.lists_with_add_content, container, false);
+        View rootView = inflater.inflate(R.layout.edit_name_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        newNameInput.setHint(R.string.name_hint);
-        newNameInput.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         newNameInput.setAdapter(new NameCreationAutoCompleteAdapter(getActivity()));
         plus.setImageDrawable(new IconDrawable(
                 getActivity(),
@@ -110,6 +112,7 @@ public class EditNameListFragment extends Fragment implements
         renameDialog = new RenameDialog(getActivity(), this);
         deleteNameDialog = new DeleteNameDialog(getActivity(), this);
         duplicationDialog = new DuplicationDialog(getActivity(), this);
+        bannerAdManager = new BannerAdManager(bannerAdContainer);
     }
 
     @OnClick(R.id.add_item)
@@ -213,6 +216,18 @@ public class EditNameListFragment extends Fragment implements
     public void onTextSpoken(String spokenText) {
         newNameInput.setText(spokenText);
         newNameInput.setSelection(spokenText.length());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bannerAdManager.onResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override

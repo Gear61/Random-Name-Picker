@@ -1,4 +1,4 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,9 +12,10 @@
 
     <LinearLayout
         android:id="@+id/focal_point"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottom_ad_banner_container"
+        android:orientation="vertical"
         android:focusable="true"
         android:focusableInTouchMode="true"
         >
@@ -52,6 +53,8 @@
                 android:layout_height="44dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="55dp"
+                android:hint="@string/name_hint"
+                android:inputType="textCapWords"
                 android:completionThreshold="1"
                 android:padding="8dp"
                 android:textColor="@color/dark_gray"
@@ -86,4 +89,11 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
     </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_ad_banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>

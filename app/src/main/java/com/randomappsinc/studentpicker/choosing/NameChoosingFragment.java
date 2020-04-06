@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -56,6 +59,7 @@ public class NameChoosingFragment extends Fragment
     @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) RecyclerView namesList;
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
@@ -73,6 +77,7 @@ public class NameChoosingFragment extends Fragment
     private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
     private ListInfo listInfo;
+    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     @Override
@@ -133,6 +138,7 @@ public class NameChoosingFragment extends Fragment
 
         settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
+        bannerAdManager = new BannerAdManager(bannerAdContainer);
     }
 
     @Override
@@ -266,6 +272,13 @@ public class NameChoosingFragment extends Fragment
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
+        bannerAdManager.onResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override

@@ -107,12 +107,6 @@ public class HomepageFragment extends Fragment implements
         bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
-    }
-
     @OnClick(R.id.voice_search)
     void searchWithVoice() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, getContext())) {
@@ -158,6 +152,12 @@ public class HomepageFragment extends Fragment implements
         rootView.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override

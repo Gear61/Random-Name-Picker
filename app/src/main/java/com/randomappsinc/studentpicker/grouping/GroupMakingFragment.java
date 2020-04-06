@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.grouping;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.database.NameListDataManager;
@@ -42,6 +45,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
 
     @BindView(R.id.no_groups) TextView noGroups;
     @BindView(R.id.groups_list) RecyclerView groupsList;
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     private GroupMakingSettings settings;
     private GroupMakingSettingsDialog settingsDialog;
@@ -49,6 +53,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     private ListInfo listInfo;
     private DataSource dataSource;
     private GroupMakingAdapter groupsMakingListAdapter;
+    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     @Override
@@ -78,6 +83,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
         super.onActivityCreated(savedInstanceState);
         settings = new GroupMakingSettings(listInfo.getNumInstances());
         settingsDialog = new GroupMakingSettingsDialog(getActivity(), settings);
+        bannerAdManager = new BannerAdManager(bannerAdContainer);
     }
 
     @Override
@@ -115,6 +121,18 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
         noGroups.setVisibility(View.GONE);
         groupsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bannerAdManager.onResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override
