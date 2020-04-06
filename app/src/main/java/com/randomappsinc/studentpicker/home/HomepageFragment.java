@@ -2,18 +2,25 @@ package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -40,7 +47,7 @@ public class HomepageFragment extends Fragment implements
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
-    @BindView(R.id.focal_point) View focusSink;
+    @BindView(R.id.homepage_root) View rootView;
     @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.search_input) EditText searchInput;
     @BindView(R.id.no_lists_match) View noListsMatch;
@@ -49,6 +56,8 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
 
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
+
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
@@ -56,6 +65,8 @@ public class HomepageFragment extends Fragment implements
     private DeleteListDialog deleteListDialog;
     private SpeechToTextManager speechToTextManager;
     private Unbinder unbinder;
+
+    private AdView adView;
 
     @Override
     public View onCreateView(
@@ -81,20 +92,51 @@ public class HomepageFragment extends Fragment implements
         lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         setNoContent();
 
-        // When the user is scrolling to browse flashcards, close the soft keyboard
+        // When the user is scrolling to browse lists, close the soft keyboard
         lists.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     UIUtils.hideKeyboard(getActivity());
-                    focusSink.requestFocus();
+                    rootView.requestFocus();
                 }
             }
         });
 
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
+
+        // Step 1 - Create an AdView and set the ad unit ID on it.
+        adView = new AdView(getActivity());
+        adView.setAdUnitId(BannerAdManager.DEBUG_BANNER_AD_UNIT_ID);
+        bottomAdBannerContainer.addView(adView);
+        loadBanner();
+    }
+
+    private void loadBanner() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        // Step 4 - Set the adaptive ad size on the ad view.
+        adView.setAdSize(getAdSize());
+
+        // Step 5 - Start loading the ad in the background.
+        adView.loadAd(adRequest);
+    }
+
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), (int) dpWidth);
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Update ad
     }
 
     @OnClick(R.id.voice_search)
@@ -138,7 +180,7 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        focusSink.requestFocus();
+        rootView.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
     }

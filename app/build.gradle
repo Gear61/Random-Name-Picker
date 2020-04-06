@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/alexanderchiou/AndroidStudioProjects/keys/randomappsinc.jks')
+            storePassword 'paypaldurdles'
+            keyPassword 'paypaldurdles'
+            keyAlias = 'randomappsinc'
+        }
+    }
     compileSdkVersion 29
 
     def versionMajor = 4
@@ -29,6 +37,8 @@ android {
             proguardFiles getDefaultProguardFile(
                     'proguard-android-optimize.txt'),
                     'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            debuggable = true
         }
     }
     lintOptions {
@@ -55,4 +65,5 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.squareup:seismic:1.0.2'
+    implementation 'com.google.android.gms:play-services-ads:19.0.1'
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/focal_point"
+    android:id="@+id/homepage_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
     >
@@ -18,7 +17,17 @@
     <TextView
         android:id="@+id/no_lists_match"
         android:text="@string/no_lists_search"
+        android:layout_below="@id/search_bar"
         style="@style/empty_state_text"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_lists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_bar"
+        android:layout_above="@id/bottom_ad_banner_container"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
     <LinearLayout
@@ -89,10 +98,10 @@
             />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/user_lists"
+    <FrameLayout
+        android:id="@+id/bottom_ad_banner_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         />
-</LinearLayout>
+</RelativeLayout>
