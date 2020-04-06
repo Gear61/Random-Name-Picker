@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
@@ -55,7 +52,6 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
-
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
 
     private PreferencesManager preferencesManager;
@@ -64,6 +60,7 @@ public class HomepageFragment extends Fragment implements
     private RenameListDialog renameListDialog;
     private DeleteListDialog deleteListDialog;
     private SpeechToTextManager speechToTextManager;
+    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     private AdView adView;
@@ -107,36 +104,13 @@ public class HomepageFragment extends Fragment implements
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
 
-        // Step 1 - Create an AdView and set the ad unit ID on it.
-        adView = new AdView(getActivity());
-        adView.setAdUnitId(BannerAdManager.DEBUG_BANNER_AD_UNIT_ID);
-        bottomAdBannerContainer.addView(adView);
-        loadBanner();
-    }
-
-    private void loadBanner() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-
-        // Step 4 - Set the adaptive ad size on the ad view.
-        adView.setAdSize(getAdSize());
-
-        // Step 5 - Start loading the ad in the background.
-        adView.loadAd(adRequest);
-    }
-
-    private AdSize getAdSize() {
-        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-
-        // Step 3 - Get adaptive ad size and return for setting on the ad view.
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(getActivity(), (int) dpWidth);
+        bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Update ad
+        bannerAdManager.onOrientationChanged();
     }
 
     @OnClick(R.id.voice_search)
