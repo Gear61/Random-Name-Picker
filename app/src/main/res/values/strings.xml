@@ -59,4 +59,8 @@
 
     <string name="clear_icon">{ion-android-close}</string>
     <string name="search_icon">{ion-android-search}</string>
+
+    <string name="ads_back_door_unlocked">
+        Hello friend of Alex. Ads will be turned off from now on.
+    </string>
 </resources>

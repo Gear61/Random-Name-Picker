@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.OpenableColumns;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -109,7 +108,9 @@ public class ImportFromTextFileActivity extends StandardActivity {
     private void loadUI(String listNameText, String namesListText) {
         runOnUiThread(() -> {
             listName.setText(listNameText);
+            listName.setHint(R.string.add_list_hint);
             names.setText(namesListText);
+            names.setHint(R.string.names);
         });
     }
 

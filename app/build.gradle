@@ -1,19 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('/Users/alexanderchiou/AndroidStudioProjects/keys/randomappsinc.jks')
-            storePassword 'paypaldurdles'
-            keyPassword 'paypaldurdles'
-            keyAlias = 'randomappsinc'
-        }
-    }
     compileSdkVersion 29
 
     def versionMajor = 4
     def versionMinor = 0
-    def versionPatch = 0
+    def versionPatch = 1
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
@@ -37,8 +29,6 @@ android {
             proguardFiles getDefaultProguardFile(
                     'proguard-android-optimize.txt'),
                     'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            debuggable = true
         }
     }
     lintOptions {

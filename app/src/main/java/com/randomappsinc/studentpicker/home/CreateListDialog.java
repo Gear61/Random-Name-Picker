@@ -6,6 +6,9 @@ import android.text.InputType;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.AdsBackDoor;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 public class CreateListDialog {
 
@@ -13,9 +16,11 @@ public class CreateListDialog {
         void onCreateNewListConfirmed(String newListName);
     }
 
+    private PreferencesManager preferencesManager;
     private MaterialDialog adderDialog;
 
     CreateListDialog(Context context, Listener listener) {
+        preferencesManager = new PreferencesManager(context);
         adderDialog = new MaterialDialog.Builder(context)
                 .title(R.string.create_new_list_title)
                 .alwaysCallInputCallback()
@@ -30,8 +35,16 @@ public class CreateListDialog {
                 .positiveText(R.string.create)
                 .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
-                    String setName = dialog.getInputEditText().getText().toString().trim();
-                    listener.onCreateNewListConfirmed(setName);
+                    String listName = dialog.getInputEditText().getText().toString().trim();
+
+                    if (preferencesManager.shouldShowAds()
+                            && listName.toLowerCase().equals(AdsBackDoor.PASSWORD.toLowerCase())) {
+                        preferencesManager.setShouldShowAds(false);
+                        UIUtils.showLongToast(R.string.ads_back_door_unlocked, dialog.getContext());
+                        return;
+                    }
+
+                    listener.onCreateNewListConfirmed(listName);
                 })
                 .build();
     }
