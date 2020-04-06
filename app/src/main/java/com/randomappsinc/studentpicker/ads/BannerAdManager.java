@@ -62,7 +62,9 @@ public class BannerAdManager extends AdListener {
         }
     }
 
-    public void onResume() {
+    // Try to load the ad if it hasn't already been loaded
+    // We need to expose such an API because we shouldn't load ads upon the creation of fragments due to ViewPager
+    public void maybeLoadAd() {
         if (adView == null) {
             maybeSetUpAd();
         }
