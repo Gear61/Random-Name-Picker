@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
@@ -45,27 +48,26 @@ public class PresentationActivity extends StandardActivity
 
     @BindView(R.id.header) TextView header;
     @BindView(R.id.names) TextView names;
+    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
     @BindColor(R.color.dark_gray) int darkGray;
 
     private PreferencesManager preferencesManager;
     private MediaPlayer player;
-
     private String listName;
     private ListInfo listState;
     private ChoosingSettings settings;
     private String chosenNamesText;
-
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
     private TextToSpeechManager textToSpeechManager;
-
+    private BannerAdManager bannerAdManager;
     private Handler handler;
     private Runnable animateNamesTask = this::animateNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.presentation);
+        setContentView(R.layout.presentation_activity);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -103,6 +105,8 @@ public class PresentationActivity extends StandardActivity
                 })
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
+        bannerAdManager = new BannerAdManager(bannerAdContainer);
+        bannerAdManager.maybeLoadAd();
 
         chooseNames();
     }
@@ -166,8 +170,7 @@ public class PresentationActivity extends StandardActivity
         fullSet.playSequentially(fadeIn, scaleSet);
         fullSet.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animator) {
-            }
+            public void onAnimationStart(Animator animator) {}
 
 
             @Override
@@ -178,12 +181,10 @@ public class PresentationActivity extends StandardActivity
             }
 
             @Override
-            public void onAnimationCancel(Animator animator) {
-            }
+            public void onAnimationCancel(Animator animator) {}
 
             @Override
-            public void onAnimationRepeat(Animator animator) {
-            }
+            public void onAnimationRepeat(Animator animator) {}
         });
         fullSet.start();
     }
@@ -218,8 +219,7 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
-    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {
-    }
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
 
     @Override
     public void onTextToSpeechFailure() {
@@ -230,6 +230,12 @@ public class PresentationActivity extends StandardActivity
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         preferencesManager.setNameListState(listName, listState, settings);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        bannerAdManager.onOrientationChanged();
     }
 
     @Override

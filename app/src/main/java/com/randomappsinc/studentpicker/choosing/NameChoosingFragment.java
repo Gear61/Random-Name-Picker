@@ -272,7 +272,7 @@ public class NameChoosingFragment extends Fragment
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-        bannerAdManager.onResume();
+        bannerAdManager.maybeLoadAd();
     }
 
     @Override

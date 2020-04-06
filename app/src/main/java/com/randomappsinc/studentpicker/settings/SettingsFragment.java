@@ -110,7 +110,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.onResume();
+        bannerAdManager.maybeLoadAd();
     }
 
     @Override
