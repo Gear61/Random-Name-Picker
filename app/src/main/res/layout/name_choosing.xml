@@ -13,9 +13,8 @@
         android:layout_above="@id/bottom_ad_banner_container"
         >
 
-        <TextView
+        <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/empty_text_for_choosing"
-            android:text="@string/no_names_for_choosing"
             style="@style/empty_state_text"
             />
 
