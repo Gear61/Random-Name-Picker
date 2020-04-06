@@ -17,7 +17,7 @@
         android:paddingRight="36dp"
         android:hint="@string/search"
         android:textSize="17dp"
-        android:background="@drawable/search_box_border"
+        android:background="@drawable/rounded_blue_rectangle_border"
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:inputType="text"
