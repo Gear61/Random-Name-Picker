@@ -16,23 +16,30 @@
         style="@style/empty_state_text"
         />
 
-    <TextView
-        android:id="@+id/make_groups"
-        android:text="@string/make_groups"
-        android:layout_alignParentBottom="true"
-        style="@style/button"
-        />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groups_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_above="@id/make_groups"
+        android:layout_above="@id/bottom_ad_banner_container"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+    <FrameLayout
+        android:id="@+id/bottom_ad_banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/make_groups"
+        />
+
+    <TextView
+        android:id="@+id/make_groups"
+        android:text="@string/make_groups"
+        android:layout_alignParentBottom="true"
+        style="@style/button"
         />
 </RelativeLayout>
