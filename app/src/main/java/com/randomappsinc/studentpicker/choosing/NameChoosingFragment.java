@@ -118,7 +118,6 @@ public class NameChoosingFragment extends Fragment
                 .negativeText(android.R.string.no)
                 .onPositive((dialog, which) -> {
                     settingsHolder.applySettings();
-                    cacheListState();
                     UIUtils.showShortToast(R.string.settings_applied, getContext());
                 })
                 .onNegative((dialog, which) -> settingsHolder.revertSettings())
@@ -137,14 +136,8 @@ public class NameChoosingFragment extends Fragment
     }
 
     @Override
-    public void onNamesHistoryCleared() {
-        cacheListState();
-    }
-
-    @Override
     public void onNameRemoved() {
         setViews();
-        cacheListState();
     }
 
     private void setViews() {
@@ -171,20 +164,17 @@ public class NameChoosingFragment extends Fragment
     public void onNameAdded(String name, int amount, int listId) {
         nameChoosingAdapter.addNames(name, amount);
         setViews();
-        cacheListState();
     }
 
     @Override
     public void onNameDeleted(String name, int amount, int listId) {
         nameChoosingAdapter.removeNames(name, amount);
         setViews();
-        cacheListState();
     }
 
     @Override
     public void onNameChanged(String oldName, String newName, int amount, int listId) {
         nameChoosingAdapter.changeNames(oldName, newName, amount);
-        cacheListState();
     }
 
     @Override
@@ -222,9 +212,6 @@ public class NameChoosingFragment extends Fragment
                 sayNames(chosenNames);
             }
         }
-
-        // Names history always changes, so always persist state
-        cacheListState();
     }
 
     @Override
@@ -259,7 +246,9 @@ public class NameChoosingFragment extends Fragment
         NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, getContext());
     }
 
-    private void cacheListState() {
+    @Override
+    public void onPause() {
+        super.onPause();
         dataSource.saveNameListState(listId, listInfo, settings);
     }
 
@@ -305,7 +294,6 @@ public class NameChoosingFragment extends Fragment
                 return true;
             case R.id.reset:
                 listInfo = dataSource.getListInfo(listId);
-                cacheListState();
                 nameChoosingAdapter.refreshList(listInfo);
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, getContext());
