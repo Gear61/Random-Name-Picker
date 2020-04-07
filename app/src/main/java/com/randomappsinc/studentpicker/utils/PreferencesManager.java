@@ -47,6 +47,7 @@ public class PreferencesManager {
         return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
     }
 
+    @Deprecated
     public ChoosingSettings getChoosingSettings(String listName) {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }

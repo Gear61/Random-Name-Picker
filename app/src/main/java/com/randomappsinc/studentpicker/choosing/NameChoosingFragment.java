@@ -104,7 +104,6 @@ public class NameChoosingFragment extends Fragment
         textToSpeechManager = new TextToSpeechManager(context, this);
         preferencesManager = new PreferencesManager(context);
 
-
         listInfo = preferencesManager.getNameListState(listName);
         if (listInfo == null) {
             listInfo = dataSource.getListInfo(listId);
@@ -136,7 +135,7 @@ public class NameChoosingFragment extends Fragment
                 .build();
         choicesDisplayDialog = new ChoicesDisplayDialog(this, getActivity());
 
-        settings = (new PreferencesManager(getContext())).getChoosingSettings(listName);
+        settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
     }
@@ -209,6 +208,7 @@ public class NameChoosingFragment extends Fragment
             canShowPresentationScreen = false;
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
+            intent.putExtra(PresentationActivity.LIST_ID_KEY, listId);
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
             startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {

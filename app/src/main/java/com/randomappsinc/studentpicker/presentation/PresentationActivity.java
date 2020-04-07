@@ -28,6 +28,7 @@ import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
+import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -44,6 +45,7 @@ public class PresentationActivity extends StandardActivity
         implements ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener {
 
     public static final String LIST_NAME_KEY = "listName";
+    public static final String LIST_ID_KEY = "listId";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
 
     @BindView(R.id.header) TextView header;
@@ -52,8 +54,10 @@ public class PresentationActivity extends StandardActivity
     @BindColor(R.color.dark_gray) int darkGray;
 
     private PreferencesManager preferencesManager;
+    private DataSource dataSource;
     private MediaPlayer player;
     private String listName;
+    private int listId;
     private ListInfo listState;
     private ChoosingSettings settings;
     private String chosenNamesText;
@@ -73,8 +77,9 @@ public class PresentationActivity extends StandardActivity
 
         preferencesManager = new PreferencesManager(this);
         listName = getIntent().getStringExtra(LIST_NAME_KEY);
+        listId = getIntent().getIntExtra(LIST_ID_KEY, 0);
         listState = preferencesManager.getNameListState(listName);
-        settings = preferencesManager.getChoosingSettings(listName);
+        settings = dataSource.getChoosingSettings(listId);
         textToSpeechManager = new TextToSpeechManager(this, this);
 
         int numNames = settings.getNumNamesToChoose();
@@ -153,7 +158,8 @@ public class PresentationActivity extends StandardActivity
     }
 
     private void animateNames() {
-        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(names, "alpha", 1.0f).setDuration(250);
+        ObjectAnimator fadeIn = ObjectAnimator
+                .ofFloat(names, "alpha", 1.0f).setDuration(250);
         fadeIn.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet scaleSet = new AnimatorSet();
@@ -228,7 +234,7 @@ public class PresentationActivity extends StandardActivity
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        preferencesManager.setNameListState(listName, listState, settings);
+        dataSource.saveNameListState(listId, settings);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -241,7 +247,7 @@ public class PresentationActivity extends StandardActivity
     @Override
     public void finish() {
         // Make sure that we persist the choosing state, since name history will always change at least
-        preferencesManager.setNameListState(listName, listState, settings);
+        dataSource.saveNameListState(listId, settings);
         super.finish();
     }
 

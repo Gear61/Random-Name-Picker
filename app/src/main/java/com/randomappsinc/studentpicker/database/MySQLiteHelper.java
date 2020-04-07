@@ -24,6 +24,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // NEW table names
     static final String LISTS_TABLE_NAME = "Lists";
     static final String NAMES_TABLE_NAME = "Names";
+    static final String NAMES_IN_LIST_TABLE_NAME = "NamesInList";
 
     // COLUMNS
     static final String COLUMN_ID = "id";
@@ -32,23 +33,46 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     static final String COLUMN_NAME = "name";
     static final String COLUMN_NAME_COUNT = "name_count";
 
+    // Choosing settings columns
+    static final String COLUMN_PRESENTATION_MODE = "presentation_mode";
+    static final String COLUMN_WITH_REPLACEMENT = "with_replacement";
+    static final String COLUMN_AUTOMATIC_TTS = "automatic_tts";
+    static final String COLUMN_SHOW_AS_LIST = "show_as_list";
+    static final String COLUMN_NUM_NAMES_CHOSEN = "num_names_chosen";
+    static final String COLUMN_NAMES_HISTORY = "names_history";
+
     // Some random things fed to a super's method
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
-    // Updates
-    // V2
+    // V2 - Introduce concept of amount
     private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + LEGACY_TABLE_NAME +
             " ADD COLUMN " + COLUMN_NAME_COUNT + " INTEGER;";
 
-    // Updates
-    // V3
-    private static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + LISTS_TABLE_NAME +
-            "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_NAME + " TEXT);";
+    // V3 - Migrate to lists to names schema
+    private static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
+            + LISTS_TABLE_NAME + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_LIST_NAME + " TEXT, "
+            + COLUMN_PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0 "
+            + COLUMN_WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0 "
+            + COLUMN_AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0 "
+            + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0 "
+            + COLUMN_NUM_NAMES_CHOSEN + " INTEGER "
+            + COLUMN_NAMES_HISTORY + " TEXT);";
 
     private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + NAMES_TABLE_NAME +
             "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_ID + " INTEGER, " +
             COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
+
+    // V4 - Migrate name choosing state
+    private static final String ADD_SETTINGS_COLUMNS = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0 "
+            + " ADD COLUMN " + COLUMN_WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0 "
+            + " ADD COLUMN " + COLUMN_AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0 "
+            + " ADD COLUMN " + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0 "
+            + " ADD COLUMN " + COLUMN_NUM_NAMES_CHOSEN + " BOOLEAN NOT NULL DEFAULT 0 "
+            + " ADD COLUMN " + COLUMN_NAMES_HISTORY + " TEXT);";
 
     // Struct for migration
     private static class NameInfoPod {
@@ -97,7 +121,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database.insert(MySQLiteHelper.LEGACY_TABLE_NAME, null, values);
                 }
             }
-        } else if (oldVersion == 2) {
+            oldVersion++;
+        }
+
+        // Convert to list + names schemas
+        if (oldVersion == 2) {
             database.execSQL(CREATE_LISTS_TABLE_QUERY);
             database.execSQL(CREATE_NAMES_TABLE_QUERY);
 
@@ -113,11 +141,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
 
             List<NameInfoPod> namesToMigrate = new ArrayList<>();
-            Cursor nameInfoCursor = database.rawQuery("SELECT * FROM " + LEGACY_TABLE_NAME, null);
+            Cursor nameInfoCursor = database.rawQuery(
+                    "SELECT * FROM " + LEGACY_TABLE_NAME, null);
             if (nameInfoCursor.moveToFirst()){
                 do {
-                    String listName = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_LIST_NAME));
-                    String name = nameInfoCursor.getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME_LEGACY));
+                    String listName = nameInfoCursor.getString(
+                            nameInfoCursor.getColumnIndex(COLUMN_LIST_NAME));
+                    String name = nameInfoCursor
+                            .getString(nameInfoCursor.getColumnIndex(COLUMN_PERSON_NAME_LEGACY));
                     int amount = nameInfoCursor.getInt(nameInfoCursor.getColumnIndex(COLUMN_NAME_COUNT));
                     namesToMigrate.add(new NameInfoPod(listName, name, amount));
                 } while (nameInfoCursor.moveToNext());
@@ -131,6 +162,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 values.put(COLUMN_NAME_COUNT, nameInfoPod.amount);
                 database.insert(NAMES_TABLE_NAME, null, values);
             }
+            oldVersion++;
+        }
+
+        // Store settings in DB
+        if (oldVersion == 3) {
+            database.execSQL(ADD_SETTINGS_COLUMNS);
         }
     }
 
