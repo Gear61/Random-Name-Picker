@@ -199,8 +199,26 @@ public class DataSource {
             totalAmountOfNames += nameAmount;
         }
         cursor.close();
+
+        String[] historyColumns = {MySQLiteHelper.COLUMN_NAMES_HISTORY};
+        String historySelection = MySQLiteHelper.COLUMN_ID + " = ?";
+        Cursor historyCursor = database.query(
+                MySQLiteHelper.LISTS_TABLE_NAME,
+                historyColumns,
+                historySelection,
+                selectionArgs,
+                null,
+                null,
+                null);
+        List<String> namesHistory = new ArrayList<>();
+        if (historyCursor.moveToFirst()) {
+            String namesHistoryJsonBlurb = historyCursor.getString(0);
+            namesHistory.addAll(JSONUtils.extractNamesHistory(namesHistoryJsonBlurb));
+        }
+        historyCursor.close();
+
         close();
-        return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
+        return new ListInfo(nameAmounts, names, totalAmountOfNames, namesHistory);
     }
 
     public void addNames(String name, int amount, int listId) {
@@ -317,7 +335,20 @@ public class DataSource {
         open();
 
         // Persist names in list
+        String[] whereArgsToClearNamesState = {String.valueOf(listId)};
+        database.delete(
+                MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME,
+                MySQLiteHelper.COLUMN_LIST_ID + " = ?",
+                whereArgsToClearNamesState);
 
+        Map<String, Integer> nameAmounts = listInfo.getNameAmounts();
+        for (String name : nameAmounts.keySet()) {
+            ContentValues values = new ContentValues();
+            values.put(MySQLiteHelper.COLUMN_LIST_ID, listId);
+            values.put(MySQLiteHelper.COLUMN_NAME, name);
+            values.put(MySQLiteHelper.COLUMN_NAME_COUNT, nameAmounts.get(name));
+            database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
+        }
 
         // Persist choosing settings
         ContentValues newValues = new ContentValues();
