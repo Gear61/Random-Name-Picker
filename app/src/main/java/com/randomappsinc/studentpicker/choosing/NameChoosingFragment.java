@@ -222,9 +222,9 @@ public class NameChoosingFragment extends Fragment
                 sayNames(chosenNames);
             }
         }
-        if (!settings.getWithReplacement()) {
-            cacheListState();
-        }
+
+        // Names history always changes, so always persist state
+        cacheListState();
     }
 
     @Override
