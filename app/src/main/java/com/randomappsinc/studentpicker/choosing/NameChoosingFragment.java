@@ -30,7 +30,6 @@ import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.shake.ShakeManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
@@ -68,12 +67,10 @@ public class NameChoosingFragment extends Fragment
 
     private ChoicesDisplayDialog choicesDisplayDialog;
     private boolean canShowPresentationScreen;
-    private String listName;
     private int listId;
     private NameListDataManager nameListDataManager = NameListDataManager.get();
     private ShakeManager shakeManager = ShakeManager.get();
     private TextToSpeechManager textToSpeechManager;
-    private PreferencesManager preferencesManager;
     private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
     private ListInfo listInfo;
@@ -95,14 +92,11 @@ public class NameChoosingFragment extends Fragment
         dataSource = new DataSource(context);
 
         listId = getArguments().getInt(Constants.LIST_ID_KEY);
-        listName = dataSource.getListName(listId);
         namesList.addItemDecoration(new SimpleDividerItemDecoration(context));
 
         nameListDataManager.registerListener(this);
         shakeManager.registerListener(this);
-
         textToSpeechManager = new TextToSpeechManager(context, this);
-        preferencesManager = new PreferencesManager(context);
 
         listInfo = dataSource.getChoosingStateListInfo(listId);
         setViews();
@@ -140,6 +134,11 @@ public class NameChoosingFragment extends Fragment
     @Override
     public ListInfo getListInfo() {
         return listInfo;
+    }
+
+    @Override
+    public void onNamesHistoryCleared() {
+        cacheListState();
     }
 
     @Override
