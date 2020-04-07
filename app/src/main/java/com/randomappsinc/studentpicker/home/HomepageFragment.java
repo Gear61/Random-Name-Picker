@@ -176,7 +176,6 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onRenameListConfirmed(int position, ListDO updatedList) {
         dataSource.renameList(updatedList);
-        preferencesManager.renameList(nameListsAdapter.getItem(position).getName(), updatedList.getName());
         nameListsAdapter.renameItem(position, updatedList.getName());
     }
 
@@ -188,7 +187,6 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onDeleteListConfirmed(int position, ListDO listDO) {
         dataSource.deleteList(listDO.getId());
-        preferencesManager.removeNameList(listDO.getName());
         nameListsAdapter.deleteItem(position);
     }
 

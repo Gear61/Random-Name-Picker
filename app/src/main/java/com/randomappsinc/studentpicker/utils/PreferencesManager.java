@@ -15,7 +15,6 @@ public class PreferencesManager {
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
     private static final String STUDENT_LISTS_KEY = "com.randomappsinc.studentpicker.studentLists";
-    private static final String FIRST_TIME_KEY = "firstTime";
     private static final String NUM_APP_OPENS = "numAppOpens";
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
@@ -26,23 +25,12 @@ public class PreferencesManager {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
+    @Deprecated
     public Set<String> getNameLists() {
         return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
     }
 
-    public void removeNameList(String deletedList) {
-        removeNamesListCache(deletedList);
-    }
-
-    public void renameList(String oldName, String newName) {
-        moveNamesListCache(oldName, newName);
-    }
-
-    public void setNameListState(String listName, ListInfo currentState, ChoosingSettings settings) {
-        String cache = JSONUtils.serializeChoosingState(currentState, settings);
-        prefs.edit().putString(listName, cache).apply();
-    }
-
+    @Deprecated
     public ListInfo getNameListState(String listName) {
         return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
     }
@@ -50,16 +38,6 @@ public class PreferencesManager {
     @Deprecated
     public ChoosingSettings getChoosingSettings(String listName) {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
-    }
-
-    private void moveNamesListCache(String oldListName, String newListName) {
-        String cache = prefs.getString(oldListName, "");
-        removeNamesListCache(oldListName);
-        prefs.edit().putString(newListName, cache).apply();
-    }
-
-    private void removeNamesListCache(String listName) {
-        prefs.edit().remove(listName).apply();
     }
 
     public int rememberAppOpen() {
