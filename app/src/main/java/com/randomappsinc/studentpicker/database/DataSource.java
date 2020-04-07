@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
@@ -70,7 +71,8 @@ public class DataSource {
                     null, null, null, null);
         } else {
             cursor = database.rawQuery("SELECT * FROM " + MySQLiteHelper.LISTS_TABLE_NAME + " WHERE " +
-                    MySQLiteHelper.COLUMN_LIST_NAME + " like ? COLLATE NOCASE", new String[] {searchTerm + "%"});
+                    MySQLiteHelper.COLUMN_LIST_NAME + " like ? COLLATE NOCASE",
+                    new String[] {searchTerm + "%"});
         }
         while (cursor.moveToNext()) {
             lists.add(new ListDO(cursor.getInt(0), cursor.getString(1)));
@@ -121,7 +123,8 @@ public class DataSource {
     public List<NameDO> getNamesInList(int listId) {
         List<NameDO> nameDOs = new ArrayList<>();
         open();
-        String[] columns = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
+        String[] columns = {
+                MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
         String selection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
         Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
@@ -240,5 +243,60 @@ public class DataSource {
     void renamePeople(String oldName, String newName, int listId, int amount) {
         removeNames(oldName, amount, listId);
         addNames(newName, amount, listId);
+    }
+
+    public ChoosingSettings getChoosingSettings(int listId) {
+        open();
+        ChoosingSettings choosingSettings = new ChoosingSettings();
+
+        open();
+        String[] columns = {
+                MySQLiteHelper.COLUMN_PRESENTATION_MODE,
+                MySQLiteHelper.COLUMN_WITH_REPLACEMENT,
+                MySQLiteHelper.COLUMN_AUTOMATIC_TTS,
+                MySQLiteHelper.COLUMN_SHOW_AS_LIST,
+                MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN
+        };
+        String selection = MySQLiteHelper.COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(listId)};
+        Cursor cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, selection,
+                selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            choosingSettings.setPresentationMode(cursor.getInt(0) != 0);
+            choosingSettings.setWithReplacement(cursor.getInt(1) != 0);
+            choosingSettings.setAutomaticTts(cursor.getInt(2) != 0);
+            choosingSettings.setShowAsList(cursor.getInt(3) != 0);
+            choosingSettings.setNumNamesToChoose(cursor.getInt(4));
+        }
+        cursor.close();
+        close();
+
+        return choosingSettings;
+    }
+
+    public void saveNameListState(int listId, ChoosingSettings choosingSettings) {
+        open();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(
+                MySQLiteHelper.COLUMN_PRESENTATION_MODE,
+                choosingSettings.isPresentationModeEnabled() ? 1 : 0);
+        newValues.put(
+                MySQLiteHelper.COLUMN_WITH_REPLACEMENT,
+                choosingSettings.getWithReplacement() ? 1 : 0);
+        newValues.put(
+                MySQLiteHelper.COLUMN_AUTOMATIC_TTS,
+                choosingSettings.getAutomaticTts() ? 1 : 0);
+        newValues.put(
+                MySQLiteHelper.COLUMN_SHOW_AS_LIST,
+                choosingSettings.getShowAsList() ? 1 : 0);
+        newValues.put(
+                MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
+                choosingSettings.getNumNamesToChoose());
+        String[] whereArgs = new String[]{String.valueOf(listId)};
+        String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
+        database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+
+        close();
     }
 }
