@@ -231,22 +231,15 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
-        dataSource.saveNameListState(listId, listState, settings);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         bannerAdManager.onOrientationChanged();
     }
 
     @Override
-    public void finish() {
-        // Make sure that we persist the choosing state, since name history will always change at least
+    public void onPause() {
+        super.onPause();
         dataSource.saveNameListState(listId, listState, settings);
-        super.finish();
     }
 
     @Override

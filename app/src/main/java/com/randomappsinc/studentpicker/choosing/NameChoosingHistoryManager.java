@@ -14,8 +14,6 @@ class NameChoosingHistoryManager {
 
     interface Delegate {
         ListInfo getListInfo();
-
-        void onNamesHistoryCleared();
     }
 
     private Delegate delegate;
@@ -30,7 +28,6 @@ class NameChoosingHistoryManager {
                 .negativeText(R.string.copy_text)
                 .onNeutral((dialog, which) -> {
                     delegate.getListInfo().clearNameHistory();
-                    delegate.onNamesHistoryCleared();
                     UIUtils.showShortToast(R.string.name_history_cleared, dialog.getContext());
                 })
                 .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
