@@ -265,7 +265,7 @@ public class NameChoosingFragment extends Fragment
     }
 
     private void cacheListState() {
-        preferencesManager.setNameListState(listName, listInfo, settings);
+        dataSource.saveNameListState(listId, settings);
     }
 
     @Override

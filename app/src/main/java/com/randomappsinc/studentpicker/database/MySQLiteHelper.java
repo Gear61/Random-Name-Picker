@@ -58,7 +58,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0 "
             + COLUMN_AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0 "
             + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0 "
-            + COLUMN_NUM_NAMES_CHOSEN + " INTEGER "
+            + COLUMN_NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1 "
             + COLUMN_NAMES_HISTORY + " TEXT);";
 
     private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + NAMES_TABLE_NAME +
@@ -79,7 +79,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + " ADD COLUMN " + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0;";
 
     private static final String ADD_NUM_NAMES_CHOSEN = "ALTER TABLE " + LISTS_TABLE_NAME
-            + " ADD COLUMN " + COLUMN_NUM_NAMES_CHOSEN + " BOOLEAN NOT NULL DEFAULT 0;";
+            + " ADD COLUMN " + COLUMN_NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1;";
 
     private static final String ADD_NAMES_HISTORY = "ALTER TABLE " + LISTS_TABLE_NAME
             + " ADD COLUMN " + COLUMN_NAMES_HISTORY + " TEXT;";
