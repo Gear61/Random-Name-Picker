@@ -66,13 +66,23 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
 
     // V4 - Migrate name choosing state
-    private static final String ADD_SETTINGS_COLUMNS = "ALTER TABLE " + LISTS_TABLE_NAME
-            + " ADD COLUMN " + COLUMN_PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0 "
-            + " ADD COLUMN " + COLUMN_WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0 "
-            + " ADD COLUMN " + COLUMN_AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0 "
-            + " ADD COLUMN " + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0 "
-            + " ADD COLUMN " + COLUMN_NUM_NAMES_CHOSEN + " BOOLEAN NOT NULL DEFAULT 0 "
-            + " ADD COLUMN " + COLUMN_NAMES_HISTORY + " TEXT);";
+    private static final String ADD_PRESENTATION = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0;";
+
+    private static final String ADD_WITH_REPLACEMENT = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0;";
+
+    private static final String ADD_AUTOMATIC_TTS = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0;";
+
+    private static final String ADD_SHOW_AS_LIST = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0;";
+
+    private static final String ADD_NUM_NAMES_CHOSEN = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_NUM_NAMES_CHOSEN + " BOOLEAN NOT NULL DEFAULT 0;";
+
+    private static final String ADD_NAMES_HISTORY = "ALTER TABLE " + LISTS_TABLE_NAME
+            + " ADD COLUMN " + COLUMN_NAMES_HISTORY + " TEXT;";
 
     // Struct for migration
     private static class NameInfoPod {
@@ -167,7 +177,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Store settings in DB
         if (oldVersion == 3) {
-            database.execSQL(ADD_SETTINGS_COLUMNS);
+            database.execSQL(ADD_PRESENTATION);
+            database.execSQL(ADD_WITH_REPLACEMENT);
+            database.execSQL(ADD_AUTOMATIC_TTS);
+            database.execSQL(ADD_SHOW_AS_LIST);
+            database.execSQL(ADD_NUM_NAMES_CHOSEN);
+            database.execSQL(ADD_NAMES_HISTORY);
         }
     }
 
