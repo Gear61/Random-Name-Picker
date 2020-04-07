@@ -104,10 +104,7 @@ public class NameChoosingFragment extends Fragment
         textToSpeechManager = new TextToSpeechManager(context, this);
         preferencesManager = new PreferencesManager(context);
 
-        listInfo = preferencesManager.getNameListState(listName);
-        if (listInfo == null) {
-            listInfo = dataSource.getListInfo(listId);
-        }
+        listInfo = dataSource.getChoosingStateListInfo(listId);
         setViews();
 
         nameChoosingHistoryManager = new NameChoosingHistoryManager(this, context);
@@ -207,7 +204,6 @@ public class NameChoosingFragment extends Fragment
             }
             canShowPresentationScreen = false;
             Intent intent = new Intent(getActivity(), PresentationActivity.class);
-            intent.putExtra(PresentationActivity.LIST_NAME_KEY, listName);
             intent.putExtra(PresentationActivity.LIST_ID_KEY, listId);
             getActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
             startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
@@ -243,7 +239,7 @@ public class NameChoosingFragment extends Fragment
         super.onActivityResult(requestCode, resultCode, data);
         // Presentation mode mutates the choosing state, so trigger a refresh here
         if (requestCode == PRESENTATION_MODE_REQUEST_CODE) {
-            listInfo = preferencesManager.getNameListState(listName);
+            listInfo = dataSource.getChoosingStateListInfo(listId);
             nameChoosingAdapter.refreshList(listInfo);
             setViews();
         }
@@ -265,7 +261,7 @@ public class NameChoosingFragment extends Fragment
     }
 
     private void cacheListState() {
-        dataSource.saveNameListState(listId, settings);
+        dataSource.saveNameListState(listId, listInfo, settings);
     }
 
     @Override

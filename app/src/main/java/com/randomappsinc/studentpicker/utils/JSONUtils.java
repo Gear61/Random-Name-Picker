@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.utils;
 
+import android.text.TextUtils;
+
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
@@ -13,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class JSONUtils {
+public class JSONUtils {
 
     private static final String NAMES_KEY = "names";
     private static final String ALREADY_CHOSEN_NAMES_KEY = "alreadyChosenNames";
@@ -57,7 +59,7 @@ class JSONUtils {
 
             return nameListJson.toString();
         }
-         catch (JSONException e) {
+        catch (JSONException e) {
             return "";
         }
     }
@@ -111,5 +113,30 @@ class JSONUtils {
             settings.setShowAsList(settingsJson.getBoolean(SHOW_AS_LIST_KEY));
         } catch (JSONException ignored) {}
         return settings;
+    }
+
+    public static String namesArrayToJsonString(List<String> chosenNames) {
+        JSONArray alreadyChosenNamesArray = new JSONArray();
+        for (String alreadyChosenName : chosenNames) {
+            alreadyChosenNamesArray.put(alreadyChosenName);
+        }
+        return alreadyChosenNamesArray.toString();
+    }
+
+    public static List<String> extractNamesHistory(String namesArrayText) {
+        if (TextUtils.isEmpty(namesArrayText)) {
+            return Collections.emptyList();
+        }
+
+        List<String> alreadyChosenNames = new ArrayList<>();
+        try {
+            JSONArray namesArray = new JSONArray(namesArrayText);
+            for (int i = 0; i < namesArray.length(); i++) {
+                alreadyChosenNames.add(namesArray.getString(i));
+            }
+        }
+        catch (JSONException ignored) {}
+
+        return alreadyChosenNames;
     }
 }
