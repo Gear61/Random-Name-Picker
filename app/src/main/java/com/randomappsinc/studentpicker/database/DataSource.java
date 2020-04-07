@@ -277,6 +277,8 @@ public class DataSource {
     public void saveNameListState(int listId, ChoosingSettings choosingSettings) {
         open();
 
+
+
         ContentValues newValues = new ContentValues();
         newValues.put(
                 MySQLiteHelper.COLUMN_PRESENTATION_MODE,

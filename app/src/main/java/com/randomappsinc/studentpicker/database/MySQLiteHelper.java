@@ -84,6 +84,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String ADD_NAMES_HISTORY = "ALTER TABLE " + LISTS_TABLE_NAME
             + " ADD COLUMN " + COLUMN_NAMES_HISTORY + " TEXT;";
 
+    private static final String CREATE_NAMES_IN_LIST_TABLE_QUERY =
+            "CREATE TABLE IF NOT EXISTS " + NAMES_IN_LIST_TABLE_NAME +  "("
+                    + COLUMN_LIST_ID + " INTEGER, "
+                    + COLUMN_NAME + " TEXT, "
+                    + COLUMN_NAME_COUNT + " INTEGER);";
+
     // Struct for migration
     private static class NameInfoPod {
         final String listName;
@@ -105,6 +111,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_LISTS_TABLE_QUERY);
         database.execSQL(CREATE_NAMES_TABLE_QUERY);
+        database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
     }
 
     @Override
@@ -183,6 +190,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             database.execSQL(ADD_SHOW_AS_LIST);
             database.execSQL(ADD_NUM_NAMES_CHOSEN);
             database.execSQL(ADD_NAMES_HISTORY);
+            database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
         }
     }
 
