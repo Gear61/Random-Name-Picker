@@ -12,6 +12,7 @@ import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.utils.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -164,6 +165,44 @@ public class DataSource {
         return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
     }
 
+    public ListInfo getChoosingStateListInfo(int listId) {
+        String quickSelection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
+        String[] quickWhereArgs = {String.valueOf(listId)};
+
+        open();
+        long numNamesInHistory = DatabaseUtils.queryNumEntries(
+                database,
+                MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME,
+                quickSelection,
+                quickWhereArgs);
+        close();
+
+        if (numNamesInHistory == 0) {
+            return getListInfo(listId);
+        }
+
+        Map<String, Integer> nameAmounts = new HashMap<>();
+        List<String> names = new ArrayList<>();
+        int totalAmountOfNames = 0;
+        open();
+        String[] columns = {MySQLiteHelper.COLUMN_NAME, MySQLiteHelper.COLUMN_NAME_COUNT};
+        String selection = MySQLiteHelper.COLUMN_LIST_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(listId)};
+        Cursor cursor = database.query(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, columns, selection,
+                selectionArgs, null, null, MySQLiteHelper.COLUMN_NAME + " ASC");
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            int nameAmount = cursor.getInt(1);
+
+            nameAmounts.put(name, nameAmount);
+            names.add(name);
+            totalAmountOfNames += nameAmount;
+        }
+        cursor.close();
+        close();
+        return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
+    }
+
     public void addNames(String name, int amount, int listId) {
         int currentAmount = getAmountOfName(name, listId);
 
@@ -274,11 +313,13 @@ public class DataSource {
         return choosingSettings;
     }
 
-    public void saveNameListState(int listId, ChoosingSettings choosingSettings) {
+    public void saveNameListState(int listId, ListInfo listInfo, ChoosingSettings choosingSettings) {
         open();
 
+        // Persist names in list
 
 
+        // Persist choosing settings
         ContentValues newValues = new ContentValues();
         newValues.put(
                 MySQLiteHelper.COLUMN_PRESENTATION_MODE,
@@ -295,6 +336,9 @@ public class DataSource {
         newValues.put(
                 MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
                 choosingSettings.getNumNamesToChoose());
+        newValues.put(
+                MySQLiteHelper.COLUMN_NAMES_HISTORY,
+                JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
         String[] whereArgs = new String[]{String.valueOf(listId)};
         String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
         database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
