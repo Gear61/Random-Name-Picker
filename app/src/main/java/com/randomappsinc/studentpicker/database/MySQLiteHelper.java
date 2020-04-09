@@ -212,8 +212,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
             PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
             for (ListDO listDO : listsToMigrate) {
-                System.out.println("Spaghetti - Migrating list with ID " + listDO.getId()
-                        + " || Name: " + listDO.getName());
                 ListInfo listInfo = preferencesManager.getNameListState(listDO.getName());
                 Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
 
@@ -222,9 +220,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     values.put(MySQLiteHelper.COLUMN_LIST_ID, listDO.getId());
                     values.put(MySQLiteHelper.COLUMN_NAME, name);
                     values.put(MySQLiteHelper.COLUMN_NAME_COUNT, nameToAmount.get(name));
-
-                    System.out.println("Migrating name of " + name + " || Amount: " + nameToAmount.get(name));
-
                     database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
                 }
 
