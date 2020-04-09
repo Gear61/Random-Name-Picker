@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.init.MyApplication;
+import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.utils.JSONUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 
 import java.util.ArrayList;
@@ -191,6 +195,65 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             database.execSQL(ADD_NUM_NAMES_CHOSEN);
             database.execSQL(ADD_NAMES_HISTORY);
             database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
+
+            List<ListDO> listsToMigrate = new ArrayList<>();
+            Cursor listInfoCursor = database.rawQuery(
+                    "SELECT * FROM " + LISTS_TABLE_NAME, null);
+            if (listInfoCursor.moveToFirst()){
+                do {
+                    String listName = listInfoCursor.getString(
+                            listInfoCursor.getColumnIndex(COLUMN_LIST_NAME));
+                    int listId = listInfoCursor
+                            .getInt(listInfoCursor.getColumnIndex(COLUMN_ID));
+                    listsToMigrate.add(new ListDO(listId, listName));
+                } while (listInfoCursor.moveToNext());
+            }
+            listInfoCursor.close();
+
+            PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
+            for (ListDO listDO : listsToMigrate) {
+                System.out.println("Spaghetti - Migrating list with ID " + listDO.getId()
+                        + " || Name: " + listDO.getName());
+                ListInfo listInfo = preferencesManager.getNameListState(listDO.getName());
+                Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
+
+                for (String name : nameToAmount.keySet()) {
+                    ContentValues values = new ContentValues();
+                    values.put(MySQLiteHelper.COLUMN_LIST_ID, listDO.getId());
+                    values.put(MySQLiteHelper.COLUMN_NAME, name);
+                    values.put(MySQLiteHelper.COLUMN_NAME_COUNT, nameToAmount.get(name));
+
+                    System.out.println("Migrating name of " + name + " || Amount: " + nameToAmount.get(name));
+
+                    database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
+                }
+
+                ChoosingSettings choosingSettings = preferencesManager.getChoosingSettings(listDO.getName());
+
+                // Persist choosing settings
+                ContentValues newValues = new ContentValues();
+                newValues.put(
+                        MySQLiteHelper.COLUMN_PRESENTATION_MODE,
+                        choosingSettings.isPresentationModeEnabled() ? 1 : 0);
+                newValues.put(
+                        MySQLiteHelper.COLUMN_WITH_REPLACEMENT,
+                        choosingSettings.getWithReplacement() ? 1 : 0);
+                newValues.put(
+                        MySQLiteHelper.COLUMN_AUTOMATIC_TTS,
+                        choosingSettings.getAutomaticTts() ? 1 : 0);
+                newValues.put(
+                        MySQLiteHelper.COLUMN_SHOW_AS_LIST,
+                        choosingSettings.getShowAsList() ? 1 : 0);
+                newValues.put(
+                        MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
+                        choosingSettings.getNumNamesToChoose());
+                newValues.put(
+                        MySQLiteHelper.COLUMN_NAMES_HISTORY,
+                        JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
+                String[] whereArgs = new String[]{String.valueOf(listDO.getId())};
+                String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
+                database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+            }
         }
     }
 

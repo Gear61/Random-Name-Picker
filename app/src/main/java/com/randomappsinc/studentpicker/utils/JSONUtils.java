@@ -26,45 +26,7 @@ public class JSONUtils {
     private static final String SHOW_AS_LIST_KEY = "showAsList";
     private static final String NUM_NAMES_TO_CHOOSE_KEY = "numNamesToChoose";
 
-    // Given a list of names, converts it to a JSON and stringifies it
-    static String serializeChoosingState(ListInfo currentState, ChoosingSettings choosingSettings) {
-        try {
-            JSONObject nameListJson = new JSONObject();
-
-            // Store current names in list
-            JSONArray namesArray = new JSONArray();
-            Map<String, Integer> nameAmounts = currentState.getNameAmounts();
-            for (String name : currentState.getUniqueNames()) {
-                int amount = nameAmounts.get(name);
-                for (int i = 0; i < amount; i++) {
-                    namesArray.put(name);
-                }
-            }
-            nameListJson.put(NAMES_KEY, namesArray);
-
-            // Store already chosen names
-            JSONArray alreadyChosenNamesArray = new JSONArray();
-            for (String alreadyChosenName : currentState.getNameHistory()) {
-                alreadyChosenNamesArray.put(alreadyChosenName);
-            }
-            nameListJson.put(ALREADY_CHOSEN_NAMES_KEY, alreadyChosenNamesArray);
-
-            JSONObject settings = new JSONObject();
-            settings.put(PRESENTATION_MODE_KEY, choosingSettings.isPresentationModeEnabled());
-            settings.put(WITH_REPLACEMENT_KEY, choosingSettings.getWithReplacement());
-            settings.put(AUTOMATIC_TTS_KEY, choosingSettings.getAutomaticTts());
-            settings.put(SHOW_AS_LIST_KEY, choosingSettings.getShowAsList());
-            settings.put(NUM_NAMES_TO_CHOOSE_KEY, choosingSettings.getNumNamesToChoose());
-            nameListJson.put(SETTINGS_KEY, settings);
-
-            return nameListJson.toString();
-        }
-        catch (JSONException e) {
-            return "";
-        }
-    }
-
-    // Given a serialized JSON "cache" string of a name list, extracts the list state
+    @Deprecated
     static ListInfo extractChoosingState(String cachedList) {
         if (cachedList.isEmpty()) {
             return null;
@@ -100,7 +62,7 @@ public class JSONUtils {
         return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
     }
 
-    // Given a serialized JSON "cache" string of a name list, extracts the choosing settings
+    @Deprecated
     static ChoosingSettings extractChoosingSettings(String cachedList) {
         ChoosingSettings settings = new ChoosingSettings();
         try {
