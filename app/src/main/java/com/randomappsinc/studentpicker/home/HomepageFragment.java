@@ -24,6 +24,7 @@ import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
@@ -40,6 +41,8 @@ public class HomepageFragment extends Fragment implements
     static HomepageFragment getInstance() {
         return new HomepageFragment();
     }
+
+    private static final int NUM_APP_OPENS_FOR_TOOLTIP = 10;
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -101,6 +104,12 @@ public class HomepageFragment extends Fragment implements
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
 
         bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
+
+        PreferencesManager preferencesManager = new PreferencesManager(getContext());
+        if (!preferencesManager.hasSeenPremiumTooltip()
+                || preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_TOOLTIP == 0) {
+            buyPremiumTooltip.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.buy_premium_tooltip)
@@ -108,6 +117,7 @@ public class HomepageFragment extends Fragment implements
         Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
         getActivity().startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        buyPremiumTooltip.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.dismiss_premium_tooltip)

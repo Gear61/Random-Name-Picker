@@ -14,6 +14,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,8 +37,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
 
     SettingsAdapter(Context context, ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
-        this.options = Arrays.asList(context.getResources().getStringArray(R.array.settings_options));
-        this.icons = Arrays.asList(context.getResources().getStringArray(R.array.settings_icons));
+        this.options = new ArrayList<>(
+                Arrays.asList(context.getResources().getStringArray(R.array.settings_options)));
+        this.icons = new ArrayList<>(
+                Arrays.asList(context.getResources().getStringArray(R.array.settings_icons)));
         this.preferencesManager = new PreferencesManager(context);
     }
 
