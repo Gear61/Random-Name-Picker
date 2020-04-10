@@ -126,7 +126,7 @@ public class GroupMakingFragment extends Fragment implements NameListDataManager
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.maybeLoadAd();
+        bannerAdManager.loadOrRemoveAd();
     }
 
     @Override

@@ -43,7 +43,7 @@ public class ImportFromTextFileActivity extends StandardActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.maybeLoadAd();
+        bannerAdManager.loadOrRemoveAd();
 
         extractNameListInfo();
     }

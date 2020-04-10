@@ -148,7 +148,7 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.maybeLoadAd();
+        bannerAdManager.loadOrRemoveAd();
         rootView.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();

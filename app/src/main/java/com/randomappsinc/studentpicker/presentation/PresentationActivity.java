@@ -109,7 +109,7 @@ public class PresentationActivity extends StandardActivity
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
         bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.maybeLoadAd();
+        bannerAdManager.loadOrRemoveAd();
 
         chooseNames();
     }

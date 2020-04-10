@@ -221,7 +221,7 @@ public class EditNameListFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.maybeLoadAd();
+        bannerAdManager.loadOrRemoveAd();
     }
 
     @Override

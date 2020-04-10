@@ -62,5 +62,11 @@
             android:configChanges="orientation|screenSize"
             android:label=""
             />
+
+        <activity
+            android:name=".payments.BuyPremiumActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/buy_premium_title"
+            />
     </application>
 </manifest>
