@@ -5,12 +5,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
-import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
@@ -28,7 +29,7 @@ import java.util.List;
  * Make sure to call cleanUp() to prevent leaks.
  */
 public class PaymentManager implements PurchasesUpdatedListener, BillingClientStateListener,
-        SkuDetailsResponseListener, ConsumeResponseListener {
+        SkuDetailsResponseListener, AcknowledgePurchaseResponseListener {
 
     private static final String TAG = PaymentManager.class.getSimpleName();
     private static final String NINETY_NINE_CENT_PREMIUM = "99_cent_premium";
@@ -58,12 +59,12 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
             preferencesManager.setIsOnFreeVersion(false);
 
             for (Purchase purchase : purchases) {
-                // This call only returns unconsumed purchases
+                // This call only returns unacknowledged purchases
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
-                    ConsumeParams consumeParams = ConsumeParams.newBuilder()
+                    AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
                             .setPurchaseToken(purchase.getPurchaseToken())
                             .build();
-                    billingClient.consumeAsync(consumeParams, this);
+                    billingClient.acknowledgePurchase(ackParams, this);
                 }
             }
         } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.USER_CANCELED) {
@@ -72,23 +73,23 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     @Override
-    public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+    public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
         if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             Log.d(TAG, "Purchase failed. Response code: " + billingResult.getResponseCode()
-                    + " || Purchase token: " + purchaseToken);
+                    + " || Debug message: " + billingResult.getDebugMessage());
         }
     }
 
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
-        // Consume any purchases that haven't been consumed already
+        // Acknowledge any purchases that haven't been acknowledged already
         Purchase.PurchasesResult purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
         List<Purchase> purchasesList = purchases.getPurchasesList();
         for (Purchase purchase : purchasesList) {
-            ConsumeParams consumeParams = ConsumeParams.newBuilder()
+            AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.getPurchaseToken())
                     .build();
-            billingClient.consumeAsync(consumeParams, this);
+            billingClient.acknowledgePurchase(ackParams, this);
         }
 
         List<String> skuList = new ArrayList<>();
