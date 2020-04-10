@@ -17,6 +17,7 @@
     </array>
     <string name="play_store_error">Unable to open the Play Store.</string>
     <string name="feedback_subject">Random Name Picker Feedback</string>
+    <string name="premium_feedback_subject">[PREMIUM] Random Name Picker Feedback</string>
     <string name="send_email">Send email</string>
 
     <!-- Icons -->

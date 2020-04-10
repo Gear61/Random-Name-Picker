@@ -9,8 +9,63 @@
     android:focusableInTouchMode="true"
     >
 
+    <RelativeLayout
+        android:id="@+id/buy_premium_tooltip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        >
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/dismiss_premium_tooltip"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="@string/clear_icon"
+            android:textSize="24dp"
+            android:layout_alignParentEnd="true"
+            />
+
+        <TextView
+            android:id="@+id/tooltip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_toStartOf="@id/dismiss_premium_tooltip"
+            android:text="@string/premium_tooltip_title"
+            android:textColor="@color/black"
+            android:textSize="19sp"
+            />
+
+        <TextView
+            android:id="@+id/tooltip_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@+id/tooltip_title"
+            android:text="@string/premium_tooltip_body"
+            android:textColor="@color/dark_gray"
+            android:textSize="15sp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/tooltip_body"
+            android:background="@color/gray_300"
+            />
+    </RelativeLayout>
+
     <include
         android:id="@+id/search_bar"
+        android:layout_below="@id/buy_premium_tooltip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         layout="@layout/search_bar"
         />
 
@@ -35,6 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
+        android:layout_below="@id/buy_premium_tooltip"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         >
