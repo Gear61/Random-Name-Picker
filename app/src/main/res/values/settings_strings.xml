@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="buy_premium">Buy premium</string>
+    <string name="buy_button_text">Buy ($0.99)</string>
     <string name="shake_enabled">Shake to choose</string>
     <string name="send_feedback">Send feedback</string>
     <string name="my_other_apps">My other apps</string>
