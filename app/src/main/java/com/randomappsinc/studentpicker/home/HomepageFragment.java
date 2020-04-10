@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
@@ -23,8 +22,8 @@ import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
@@ -45,6 +44,7 @@ public class HomepageFragment extends Fragment implements
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
     @BindView(R.id.homepage_root) View rootView;
+    @BindView(R.id.buy_premium_tooltip) View buyPremiumTooltip;
     @BindView(R.id.search_bar) View searchBar;
     @BindView(R.id.search_input) EditText searchInput;
     @BindView(R.id.no_lists_match) View noListsMatch;
@@ -54,7 +54,6 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.no_content) View noListsAtAll;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
 
-    private PreferencesManager preferencesManager;
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private RenameListDialog renameListDialog;
@@ -62,8 +61,6 @@ public class HomepageFragment extends Fragment implements
     private SpeechToTextManager speechToTextManager;
     private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
-
-    private AdView adView;
 
     @Override
     public View onCreateView(
@@ -79,7 +76,6 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        preferencesManager = new PreferencesManager(getContext());
         renameListDialog = new RenameListDialog(this, getContext());
         deleteListDialog = new DeleteListDialog(this, getContext());
         dataSource = new DataSource(getContext());
@@ -105,6 +101,18 @@ public class HomepageFragment extends Fragment implements
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
 
         bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
+    }
+
+    @OnClick(R.id.buy_premium_tooltip)
+    void buyPremium() {
+        Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    @OnClick(R.id.dismiss_premium_tooltip)
+    void dismissPremiumTooltip() {
+        buyPremiumTooltip.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.voice_search)

@@ -41,6 +41,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     @BindView(R.id.settings_root) LinearLayout rootView;
     @BindView(R.id.settings_options) RecyclerView settingsOptions;
     @BindString(R.string.feedback_subject) String feedbackSubject;
+    @BindString(R.string.premium_feedback_subject) String premiumFeedbackSubject;
     @BindString(R.string.send_email) String sendEmail;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
@@ -93,7 +94,10 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 preferencesManager.setShakeEnabled(!currentState);
                 return;
             case 2:
-                String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
+                String uriText = "mailto:" + SUPPORT_EMAIL
+                        + "?subject=" + Uri.encode(preferencesManager.isOnFreeVersion()
+                        ? feedbackSubject
+                        : premiumFeedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
                 sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
