@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
+import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -45,6 +46,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private PreferencesManager preferencesManager;
+    private SettingsAdapter settingsAdapter;
     private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
@@ -66,32 +68,41 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(lineDivider);
         settingsOptions.addItemDecoration(itemDecorator);
-        settingsOptions.setAdapter(new SettingsAdapter(getContext(), this));
+        settingsAdapter = new SettingsAdapter(getContext(), this);
+        settingsOptions.setAdapter(settingsAdapter);
         bannerAdManager = new BannerAdManager(rootView);
     }
 
     @Override
     public void onItemClick(int position) {
         Intent intent = null;
-        switch (position) {
+        // Everything is moved up by 1 if the user has already bought premium
+        int delta = preferencesManager.isOnFreeVersion() ? 0 : -1;
+        switch (position + delta) {
             case 0:
-                View firstCell = settingsOptions.getChildAt(0);
+                intent = new Intent(getActivity(), BuyPremiumActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+                break;
+            case 1:
+                int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
+                View firstCell = settingsOptions.getChildAt(shakePosition);
                 Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
                 preferencesManager.setShakeEnabled(!currentState);
                 return;
-            case 1:
+            case 2:
                 String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
                 sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 2:
+            case 3:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 3:
+            case 4:
                 Uri uri =  Uri.parse("market://details?id=" + getContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getContext().getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -99,7 +110,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                     return;
                 }
                 break;
-            case 4:
+            case 5:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
@@ -111,6 +122,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     public void onResume() {
         super.onResume();
         bannerAdManager.loadOrRemoveAd();
+        settingsAdapter.maybeRefreshList();
     }
 
     @Override

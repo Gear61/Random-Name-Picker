@@ -17,6 +17,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
 
     private Activity activity;
     private BillingClient billingClient;
+    private PreferencesManager preferencesManager;
 
     public PaymentManager(Activity activity) {
         this.activity = activity;
@@ -42,6 +44,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                 .enablePendingPurchases()
                 .setListener(this)
                 .build();
+        this.preferencesManager = new PreferencesManager(activity);
     }
 
     public void startPaymentFlow() {
@@ -52,6 +55,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
             UIUtils.showLongToast(R.string.payment_thank_you, activity);
+            preferencesManager.setIsOnFreeVersion(false);
 
             for (Purchase purchase : purchases) {
                 // This call only returns unconsumed purchases
