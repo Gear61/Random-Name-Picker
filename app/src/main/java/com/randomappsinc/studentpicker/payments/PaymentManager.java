@@ -11,7 +11,6 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
@@ -38,7 +37,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     private BillingClient billingClient;
     private PreferencesManager preferencesManager;
 
-    public PaymentManager(Activity activity) {
+    PaymentManager(Activity activity) {
         this.activity = activity;
         this.billingClient = BillingClient
                 .newBuilder(activity)
@@ -48,7 +47,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
         this.preferencesManager = new PreferencesManager(activity);
     }
 
-    public void startPaymentFlow() {
+    void startPaymentFlow() {
         billingClient.startConnection(this);
     }
 
@@ -122,7 +121,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
         }
     }
 
-    public void cleanUp() {
+    void cleanUp() {
         billingClient.endConnection();
         activity = null;
     }
