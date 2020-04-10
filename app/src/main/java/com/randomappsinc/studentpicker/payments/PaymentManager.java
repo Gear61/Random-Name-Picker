@@ -33,11 +33,16 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     private static final String TAG = PaymentManager.class.getSimpleName();
     private static final String NINETY_NINE_CENT_PREMIUM = "99_cent_premium";
 
+    public interface Listener {
+        void onPurchaseSuccess();
+    }
+
     private Activity activity;
     private BillingClient billingClient;
     private PreferencesManager preferencesManager;
+    private Listener listener;
 
-    PaymentManager(Activity activity) {
+    PaymentManager(Activity activity, Listener listener) {
         this.activity = activity;
         this.billingClient = BillingClient
                 .newBuilder(activity)
@@ -45,6 +50,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                 .setListener(this)
                 .build();
         this.preferencesManager = new PreferencesManager(activity);
+        this.listener = listener;
     }
 
     void startPaymentFlow() {
@@ -66,6 +72,8 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                     billingClient.acknowledgePurchase(ackParams, this);
                 }
             }
+
+            listener.onPurchaseSuccess();
         } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.USER_CANCELED) {
             UIUtils.showLongToast(R.string.payment_failed, activity);
         }

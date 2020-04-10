@@ -12,7 +12,7 @@ import com.randomappsinc.studentpicker.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BuyPremiumActivity extends AppCompatActivity {
+public class BuyPremiumActivity extends AppCompatActivity implements PaymentManager.Listener {
 
     private PaymentManager paymentManager;
 
@@ -29,7 +29,12 @@ public class BuyPremiumActivity extends AppCompatActivity {
                         .colorRes(R.color.white)
                         .actionBarSize());
 
-        paymentManager = new PaymentManager(this);
+        paymentManager = new PaymentManager(this, this);
+    }
+
+    @Override
+    public void onPurchaseSuccess() {
+        finish();
     }
 
     @OnClick(R.id.buy)
