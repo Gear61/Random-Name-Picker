@@ -14,26 +14,39 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingViewHolder> {
 
+    private static final int NUM_SETTINGS_OPTIONS = 6;
+
     public interface ItemSelectionListener {
         void onItemClick(int position);
     }
 
-    private @NonNull ItemSelectionListener itemSelectionListener;
-    private String[] options;
-    private String[] icons;
+    private ItemSelectionListener itemSelectionListener;
+    private List<String> options;
+    private List<String> icons;
     private PreferencesManager preferencesManager;
 
-    SettingsAdapter(Context context, @NonNull ItemSelectionListener itemSelectionListener) {
+    SettingsAdapter(Context context, ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
-        this.options = context.getResources().getStringArray(R.array.settings_options);
-        this.icons = context.getResources().getStringArray(R.array.settings_icons);
+        this.options = Arrays.asList(context.getResources().getStringArray(R.array.settings_options));
+        this.icons = Arrays.asList(context.getResources().getStringArray(R.array.settings_icons));
         this.preferencesManager = new PreferencesManager(context);
+    }
+
+    void maybeRefreshList() {
+        if (options.size() == NUM_SETTINGS_OPTIONS && !preferencesManager.isOnFreeVersion()) {
+            options.remove(0);
+            icons.remove(0);
+            notifyItemRemoved(0);
+        }
     }
 
     @Override
@@ -53,7 +66,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
 
     @Override
     public int getItemCount() {
-        return options.length;
+        return options.size();
     }
 
     class SettingViewHolder extends RecyclerView.ViewHolder {
@@ -67,10 +80,11 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         }
 
         void loadSetting(int position) {
-            option.setText(options[position]);
-            icon.setText(icons[position]);
+            option.setText(options.get(position));
+            icon.setText(icons.get(position));
 
-            if (position == 0) {
+            int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
+            if (position == shakePosition) {
                 UIUtils.setCheckedImmediately(toggle, preferencesManager.isShakeEnabled());
                 toggle.setVisibility(View.VISIBLE);
             } else {
