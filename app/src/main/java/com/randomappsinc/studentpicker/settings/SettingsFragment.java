@@ -78,7 +78,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     public void onItemClick(int position) {
         Intent intent = null;
         // Everything is moved up by 1 if the user has already bought premium
-        int delta = preferencesManager.isOnFreeVersion() ? 0 : -1;
+        int delta = preferencesManager.isOnFreeVersion() ? 0 : 1;
         switch (position + delta) {
             case 0:
                 intent = new Intent(getActivity(), BuyPremiumActivity.class);
