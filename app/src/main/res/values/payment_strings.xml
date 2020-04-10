@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buy_premium_title">Buy Premium</string>
+    <string name="payment_flow_startup_failed">
+        We were unable to start the payment flow. Please try again later!
+    </string>
+    <string name="payment_thank_you">
+        Thank you for the donation!
+        Every cent of it goes towards improving Random Name Picker!
+    </string>
+    <string name="payment_failed">
+        We failed to process your payment. Please try again later!
+    </string>
+</resources>

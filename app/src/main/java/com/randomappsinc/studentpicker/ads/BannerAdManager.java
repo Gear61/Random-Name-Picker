@@ -28,29 +28,28 @@ public class BannerAdManager extends AdListener {
         this.preferencesManager = new PreferencesManager(adContainerView.getContext());
     }
 
-    private void maybeSetUpAd() {
+    // Removes the current ad (if applicable) and replaces it with a new one
+    private void reloadAd() {
         if (adView != null) {
             adContainerView.removeView(adView);
         }
 
-        if (preferencesManager.shouldShowAds()) {
-            Context context = adContainerView.getContext();
-            adView = new AdView(context);
-            adView.setAlpha(0f);
-            adView.setAdUnitId(BuildConfig.DEBUG ? DEBUG_BANNER_AD_UNIT_ID : PROD_BANNER_AD_UNIT_ID);
+        Context context = adContainerView.getContext();
+        adView = new AdView(context);
+        adView.setAlpha(0f);
+        adView.setAdUnitId(BuildConfig.DEBUG ? DEBUG_BANNER_AD_UNIT_ID : PROD_BANNER_AD_UNIT_ID);
 
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
-            AdSize adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                    context, (int) screenWidthDp);
-            adView.setAdSize(adSize);
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
+        AdSize adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+                context, (int) screenWidthDp);
+        adView.setAdSize(adSize);
 
-            adContainerView.addView(adView);
+        adContainerView.addView(adView);
 
-            adView.setAdListener(this);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-        }
+        adView.setAdListener(this);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     @Override
@@ -62,16 +61,21 @@ public class BannerAdManager extends AdListener {
         }
     }
 
-    // Try to load the ad if it hasn't already been loaded
+    // Try to load the ad if it hasn't already been loaded. Remove ads otherwise.
     // We need to expose such an API because we shouldn't load ads upon the creation of fragments due to ViewPager
-    public void maybeLoadAd() {
-        if (adView == null) {
-            maybeSetUpAd();
+    public void loadOrRemoveAd() {
+        // Remove ad if it's around and the user has premium
+        if (!preferencesManager.isOnFreeVersion()) {
+            if (adView != null) {
+                adContainerView.removeView(adView);
+            }
+        } else if (adView == null) {
+            reloadAd();
         }
     }
 
     // Refresh the ad to have a proper size for the orientation
     public void onOrientationChanged() {
-        maybeSetUpAd();
+        reloadAd();
     }
 }

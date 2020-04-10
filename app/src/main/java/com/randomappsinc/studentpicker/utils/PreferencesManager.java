@@ -25,21 +25,6 @@ public class PreferencesManager {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
-    @Deprecated
-    public Set<String> getNameLists() {
-        return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
-    }
-
-    @Deprecated
-    public ListInfo getNameListState(String listName) {
-        return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
-    }
-
-    @Deprecated
-    public ChoosingSettings getChoosingSettings(String listName) {
-        return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
-    }
-
     public int rememberAppOpen() {
         int numAppOpens = prefs.getInt(NUM_APP_OPENS, 0);
         numAppOpens++;
@@ -70,11 +55,27 @@ public class PreferencesManager {
         return prefs.getBoolean(SHAKE_ENABLED, false);
     }
 
-    public void setShouldShowAds(boolean shouldShowAds) {
+    public void setIsOnFreeVersion(boolean shouldShowAds) {
         prefs.edit().putBoolean(SHOULD_SHOW_ADS_KEY, shouldShowAds).apply();
     }
 
-    public boolean shouldShowAds() {
+    public boolean isOnFreeVersion() {
         return prefs.getBoolean(SHOULD_SHOW_ADS_KEY, true);
+    }
+
+    /** API dead zone - DO NOT THE USE THE APIS BELOW **/
+    @Deprecated
+    public Set<String> getNameLists() {
+        return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
+    }
+
+    @Deprecated
+    public ListInfo getNameListState(String listName) {
+        return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
+    }
+
+    @Deprecated
+    public ChoosingSettings getChoosingSettings(String listName) {
+        return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 }

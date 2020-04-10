@@ -37,9 +37,9 @@ public class CreateListDialog {
                 .onPositive((dialog, which) -> {
                     String listName = dialog.getInputEditText().getText().toString().trim();
 
-                    if (preferencesManager.shouldShowAds()
+                    if (preferencesManager.isOnFreeVersion()
                             && listName.toLowerCase().equals(AdsBackDoor.PASSWORD.toLowerCase())) {
-                        preferencesManager.setShouldShowAds(false);
+                        preferencesManager.setIsOnFreeVersion(false);
                         UIUtils.showLongToast(R.string.ads_back_door_unlocked, dialog.getContext());
                         return;
                     }

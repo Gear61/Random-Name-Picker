@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="buy_premium">Buy premium</string>
     <string name="shake_enabled">Shake to choose</string>
     <string name="send_feedback">Send feedback</string>
     <string name="my_other_apps">My other apps</string>
     <string name="rate_this_app">Rate this app</string>
     <string name="source_code">Source code</string>
     <array name="settings_options">
+        <item>@string/buy_premium</item>
         <item>@string/shake_enabled</item>
         <item>@string/send_feedback</item>
         <item>@string/my_other_apps</item>
@@ -17,12 +19,14 @@
     <string name="send_email">Send email</string>
 
     <!-- Icons -->
+    <string name="money_icon">{fa-money}</string>
     <string name="shake_icon">{ion-radio-waves}</string>
     <string name="email_icon">{ion-email}</string>
     <string name="android_icon">{ion-social-android}</string>
     <string name="rate_icon">{ion-thumbsup}</string>
     <string name="github_icon">{ion-social-github}</string>
     <array name="settings_icons">
+        <item>@string/money_icon</item>
         <item>@string/shake_icon</item>
         <item>@string/email_icon</item>
         <item>@string/android_icon</item>
