@@ -20,16 +20,19 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_ENABLED = "shakeEnabled";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
+    private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
-    public int rememberAppOpen() {
+    public void increaseNumAppOpens() {
         int numAppOpens = prefs.getInt(NUM_APP_OPENS, 0);
-        numAppOpens++;
-        prefs.edit().putInt(NUM_APP_OPENS, numAppOpens).apply();
-        return numAppOpens;
+        prefs.edit().putInt(NUM_APP_OPENS, numAppOpens + 1).apply();
+    }
+
+    public int getNumAppOpens() {
+        return prefs.getInt(NUM_APP_OPENS, 0);
     }
 
     public int getPresentationTextSize() {
@@ -61,6 +64,12 @@ public class PreferencesManager {
 
     public boolean isOnFreeVersion() {
         return prefs.getBoolean(SHOULD_SHOW_ADS_KEY, true);
+    }
+
+    public boolean hasSeenPremiumTooltip() {
+        boolean hasSeenTooltip = prefs.getBoolean(HAS_SEEN_PREMIUM_TOOLTIP, false);
+        prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
+        return hasSeenTooltip;
     }
 
     /** API dead zone - DO NOT THE USE THE APIS BELOW **/

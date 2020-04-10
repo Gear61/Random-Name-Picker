@@ -30,6 +30,8 @@ import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDI
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener {
 
+    private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
+
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
@@ -69,7 +71,8 @@ public class HomeActivity extends StandardActivity implements
         bottomNavigation.setListener(this);
 
         PreferencesManager preferencesManager = new PreferencesManager(this);
-        if (preferencesManager.rememberAppOpen() == 5) {
+        preferencesManager.increaseNumAppOpens();
+        if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
         }
 
