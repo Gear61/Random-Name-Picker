@@ -213,41 +213,44 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
             for (ListDO listDO : listsToMigrate) {
                 ListInfo listInfo = preferencesManager.getNameListState(listDO.getName());
-                Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
 
-                for (String name : nameToAmount.keySet()) {
-                    ContentValues values = new ContentValues();
-                    values.put(MySQLiteHelper.COLUMN_LIST_ID, listDO.getId());
-                    values.put(MySQLiteHelper.COLUMN_NAME, name);
-                    values.put(MySQLiteHelper.COLUMN_NAME_COUNT, nameToAmount.get(name));
-                    database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
+                if (listInfo != null) {
+                    Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
+                    for (String name : nameToAmount.keySet()) {
+                        ContentValues values = new ContentValues();
+                        values.put(MySQLiteHelper.COLUMN_LIST_ID, listDO.getId());
+                        values.put(MySQLiteHelper.COLUMN_NAME, name);
+                        values.put(MySQLiteHelper.COLUMN_NAME_COUNT, nameToAmount.get(name));
+                        database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
+                    }
                 }
 
                 ChoosingSettings choosingSettings = preferencesManager.getChoosingSettings(listDO.getName());
 
-                // Persist choosing settings
-                ContentValues newValues = new ContentValues();
-                newValues.put(
-                        MySQLiteHelper.COLUMN_PRESENTATION_MODE,
-                        choosingSettings.isPresentationModeEnabled() ? 1 : 0);
-                newValues.put(
-                        MySQLiteHelper.COLUMN_WITH_REPLACEMENT,
-                        choosingSettings.getWithReplacement() ? 1 : 0);
-                newValues.put(
-                        MySQLiteHelper.COLUMN_AUTOMATIC_TTS,
-                        choosingSettings.getAutomaticTts() ? 1 : 0);
-                newValues.put(
-                        MySQLiteHelper.COLUMN_SHOW_AS_LIST,
-                        choosingSettings.getShowAsList() ? 1 : 0);
-                newValues.put(
-                        MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
-                        choosingSettings.getNumNamesToChoose());
-                newValues.put(
-                        MySQLiteHelper.COLUMN_NAMES_HISTORY,
-                        JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
-                String[] whereArgs = new String[]{String.valueOf(listDO.getId())};
-                String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
-                database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+                if (choosingSettings != null) {
+                    ContentValues newValues = new ContentValues();
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_PRESENTATION_MODE,
+                            choosingSettings.isPresentationModeEnabled() ? 1 : 0);
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_WITH_REPLACEMENT,
+                            choosingSettings.getWithReplacement() ? 1 : 0);
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_AUTOMATIC_TTS,
+                            choosingSettings.getAutomaticTts() ? 1 : 0);
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_SHOW_AS_LIST,
+                            choosingSettings.getShowAsList() ? 1 : 0);
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
+                            choosingSettings.getNumNamesToChoose());
+                    newValues.put(
+                            MySQLiteHelper.COLUMN_NAMES_HISTORY,
+                            JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
+                    String[] whereArgs = new String[]{String.valueOf(listDO.getId())};
+                    String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
+                    database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+                }
             }
         }
     }

@@ -3,6 +3,8 @@ package com.randomappsinc.studentpicker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.Nullable;
+
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
@@ -79,11 +81,13 @@ public class PreferencesManager {
     }
 
     @Deprecated
+    @Nullable
     public ListInfo getNameListState(String listName) {
         return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
     }
 
     @Deprecated
+    @Nullable
     public ChoosingSettings getChoosingSettings(String listName) {
         return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
