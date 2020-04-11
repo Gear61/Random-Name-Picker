@@ -162,7 +162,7 @@ public class HomeActivity extends StandardActivity implements
 
     @Override
     public void onPremiumAlreadyOwned() {
-        UIUtils.showLongToast(R.string.premium_detected, this);
+        UIUtils.showLongToast(R.string.premium_detected_home, this);
     }
 
     @Override

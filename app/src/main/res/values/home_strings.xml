@@ -24,7 +24,7 @@
 
     <string name="no_lists_search">You do not have any lists that match your search.</string>
 
-    <string name="premium_detected">
+    <string name="premium_detected_home">
         We detected that you purchased premium on another device.
         Restart the app to immediately see changes.
     </string>
