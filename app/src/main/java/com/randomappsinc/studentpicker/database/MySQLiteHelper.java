@@ -193,18 +193,24 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Store settings in DB
         if (oldVersion == 3) {
-            doesColumnExist(LISTS_TABLE_NAME, COLUMN_PRESENTATION_MODE);
-            doesColumnExist(LISTS_TABLE_NAME, COLUMN_WITH_REPLACEMENT);
-            doesColumnExist(LISTS_TABLE_NAME, COLUMN_AUTOMATIC_TTS);
-            doesColumnExist(LISTS_TABLE_NAME, COLUMN_NAME);
-            doesColumnExist(LISTS_TABLE_NAME, COLUMN_ID);
-
-            database.execSQL(ADD_PRESENTATION);
-            database.execSQL(ADD_WITH_REPLACEMENT);
-            database.execSQL(ADD_AUTOMATIC_TTS);
-            database.execSQL(ADD_SHOW_AS_LIST);
-            database.execSQL(ADD_NUM_NAMES_CHOSEN);
-            database.execSQL(ADD_NAMES_HISTORY);
+            if (doesColumnNotExistInListsTable(database, COLUMN_PRESENTATION_MODE)) {
+                database.execSQL(ADD_PRESENTATION);
+            }
+            if (doesColumnNotExistInListsTable(database, COLUMN_WITH_REPLACEMENT)) {
+                database.execSQL(ADD_WITH_REPLACEMENT);
+            }
+            if (doesColumnNotExistInListsTable(database, COLUMN_AUTOMATIC_TTS)) {
+                database.execSQL(ADD_AUTOMATIC_TTS);
+            }
+            if (doesColumnNotExistInListsTable(database, COLUMN_SHOW_AS_LIST)) {
+                database.execSQL(ADD_SHOW_AS_LIST);
+            }
+            if (doesColumnNotExistInListsTable(database, COLUMN_NUM_NAMES_CHOSEN)) {
+                database.execSQL(ADD_NUM_NAMES_CHOSEN);
+            }
+            if (doesColumnNotExistInListsTable(database, COLUMN_NAMES_HISTORY)) {
+                database.execSQL(ADD_NAMES_HISTORY);
+            }
             database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
 
             List<ListDO> listsToMigrate = new ArrayList<>();
@@ -271,22 +277,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     // This method will check if column exists in your table
-    public boolean doesColumnExist(String tableName, String fieldName) {
-        boolean doesFieldExist = false;
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")",null);
+    private boolean doesColumnNotExistInListsTable(SQLiteDatabase database, String fieldName) {
+        boolean doesColumnNotExist = true;
+        Cursor cursor = database.rawQuery("PRAGMA table_info(" + LISTS_TABLE_NAME + ")",null);
         cursor.moveToFirst();
         do {
             String currentColumn = cursor.getString(1);
             if (currentColumn.equals(fieldName)) {
-                doesFieldExist = true;
+                doesColumnNotExist = false;
             }
         } while (cursor.moveToNext());
         cursor.close();
-
-        System.out.println("Column: " + fieldName + " || Exists: " + doesFieldExist);
-
-        return doesFieldExist;
+        return doesColumnNotExist;
     }
 
     // V1 -> V2 upgrade, get list names
