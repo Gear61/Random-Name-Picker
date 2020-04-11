@@ -39,6 +39,7 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
                         .actionBarSize());
 
         paymentManager = new PaymentManager(this, this);
+        paymentManager.setUpAndCheckForPremium();
     }
 
     private void showThankYou() {

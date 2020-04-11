@@ -65,7 +65,9 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     public void setUpAndCheckForPremium() {
-        billingClient.startConnection(this);
+        if (preferencesManager.isOnFreeVersion()) {
+            billingClient.startConnection(this);
+        }
     }
 
     @Override
@@ -98,6 +100,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
         }
     }
 
+    // Need to get to this point to call APIs
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
@@ -110,10 +113,16 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
         Purchase.PurchasesResult purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
         List<Purchase> purchasesList = purchases.getPurchasesList();
         for (Purchase purchase : purchasesList) {
-            AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
-                    .setPurchaseToken(purchase.getPurchaseToken())
-                    .build();
-            billingClient.acknowledgePurchase(ackParams, this);
+            if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                if (purchase.isAcknowledged()) {
+                    AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
+                            .setPurchaseToken(purchase.getPurchaseToken())
+                            .build();
+                    billingClient.acknowledgePurchase(ackParams, this);
+                }
+                preferencesManager.setIsOnFreeVersion(false);
+                listener.onPremiumAlreadyOwned();
+            }
         }
 
         List<String> skuList = new ArrayList<>();
