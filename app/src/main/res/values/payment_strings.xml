@@ -29,7 +29,7 @@
     <string name="post_payment_thank_you">{ion-checkmark-circled 120dp #4CAF50}\n\nThank You</string>
 
     <string name="premium_detected_buy_page">
-        We detected that you purchased premium on another device.
+        We detected that you purchased Random Name Picker Premium on another device.
         You have not been charged and can simply close the page.
     </string>
 </resources>

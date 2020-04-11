@@ -162,7 +162,11 @@ public class HomeActivity extends StandardActivity implements
 
     @Override
     public void onPremiumAlreadyOwned() {
-        UIUtils.showLongToast(R.string.premium_detected_home, this);
+        new MaterialDialog.Builder(this)
+                .title(R.string.thank_you_for_support)
+                .content(R.string.premium_detected_home)
+                .positiveText(R.string.okay)
+                .show();
     }
 
     @Override
