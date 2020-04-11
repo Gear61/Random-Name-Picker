@@ -41,8 +41,7 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
         paymentManager = new PaymentManager(this, this);
     }
 
-    @Override
-    public void onPremiumPurchaseSuccessful() {
+    private void showThankYou() {
         buyButton.setVisibility(View.GONE);
         buyPremiumIntro.setVisibility(View.GONE);
         buyPremiumBody.setVisibility(View.GONE);
@@ -51,8 +50,14 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
     }
 
     @Override
-    public void onPremiumAlreadyOwned() {
+    public void onPremiumPurchaseSuccessful() {
+        showThankYou();
+    }
 
+    @Override
+    public void onPremiumAlreadyOwned() {
+        showThankYou();
+        UIUtils.showLongToast(R.string.premium_detected_buy_page, this);
     }
 
     @Override
