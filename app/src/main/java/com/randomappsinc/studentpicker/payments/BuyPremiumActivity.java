@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.payments;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +10,17 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BuyPremiumActivity extends AppCompatActivity implements PaymentManager.Listener {
+
+    @BindView(R.id.buy) View buyButton;
+    @BindView(R.id.buy_premium_intro) View buyPremiumIntro;
+    @BindView(R.id.buy_premium_body) View buyPremiumBody;
+    @BindView(R.id.post_payment_thank_you) View thankYouTitle;
+    @BindView(R.id.post_payment_message) View thankYouMessage;
 
     private PaymentManager paymentManager;
 
@@ -34,7 +42,11 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
 
     @Override
     public void onPurchaseSuccess() {
-        finish();
+        buyButton.setVisibility(View.GONE);
+        buyPremiumIntro.setVisibility(View.GONE);
+        buyPremiumBody.setVisibility(View.GONE);
+        thankYouTitle.setVisibility(View.VISIBLE);
+        thankYouMessage.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.buy)
