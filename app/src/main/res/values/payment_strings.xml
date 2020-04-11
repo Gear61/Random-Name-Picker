@@ -5,8 +5,7 @@
         We were unable to start the payment flow. Please try again later!
     </string>
     <string name="payment_thank_you">
-        Thank you for the donation!
-        Every cent of it goes towards improving Random Name Picker!
+        Every cent of your purchase goes towards improving Random Name Picker!
     </string>
     <string name="payment_failed">
         We failed to process your payment. Please try again later!
@@ -26,4 +25,6 @@
         (but are not limited to): Importing name lists from .csv
         spreadsheets, sharing name lists as .txt files, and customizing the choosing message.
     </string>
+
+    <string name="post_payment_thank_you">{ion-checkmark-circled 120dp #4CAF50}\n\nThank You</string>
 </resources>

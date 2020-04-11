@@ -21,6 +21,7 @@
             >
 
             <TextView
+                android:id="@+id/buy_premium_intro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/premium_intro"
@@ -29,12 +30,39 @@
                 />
 
             <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/buy_premium_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/premium_feature_list"
                 android:textColor="@color/dark_gray"
                 android:textSize="19sp"
+                />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/post_payment_thank_you"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center_horizontal"
+                android:text="@string/post_payment_thank_you"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/post_payment_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_horizontal"
+                android:text="@string/payment_thank_you"
+                android:textColor="@color/dark_gray"
+                android:textSize="17sp"
+                android:visibility="gone"
                 />
         </LinearLayout>
 

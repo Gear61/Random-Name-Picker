@@ -60,7 +60,6 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
-            UIUtils.showLongToast(R.string.payment_thank_you, activity);
             preferencesManager.setIsOnFreeVersion(false);
 
             for (Purchase purchase : purchases) {
