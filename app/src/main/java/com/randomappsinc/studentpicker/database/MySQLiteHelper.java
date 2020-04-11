@@ -54,6 +54,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             " ADD COLUMN " + COLUMN_NAME_COUNT + " INTEGER;";
 
     // V3 - Migrate to lists to names schema
+    private static final String CREATE_LISTS_TABLE_OLD = "CREATE TABLE IF NOT EXISTS "
+            + LISTS_TABLE_NAME + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_LIST_NAME + " TEXT);";
+
+    private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + NAMES_TABLE_NAME +
+            "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_ID + " INTEGER, " +
+            COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
+
+    // V4 - Migrate name choosing state
     private static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
             + LISTS_TABLE_NAME + "("
             + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -65,11 +75,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1, "
             + COLUMN_NAMES_HISTORY + " TEXT);";
 
-    private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + NAMES_TABLE_NAME +
-            "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_LIST_ID + " INTEGER, " +
-            COLUMN_NAME + " TEXT, " + COLUMN_NAME_COUNT + " INTEGER);";
-
-    // V4 - Migrate name choosing state
     private static final String ADD_PRESENTATION = "ALTER TABLE " + LISTS_TABLE_NAME
             + " ADD COLUMN " + COLUMN_PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0;";
 
@@ -147,7 +152,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Convert to list + names schemas
         if (oldVersion == 2) {
-            database.execSQL(CREATE_LISTS_TABLE_QUERY);
+            database.execSQL(CREATE_LISTS_TABLE_OLD);
             database.execSQL(CREATE_NAMES_TABLE_QUERY);
 
             PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
@@ -244,9 +249,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     newValues.put(
                             MySQLiteHelper.COLUMN_NUM_NAMES_CHOSEN,
                             choosingSettings.getNumNamesToChoose());
-                    newValues.put(
-                            MySQLiteHelper.COLUMN_NAMES_HISTORY,
-                            JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
+
+                    if (listInfo != null) {
+                        newValues.put(
+                                MySQLiteHelper.COLUMN_NAMES_HISTORY,
+                                JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
+                    }
+
                     String[] whereArgs = new String[]{String.valueOf(listDO.getId())};
                     String whereStatement = MySQLiteHelper.COLUMN_ID + " = ?";
                     database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
