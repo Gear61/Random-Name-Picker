@@ -42,7 +42,7 @@ public class HomepageFragment extends Fragment implements
         return new HomepageFragment();
     }
 
-    private static final int NUM_APP_OPENS_FOR_TOOLTIP = 10;
+    private static final int NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP = 10;
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -63,6 +63,7 @@ public class HomepageFragment extends Fragment implements
     private DeleteListDialog deleteListDialog;
     private SpeechToTextManager speechToTextManager;
     private BannerAdManager bannerAdManager;
+    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -105,9 +106,10 @@ public class HomepageFragment extends Fragment implements
 
         bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
 
-        PreferencesManager preferencesManager = new PreferencesManager(getContext());
-        if (!preferencesManager.hasSeenPremiumTooltip()
-                || preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_TOOLTIP == 0) {
+        preferencesManager = new PreferencesManager(getContext());
+        if (preferencesManager.isOnFreeVersion() &&
+                (!preferencesManager.hasSeenPremiumTooltip()
+                        || preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP == 0)) {
             buyPremiumTooltip.setVisibility(View.VISIBLE);
         }
     }
@@ -167,6 +169,9 @@ public class HomepageFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         bannerAdManager.loadOrRemoveAd();
+        if (!preferencesManager.isOnFreeVersion() && buyPremiumTooltip.getVisibility() == View.VISIBLE) {
+            buyPremiumTooltip.setVisibility(View.GONE);
+        }
         rootView.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
