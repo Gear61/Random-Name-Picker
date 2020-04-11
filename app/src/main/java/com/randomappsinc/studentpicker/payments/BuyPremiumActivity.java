@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
@@ -58,7 +59,11 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
     @Override
     public void onPremiumAlreadyOwned() {
         showThankYou();
-        UIUtils.showLongToast(R.string.premium_detected_buy_page, this);
+        new MaterialDialog.Builder(this)
+                .title(R.string.thank_you_for_support)
+                .content(R.string.premium_detected_buy_page)
+                .positiveText(R.string.okay)
+                .show();
     }
 
     @Override
