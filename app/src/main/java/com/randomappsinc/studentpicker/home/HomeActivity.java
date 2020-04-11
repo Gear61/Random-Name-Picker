@@ -17,6 +17,7 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.listpage.ListActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.payments.PaymentManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -28,7 +29,7 @@ import butterknife.OnClick;
 import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class HomeActivity extends StandardActivity implements
-        BottomNavigationView.Listener, CreateListDialog.Listener {
+        BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
@@ -41,6 +42,7 @@ public class HomeActivity extends StandardActivity implements
     private CreateListDialog createListDialog;
     private BottomSheetBehavior bottomSheetBehavior;
     private DataSource dataSource;
+    private PaymentManager paymentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,8 @@ public class HomeActivity extends StandardActivity implements
 
         createListDialog = new CreateListDialog(this, this);
         dataSource = new DataSource(this);
+        paymentManager = new PaymentManager(this, this);
+        paymentManager.setUpAndCheckForPremium();
     }
 
     @Override
@@ -154,6 +158,20 @@ public class HomeActivity extends StandardActivity implements
     }
 
     @Override
+    public void onPremiumPurchaseSuccessful() {}
+
+    @Override
+    public void onPremiumAlreadyOwned() {
+        UIUtils.showLongToast(R.string.premium_detected, this);
+    }
+
+    @Override
+    public void onPaymentFailed() {}
+
+    @Override
+    public void onStartupFailed() {}
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMPORT_FILE_REQUEST_CODE) {
@@ -172,5 +190,11 @@ public class HomeActivity extends StandardActivity implements
                 startActivity(intent);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        paymentManager.cleanUp();
     }
 }

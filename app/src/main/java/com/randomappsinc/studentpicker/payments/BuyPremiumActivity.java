@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,12 +42,27 @@ public class BuyPremiumActivity extends AppCompatActivity implements PaymentMana
     }
 
     @Override
-    public void onPurchaseSuccess() {
+    public void onPremiumPurchaseSuccessful() {
         buyButton.setVisibility(View.GONE);
         buyPremiumIntro.setVisibility(View.GONE);
         buyPremiumBody.setVisibility(View.GONE);
         thankYouTitle.setVisibility(View.VISIBLE);
         thankYouMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPremiumAlreadyOwned() {
+
+    }
+
+    @Override
+    public void onPaymentFailed() {
+        UIUtils.showLongToast(R.string.payment_failed, this);
+    }
+
+    @Override
+    public void onStartupFailed() {
+        UIUtils.showLongToast(R.string.payment_flow_startup_failed, this);
     }
 
     @OnClick(R.id.buy)

@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.payments;
 
 import android.app.Activity;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -16,33 +15,37 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
-import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
-import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages the donation flow, including all success/error messaging.
+ * Manages the payment flow.
  * Make sure to call cleanUp() to prevent leaks.
  */
 public class PaymentManager implements PurchasesUpdatedListener, BillingClientStateListener,
         SkuDetailsResponseListener, AcknowledgePurchaseResponseListener {
 
-    private static final String TAG = PaymentManager.class.getSimpleName();
     private static final String NINETY_NINE_CENT_PREMIUM = "99_cent_premium";
 
     public interface Listener {
-        void onPurchaseSuccess();
+        void onPremiumPurchaseSuccessful();
+
+        void onPremiumAlreadyOwned();
+
+        void onPaymentFailed();
+
+        void onStartupFailed();
     }
 
     private Activity activity;
     private BillingClient billingClient;
     private PreferencesManager preferencesManager;
     private Listener listener;
+    private @Nullable BillingFlowParams billingFlowParams;
 
-    PaymentManager(Activity activity, Listener listener) {
+    public PaymentManager(Activity activity, Listener listener) {
         this.activity = activity;
         this.billingClient = BillingClient
                 .newBuilder(activity)
@@ -54,14 +57,20 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     void startPaymentFlow() {
+        if (billingFlowParams != null) {
+            billingClient.launchBillingFlow(activity, billingFlowParams);
+        } else {
+            listener.onStartupFailed();
+        }
+    }
+
+    public void setUpAndCheckForPremium() {
         billingClient.startConnection(this);
     }
 
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && purchases != null) {
-            preferencesManager.setIsOnFreeVersion(false);
-
             for (Purchase purchase : purchases) {
                 // This call only returns unacknowledged purchases
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
@@ -71,23 +80,32 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                     billingClient.acknowledgePurchase(ackParams, this);
                 }
             }
-
-            listener.onPurchaseSuccess();
+            preferencesManager.setIsOnFreeVersion(false);
+            listener.onPremiumPurchaseSuccessful();
+        } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            preferencesManager.setIsOnFreeVersion(false);
+            listener.onPremiumAlreadyOwned();
         } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.USER_CANCELED) {
-            UIUtils.showLongToast(R.string.payment_failed, activity);
+            listener.onPaymentFailed();
         }
     }
 
     @Override
     public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
-        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            Log.d(TAG, "Purchase failed. Response code: " + billingResult.getResponseCode()
-                    + " || Debug message: " + billingResult.getDebugMessage());
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            preferencesManager.setIsOnFreeVersion(false);
+            listener.onPremiumAlreadyOwned();
         }
     }
 
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            preferencesManager.setIsOnFreeVersion(false);
+            listener.onPremiumAlreadyOwned();
+            return;
+        }
+
         // Acknowledge any purchases that haven't been acknowledged already
         Purchase.PurchasesResult purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
         List<Purchase> purchasesList = purchases.getPurchasesList();
@@ -107,28 +125,30 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
 
     @Override
     public void onBillingServiceDisconnected() {
-        UIUtils.showLongToast(R.string.payment_flow_startup_failed, activity);
+        listener.onPaymentFailed();
     }
 
     @Override
     public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
-        if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-            UIUtils.showLongToast(R.string.payment_flow_startup_failed, activity);
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            preferencesManager.setIsOnFreeVersion(false);
+            listener.onPremiumAlreadyOwned();
+        } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+            listener.onStartupFailed();
             return;
         }
 
         for (SkuDetails skuDetails : skuDetailsList) {
             String sku = skuDetails.getSku();
             if (NINETY_NINE_CENT_PREMIUM.equals(sku)) {
-                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                billingFlowParams = BillingFlowParams.newBuilder()
                         .setSkuDetails(skuDetails)
                         .build();
-                billingClient.launchBillingFlow(activity, flowParams);
             }
         }
     }
 
-    void cleanUp() {
+    public void cleanUp() {
         billingClient.endConnection();
         activity = null;
     }

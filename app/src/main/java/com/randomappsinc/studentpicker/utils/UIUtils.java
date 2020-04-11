@@ -2,12 +2,10 @@ package com.randomappsinc.studentpicker.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -56,11 +54,6 @@ public class UIUtils {
         snackbar.show();
     }
 
-    public static int getDpInPixels(int numDp, Context context) {
-        Resources resources = context.getResources();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, numDp, resources.getDisplayMetrics());
-    }
-
     public static void loadMenuIcon(Menu menu, int itemId, Icon icon, Context context) {
         menu.findItem(itemId).setIcon(
                 new IconDrawable(context, icon)
@@ -74,6 +67,10 @@ public class UIUtils {
 
     public static void showLongToast(@StringRes int stringId, Context context) {
         showToast(stringId, Toast.LENGTH_LONG, context);
+    }
+
+    public static void showLongToast(String text, Context context) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
     private static void showToast(@StringRes int stringId, int duration, Context context) {
