@@ -78,19 +78,19 @@ class GroupMakingSettingsViewHolder {
     @OnTextChanged(value = R.id.num_of_names_per_group, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterNamesPerGroupChanged() {
         String namesPerGroupInput = namesPerGroup.getText().toString().trim();
-        if (namesPerGroup.isFocused() && isValid(namesNumber)) {
-            numGroups.setText(getOffset(namesNumber));
+        if (namesPerGroup.isFocused() && isInputValid(namesPerGroupInput)) {
+            numGroups.setText(getMatchingNumber(namesPerGroupInput));
         }
-        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(namesNumber));
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid(namesPerGroupInput));
     }
 
     @OnTextChanged(value = R.id.num_of_groups, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterGroupNumChanged() {
         String numberOfGroupsInput = numGroups.getText().toString().trim();
-        if (numGroups.isFocused() && isValid(groupsNumber)) {
-            namesPerGroup.setText(getOffset(groupsNumber));
+        if (numGroups.isFocused() && isInputValid(numberOfGroupsInput)) {
+            namesPerGroup.setText(getMatchingNumber(numberOfGroupsInput));
         }
-        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isValid(groupsNumber));
+        dialog.getActionButton(DialogAction.POSITIVE).setEnabled(isInputValid(numberOfGroupsInput));
     }
 
     // Given the number of names per group or number of groups, returns the corresponding number to use all the names
