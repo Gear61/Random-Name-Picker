@@ -193,6 +193,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Store settings in DB
         if (oldVersion == 3) {
+            doesColumnExist(LISTS_TABLE_NAME, COLUMN_PRESENTATION_MODE);
+            doesColumnExist(LISTS_TABLE_NAME, COLUMN_WITH_REPLACEMENT);
+            doesColumnExist(LISTS_TABLE_NAME, COLUMN_AUTOMATIC_TTS);
+            doesColumnExist(LISTS_TABLE_NAME, COLUMN_NAME);
+            doesColumnExist(LISTS_TABLE_NAME, COLUMN_ID);
+
             database.execSQL(ADD_PRESENTATION);
             database.execSQL(ADD_WITH_REPLACEMENT);
             database.execSQL(ADD_AUTOMATIC_TTS);
@@ -262,6 +268,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 }
             }
         }
+    }
+
+    // This method will check if column exists in your table
+    public boolean doesColumnExist(String tableName, String fieldName) {
+        boolean doesFieldExist = false;
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")",null);
+        cursor.moveToFirst();
+        do {
+            String currentColumn = cursor.getString(1);
+            if (currentColumn.equals(fieldName)) {
+                doesFieldExist = true;
+            }
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        System.out.println("Column: " + fieldName + " || Exists: " + doesFieldExist);
+
+        return doesFieldExist;
     }
 
     // V1 -> V2 upgrade, get list names
