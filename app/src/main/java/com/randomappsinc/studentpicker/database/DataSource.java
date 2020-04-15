@@ -44,7 +44,7 @@ public class DataSource {
         String[] columns = {DatabaseColumns.LIST_NAME};
         String selection = DatabaseColumns.ID + " = ?";
         String[] whereArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
                 whereArgs, null, null, null);
         if (cursor.moveToNext()) {
             return cursor.getString(0);
@@ -57,7 +57,7 @@ public class DataSource {
     public long getNumLists() {
         open();
         long numLists = DatabaseUtils.queryNumEntries(
-                database, MySQLiteHelper.LISTS_TABLE_NAME, null, null);
+                database, DatabaseTables.LISTS, null, null);
         close();
         return numLists;
     }
@@ -68,10 +68,10 @@ public class DataSource {
         Cursor cursor;
         if (TextUtils.isEmpty(searchTerm)) {
             String[] columns = {DatabaseColumns.ID, DatabaseColumns.LIST_NAME};
-            cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, null,
+            cursor = database.query(DatabaseTables.LISTS, columns, null,
                     null, null, null, null);
         } else {
-            cursor = database.rawQuery("SELECT * FROM " + MySQLiteHelper.LISTS_TABLE_NAME + " WHERE " +
+            cursor = database.rawQuery("SELECT * FROM " + DatabaseTables.LISTS + " WHERE " +
                     DatabaseColumns.LIST_NAME + " like ? COLLATE NOCASE",
                     new String[] {searchTerm + "%"});
         }
@@ -87,7 +87,7 @@ public class DataSource {
         open();
         ContentValues values = new ContentValues();
         values.put(DatabaseColumns.LIST_NAME, newListName);
-        int result = (int) database.insert(MySQLiteHelper.LISTS_TABLE_NAME, null, values);
+        int result = (int) database.insert(DatabaseTables.LISTS, null, values);
         close();
         return new ListDO(result, newListName);
     }
@@ -98,13 +98,13 @@ public class DataSource {
 
         // Delete the list
         database.delete(
-                MySQLiteHelper.LISTS_TABLE_NAME,
+                DatabaseTables.LISTS,
                 DatabaseColumns.ID + " = ?",
                 whereArgs);
 
         // Delete the names in the list
         database.delete(
-                MySQLiteHelper.NAMES_TABLE_NAME,
+                DatabaseTables.NAMES,
                 DatabaseColumns.LIST_ID + " = ?",
                 whereArgs);
 
@@ -117,7 +117,7 @@ public class DataSource {
         newValues.put(DatabaseColumns.LIST_NAME, updatedList.getName());
         String[] whereArgs = new String[] {String.valueOf(updatedList.getId())};
         String whereStatement = DatabaseColumns.ID + " = ?";
-        database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+        database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
         close();
     }
 
@@ -128,7 +128,7 @@ public class DataSource {
                 DatabaseColumns.ID, DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
         String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
                 selectionArgs, null, null, DatabaseColumns.NAME + " ASC");
         while (cursor.moveToNext()) {
             int nameId = cursor.getInt(0);
@@ -150,7 +150,7 @@ public class DataSource {
         String[] columns = {DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
         String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
                 selectionArgs, null, null, DatabaseColumns.NAME + " ASC");
         while (cursor.moveToNext()) {
             String name = cursor.getString(0);
@@ -172,7 +172,7 @@ public class DataSource {
         open();
         long numNamesInHistory = DatabaseUtils.queryNumEntries(
                 database,
-                MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME,
+                DatabaseTables.NAMES_IN_LIST,
                 quickSelection,
                 quickWhereArgs);
         close();
@@ -188,7 +188,7 @@ public class DataSource {
         String[] columns = {DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
         String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.NAMES_IN_LIST, columns, selection,
                 selectionArgs, null, null, DatabaseColumns.NAME + " ASC");
         while (cursor.moveToNext()) {
             String name = cursor.getString(0);
@@ -203,7 +203,7 @@ public class DataSource {
         String[] historyColumns = {DatabaseColumns.NAMES_HISTORY};
         String historySelection = DatabaseColumns.ID + " = ?";
         Cursor historyCursor = database.query(
-                MySQLiteHelper.LISTS_TABLE_NAME,
+                DatabaseTables.LISTS,
                 historyColumns,
                 historySelection,
                 selectionArgs,
@@ -230,14 +230,14 @@ public class DataSource {
             values.put(DatabaseColumns.LIST_ID, listId);
             values.put(DatabaseColumns.NAME, name);
             values.put(DatabaseColumns.NAME_COUNT, amount);
-            database.insert(MySQLiteHelper.NAMES_TABLE_NAME, null, values);
+            database.insert(DatabaseTables.NAMES, null, values);
         } else {
             ContentValues newValues = new ContentValues();
             newValues.put(DatabaseColumns.NAME_COUNT, currentAmount + amount);
             String[] whereArgs = new String[]{name, String.valueOf(listId)};
             String whereStatement = DatabaseColumns.NAME + " = ? AND "
                     + DatabaseColumns.LIST_ID + " = ?";
-            database.update(MySQLiteHelper.NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
+            database.update(DatabaseTables.NAMES, newValues, whereStatement, whereArgs);
         }
         close();
     }
@@ -248,7 +248,7 @@ public class DataSource {
         open();
         if (currentAmount <= amount) {
             String[] whereArgs = {name, String.valueOf(listId)};
-            database.delete(MySQLiteHelper.NAMES_TABLE_NAME,
+            database.delete(DatabaseTables.NAMES,
                     DatabaseColumns.NAME
                             + " = ? AND "
                             + DatabaseColumns.LIST_ID + " = ?",
@@ -260,7 +260,7 @@ public class DataSource {
             String whereStatement = DatabaseColumns.NAME
                     + " = ? AND "
                     + DatabaseColumns.LIST_ID + " = ?";
-            database.update(MySQLiteHelper.NAMES_TABLE_NAME, newValues, whereStatement, whereArgs);
+            database.update(DatabaseTables.NAMES, newValues, whereStatement, whereArgs);
         }
         close();
     }
@@ -272,7 +272,7 @@ public class DataSource {
                 + " = ? AND "
                 + DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {name, String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.NAMES_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
                 selectionArgs, null, null, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
@@ -286,7 +286,7 @@ public class DataSource {
         List<String> matchingNames = new ArrayList<>();
         open();
         Cursor cursor = database.rawQuery("SELECT DISTINCT " + DatabaseColumns.NAME +
-                " FROM " + MySQLiteHelper.NAMES_TABLE_NAME + " WHERE " +
+                " FROM " + DatabaseTables.NAMES + " WHERE " +
                 DatabaseColumns.NAME + " like ? COLLATE NOCASE " +
                 "ORDER BY " + DatabaseColumns.NAME + " ASC", new String[] {prefix + "%"});
         while (cursor.moveToNext()) {
@@ -316,7 +316,7 @@ public class DataSource {
         };
         String selection = DatabaseColumns.ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(MySQLiteHelper.LISTS_TABLE_NAME, columns, selection,
+        Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
                 selectionArgs, null, null, null);
         if (cursor.moveToFirst()) {
             choosingSettings.setPresentationMode(cursor.getInt(0) != 0);
@@ -337,7 +337,7 @@ public class DataSource {
         // Persist names in list
         String[] whereArgsToClearNamesState = {String.valueOf(listId)};
         database.delete(
-                MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME,
+                DatabaseTables.NAMES_IN_LIST,
                 DatabaseColumns.LIST_ID + " = ?",
                 whereArgsToClearNamesState);
 
@@ -347,7 +347,7 @@ public class DataSource {
             values.put(DatabaseColumns.LIST_ID, listId);
             values.put(DatabaseColumns.NAME, name);
             values.put(DatabaseColumns.NAME_COUNT, nameAmounts.get(name));
-            database.insert(MySQLiteHelper.NAMES_IN_LIST_TABLE_NAME, null, values);
+            database.insert(DatabaseTables.NAMES_IN_LIST, null, values);
         }
 
         // Persist choosing settings
@@ -372,7 +372,7 @@ public class DataSource {
                 JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
         String[] whereArgs = new String[]{String.valueOf(listId)};
         String whereStatement = DatabaseColumns.ID + " = ?";
-        database.update(MySQLiteHelper.LISTS_TABLE_NAME, newValues, whereStatement, whereArgs);
+        database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
 
         close();
     }
