@@ -78,7 +78,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Convert to list + names schemas
         if (oldVersion == 2) {
-            database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_OLD);
+            database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_QUERY);
             database.execSQL(TableCreationScripts.CREATE_NAMES_TABLE_QUERY);
 
             PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
