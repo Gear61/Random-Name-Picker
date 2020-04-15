@@ -29,28 +29,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + DatabaseTables.LEGACY_TABLE_NAME +
             " ADD COLUMN " + DatabaseColumns.NAME_COUNT + " INTEGER;";
 
-    // V3 - Migrate to lists to names schema
-    private static final String CREATE_LISTS_TABLE_OLD = "CREATE TABLE IF NOT EXISTS "
-            + DatabaseTables.LISTS + "("
-            + DatabaseColumns.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DatabaseColumns.LIST_NAME + " TEXT);";
-
-    private static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + DatabaseTables.NAMES +
-            "(" + DatabaseColumns.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DatabaseColumns.LIST_ID + " INTEGER, " +
-            DatabaseColumns.NAME + " TEXT, " + DatabaseColumns.NAME_COUNT + " INTEGER);";
-
-    // V4 - Migrate name choosing state
-    private static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
-            + DatabaseTables.LISTS + "("
-            + DatabaseColumns.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DatabaseColumns.LIST_NAME + " TEXT, "
-            + DatabaseColumns.PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0, "
-            + DatabaseColumns.WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0, "
-            + DatabaseColumns.AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0, "
-            + DatabaseColumns.SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0, "
-            + DatabaseColumns.NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1, "
-            + DatabaseColumns.NAMES_HISTORY + " TEXT);";
-
     private static final String ADD_PRESENTATION = "ALTER TABLE " + DatabaseTables.LISTS
             + " ADD COLUMN " + DatabaseColumns.PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0;";
 
@@ -94,8 +72,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(CREATE_LISTS_TABLE_QUERY);
-        database.execSQL(CREATE_NAMES_TABLE_QUERY);
+        database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_QUERY);
+        database.execSQL(TableCreationScripts.CREATE_NAMES_TABLE_QUERY);
         database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
     }
 
@@ -128,8 +106,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Convert to list + names schemas
         if (oldVersion == 2) {
-            database.execSQL(CREATE_LISTS_TABLE_OLD);
-            database.execSQL(CREATE_NAMES_TABLE_QUERY);
+            database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_OLD);
+            database.execSQL(TableCreationScripts.CREATE_NAMES_TABLE_QUERY);
 
             PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
             Set<String> listNames = preferencesManager.getNameLists();
@@ -169,22 +147,22 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Store settings in DB
         if (oldVersion == 3) {
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.PRESENTATION_MODE)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.PRESENTATION_MODE)) {
                 database.execSQL(ADD_PRESENTATION);
             }
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.WITH_REPLACEMENT)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.WITH_REPLACEMENT)) {
                 database.execSQL(ADD_WITH_REPLACEMENT);
             }
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.AUTOMATIC_TTS)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.AUTOMATIC_TTS)) {
                 database.execSQL(ADD_AUTOMATIC_TTS);
             }
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.SHOW_AS_LIST)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.SHOW_AS_LIST)) {
                 database.execSQL(ADD_SHOW_AS_LIST);
             }
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.NUM_NAMES_CHOSEN)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.NUM_NAMES_CHOSEN)) {
                 database.execSQL(ADD_NUM_NAMES_CHOSEN);
             }
-            if (doesColumnNotExistInListsTable(database, DatabaseColumns.NAMES_HISTORY)) {
+            if (safelyAddColumnToTable(database, DatabaseColumns.NAMES_HISTORY)) {
                 database.execSQL(ADD_NAMES_HISTORY);
             }
             database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
@@ -252,8 +230,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    // This method will check if column exists in your table
-    private boolean doesColumnNotExistInListsTable(SQLiteDatabase database, String fieldName) {
+    private boolean safelyAddColumnToTable(SQLiteDatabase database, String fieldName) {
         boolean doesColumnNotExist = true;
         Cursor cursor = database.rawQuery("PRAGMA table_info(" + DatabaseTables.LISTS + ")",null);
         cursor.moveToFirst();
