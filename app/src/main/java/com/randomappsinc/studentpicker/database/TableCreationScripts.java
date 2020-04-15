@@ -21,4 +21,10 @@ class TableCreationScripts {
             + DatabaseColumns.SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0, "
             + DatabaseColumns.NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1, "
             + DatabaseColumns.NAMES_HISTORY + " TEXT);";
+
+    static final String CREATE_NAMES_IN_LIST_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
+            + DatabaseTables.NAMES_IN_LIST +  "("
+            + DatabaseColumns.LIST_ID + " INTEGER, "
+            + DatabaseColumns.NAME + " TEXT, "
+            + DatabaseColumns.NAME_COUNT + " INTEGER);";
 }
