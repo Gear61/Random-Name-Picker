@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.database;
 
+// Holds database column names
 class DatabaseColumns {
 
     // Core columns
@@ -16,4 +17,7 @@ class DatabaseColumns {
     static final String SHOW_AS_LIST = "show_as_list";
     static final String NUM_NAMES_CHOSEN = "num_names_chosen";
     static final String NAMES_HISTORY = "names_history";
+
+    // LEGACY
+    static final String PERSON_NAME_LEGACY = "student_name";
 }
