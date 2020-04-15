@@ -25,34 +25,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "studentpicker.db";
     private static final int DATABASE_VERSION = 4;
 
-    // V2 - Introduce concept of amount
-    private static final String ADD_COUNT_COLUMN = "ALTER TABLE " + DatabaseTables.LEGACY_TABLE_NAME +
-            " ADD COLUMN " + DatabaseColumns.NAME_COUNT + " INTEGER;";
-
-    private static final String ADD_PRESENTATION = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.PRESENTATION_MODE + " BOOLEAN NOT NULL DEFAULT 0;";
-
-    private static final String ADD_WITH_REPLACEMENT = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.WITH_REPLACEMENT + " BOOLEAN NOT NULL DEFAULT 0;";
-
-    private static final String ADD_AUTOMATIC_TTS = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.AUTOMATIC_TTS + " BOOLEAN NOT NULL DEFAULT 0;";
-
-    private static final String ADD_SHOW_AS_LIST = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.SHOW_AS_LIST + " BOOLEAN NOT NULL DEFAULT 0;";
-
-    private static final String ADD_NUM_NAMES_CHOSEN = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1;";
-
-    private static final String ADD_NAMES_HISTORY = "ALTER TABLE " + DatabaseTables.LISTS
-            + " ADD COLUMN " + DatabaseColumns.NAMES_HISTORY + " TEXT;";
-
-    private static final String CREATE_NAMES_IN_LIST_TABLE_QUERY =
-            "CREATE TABLE IF NOT EXISTS " + DatabaseTables.NAMES_IN_LIST +  "("
-                    + DatabaseColumns.LIST_ID + " INTEGER, "
-                    + DatabaseColumns.NAME + " TEXT, "
-                    + DatabaseColumns.NAME_COUNT + " INTEGER);";
-
     // Struct for migration
     private static class NameInfoPod {
         final String listName;
@@ -74,7 +46,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_QUERY);
         database.execSQL(TableCreationScripts.CREATE_NAMES_TABLE_QUERY);
-        database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
+        database.execSQL(TableCreationScripts.CREATE_NAMES_IN_LIST_TABLE_QUERY);
     }
 
     @Override
@@ -88,7 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 oldData.put(listName, getNameCountsLegacy(database, listName));
             }
 
-            database.execSQL(ADD_COUNT_COLUMN);
+            safelyAddColumnToTable(database, DatabaseColumns.NAME, "INTEGER", DatabaseTables.LEGACY_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseTables.LEGACY_TABLE_NAME);
 
             for (String listName : oldData.keySet()) {
@@ -147,25 +119,43 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // Store settings in DB
         if (oldVersion == 3) {
-            if (safelyAddColumnToTable(database, DatabaseColumns.PRESENTATION_MODE)) {
-                database.execSQL(ADD_PRESENTATION);
-            }
-            if (safelyAddColumnToTable(database, DatabaseColumns.WITH_REPLACEMENT)) {
-                database.execSQL(ADD_WITH_REPLACEMENT);
-            }
-            if (safelyAddColumnToTable(database, DatabaseColumns.AUTOMATIC_TTS)) {
-                database.execSQL(ADD_AUTOMATIC_TTS);
-            }
-            if (safelyAddColumnToTable(database, DatabaseColumns.SHOW_AS_LIST)) {
-                database.execSQL(ADD_SHOW_AS_LIST);
-            }
-            if (safelyAddColumnToTable(database, DatabaseColumns.NUM_NAMES_CHOSEN)) {
-                database.execSQL(ADD_NUM_NAMES_CHOSEN);
-            }
-            if (safelyAddColumnToTable(database, DatabaseColumns.NAMES_HISTORY)) {
-                database.execSQL(ADD_NAMES_HISTORY);
-            }
-            database.execSQL(CREATE_NAMES_IN_LIST_TABLE_QUERY);
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.PRESENTATION_MODE,
+                    "BOOLEAN NOT NULL DEFAULT 0",
+                    DatabaseTables.LISTS);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.WITH_REPLACEMENT,
+                    "BOOLEAN NOT NULL DEFAULT 0",
+                    DatabaseTables.LISTS);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.AUTOMATIC_TTS,
+                    "BOOLEAN NOT NULL DEFAULT 0",
+                    DatabaseTables.LISTS);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.SHOW_AS_LIST,
+                    "INTEGER DEFAULT 1",
+                    DatabaseTables.LISTS);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.NUM_NAMES_CHOSEN,
+                    "BOOLEAN NOT NULL DEFAULT 0",
+                    DatabaseTables.LISTS);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.NAMES_HISTORY,
+                    "TEXT",
+                    DatabaseTables.LISTS);
+
+            database.execSQL(TableCreationScripts.CREATE_NAMES_IN_LIST_TABLE_QUERY);
 
             List<ListDO> listsToMigrate = new ArrayList<>();
             Cursor listInfoCursor = database.rawQuery(
@@ -230,9 +220,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    private boolean safelyAddColumnToTable(SQLiteDatabase database, String fieldName) {
+    // Checks to see if the given column exists in the given table and adds it if it doesn't exist
+    private void safelyAddColumnToTable(
+            SQLiteDatabase database, String fieldName, String fieldType, String tableName) {
         boolean doesColumnNotExist = true;
-        Cursor cursor = database.rawQuery("PRAGMA table_info(" + DatabaseTables.LISTS + ")",null);
+        Cursor cursor = database.rawQuery("PRAGMA table_info(" + tableName + ")",null);
         cursor.moveToFirst();
         do {
             String currentColumn = cursor.getString(1);
@@ -241,7 +233,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         } while (cursor.moveToNext());
         cursor.close();
-        return doesColumnNotExist;
+
+        if (doesColumnNotExist) {
+            String addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + fieldName + " " + fieldType + ";";
+            database.execSQL(addColumnQuery);
+        }
     }
 
     // V1 -> V2 upgrade, get list names
