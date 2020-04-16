@@ -45,13 +45,6 @@
             />
 
         <activity
-            android:name=".listpage.ListActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            />
-
-        <activity
             android:name=".importdata.ImportFromTextFileActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/import_name_list"

@@ -15,7 +15,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
-import com.randomappsinc.studentpicker.listpage.ListActivity;
+import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.PaymentManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -25,8 +25,6 @@ import com.randomappsinc.studentpicker.views.BottomNavigationView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.randomappsinc.studentpicker.listpage.ListActivity.START_ON_EDIT_PAGE;
 
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
@@ -88,9 +86,8 @@ public class HomeActivity extends StandardActivity implements
     public void onCreateNewListConfirmed(String newListName) {
         ListDO newListDO = dataSource.addNameList(newListName);
 
-        Intent intent = new Intent(this, ListActivity.class);
+        Intent intent = new Intent(this, ListLandingPageActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, newListDO.getId());
-        intent.putExtra(START_ON_EDIT_PAGE, true);
         startActivity(intent);
     }
 

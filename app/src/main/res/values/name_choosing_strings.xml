@@ -7,7 +7,6 @@
 
     <string name="choose_icon">{ion-android-person}</string>
     <string name="groups_icon">{ion-android-people}</string>
-    <string name="swap_icon">{ion-arrow-swap}</string>
     <string-array name="choosing_options_icons">
         <item>@string/choose_icon</item>
         <item>@string/groups_icon</item>
