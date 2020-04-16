@@ -117,11 +117,11 @@ public class DataSource {
         close();
     }
 
-    public void renameList(ListDO updatedList) {
+    public void renameList(int listId, String newName) {
         open();
         ContentValues newValues = new ContentValues();
-        newValues.put(DatabaseColumns.LIST_NAME, updatedList.getName());
-        String[] whereArgs = new String[] {String.valueOf(updatedList.getId())};
+        newValues.put(DatabaseColumns.LIST_NAME, newName);
+        String[] whereArgs = new String[] {String.valueOf(listId)};
         String whereStatement = DatabaseColumns.ID + " = ?";
         database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
         close();
