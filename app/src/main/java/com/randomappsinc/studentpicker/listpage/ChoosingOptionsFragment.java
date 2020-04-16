@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.listpage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.grouping.GroupMakingActivity;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
@@ -60,6 +62,9 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
             case 0:
                 break;
             case 1:
+                Intent intent = new Intent(getActivity(), GroupMakingActivity.class);
+                intent.putExtra(Constants.LIST_ID_KEY, listId);
+                getActivity().startActivity(intent);
                 break;
         }
     }

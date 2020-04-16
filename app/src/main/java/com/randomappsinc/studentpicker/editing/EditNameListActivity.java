@@ -91,6 +91,7 @@ public class EditNameListActivity extends StandardActivity implements
         deleteNameDialog = new DeleteNameDialog(this, this);
         duplicationDialog = new DuplicationDialog(this, this);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
+        bannerAdManager.loadOrRemoveAd();
     }
 
     @OnClick(R.id.add_item)
@@ -194,12 +195,6 @@ public class EditNameListActivity extends StandardActivity implements
     public void onTextSpoken(String spokenText) {
         newNameInput.setText(spokenText);
         newNameInput.setSelection(spokenText.length());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        bannerAdManager.loadOrRemoveAd();
     }
 
     @Override
