@@ -69,5 +69,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
+
+        <activity
+            android:name=".editing.EditNameListActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
     </application>
 </manifest>

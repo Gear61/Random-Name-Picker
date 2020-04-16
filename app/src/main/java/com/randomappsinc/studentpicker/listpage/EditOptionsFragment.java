@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.listpage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
@@ -58,6 +60,9 @@ public class EditOptionsFragment extends Fragment implements ListOptionsAdapter.
     public void onItemClick(int position) {
         switch (position) {
             case 0:
+                Intent intent = new Intent(getActivity(), EditNameListActivity.class);
+                intent.putExtra(Constants.LIST_ID_KEY, listId);
+                getActivity().startActivity(intent);
                 break;
             case 1:
                 break;

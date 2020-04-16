@@ -248,7 +248,7 @@ public class DataSource {
         close();
     }
 
-    void removeNames(String name, int amount, int listId) {
+    public void removeNames(String name, int amount, int listId) {
         int currentAmount = getAmountOfName(name, listId);
 
         open();
@@ -303,7 +303,7 @@ public class DataSource {
         return matchingNames;
     }
 
-    void renamePeople(String oldName, String newName, int listId, int amount) {
+    public void renamePeople(String oldName, String newName, int listId, int amount) {
         removeNames(oldName, amount, listId);
         addNames(newName, amount, listId);
     }
