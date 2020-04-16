@@ -19,15 +19,15 @@ import butterknife.Unbinder;
 
 public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdapter.ItemSelectionListener {
 
-    public static ChoosingOptionsFragment getInstance(int setId) {
+    public static ChoosingOptionsFragment getInstance(int listId) {
         ChoosingOptionsFragment fragment = new ChoosingOptionsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.LIST_ID_KEY, setId);
+        bundle.putInt(Constants.LIST_ID_KEY, listId);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    @BindView(R.id.choosing_options) RecyclerView learnSetOptions;
+    @BindView(R.id.choosing_options) RecyclerView choosingOptions;
 
     private int listId;
     private Unbinder unbinder;
@@ -46,8 +46,8 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        learnSetOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        learnSetOptions.setAdapter(new ListOptionsAdapter(
+        choosingOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        choosingOptions.setAdapter(new ListOptionsAdapter(
                 getActivity(),
                 this,
                 R.array.choosing_options,

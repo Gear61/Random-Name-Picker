@@ -108,6 +108,12 @@ public class DataSource {
                 DatabaseColumns.LIST_ID + " = ?",
                 whereArgs);
 
+        // Delete the name list choosing state
+        database.delete(
+                DatabaseTables.NAMES_IN_LIST,
+                DatabaseColumns.LIST_ID + " = ?",
+                whereArgs);
+
         close();
     }
 
