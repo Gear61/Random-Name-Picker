@@ -35,8 +35,7 @@ import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class HomepageFragment extends Fragment implements
-        NameListsAdapter.Delegate, RenameListDialog.Listener,
-        DeleteListDialog.Listener, SpeechToTextManager.Listener {
+        NameListsAdapter.Delegate, SpeechToTextManager.Listener {
 
     static HomepageFragment getInstance() {
         return new HomepageFragment();
@@ -59,8 +58,6 @@ public class HomepageFragment extends Fragment implements
 
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
-    private RenameListDialog renameListDialog;
-    private DeleteListDialog deleteListDialog;
     private SpeechToTextManager speechToTextManager;
     private BannerAdManager bannerAdManager;
     private PreferencesManager preferencesManager;
@@ -80,8 +77,6 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        renameListDialog = new RenameListDialog(this, getContext());
-        deleteListDialog = new DeleteListDialog(this, getContext());
         dataSource = new DataSource(getContext());
 
         nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists(""));
@@ -189,28 +184,6 @@ public class HomepageFragment extends Fragment implements
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         getActivity().startActivity(intent);
-    }
-
-    @Override
-    public void onItemEditClick(int position, ListDO listDO) {
-        renameListDialog.show(position, listDO);
-    }
-
-    @Override
-    public void onRenameListConfirmed(int position, ListDO updatedList) {
-        dataSource.renameList(updatedList);
-        nameListsAdapter.renameItem(position, updatedList.getName());
-    }
-
-    @Override
-    public void onItemDeleteClick(int position, ListDO listDO) {
-        deleteListDialog.presentForList(position, listDO);
-    }
-
-    @Override
-    public void onDeleteListConfirmed(int position, ListDO listDO) {
-        dataSource.deleteList(listDO.getId());
-        nameListsAdapter.deleteItem(position);
     }
 
     @Override

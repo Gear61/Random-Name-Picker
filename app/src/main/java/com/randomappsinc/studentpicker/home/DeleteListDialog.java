@@ -2,8 +2,6 @@ package com.randomappsinc.studentpicker.home;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.ListDO;
@@ -18,7 +16,7 @@ public class DeleteListDialog {
     private ListDO listDO;
     private int position;
 
-    DeleteListDialog(@NonNull Listener listener, Context context) {
+    public DeleteListDialog(Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
                 .title(R.string.confirm_deletion_title)
                 .positiveText(android.R.string.yes)

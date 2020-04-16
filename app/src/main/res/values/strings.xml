@@ -38,7 +38,7 @@
     <string name="will_rate">Sure, I\'ll help</string>
 
     <string name="rename_list">Rename List</string>
-    <string name="delete_list">Delete List</string>
+    <string name="delete_list">Delete list</string>
 
     <string name="search_with_speech_message">Tell us what you\'re searching for.</string>
     <string name="list_name_speech_input_prompt">Tell us what you want to name your list</string>
