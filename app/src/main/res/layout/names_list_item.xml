@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="8dp"
     android:background="?android:attr/selectableItemBackground"
-    >
-
-    <com.joanzapata.iconify.widget.IconTextView
-        android:id="@+id/delete_icon"
-        android:text="@string/trash_icon"
-        android:layout_alignParentRight="true"
-        style="@style/list_item_button"
-        />
-
-    <com.joanzapata.iconify.widget.IconTextView
-        android:id="@+id/edit_icon"
-        android:text="@string/edit_icon"
-        android:layout_toLeftOf="@id/delete_icon"
-        style="@style/list_item_button"
-        />
-
-    <TextView
-        android:id="@+id/list_name"
-        android:layout_toLeftOf="@id/edit_icon"
-        style="@style/item_name"
-        />
-</RelativeLayout>
+    android:textSize="27sp"
+    android:textColor="@color/dark_gray"
+    />

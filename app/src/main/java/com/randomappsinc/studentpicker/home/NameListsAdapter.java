@@ -18,7 +18,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
@@ -27,10 +26,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     public interface Delegate {
         void onItemClick(ListDO listDO);
-
-        void onItemEditClick(int position, ListDO listDO);
-
-        void onItemDeleteClick(int position, ListDO listDO);
 
         void setNoContent();
     }
@@ -51,10 +46,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         notifyDataSetChanged();
     }
 
-    ListDO getItem(int position) {
-        return nameLists.get(position);
-    }
-
     @NonNull
     @Override
     public NameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,17 +64,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return nameLists.size();
     }
 
-    void renameItem(int position, String newName) {
-        nameLists.get(position).setName(newName);
-        notifyItemChanged(position);
-    }
-
-    void deleteItem(int position) {
-        nameLists.remove(position);
-        notifyItemRemoved(position);
-        delegate.setNoContent();
-    }
-
     class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.list_name) TextView listName;
 
@@ -95,18 +75,6 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
         void loadList(int position) {
             this.listName.setText(nameLists.get(position).getName());
-        }
-
-        @OnClick(R.id.edit_icon)
-        void renameList() {
-            ListDO listDO = nameLists.get(getAdapterPosition());
-            delegate.onItemEditClick(getAdapterPosition(), new ListDO(listDO));
-        }
-
-        @OnClick(R.id.delete_icon)
-        void deleteList() {
-            ListDO listDO = nameLists.get(getAdapterPosition());
-            delegate.onItemDeleteClick(getAdapterPosition(), new ListDO(listDO));
         }
 
         @Override
