@@ -36,7 +36,6 @@ public class GroupMakingActivity extends StandardActivity {
     private GroupMakingSettings settings;
     private GroupMakingSettingsDialog settingsDialog;
     private ListInfo listInfo;
-    private DataSource dataSource;
     private GroupMakingAdapter groupsMakingListAdapter;
     private BannerAdManager bannerAdManager;
 
@@ -48,7 +47,8 @@ public class GroupMakingActivity extends StandardActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
-        dataSource = new DataSource(this);
+        DataSource dataSource = new DataSource(this);
+        setTitle(dataSource.getListName(listId));
         listInfo = dataSource.getListInfo(listId);
 
         groupsMakingListAdapter = new GroupMakingAdapter();

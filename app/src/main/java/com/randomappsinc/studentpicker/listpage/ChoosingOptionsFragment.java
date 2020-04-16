@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.grouping.GroupMakingActivity;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
@@ -60,11 +61,14 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
     public void onItemClick(int position) {
         switch (position) {
             case 0:
+                Intent choosingIntent = new Intent(getActivity(), NameChoosingActivity.class);
+                choosingIntent.putExtra(Constants.LIST_ID_KEY, listId);
+                getActivity().startActivity(choosingIntent);
                 break;
             case 1:
-                Intent intent = new Intent(getActivity(), GroupMakingActivity.class);
-                intent.putExtra(Constants.LIST_ID_KEY, listId);
-                getActivity().startActivity(intent);
+                Intent groupsIntent = new Intent(getActivity(), GroupMakingActivity.class);
+                groupsIntent.putExtra(Constants.LIST_ID_KEY, listId);
+                getActivity().startActivity(groupsIntent);
                 break;
         }
     }
