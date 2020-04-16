@@ -4,17 +4,14 @@ import android.content.Context;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.models.ListDO;
 
 public class DeleteListDialog {
 
     public interface Listener {
-        void onDeleteListConfirmed(int position, ListDO listDO);
+        void onDeleteListConfirmed();
     }
 
     private MaterialDialog dialog;
-    private ListDO listDO;
-    private int position;
 
     public DeleteListDialog(Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
@@ -22,16 +19,14 @@ public class DeleteListDialog {
                 .positiveText(android.R.string.yes)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) ->
-                        listener.onDeleteListConfirmed(position, listDO)
+                        listener.onDeleteListConfirmed()
                 ).build();
     }
 
-    void presentForList(int position, ListDO listDO) {
-        this.position = position;
-        this.listDO = listDO;
+    public void presentForList(String listName) {
         String dialogContent = dialog.getContext().getString(
                 R.string.confirm_deletion_message,
-                " \"" + listDO.getName() + "\"");
+                " \"" + listName + "\"");
         dialog.setContent(dialogContent);
         dialog.show();
     }

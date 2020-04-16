@@ -14,7 +14,6 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.home.DeleteListDialog;
-import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindArray;
@@ -28,6 +27,7 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
     @BindView(R.id.name_list_tabs) TabLayout nameListTabs;
     @BindArray(R.array.list_options) String[] listTabTitles;
 
+    private int listId;
     private DeleteListDialog deleteListDialog;
     private DataSource dataSource;
 
@@ -40,8 +40,8 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
-        DataSource dataSource = new DataSource(this);
+        listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
+        dataSource = new DataSource(this);
         setTitle(dataSource.getListName(listId));
 
         ListTabsAdapter listTabsAdapter = new ListTabsAdapter(
@@ -52,12 +52,13 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
         nameListTabs.setupWithViewPager(nameListPager);
 
         deleteListDialog = new DeleteListDialog(this, this);
-        dataSource = new DataSource(this);
     }
 
     @Override
-    public void onDeleteListConfirmed(int position, ListDO listDO) {
-        dataSource.deleteList(listDO.getId());
+    public void onDeleteListConfirmed() {
+        dataSource.deleteList(listId);
+        UIUtils.showShortToast(R.string.list_deleted, this);
+        finish();
     }
 
     @Override
@@ -70,6 +71,7 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_list) {
+            deleteListDialog.presentForList(dataSource.getListName(listId));
         }
         return super.onOptionsItemSelected(item);
     }

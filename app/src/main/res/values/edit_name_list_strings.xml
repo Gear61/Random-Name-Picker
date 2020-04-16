@@ -51,4 +51,6 @@
     <string name="next">Next</string>
     <string name="back">Back</string>
     <string name="all_of_them">All of them</string>
+
+    <string name="list_deleted">List deleted.</string>
 </resources>
