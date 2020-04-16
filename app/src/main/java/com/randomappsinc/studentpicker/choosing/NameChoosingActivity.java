@@ -198,7 +198,6 @@ public class NameChoosingActivity extends StandardActivity
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-        bannerAdManager.loadOrRemoveAd();
     }
 
     @Override
