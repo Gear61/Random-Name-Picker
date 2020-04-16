@@ -20,7 +20,7 @@ import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
-import com.randomappsinc.studentpicker.listpage.ListActivity;
+import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
@@ -185,7 +185,7 @@ public class HomepageFragment extends Fragment implements
 
     @Override
     public void onItemClick(ListDO listDO) {
-        Intent intent = new Intent(getActivity(), ListActivity.class);
+        Intent intent = new Intent(getActivity(), ListLandingPageActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         getActivity().startActivity(intent);

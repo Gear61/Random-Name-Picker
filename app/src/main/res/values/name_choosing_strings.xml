@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Name Choosing -->
+    <string-array name="choosing_options">
+        <item>Choose names</item>
+        <item>Make groups</item>
+    </string-array>
+
+    <string name="choose_icon">{ion-android-person}</string>
+    <string name="groups_icon">{ion-android-people}</string>
+    <string name="swap_icon">{ion-arrow-swap}</string>
+    <string-array name="choosing_options_icons">
+        <item>@string/choose_icon</item>
+        <item>@string/groups_icon</item>
+    </string-array>
+
     <string name="reset_list">Reset list</string>
     <string name="no_names_for_choosing">
         Switch over to the Edit page to add names to this list!

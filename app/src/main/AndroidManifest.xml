@@ -69,5 +69,12 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/buy_premium_title"
             />
+
+        <activity
+            android:name=".listpage.ListLandingPageActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
     </application>
 </manifest>

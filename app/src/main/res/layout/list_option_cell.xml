@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="16dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    tools:ignore="RtlHardcoded, SpUsage"
+    >
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/icon"
+        android:gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:textSize="36dp"
+        />
+
+    <TextView
+        android:id="@+id/option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:textSize="25dp"
+        />
+</LinearLayout>
