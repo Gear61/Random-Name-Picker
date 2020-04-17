@@ -87,6 +87,9 @@ public class EditListOptionsFragment extends Fragment
             case 1:
                 renameListDialog.show(dataSource.getListName(listId));
                 break;
+            case 2:
+                nameListImporterDialog.show();
+                break;
         }
     }
 
