@@ -61,6 +61,8 @@ public class NameListImporterDialog {
         if (indexToList.isEmpty()) {
             UIUtils.showLongToast(R.string.no_import_candidates, importDialog.getContext());
         } else {
+            importDialog.clearSelectedIndices();
+            importDialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             importDialog.show();
         }
     }

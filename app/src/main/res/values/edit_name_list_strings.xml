@@ -71,4 +71,7 @@
     <string name="no_import_candidates">
         You have no non-empty lists to import names from.
     </string>
+    <string name="list_import_success">
+        Names successfully imported from other lists.
+    </string>
 </resources>
