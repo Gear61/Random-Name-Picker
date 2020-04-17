@@ -74,6 +74,7 @@ public class EditListOptionsFragment extends Fragment
     @Override
     public void onNameListImportsConfirmed(List<ListDO> chosenLists) {
         dataSource.importOtherLists(listId, chosenLists);
+        UIUtils.showShortToast(R.string.list_import_success, getContext());
     }
 
     @Override

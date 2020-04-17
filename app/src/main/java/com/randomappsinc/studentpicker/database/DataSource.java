@@ -437,5 +437,9 @@ public class DataSource {
         }
         cursor.close();
         close();
+
+        for (String name : nameToAmount.keySet()) {
+            addNames(name, nameToAmount.get(name), receivingListId);
+        }
     }
 }
