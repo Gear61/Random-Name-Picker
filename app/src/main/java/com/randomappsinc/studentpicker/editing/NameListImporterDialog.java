@@ -7,6 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,10 @@ public class NameListImporterDialog {
     }
 
     public void show() {
-        importDialog.show();
+        if (indexToList.isEmpty()) {
+            UIUtils.showLongToast(R.string.no_import_candidates, importDialog.getContext());
+        } else {
+            importDialog.show();
+        }
     }
 }

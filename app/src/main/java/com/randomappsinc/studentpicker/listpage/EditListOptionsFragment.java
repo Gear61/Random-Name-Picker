@@ -73,7 +73,7 @@ public class EditListOptionsFragment extends Fragment
 
     @Override
     public void onNameListImportsConfirmed(List<ListDO> chosenLists) {
-
+        dataSource.importOtherLists(listId, chosenLists);
     }
 
     @Override
