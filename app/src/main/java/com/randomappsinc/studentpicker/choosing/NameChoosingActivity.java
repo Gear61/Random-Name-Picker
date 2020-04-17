@@ -74,6 +74,9 @@ public class NameChoosingActivity extends StandardActivity
         dataSource = new DataSource(this);
         preferencesManager = new PreferencesManager(this);
         shakeDetector = new ShakeDetector(this);
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         setTitle(dataSource.getListName(listId));
@@ -200,18 +203,12 @@ public class NameChoosingActivity extends StandardActivity
     public void onPause() {
         super.onPause();
         dataSource.saveNameListState(listId, listInfo, settings);
-        if (preferencesManager.isShakeEnabled()) {
-            shakeDetector.stop();
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-        if (preferencesManager.isShakeEnabled()) {
-            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
-        }
     }
 
     @Override
@@ -229,6 +226,9 @@ public class NameChoosingActivity extends StandardActivity
     public void onDestroy() {
         super.onDestroy();
         textToSpeechManager.shutdown();
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
+        }
     }
 
     @Override
