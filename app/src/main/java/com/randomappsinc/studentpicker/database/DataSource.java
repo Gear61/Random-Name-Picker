@@ -397,4 +397,45 @@ public class DataSource {
 
         return nameLists;
     }
+
+    public void importOtherLists(int receivingListId, List<ListDO> listsToImportFrom) {
+        open();
+        String[] columns = {
+                DatabaseColumns.NAME,
+                DatabaseColumns.NAME_COUNT
+        };
+
+        StringBuilder whereQuery = new StringBuilder();
+        for (int i = 0; i < listsToImportFrom.size(); i++) {
+            if (whereQuery.length() > 0) {
+                whereQuery.append(" OR ");
+            }
+            whereQuery
+                    .append(DatabaseColumns.LIST_ID)
+                    .append(" = ?");
+        }
+
+        String[] selectionArgs = new String[listsToImportFrom.size()];
+        for (int i = 0; i < listsToImportFrom.size(); i++) {
+            selectionArgs[i] = String.valueOf(listsToImportFrom.get(i).getId());
+        }
+
+        Cursor cursor = database.query(DatabaseTables.NAMES, columns, whereQuery.toString(),
+                selectionArgs, null, null, null);
+        Map<String, Integer> nameToAmount = new HashMap<>();
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            int nameAmount = cursor.getInt(1);
+
+            if (nameToAmount.containsKey(name)) {
+                int currentAmount = nameToAmount.get(name);
+                int newAmount = currentAmount + nameAmount;
+                nameToAmount.put(name, newAmount);
+            } else {
+                nameToAmount.put(name, nameAmount);
+            }
+        }
+        cursor.close();
+        close();
+    }
 }

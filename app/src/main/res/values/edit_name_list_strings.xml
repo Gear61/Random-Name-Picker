@@ -68,4 +68,7 @@
     <string name="name_list_importer_body">
         Choose the lists you want to import names from into this list.
     </string>
+    <string name="no_import_candidates">
+        You have no non-empty lists to import names from.
+    </string>
 </resources>
