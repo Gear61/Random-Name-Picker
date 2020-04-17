@@ -3,11 +3,14 @@
     <string-array name="edit_list_options">
         <item>Add/edit names</item>
         <item>Rename list</item>
+        <item>Cross-list import</item>
     </string-array>
 
+    <string name="upload_icon">{ion-android-upload}</string>
     <string-array name="edit_list_icons">
         <item>@string/add_circle_icon</item>
         <item>@string/edit_icon</item>
+        <item>@string/upload_icon</item>
     </string-array>
 
     <string name="edit">Edit</string>
@@ -29,9 +32,6 @@
     <string name="clones_added">Name duplicated.</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
-
-    <!-- Action bar options -->
-    <string name="import_names_from_list">Import names from another list(s)</string>
 
     <string name="confirm_deletion_title">Confirm List Deletion</string>
     <string name="confirm_deletion_message">Are you sure you want to delete your name list %s?</string>
@@ -63,4 +63,9 @@
 
     <string name="list_deleted">List deleted.</string>
     <string name="list_renamed">List renamed.</string>
+
+    <string name="name_list_importer">Name List Importer</string>
+    <string name="name_list_importer_body">
+        Choose the lists you want to import names from into this list.
+    </string>
 </resources>
