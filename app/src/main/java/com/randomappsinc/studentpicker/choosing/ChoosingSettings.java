@@ -49,6 +49,6 @@ public class ChoosingSettings {
     }
 
     public void setNumNamesToChoose(int numNamesToChoose) {
-        this.numNamesToChoose = numNamesToChoose;
+        this.numNamesToChoose = Math.max(1, numNamesToChoose);
     }
 }
