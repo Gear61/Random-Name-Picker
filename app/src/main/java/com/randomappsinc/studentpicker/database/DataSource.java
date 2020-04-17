@@ -172,21 +172,6 @@ public class DataSource {
     }
 
     public ListInfo getChoosingStateListInfo(int listId) {
-        String quickSelection = DatabaseColumns.LIST_ID + " = ?";
-        String[] quickWhereArgs = {String.valueOf(listId)};
-
-        open();
-        long numNamesInHistory = DatabaseUtils.queryNumEntries(
-                database,
-                DatabaseTables.NAMES_IN_LIST,
-                quickSelection,
-                quickWhereArgs);
-        close();
-
-        if (numNamesInHistory == 0) {
-            return getListInfo(listId);
-        }
-
         Map<String, Integer> nameAmounts = new HashMap<>();
         List<String> names = new ArrayList<>();
         int totalAmountOfNames = 0;

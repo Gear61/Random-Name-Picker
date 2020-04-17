@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.choosing;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +26,10 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.utils.NameUtils;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.List;
 
@@ -36,7 +39,8 @@ import butterknife.OnClick;
 
 public class NameChoosingActivity extends StandardActivity
         implements ChoicesDisplayDialog.Listener, TextToSpeechManager.Listener,
-        NameChoosingAdapter.Listener, NameChoosingHistoryManager.Delegate {
+        NameChoosingAdapter.Listener, NameChoosingHistoryManager.Delegate,
+        ShakeDetector.Listener {
 
     private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
 
@@ -49,14 +53,15 @@ public class NameChoosingActivity extends StandardActivity
     private ChoosingSettings settings;
     private ChoosingSettingsViewHolder settingsHolder;
     private MaterialDialog settingsDialog;
-
     private ChoicesDisplayDialog choicesDisplayDialog;
     private boolean canShowPresentationScreen;
     private int listId;
+    private ListInfo listInfo;
     private TextToSpeechManager textToSpeechManager;
     private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
-    private ListInfo listInfo;
+    private PreferencesManager preferencesManager;
+    private ShakeDetector shakeDetector;
     private BannerAdManager bannerAdManager;
 
     @Override
@@ -67,6 +72,8 @@ public class NameChoosingActivity extends StandardActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dataSource = new DataSource(this);
+        preferencesManager = new PreferencesManager(this);
+        shakeDetector = new ShakeDetector(this);
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         setTitle(dataSource.getListName(listId));
@@ -143,6 +150,7 @@ public class NameChoosingActivity extends StandardActivity
             canShowPresentationScreen = false;
             Intent intent = new Intent(this, PresentationActivity.class);
             intent.putExtra(PresentationActivity.LIST_ID_KEY, listId);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivityForResult(intent, PRESENTATION_MODE_REQUEST_CODE);
         } else {
             if (choicesDisplayDialog.isShowing()) {
@@ -192,18 +200,29 @@ public class NameChoosingActivity extends StandardActivity
     public void onPause() {
         super.onPause();
         dataSource.saveNameListState(listId, listInfo, settings);
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.stop();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
+        if (preferencesManager.isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         bannerAdManager.onOrientationChanged();
+    }
+
+    @Override
+    public void hearShake() {
+        choose();
     }
 
     @Override
