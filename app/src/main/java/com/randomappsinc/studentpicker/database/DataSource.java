@@ -228,7 +228,12 @@ public class DataSource {
     }
 
     public void addNames(String name, int amount, int listId) {
-        int currentAmount = getAmountOfName(name, listId);
+        addNamesInternal(name, amount, listId, DatabaseTables.NAMES);
+        addNamesInternal(name, amount, listId, DatabaseTables.NAMES_IN_LIST);
+    }
+
+    private void addNamesInternal(String name, int amount, int listId, String tableName) {
+        int currentAmount = getAmountOfName(name, listId, tableName);
 
         open();
         if (currentAmount == 0) {
@@ -236,25 +241,30 @@ public class DataSource {
             values.put(DatabaseColumns.LIST_ID, listId);
             values.put(DatabaseColumns.NAME, name);
             values.put(DatabaseColumns.NAME_COUNT, amount);
-            database.insert(DatabaseTables.NAMES, null, values);
+            database.insert(tableName, null, values);
         } else {
             ContentValues newValues = new ContentValues();
             newValues.put(DatabaseColumns.NAME_COUNT, currentAmount + amount);
             String[] whereArgs = new String[]{name, String.valueOf(listId)};
             String whereStatement = DatabaseColumns.NAME + " = ? AND "
                     + DatabaseColumns.LIST_ID + " = ?";
-            database.update(DatabaseTables.NAMES, newValues, whereStatement, whereArgs);
+            database.update(tableName, newValues, whereStatement, whereArgs);
         }
         close();
     }
 
     public void removeNames(String name, int amount, int listId) {
-        int currentAmount = getAmountOfName(name, listId);
+        removeNamesInternal(name, amount, listId, DatabaseTables.NAMES);
+        removeNamesInternal(name, amount, listId, DatabaseTables.NAMES_IN_LIST);
+    }
+
+    private void removeNamesInternal(String name, int amount, int listId, String tableName) {
+        int currentAmount = getAmountOfName(name, listId, tableName);
 
         open();
         if (currentAmount <= amount) {
             String[] whereArgs = {name, String.valueOf(listId)};
-            database.delete(DatabaseTables.NAMES,
+            database.delete(tableName,
                     DatabaseColumns.NAME
                             + " = ? AND "
                             + DatabaseColumns.LIST_ID + " = ?",
@@ -266,19 +276,19 @@ public class DataSource {
             String whereStatement = DatabaseColumns.NAME
                     + " = ? AND "
                     + DatabaseColumns.LIST_ID + " = ?";
-            database.update(DatabaseTables.NAMES, newValues, whereStatement, whereArgs);
+            database.update(tableName, newValues, whereStatement, whereArgs);
         }
         close();
     }
 
-    private int getAmountOfName(String name, int listId) {
+    private int getAmountOfName(String name, int listId, String tableName) {
         open();
         String[] columns = {DatabaseColumns.NAME_COUNT};
         String selection = DatabaseColumns.NAME
                 + " = ? AND "
                 + DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {name, String.valueOf(listId)};
-        Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
+        Cursor cursor = database.query(tableName, columns, selection,
                 selectionArgs, null, null, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
