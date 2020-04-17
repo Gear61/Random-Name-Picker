@@ -14,19 +14,24 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
+import com.randomappsinc.studentpicker.editing.NameListImporterDialog;
 import com.randomappsinc.studentpicker.home.RenameListDialog;
+import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class EditOptionsFragment extends Fragment
-        implements ListOptionsAdapter.ItemSelectionListener, RenameListDialog.Listener {
+public class EditListOptionsFragment extends Fragment
+        implements ListOptionsAdapter.ItemSelectionListener, RenameListDialog.Listener,
+        NameListImporterDialog.Listener {
 
-    public static EditOptionsFragment getInstance(int listId) {
-        EditOptionsFragment fragment = new EditOptionsFragment();
+    public static EditListOptionsFragment getInstance(int listId) {
+        EditListOptionsFragment fragment = new EditListOptionsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LIST_ID_KEY, listId);
         fragment.setArguments(bundle);
@@ -37,6 +42,7 @@ public class EditOptionsFragment extends Fragment
 
     private int listId;
     private RenameListDialog renameListDialog;
+    private NameListImporterDialog nameListImporterDialog;
     private DataSource dataSource;
     private Unbinder unbinder;
 
@@ -62,6 +68,12 @@ public class EditOptionsFragment extends Fragment
                 R.array.edit_list_options,
                 R.array.edit_list_icons));
         renameListDialog = new RenameListDialog(this, getContext());
+        nameListImporterDialog = new NameListImporterDialog(getContext(), listId, this);
+    }
+
+    @Override
+    public void onNameListImportsConfirmed(List<ListDO> chosenLists) {
+
     }
 
     @Override

@@ -377,4 +377,24 @@ public class DataSource {
 
         close();
     }
+
+    public List<ListDO> getNonEmptyOtherLists(int listIdToExclude) {
+        open();
+        String query = "SELECT DISTINCT "
+                + "a." + DatabaseColumns.ID + ", " + "a." + DatabaseColumns.LIST_NAME
+                + " FROM " + DatabaseTables.LISTS + " a"
+                + " INNER JOIN " + DatabaseTables.NAMES + " b"
+                + " ON a." + DatabaseColumns.ID
+                + " = b." + DatabaseColumns.LIST_ID
+                + " WHERE a." + DatabaseColumns.ID + " != ?";
+        Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(listIdToExclude)});
+        List<ListDO> nameLists = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            nameLists.add(new ListDO(cursor.getInt(0), cursor.getString(1)));
+        }
+        cursor.close();
+        close();
+
+        return nameLists;
+    }
 }

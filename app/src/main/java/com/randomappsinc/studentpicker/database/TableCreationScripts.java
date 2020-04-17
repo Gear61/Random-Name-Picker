@@ -3,8 +3,10 @@ package com.randomappsinc.studentpicker.database;
 class TableCreationScripts {
 
     static final String CREATE_NAMES_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS " + DatabaseTables.NAMES +
-            "(" + DatabaseColumns.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DatabaseColumns.LIST_ID + " INTEGER, " +
-            DatabaseColumns.NAME + " TEXT, " + DatabaseColumns.NAME_COUNT + " INTEGER);";
+            "(" + DatabaseColumns.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + DatabaseColumns.LIST_ID + " INTEGER, "
+            + DatabaseColumns.NAME + " TEXT, "
+            + DatabaseColumns.NAME_COUNT + " INTEGER);";
 
     static final String CREATE_LISTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
             + DatabaseTables.LISTS + "("
