@@ -64,6 +64,10 @@ public class EditNameListActivity extends StandardActivity implements
         setContentView(R.layout.edit_name_list);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         dataSource = new DataSource(this);
@@ -201,5 +205,11 @@ public class EditNameListActivity extends StandardActivity implements
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         bannerAdManager.onOrientationChanged();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_from_top);
     }
 }

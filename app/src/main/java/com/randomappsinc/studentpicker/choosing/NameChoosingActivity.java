@@ -12,15 +12,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -37,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NameChoosingActivity extends StandardActivity
+public class NameChoosingActivity extends AppCompatActivity
         implements ChoicesDisplayDialog.Listener, TextToSpeechManager.Listener,
         NameChoosingAdapter.Listener, NameChoosingHistoryManager.Delegate,
         ShakeDetector.Listener {
@@ -70,6 +71,10 @@ public class NameChoosingActivity extends StandardActivity
         setContentView(R.layout.name_choosing);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
 
         dataSource = new DataSource(this);
         preferencesManager = new PreferencesManager(this);
@@ -223,8 +228,9 @@ public class NameChoosingActivity extends StandardActivity
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_from_top);
         textToSpeechManager.shutdown();
         if (preferencesManager.isShakeEnabled()) {
             shakeDetector.stop();
@@ -243,6 +249,9 @@ public class NameChoosingActivity extends StandardActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.show_names_history:
                 nameChoosingHistoryManager.maybeShowNamesHistory();
                 return true;
