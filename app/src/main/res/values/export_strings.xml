@@ -4,6 +4,10 @@
         Failed to share your list as a .csv file.
         Make sure your list doesn\'t have any names with special characters.
     </string>
+    <string name="export_txt_failed">
+        Failed to share your list as a .txt file.
+        Make sure your list doesn\'t have any names with special characters.
+    </string>
     <string name="export_file_title">Name List - %s</string>
     <string name="export_file_with">Export File With</string>
 </resources>
