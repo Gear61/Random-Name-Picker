@@ -24,6 +24,7 @@ import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.utils.NameUtils;
@@ -44,6 +45,7 @@ public class NameChoosingActivity extends AppCompatActivity
         ShakeDetector.Listener {
 
     private static final int PRESENTATION_MODE_REQUEST_CODE = 1;
+    private static final int EDIT_LIST_REQUEST_CODE = 2;
 
     @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
@@ -181,11 +183,22 @@ public class NameChoosingActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Presentation mode mutates the choosing state, so trigger a refresh here
-        if (requestCode == PRESENTATION_MODE_REQUEST_CODE) {
-            listInfo = dataSource.getChoosingStateListInfo(listId);
-            nameChoosingAdapter.refreshList(listInfo);
-            setViews();
+        switch (requestCode) {
+            case PRESENTATION_MODE_REQUEST_CODE:
+                // Presentation mode mutates the choosing state, so trigger a refresh here
+                listInfo = dataSource.getChoosingStateListInfo(listId);
+                nameChoosingAdapter.refreshList(listInfo);
+                setViews();
+                break;
+            case EDIT_LIST_REQUEST_CODE:
+                // If list was changed on edit page, also trigger a refresh
+                if (resultCode == Constants.LIST_UPDATED_RESULT_CODE) {
+                    listInfo = dataSource.getChoosingStateListInfo(listId);
+                    nameChoosingAdapter.refreshList(listInfo);
+                    setViews();
+                    break;
+                }
+                break;
         }
     }
 
@@ -247,9 +260,10 @@ public class NameChoosingActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.name_choosing_menu, menu);
-        UIUtils.loadMenuIcon(menu, R.id.show_names_history, FontAwesomeIcons.fa_history, this);
         UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
         UIUtils.loadMenuIcon(menu, R.id.reset, IoniconsIcons.ion_android_refresh, this);
+        UIUtils.loadMenuIcon(menu, R.id.show_names_history, FontAwesomeIcons.fa_history, this);
+        UIUtils.loadMenuIcon(menu, R.id.edit_name_list, IoniconsIcons.ion_android_add_circle, this);
         return true;
     }
 
@@ -259,9 +273,6 @@ public class NameChoosingActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.show_names_history:
-                nameChoosingHistoryManager.maybeShowNamesHistory();
-                return true;
             case R.id.settings:
                 settingsDialog.show();
                 return true;
@@ -270,6 +281,15 @@ public class NameChoosingActivity extends AppCompatActivity
                 nameChoosingAdapter.refreshList(listInfo);
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, this);
+                return true;
+            case R.id.show_names_history:
+                nameChoosingHistoryManager.maybeShowNamesHistory();
+                return true;
+            case R.id.edit_name_list:
+                Intent intent = new Intent(this, EditNameListActivity.class);
+                intent.putExtra(Constants.LIST_ID_KEY, listId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivityForResult(intent, EDIT_LIST_REQUEST_CODE);
                 return true;
         }
         return super.onOptionsItemSelected(item);
