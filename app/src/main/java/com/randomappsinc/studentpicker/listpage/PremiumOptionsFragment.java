@@ -14,6 +14,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
@@ -62,9 +63,11 @@ public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapt
     @Override
     public void onItemClick(int position) {
         if (preferencesManager.isOnFreeVersion()) {
+            UIUtils.showLongToast(R.string.premium_needed_message, getContext());
             Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
             getActivity().startActivity(intent);
             getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+            return;
         }
 
         switch (position) {
