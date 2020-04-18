@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_and_edit_names">Add/edit names</string>
+    <string name="rename_list">Rename list</string>
+    <string name="cross_list_import">Cross-list import</string>
     <string-array name="edit_list_options">
-        <item>Add/edit names</item>
-        <item>Rename list</item>
-        <item>Cross-list import</item>
+        <item>@string/add_and_edit_names</item>
+        <item>@string/rename_list</item>
+        <item>@string/cross_list_import</item>
     </string-array>
 
     <string name="upload_icon">{ion-android-upload}</string>

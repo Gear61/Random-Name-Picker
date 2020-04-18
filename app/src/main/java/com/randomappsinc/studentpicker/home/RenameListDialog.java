@@ -16,7 +16,7 @@ public class RenameListDialog {
 
     public RenameListDialog(Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
-                .title(R.string.rename_list)
+                .title(R.string.rename_list_dialog_title)
                 .input(context.getString(R.string.new_list_name), "", (dialog, input) -> {
                     boolean submitEnabled = !input.toString().trim().isEmpty();
                     dialog.getActionButton(DialogAction.POSITIVE).setEnabled(submitEnabled);

@@ -60,6 +60,7 @@ public class EditNameListActivity extends AppCompatActivity implements
     private DeleteNameDialog deleteNameDialog;
     private DuplicationDialog duplicationDialog;
     private SpeechToTextManager speechToTextManager;
+    private boolean listHasChanged = false;
     private BannerAdManager bannerAdManager;
 
     @Override
@@ -108,6 +109,7 @@ public class EditNameListActivity extends AppCompatActivity implements
         if (newName.isEmpty()) {
             UIUtils.showSnackbar(parent, getString(R.string.blank_name));
         } else {
+            listHasChanged = true;
             dataSource.addNames(newName, 1, listId);
             List<NameDO> names = dataSource.getNamesInList(listId);
             namesAdapter.setNameList(names);
@@ -163,6 +165,7 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void onRenameSubmitted(int nameId, String previousName, String newName, int amountToRename) {
+        listHasChanged = true;
         dataSource.renamePeople(previousName, newName, listId, amountToRename);
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter.setNameList(names);
@@ -170,6 +173,7 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void onDeletionSubmitted(String name, int amountToDelete) {
+        listHasChanged = true;
         dataSource.removeNames(name, amountToDelete, listId);
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter.setNameList(names);
@@ -182,6 +186,7 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void onDuplicationSubmitted(int nameId, String name, int amountToAdd) {
+        listHasChanged = true;
         dataSource.addNames(name, amountToAdd, listId);
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter.setNameList(names);
@@ -219,6 +224,9 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void finish() {
+        if (listHasChanged) {
+            setResult(Constants.LIST_UPDATED_RESULT_CODE);
+        }
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_from_top);
     }

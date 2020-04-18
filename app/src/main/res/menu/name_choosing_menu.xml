@@ -5,12 +5,6 @@
     >
 
     <item
-        android:id="@+id/show_names_history"
-        android:title="@string/show_already_chosen"
-        app:showAsAction="ifRoom"
-        />
-
-    <item
         android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom"
@@ -19,6 +13,18 @@
     <item
         android:id="@+id/reset"
         android:title="@string/reset_list"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/show_names_history"
+        android:title="@string/show_already_chosen"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/edit_name_list"
+        android:title="@string/add_and_edit_names"
         app:showAsAction="ifRoom"
         />
 </menu>
