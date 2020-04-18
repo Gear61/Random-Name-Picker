@@ -24,4 +24,19 @@ public class FileUtils {
         }
         return file;
     }
+
+    @Nullable
+    public static File createTxtFileForList(Context context, String listName) {
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        File file = new File(storageDir, listName + ".txt");
+        // Delete file if it already exists to prevent ourselves from appending to old content
+        if (file.delete()) {
+            try {
+                return file.createNewFile() ? file : null;
+            } catch (IOException exception) {
+                return null;
+            }
+        }
+        return file;
+    }
 }

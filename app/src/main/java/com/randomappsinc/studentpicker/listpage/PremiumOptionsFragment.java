@@ -15,6 +15,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
+import com.randomappsinc.studentpicker.export.TxtExporter;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -25,7 +26,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class PremiumOptionsFragment extends Fragment
-        implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener {
+        implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener,
+        TxtExporter.Listener {
 
     public static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
@@ -41,6 +43,7 @@ public class PremiumOptionsFragment extends Fragment
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
     private CsvExporter csvExporter;
+    private TxtExporter txtExporter;
     private Unbinder unbinder;
 
     @Override
@@ -66,6 +69,7 @@ public class PremiumOptionsFragment extends Fragment
                 R.array.premium_options_icons));
         dataSource = new DataSource(getContext());
         csvExporter = new CsvExporter(this);
+        txtExporter = new TxtExporter(this);
     }
 
     @Override
@@ -80,6 +84,7 @@ public class PremiumOptionsFragment extends Fragment
 
         switch (position) {
             case 0:
+                txtExporter.turnListIntoTxt(listId, getContext());
                 break;
             case 1:
                 csvExporter.turnListIntoCsv(listId, getContext());
@@ -106,6 +111,27 @@ public class PremiumOptionsFragment extends Fragment
     @Override
     public void onCsvExportFailed() {
         getActivity().runOnUiThread(() -> UIUtils.showLongToast(R.string.export_csv_failed, getContext()));
+    }
+
+    @Override
+    public void onTxtFileCreated(Uri fileUri) {
+        getActivity().runOnUiThread(() -> {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intentShareFile.setType("text/*");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri);
+
+            String listName = dataSource.getListName(listId);
+            intentShareFile.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.export_file_title, listName));
+            startActivity(Intent.createChooser(intentShareFile, getString(R.string.export_file_with)));
+        });
+    }
+
+    @Override
+    public void onTxtExportFailed() {
+        getActivity().runOnUiThread(() -> UIUtils.showLongToast(R.string.export_txt_failed, getContext()));
     }
 
     @Override
