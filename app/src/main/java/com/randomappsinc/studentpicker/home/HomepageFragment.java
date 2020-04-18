@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
+import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -184,6 +185,15 @@ public class HomepageFragment extends Fragment implements
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onChooseButtonClicked(ListDO listDO) {
+        Intent intent = new Intent(getActivity(), NameChoosingActivity.class);
+        intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
