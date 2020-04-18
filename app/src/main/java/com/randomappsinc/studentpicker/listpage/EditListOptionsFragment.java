@@ -92,6 +92,8 @@ public class EditListOptionsFragment extends Fragment
                 nameListImporterDialog.show();
                 break;
         }
+
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override

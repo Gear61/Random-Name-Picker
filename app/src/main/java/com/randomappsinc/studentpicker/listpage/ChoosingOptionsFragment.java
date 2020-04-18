@@ -71,6 +71,8 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
                 getActivity().startActivity(groupsIntent);
                 break;
         }
+
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
