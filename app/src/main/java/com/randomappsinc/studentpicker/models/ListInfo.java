@@ -4,7 +4,6 @@ import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +30,6 @@ public class ListInfo {
         return nameAmounts;
     }
 
-    public List<String> getUniqueNames() {
-        return uniqueNames;
-    }
-
     public List<String> getNameHistory() {
         return nameHistory;
     }
@@ -54,19 +49,7 @@ public class ListInfo {
         return longList;
     }
 
-    public void addNames(String name, int amount) {
-        if (nameAmounts.containsKey(name)) {
-            int currentAmount = nameAmounts.get(name);
-            nameAmounts.put(name, currentAmount + amount);
-        } else {
-            nameAmounts.put(name, amount);
-            uniqueNames.add(name);
-            Collections.sort(uniqueNames);
-        }
-        numInstances += amount;
-    }
-
-    public void removeNames(String name, int amount) {
+    private void removeNames(String name, int amount) {
         if (nameAmounts.containsKey(name)) {
             int currentAmount = nameAmounts.get(name);
             if (currentAmount - amount <= 0) {
@@ -81,11 +64,6 @@ public class ListInfo {
                 numInstances -= amount;
             }
         }
-    }
-
-    public void renamePeople(String oldName, String newName, int amount) {
-        removeNames(oldName, amount);
-        addNames(newName, amount);
     }
 
     public String getName(int position) {

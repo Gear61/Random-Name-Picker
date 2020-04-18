@@ -52,21 +52,6 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
         notifyDataSetChanged();
     }
 
-    void addNames(String name, int amount) {
-        currentState.addNames(name, amount);
-        notifyDataSetChanged();
-    }
-
-    void removeNames(String name, int amount) {
-        currentState.removeNames(name, amount);
-        notifyDataSetChanged();
-    }
-
-    void changeNames(String oldName, String newName, int amount) {
-        currentState.renamePeople(oldName, newName, amount);
-        notifyDataSetChanged();
-    }
-
     class NameViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.person_name) TextView name;
