@@ -228,6 +228,13 @@ public class NameChoosingActivity extends AppCompatActivity
     }
 
     @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        UIUtils.hideKeyboard(this);
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_from_top);
