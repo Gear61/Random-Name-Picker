@@ -57,4 +57,5 @@ dependencies {
     implementation 'com.squareup:seismic:1.0.2'
     implementation 'com.google.android.gms:play-services-ads:19.0.1'
     implementation 'com.android.billingclient:billing:2.2.0'
+    implementation 'de.siegmar:fastcsv:1.0.3'
 }

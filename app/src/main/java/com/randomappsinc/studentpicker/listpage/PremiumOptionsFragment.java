@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.listpage;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -21,7 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapter.ItemSelectionListener {
+public class PremiumOptionsFragment extends Fragment
+        implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener {
 
     public static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
@@ -35,6 +39,8 @@ public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapt
 
     private int listId;
     private PreferencesManager preferencesManager;
+    private DataSource dataSource;
+    private CsvExporter csvExporter;
     private Unbinder unbinder;
 
     @Override
@@ -58,6 +64,8 @@ public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapt
                 this,
                 R.array.premium_options,
                 R.array.premium_options_icons));
+        dataSource = new DataSource(getContext());
+        csvExporter = new CsvExporter(this);
     }
 
     @Override
@@ -74,8 +82,30 @@ public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapt
             case 0:
                 break;
             case 1:
+                csvExporter.turnListIntoCsv(listId, getContext());
                 break;
         }
+    }
+
+    @Override
+    public void onCsvFileCreated(Uri fileUri) {
+        getActivity().runOnUiThread(() -> {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intentShareFile.setType("application/csv");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, fileUri);
+
+            String listName = dataSource.getListName(listId);
+            intentShareFile.putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.export_file_title, listName));
+            startActivity(Intent.createChooser(intentShareFile, getString(R.string.export_file_with)));
+        });
+    }
+
+    @Override
+    public void onCsvExportFailed() {
+        getActivity().runOnUiThread(() -> UIUtils.showLongToast(R.string.export_csv_failed, getContext()));
     }
 
     @Override
