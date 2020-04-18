@@ -71,8 +71,9 @@
                 />
         </FrameLayout>
 
-        <TextView
+        <com.joanzapata.iconify.widget.IconTextView
             android:id="@+id/no_content"
+            android:text="@string/no_names_for_edit"
             style="@style/empty_state_text"
             />
 
