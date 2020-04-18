@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="choose_names">Choose names</string>
+    <string name="make_groups">Make groups</string>
     <string-array name="choosing_options">
-        <item>Choose names</item>
-        <item>Make groups</item>
+        <item>@string/choose_names</item>
+        <item>@string/make_groups</item>
     </string-array>
 
     <string name="choose_icon">{ion-android-person}</string>

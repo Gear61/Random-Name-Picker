@@ -18,15 +18,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -41,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PresentationActivity extends StandardActivity
+public class PresentationActivity extends AppCompatActivity
         implements ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener {
 
     public static final String LIST_ID_KEY = "listId";
@@ -72,6 +73,10 @@ public class PresentationActivity extends StandardActivity
         setContentView(R.layout.presentation_activity);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
 
         preferencesManager = new PreferencesManager(this);
         dataSource = new DataSource(this);
@@ -243,8 +248,9 @@ public class PresentationActivity extends StandardActivity
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_from_top);
         player.stop();
         textToSpeechManager.shutdown();
     }
@@ -264,6 +270,9 @@ public class PresentationActivity extends StandardActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.settings:
                 showSettingsDialog();
                 return true;

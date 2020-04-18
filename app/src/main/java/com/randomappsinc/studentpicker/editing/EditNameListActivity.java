@@ -1,9 +1,12 @@
 package com.randomappsinc.studentpicker.editing;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
@@ -11,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,9 +23,9 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
+import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.SpeechToTextManager;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
@@ -34,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EditNameListActivity extends StandardActivity implements
+public class EditNameListActivity extends AppCompatActivity implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
         DuplicationDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener {
 
@@ -208,8 +212,38 @@ public class EditNameListActivity extends StandardActivity implements
     }
 
     @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        UIUtils.hideKeyboard(this);
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_from_top);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_name_list_menu, menu);
+        UIUtils.loadMenuIcon(menu, R.id.open_choose_page, IoniconsIcons.ion_android_person, this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.open_choose_page:
+                Intent choosingIntent = new Intent(this, NameChoosingActivity.class);
+                choosingIntent.putExtra(Constants.LIST_ID_KEY, listId);
+                choosingIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(choosingIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
