@@ -5,7 +5,7 @@ android {
 
     def versionMajor = 4
     def versionMinor = 1
-    def versionPatch = 0
+    def versionPatch = 1
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"

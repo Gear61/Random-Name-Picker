@@ -9,9 +9,11 @@
     <string name="add_description">Add item</string>
     <string name="choose">Choose</string>
     <string name="groups">Groups</string>
+    <string name="premium">Premium</string>
     <array name="list_options">
         <item>@string/choose</item>
         <item>@string/edit</item>
+        <item>@string/premium</item>
     </array>
     <string name="options_for">Options for:&#160;</string>
 

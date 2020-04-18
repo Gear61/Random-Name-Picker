@@ -49,6 +49,7 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
                 listId,
                 listTabTitles);
         nameListPager.setAdapter(listTabsAdapter);
+        nameListPager.setOffscreenPageLimit(2);
         nameListTabs.setupWithViewPager(nameListPager);
 
         deleteListDialog = new DeleteListDialog(this, this);

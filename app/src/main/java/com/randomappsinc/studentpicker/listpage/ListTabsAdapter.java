@@ -29,6 +29,8 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
                 return ChoosingOptionsFragment.getInstance(listId);
             case 1:
                 return EditListOptionsFragment.getInstance(listId);
+            case 2:
+                return PremiumOptionsFragment.getInstance(listId);
             default:
                 throw new IllegalArgumentException("There should only be 2 tabs!");
         }

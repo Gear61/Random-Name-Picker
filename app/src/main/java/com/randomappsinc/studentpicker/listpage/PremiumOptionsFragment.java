@@ -11,28 +11,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.grouping.GroupMakingActivity;
+import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdapter.ItemSelectionListener {
+public class PremiumOptionsFragment extends Fragment implements ListOptionsAdapter.ItemSelectionListener {
 
-    public static ChoosingOptionsFragment getInstance(int listId) {
-        ChoosingOptionsFragment fragment = new ChoosingOptionsFragment();
+    public static PremiumOptionsFragment getInstance(int listId) {
+        PremiumOptionsFragment fragment = new PremiumOptionsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LIST_ID_KEY, listId);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    @BindView(R.id.recycler_view) RecyclerView choosingOptions;
+    @BindView(R.id.recycler_view) RecyclerView premiumOptions;
 
     private int listId;
+    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -49,26 +50,27 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        choosingOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        choosingOptions.setAdapter(new ListOptionsAdapter(
+        preferencesManager = new PreferencesManager(getContext());
+        premiumOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        premiumOptions.setAdapter(new ListOptionsAdapter(
                 getActivity(),
                 this,
-                R.array.choosing_options,
-                R.array.choosing_options_icons));
+                R.array.premium_options,
+                R.array.premium_options_icons));
     }
 
     @Override
     public void onItemClick(int position) {
+        if (preferencesManager.isOnFreeVersion()) {
+            Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
+            getActivity().startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        }
+
         switch (position) {
             case 0:
-                Intent choosingIntent = new Intent(getActivity(), NameChoosingActivity.class);
-                choosingIntent.putExtra(Constants.LIST_ID_KEY, listId);
-                getActivity().startActivity(choosingIntent);
                 break;
             case 1:
-                Intent groupsIntent = new Intent(getActivity(), GroupMakingActivity.class);
-                groupsIntent.putExtra(Constants.LIST_ID_KEY, listId);
-                getActivity().startActivity(groupsIntent);
                 break;
         }
     }

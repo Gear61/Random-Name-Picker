@@ -38,7 +38,7 @@ public class EditListOptionsFragment extends Fragment
         return fragment;
     }
 
-    @BindView(R.id.edit_list_options) RecyclerView editListOptions;
+    @BindView(R.id.recycler_view) RecyclerView editListOptions;
 
     private int listId;
     private RenameListDialog renameListDialog;
@@ -49,7 +49,7 @@ public class EditListOptionsFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.edit_list_fragment,
+                R.layout.simple_vertical_recyclerview,
                 container,
                 false);
         listId = getArguments().getInt(Constants.LIST_ID_KEY);
