@@ -27,6 +27,19 @@
             android:value="ca-app-pub-3903394384020535~6080924821"
             />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.randomappsinc.studentpicker.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                />
+        </provider>
+
         <activity
             android:name=".init.SplashActivity"
             android:theme="@style/SplashTheme"
