@@ -84,7 +84,6 @@ public class EditNameListActivity extends AppCompatActivity implements
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         dataSource = new DataSource(this);
-        noContent.setText(R.string.no_names_for_edit);
 
         speechToTextManager = new SpeechToTextManager(this, this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
