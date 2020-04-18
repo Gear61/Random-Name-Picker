@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_name"
+    android:id="@+id/list_cell_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:textSize="27sp"
-    android:textColor="@color/dark_gray"
-    />
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+
+    <TextView
+        android:id="@+id/list_name"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="27sp"
+        android:textColor="@color/dark_gray"
+        />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/choose_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/choose_icon"
+        android:textSize="28dp"
+        android:textColor="@color/dark_gray"
+        android:background="?android:attr/selectableItemBackground"
+        />
+</LinearLayout>

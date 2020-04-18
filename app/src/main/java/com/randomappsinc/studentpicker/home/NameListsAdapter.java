@@ -18,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.NameListViewHolder> {
 
@@ -26,6 +27,8 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
 
     public interface Delegate {
         void onItemClick(ListDO listDO);
+
+        void onChooseButtonClicked(ListDO listDO);
 
         void setNoContent();
     }
@@ -64,22 +67,26 @@ public class NameListsAdapter extends RecyclerView.Adapter<NameListsAdapter.Name
         return nameLists.size();
     }
 
-    class NameListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class NameListViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.list_name) TextView listName;
 
         NameListViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            view.setOnClickListener(this);
         }
 
         void loadList(int position) {
             this.listName.setText(nameLists.get(position).getName());
         }
 
-        @Override
-        public void onClick(View v) {
+        @OnClick(R.id.list_cell_parent)
+        void onEntireCellClicked() {
             delegate.onItemClick(nameLists.get(getAdapterPosition()));
+        }
+
+        @OnClick(R.id.choose_button)
+        void onChooseClicked() {
+            delegate.onChooseButtonClicked(nameLists.get(getAdapterPosition()));
         }
     }
 }
