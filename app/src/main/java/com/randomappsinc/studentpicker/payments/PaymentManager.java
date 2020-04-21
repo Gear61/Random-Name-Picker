@@ -112,16 +112,18 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
         // Acknowledge any purchases that haven't been acknowledged already
         Purchase.PurchasesResult purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
         List<Purchase> purchasesList = purchases.getPurchasesList();
-        for (Purchase purchase : purchasesList) {
-            if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
-                if (purchase.isAcknowledged()) {
-                    AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
-                            .setPurchaseToken(purchase.getPurchaseToken())
-                            .build();
-                    billingClient.acknowledgePurchase(ackParams, this);
+        if (purchasesList != null) {
+            for (Purchase purchase : purchasesList) {
+                if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+                    if (purchase.isAcknowledged()) {
+                        AcknowledgePurchaseParams ackParams = AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.getPurchaseToken())
+                                .build();
+                        billingClient.acknowledgePurchase(ackParams, this);
+                    }
+                    preferencesManager.setIsOnFreeVersion(false);
+                    listener.onPremiumAlreadyOwned();
                 }
-                preferencesManager.setIsOnFreeVersion(false);
-                listener.onPremiumAlreadyOwned();
             }
         }
 
