@@ -29,7 +29,7 @@ public class ChoosingMessageDialog {
                             boolean notEmpty = !chooseMessage.trim().isEmpty();
                             dialog.getActionButton(DialogAction.POSITIVE).setEnabled(notEmpty);
                         })
-                .positiveText(R.string.create)
+                .positiveText(R.string.save)
                 .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
                     String newMessage = dialog.getInputEditText().getText().toString().trim();
