@@ -14,8 +14,8 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
-import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.PaymentManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
@@ -85,10 +85,10 @@ public class HomeActivity extends StandardActivity implements
     @Override
     public void onCreateNewListConfirmed(String newListName) {
         ListDO newListDO = dataSource.addNameList(newListName);
-
-        Intent intent = new Intent(this, ListLandingPageActivity.class);
+        Intent intent = new Intent(this, EditNameListActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, newListDO.getId());
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     private void showPleaseRateDialog() {

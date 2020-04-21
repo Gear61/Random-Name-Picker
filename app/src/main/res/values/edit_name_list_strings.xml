@@ -18,7 +18,7 @@
 
     <string name="edit">Edit</string>
     <string name="no_names_for_edit">
-        Type in a name above and click + to add it to the list.
+        Type in a name and click + to add it to the list.
         When you\'re done, use the {ion-android-person} button above to start choosing!
     </string>
     <string name="blank_name">Names cannot be blank.</string>
