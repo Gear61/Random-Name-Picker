@@ -6,13 +6,17 @@
 
     <string name="share_list_as_txt_file">Share list as .txt file</string>
     <string name="share_list_as_csv_sheet">Share list as .csv spreadsheet</string>
+    <string name="customize_choosing_message">Customize choosing message</string>
     <string-array name="premium_options">
         <item>@string/share_list_as_txt_file</item>
         <item>@string/share_list_as_csv_sheet</item>
+        <item>@string/customize_choosing_message</item>
     </string-array>
 
+    <string name="message_icon">{ion-social-wordpress}</string>
     <string-array name="premium_options_icons">
         <item>@string/document_icon</item>
         <item>@string/document_icon</item>
+        <item>@string/message_icon</item>
     </string-array>
 </resources>
