@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.choosing.ChoosingMessageDialog;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
@@ -27,7 +28,7 @@ import butterknife.Unbinder;
 
 public class PremiumOptionsFragment extends Fragment
         implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener,
-        TxtExporter.Listener {
+        TxtExporter.Listener, ChoosingMessageDialog.Listener {
 
     static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
@@ -44,6 +45,7 @@ public class PremiumOptionsFragment extends Fragment
     private DataSource dataSource;
     private CsvExporter csvExporter;
     private TxtExporter txtExporter;
+    private ChoosingMessageDialog choosingMessageDialog;
     private Unbinder unbinder;
 
     @Override
@@ -70,6 +72,7 @@ public class PremiumOptionsFragment extends Fragment
         dataSource = new DataSource(getContext());
         csvExporter = new CsvExporter(this);
         txtExporter = new TxtExporter(this);
+        choosingMessageDialog = new ChoosingMessageDialog(getContext(), this, listId);
     }
 
     @Override
@@ -88,6 +91,9 @@ public class PremiumOptionsFragment extends Fragment
                 break;
             case 1:
                 csvExporter.turnListIntoCsv(listId, getContext());
+                break;
+            case 2:
+                choosingMessageDialog.show();
                 break;
         }
     }
@@ -134,6 +140,11 @@ public class PremiumOptionsFragment extends Fragment
     public void onTxtExportFailed() {
         getActivity().runOnUiThread(() -> UIUtils.showLongToast(
                 R.string.export_txt_failed, getContext()));
+    }
+
+    @Override
+    public void onNewChoosingMessageConfirmed(String newMessage) {
+
     }
 
     @Override
