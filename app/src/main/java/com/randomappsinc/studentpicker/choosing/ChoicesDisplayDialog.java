@@ -2,8 +2,6 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
@@ -21,7 +19,7 @@ public class ChoicesDisplayDialog {
     private int numNames;
     private MaterialDialog dialog;
 
-    ChoicesDisplayDialog(@NonNull Listener listener, Context context) {
+    ChoicesDisplayDialog(Listener listener, Context context) {
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)

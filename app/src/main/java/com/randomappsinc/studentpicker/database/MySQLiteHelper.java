@@ -23,13 +23,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // Core fields
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Struct for migration
     private static class NameInfoPod {
         final String listName;
         public final String name;
-        public final int amount;
+        final int amount;
 
         NameInfoPod(String listName, String name, int amount) {
             this.listName = listName;
@@ -60,7 +60,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 oldData.put(listName, getNameCountsLegacy(database, listName));
             }
 
-            safelyAddColumnToTable(database, DatabaseColumns.NAME, "INTEGER", DatabaseTables.LEGACY_TABLE_NAME);
+            safelyAddColumnToTable(
+                    database, DatabaseColumns.NAME, "INTEGER", DatabaseTables.LEGACY_TABLE_NAME);
             database.execSQL("DELETE FROM " + DatabaseTables.LEGACY_TABLE_NAME);
 
             for (String listName : oldData.keySet()) {
@@ -101,7 +102,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                             nameInfoCursor.getColumnIndex(DatabaseColumns.LIST_NAME));
                     String name = nameInfoCursor
                             .getString(nameInfoCursor.getColumnIndex(DatabaseColumns.PERSON_NAME_LEGACY));
-                    int amount = nameInfoCursor.getInt(nameInfoCursor.getColumnIndex(DatabaseColumns.NAME_COUNT));
+                    int amount = nameInfoCursor.getInt(
+                            nameInfoCursor.getColumnIndex(DatabaseColumns.NAME_COUNT));
                     namesToMigrate.add(new NameInfoPod(listName, name, amount));
                 } while (nameInfoCursor.moveToNext());
             }
@@ -217,6 +219,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
                 }
             }
+            oldVersion++;
+        }
+
+        // Add choosing message customization
+        if (oldVersion == 4) {
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.CHOOSING_MESSAGE,
+                    "TEXT",
+                    DatabaseTables.LISTS);
         }
     }
 
@@ -235,7 +247,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         cursor.close();
 
         if (doesColumnNotExist) {
-            String addColumnQuery = "ALTER TABLE " + tableName + " ADD COLUMN " + fieldName + " " + fieldType + ";";
+            String addColumnQuery = "ALTER TABLE " + tableName +
+                    " ADD COLUMN " + fieldName +
+                    " " + fieldType + ";";
             database.execSQL(addColumnQuery);
         }
     }
