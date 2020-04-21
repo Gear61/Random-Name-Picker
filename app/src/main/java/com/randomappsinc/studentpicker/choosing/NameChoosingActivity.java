@@ -214,7 +214,7 @@ public class NameChoosingActivity extends AppCompatActivity
 
     @Override
     public void copyNamesToClipboard(String chosenNames, int numNames) {
-        NameUtils.copyNamesToClipboard(chosenNames, null, numNames, false, this);
+        NameUtils.copyNamesToClipboard(chosenNames, numNames, false, this);
     }
 
     @Override

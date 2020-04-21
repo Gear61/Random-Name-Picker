@@ -32,7 +32,6 @@ class NameChoosingHistoryManager {
                 })
                 .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
                         getFormattedNameHistory(),
-                        null,
                         0,
                         true,
                         dialog.getContext()))
