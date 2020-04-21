@@ -29,7 +29,7 @@ public class PremiumOptionsFragment extends Fragment
         implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener,
         TxtExporter.Listener {
 
-    public static PremiumOptionsFragment getInstance(int listId) {
+    static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LIST_ID_KEY, listId);
@@ -110,7 +110,8 @@ public class PremiumOptionsFragment extends Fragment
 
     @Override
     public void onCsvExportFailed() {
-        getActivity().runOnUiThread(() -> UIUtils.showLongToast(R.string.export_csv_failed, getContext()));
+        getActivity().runOnUiThread(() -> UIUtils.showLongToast(
+                R.string.export_csv_failed, getContext()));
     }
 
     @Override
@@ -131,7 +132,8 @@ public class PremiumOptionsFragment extends Fragment
 
     @Override
     public void onTxtExportFailed() {
-        getActivity().runOnUiThread(() -> UIUtils.showLongToast(R.string.export_txt_failed, getContext()));
+        getActivity().runOnUiThread(() -> UIUtils.showLongToast(
+                R.string.export_txt_failed, getContext()));
     }
 
     @Override
