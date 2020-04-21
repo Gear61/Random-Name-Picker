@@ -17,6 +17,7 @@ class DatabaseColumns {
     static final String SHOW_AS_LIST = "show_as_list";
     static final String NUM_NAMES_CHOSEN = "num_names_chosen";
     static final String NAMES_HISTORY = "names_history";
+    static final String CHOOSING_MESSAGE = "choosing_message";
 
     // LEGACY
     static final String PERSON_NAME_LEGACY = "student_name";
