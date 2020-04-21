@@ -144,7 +144,8 @@ public class PremiumOptionsFragment extends Fragment
 
     @Override
     public void onNewChoosingMessageConfirmed(String newMessage) {
-
+        dataSource.updateChoosingMessage(listId, newMessage);
+        UIUtils.showShortToast(R.string.choosing_message_updated, getContext());
     }
 
     @Override

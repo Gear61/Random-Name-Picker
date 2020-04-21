@@ -5,6 +5,7 @@ import android.content.Context;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.NameUtils;
 
 /** Shows the chosen names and their corresponding options in a dialog */
 public class ChoicesDisplayDialog {
@@ -17,9 +18,11 @@ public class ChoicesDisplayDialog {
 
     private String chosenNames;
     private int numNames;
+    private int listId;
     private MaterialDialog dialog;
 
-    ChoicesDisplayDialog(Listener listener, Context context) {
+    ChoicesDisplayDialog(Listener listener, Context context, int listId) {
+        this.listId = listId;
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
@@ -37,11 +40,11 @@ public class ChoicesDisplayDialog {
         this.chosenNames = chosenNames;
         this.numNames = numNames;
 
-        dialog.setTitle(this.numNames == 1 ? R.string.name_chosen : R.string.names_chosen);
+        dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
         dialog.setContent(chosenNames);
         dialog.getActionButton(DialogAction.NEUTRAL)
-                .setText(this.numNames == 1 ? R.string.say_name : R.string.say_names);
-        dialog.getActionButton(DialogAction.NEUTRAL).setText(this.numNames == 1 ? R.string.say_name : R.string.say_names);
+                .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
+        dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.show();
     }
 

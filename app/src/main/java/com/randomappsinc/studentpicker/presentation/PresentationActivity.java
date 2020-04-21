@@ -86,7 +86,7 @@ public class PresentationActivity extends AppCompatActivity
         textToSpeechManager = new TextToSpeechManager(this, this);
 
         int numNames = settings.getNumNamesToChoose();
-        header.setText(numNames > 1 ? R.string.names_chosen : R.string.name_chosen);
+        header.setText(NameUtils.getChoosingMessage(this, listId, numNames));
 
         if (!settings.getShowAsList()) {
             names.setGravity(Gravity.CENTER_HORIZONTAL);

@@ -21,7 +21,7 @@ public class ChoosingMessageDialog {
         adderDialog = new MaterialDialog.Builder(context)
                 .title(R.string.customize_choosing_message_dialog_title)
                 .alwaysCallInputCallback()
-                .inputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
                 .input(context.getString(R.string.create_list_hint),
                         prefill,
                         (dialog, input) -> {
