@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -35,6 +36,7 @@ public class HomeActivity extends StandardActivity implements
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
+    @BindView(R.id.title_import_from_csv) TextView importFromCsv;
 
     private HomepageFragmentController navigationController;
     private CreateListDialog createListDialog;
@@ -75,6 +77,10 @@ public class HomeActivity extends StandardActivity implements
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
         }
+
+        importFromCsv.setText(preferencesManager.isOnFreeVersion() ?
+                getString(R.string.import_from_csv_file_premium) :
+                getString(R.string.import_from_csv_file));
 
         createListDialog = new CreateListDialog(this, this);
         dataSource = new DataSource(this);
