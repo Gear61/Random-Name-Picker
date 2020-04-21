@@ -57,4 +57,6 @@
     <string name="text_to_speech_fail">We were unable to initialize your device\'s Text To Speech engine.</string>
 
     <string name="list_reset_confirmation">List reset and all names restored.</string>
+
+    <string name="customize_choosing_message_dialog_title">Customize Choosing Message</string>
 </resources>

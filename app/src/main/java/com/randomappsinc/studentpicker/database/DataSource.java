@@ -8,6 +8,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -305,9 +307,6 @@ public class DataSource {
 
     public ChoosingSettings getChoosingSettings(int listId) {
         open();
-        ChoosingSettings choosingSettings = new ChoosingSettings();
-
-        open();
         String[] columns = {
                 DatabaseColumns.PRESENTATION_MODE,
                 DatabaseColumns.WITH_REPLACEMENT,
@@ -319,6 +318,7 @@ public class DataSource {
         String[] selectionArgs = {String.valueOf(listId)};
         Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
                 selectionArgs, null, null, null);
+        ChoosingSettings choosingSettings = new ChoosingSettings();
         if (cursor.moveToFirst()) {
             choosingSettings.setPresentationMode(cursor.getInt(0) != 0);
             choosingSettings.setWithReplacement(cursor.getInt(1) != 0);
@@ -441,5 +441,25 @@ public class DataSource {
         for (String name : nameToAmount.keySet()) {
             addNames(name, nameToAmount.get(name), receivingListId);
         }
+    }
+
+    @Nullable
+    public String getChoosingMessage(int listId) {
+        open();
+        String[] columns = {
+                DatabaseColumns.CHOOSING_MESSAGE,
+        };
+        String selection = DatabaseColumns.ID + " = ?";
+        String[] selectionArgs = {String.valueOf(listId)};
+        Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
+                selectionArgs, null, null, null);
+        String choosingMessage = null;
+        if (cursor.moveToFirst()) {
+            choosingMessage = cursor.getString(0);
+        }
+        cursor.close();
+        close();
+
+        return choosingMessage;
     }
 }

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.database.DataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,5 +81,16 @@ public class NameUtils {
     // Given 0 (1st element in array), returns "1. ", scaling linearly with the input
     public static String getPrefix(int index) {
         return (index + 1) + ". ";
+    }
+
+    public static String getChoosingMessage(Context context, int listId, int numNames) {
+        DataSource dataSource = new DataSource(context);
+        String choosingMessage = dataSource.getChoosingMessage(listId);
+        if (TextUtils.isEmpty(choosingMessage)) {
+            return numNames == 1
+                    ? context.getString(R.string.name_chosen)
+                    : context.getString(R.string.names_chosen);
+        }
+        return choosingMessage;
     }
 }
