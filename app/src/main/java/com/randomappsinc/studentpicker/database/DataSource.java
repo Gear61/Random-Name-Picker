@@ -462,4 +462,16 @@ public class DataSource {
 
         return choosingMessage;
     }
+
+    public void updateChoosingMessage(int listId, String newMessage) {
+        open();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(DatabaseColumns.CHOOSING_MESSAGE, newMessage);
+        String[] whereArgs = new String[]{String.valueOf(listId)};
+        String whereStatement = DatabaseColumns.ID + " = ?";
+        database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
+
+        close();
+    }
 }

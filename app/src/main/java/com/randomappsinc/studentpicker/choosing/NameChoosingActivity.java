@@ -110,7 +110,7 @@ public class NameChoosingActivity extends AppCompatActivity
                 .onNegative((dialog, which) -> settingsHolder.revertSettings())
                 .cancelable(false)
                 .build();
-        choicesDisplayDialog = new ChoicesDisplayDialog(this, this);
+        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId);
 
         settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);

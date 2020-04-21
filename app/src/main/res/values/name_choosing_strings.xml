@@ -59,4 +59,5 @@
     <string name="list_reset_confirmation">List reset and all names restored.</string>
 
     <string name="customize_choosing_message_dialog_title">Customize Choosing Message</string>
+    <string name="choosing_message_updated">Choosing message updated for this list!</string>
 </resources>
