@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,7 +43,6 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
-    @BindView(R.id.parent) View parent;
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @BindView(R.id.no_content) TextView noContent;
     @BindView(R.id.num_names) TextView numNames;
@@ -107,14 +105,14 @@ public class EditNameListActivity extends AppCompatActivity implements
         String newName = newNameInput.getText().toString().trim();
         newNameInput.setText("");
         if (newName.isEmpty()) {
-            UIUtils.showSnackbar(parent, getString(R.string.blank_name));
+            UIUtils.showLongToast(R.string.blank_name, this);
         } else {
             listHasChanged = true;
             dataSource.addNames(newName, 1, listId);
             List<NameDO> names = dataSource.getNamesInList(listId);
             namesAdapter.setNameList(names);
             String template = getString(R.string.added_name);
-            UIUtils.showSnackbar(parent, String.format(template, newName));
+            UIUtils.showShortToast(String.format(template, newName), this);
         }
     }
 
@@ -178,9 +176,9 @@ public class EditNameListActivity extends AppCompatActivity implements
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter.setNameList(names);
         if (amountToDelete == 1) {
-            UIUtils.showSnackbar(parent, getString(R.string.deleted_name, name));
+            UIUtils.showShortToast(getString(R.string.deleted_name, name), this);
         } else {
-            UIUtils.showSnackbar(parent, getString(R.string.names_deleted, amountToDelete, name));
+            UIUtils.showLongToast(getString(R.string.names_deleted, amountToDelete, name), this);
         }
     }
 
@@ -190,7 +188,7 @@ public class EditNameListActivity extends AppCompatActivity implements
         dataSource.addNames(name, amountToAdd, listId);
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter.setNameList(names);
-        UIUtils.showSnackbar(parent, R.string.clones_added);
+        UIUtils.showLongToast(R.string.clones_added, this);
     }
 
     @Override

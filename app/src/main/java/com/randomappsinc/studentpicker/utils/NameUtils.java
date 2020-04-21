@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.view.View;
-
-import androidx.annotation.Nullable;
 
 import com.randomappsinc.studentpicker.R;
 
@@ -57,12 +54,7 @@ public class NameUtils {
         return listOfGroups;
     }
 
-    public static void copyNamesToClipboard(
-            String names,
-            @Nullable View parent,
-            int numNames,
-            boolean historyMode,
-            Context context) {
+    public static void copyNamesToClipboard(String names, int numNames, boolean historyMode, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
         if (clipboard == null) {
             return;
@@ -81,11 +73,7 @@ public class NameUtils {
             }
         }
 
-        if (parent == null) {
-            UIUtils.showLongToast(messageId, context);
-        } else {
-            UIUtils.showSnackbar(parent, context.getString(messageId));
-        }
+        UIUtils.showLongToast(messageId, context);
     }
 
     // Given 0 (1st element in array), returns "1. ", scaling linearly with the input

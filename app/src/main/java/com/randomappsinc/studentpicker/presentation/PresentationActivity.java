@@ -282,7 +282,6 @@ public class PresentationActivity extends AppCompatActivity
             case R.id.copy_names:
                 NameUtils.copyNamesToClipboard(
                         chosenNamesText,
-                        null,
                         settings.getNumNamesToChoose(),
                         false,
                         this);
