@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -35,8 +36,10 @@ public class HomeActivity extends StandardActivity implements
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
+    @BindView(R.id.title_import_from_csv) TextView importFromCsv;
 
     private HomepageFragmentController navigationController;
+    private PreferencesManager preferencesManager;
     private CreateListDialog createListDialog;
     private BottomSheetBehavior bottomSheetBehavior;
     private DataSource dataSource;
@@ -70,7 +73,7 @@ public class HomeActivity extends StandardActivity implements
         });
         bottomNavigation.setListener(this);
 
-        PreferencesManager preferencesManager = new PreferencesManager(this);
+        preferencesManager = new PreferencesManager(this);
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
@@ -171,6 +174,14 @@ public class HomeActivity extends StandardActivity implements
 
     @Override
     public void onStartupFailed() {}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        importFromCsv.setText(preferencesManager.isOnFreeVersion() ?
+                R.string.import_from_csv_file_premium :
+                R.string.import_from_csv_file);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
