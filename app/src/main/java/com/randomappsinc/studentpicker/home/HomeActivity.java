@@ -18,6 +18,7 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.payments.PaymentManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -33,6 +34,7 @@ public class HomeActivity extends StandardActivity implements
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
+    private static final int CSV_IMPORT_REQUEST_CODE = 2;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
@@ -150,6 +152,25 @@ public class HomeActivity extends StandardActivity implements
         txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
         txtFileIntent.setType("text/*");
         startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
+    }
+
+    @OnClick(R.id.sheet_import_from_csv)
+    public void importFromCsv() {
+        if (preferencesManager.isOnFreeVersion()) {
+            UIUtils.showLongToast(R.string.premium_needed_message, this);
+            Intent intent = new Intent(this, BuyPremiumActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+            return;
+        }
+
+        hideBottomSheet();
+        UIUtils.showLongToast(R.string.csv_format_instructions, this);
+        Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        csvIntent.setType("*/*");
+        csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
+        startActivityForResult(csvIntent, CSV_IMPORT_REQUEST_CODE);
     }
 
     private void hideBottomSheet() {
