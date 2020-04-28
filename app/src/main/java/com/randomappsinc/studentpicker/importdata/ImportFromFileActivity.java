@@ -28,7 +28,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ImportFromTextFileActivity extends StandardActivity {
+public class ImportFromFileActivity extends StandardActivity {
+
+    public static final String IS_TEXT_FILE = "isTextFile";
 
     @BindView(R.id.list_name) EditText listName;
     @BindView(R.id.names) EditText names;
@@ -45,7 +47,9 @@ public class ImportFromTextFileActivity extends StandardActivity {
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
 
-        extractNameListInfo();
+        if (getIntent().getExtras().getBoolean(IS_TEXT_FILE, false)) {
+            extractNameListInfoFromTextFile();
+        }
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ImportFromTextFileActivity extends StandardActivity {
         bannerAdManager.onOrientationChanged();
     }
 
-    private void extractNameListInfo() {
+    private void extractNameListInfoFromTextFile() {
         Handler handler = new Handler();
         handler.post(() -> {
             Uri fileUri = Uri.parse(getIntent().getStringExtra(Constants.FILE_URI_KEY));

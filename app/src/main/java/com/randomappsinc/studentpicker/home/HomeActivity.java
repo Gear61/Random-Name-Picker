@@ -16,7 +16,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
-import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
+import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.payments.PaymentManager;
@@ -28,13 +28,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.IS_TEXT_FILE;
+
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
-    private static final int CSV_IMPORT_REQUEST_CODE = 2;
+    private static final int IMPORT_CSV_REQUEST_CODE = 2;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
@@ -150,7 +152,7 @@ public class HomeActivity extends StandardActivity implements
         hideBottomSheet();
         Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        txtFileIntent.setType("text/*");
+        txtFileIntent.setType("text/plain");
         startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
     }
 
@@ -170,7 +172,7 @@ public class HomeActivity extends StandardActivity implements
         csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
         csvIntent.setType("*/*");
         csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
-        startActivityForResult(csvIntent, CSV_IMPORT_REQUEST_CODE);
+        startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
     }
 
     private void hideBottomSheet() {
@@ -208,20 +210,27 @@ public class HomeActivity extends StandardActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMPORT_FILE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-                Uri uri = data.getData();
+            maybeOpenImportFileActivity(resultCode,data,true);
+        } else if (requestCode == IMPORT_CSV_REQUEST_CODE) {
+            maybeOpenImportFileActivity(resultCode,data,false);
+        }
+    }
 
-                // Persist ability to read from this file
-                int takeFlags = data.getFlags()
-                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+    private void maybeOpenImportFileActivity(int resultCode, Intent data, boolean isTextFile) {
+        if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
 
-                String uriString = uri.toString();
-                Intent intent = new Intent(this, ImportFromTextFileActivity.class);
-                intent.putExtra(Constants.FILE_URI_KEY, uriString);
-                startActivity(intent);
-            }
+            // Persist ability to read from this file
+            int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+            String uriString = uri.toString();
+            Intent intent = new Intent(this, ImportFromFileActivity.class);
+            intent.putExtra(Constants.FILE_URI_KEY, uriString);
+            intent.putExtra(IS_TEXT_FILE, isTextFile);
+            startActivity(intent);
         }
     }
 
