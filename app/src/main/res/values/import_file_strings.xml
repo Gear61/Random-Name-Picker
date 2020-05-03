@@ -12,6 +12,7 @@
     <string name="import_success">Name list successfully imported.</string>
 
     <string name="csv_format_instructions">Make sure first names are in the first column and last names in the second.</string>
+    <string name="csv_read_failed">We failed to parse your .csv file.</string>
 
     <string name="loading">Loading&#8230;</string>
 </resources>
