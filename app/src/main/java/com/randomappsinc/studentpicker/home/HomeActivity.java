@@ -16,6 +16,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
+import com.randomappsinc.studentpicker.importdata.FileImportType;
 import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
@@ -28,14 +29,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.IS_TEXT_FILE;
+import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
-    private static final int IMPORT_FILE_REQUEST_CODE = 1;
+    private static final int IMPORT_TXT_REQUEST_CODE = 1;
     private static final int IMPORT_CSV_REQUEST_CODE = 2;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
@@ -153,7 +154,7 @@ public class HomeActivity extends StandardActivity implements
         Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
         txtFileIntent.setType("text/plain");
-        startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
+        startActivityForResult(txtFileIntent, IMPORT_TXT_REQUEST_CODE);
     }
 
     @OnClick(R.id.sheet_import_from_csv)
@@ -209,14 +210,14 @@ public class HomeActivity extends StandardActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMPORT_FILE_REQUEST_CODE) {
-            maybeOpenImportFileActivity(resultCode,data,true);
+        if (requestCode == IMPORT_TXT_REQUEST_CODE) {
+            maybeOpenImportFileActivity(resultCode, data, FileImportType.TEXT);
         } else if (requestCode == IMPORT_CSV_REQUEST_CODE) {
-            maybeOpenImportFileActivity(resultCode,data,false);
+            maybeOpenImportFileActivity(resultCode, data, FileImportType.CSV);
         }
     }
 
-    private void maybeOpenImportFileActivity(int resultCode, Intent data, boolean isTextFile) {
+    private void maybeOpenImportFileActivity(int resultCode, Intent data, @FileImportType int fileType) {
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
 
@@ -229,7 +230,7 @@ public class HomeActivity extends StandardActivity implements
             String uriString = uri.toString();
             Intent intent = new Intent(this, ImportFromFileActivity.class);
             intent.putExtra(Constants.FILE_URI_KEY, uriString);
-            intent.putExtra(IS_TEXT_FILE, isTextFile);
+            intent.putExtra(FILE_TYPE, fileType);
             startActivity(intent);
         }
     }

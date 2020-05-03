@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.OpenableColumns;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
@@ -28,15 +30,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ImportFromFileActivity extends StandardActivity {
+public class ImportFromFileActivity extends StandardActivity implements FileParsingManager.Listener {
 
-    public static final String IS_TEXT_FILE = "isTextFile";
+    public static final String FILE_TYPE = "fileType";
 
     @BindView(R.id.list_name) EditText listName;
     @BindView(R.id.names) EditText names;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
+    @BindView(R.id.loading) ProgressBar loading;
 
     private BannerAdManager bannerAdManager;
+    private FileParsingManager fileParsingManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +51,9 @@ public class ImportFromFileActivity extends StandardActivity {
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
 
-        if (getIntent().getExtras().getBoolean(IS_TEXT_FILE, false)) {
-            extractNameListInfoFromTextFile();
-        }
+        fileParsingManager = new FileParsingManager(this);
+        extractNamesList(getIntent().getExtras().getInt(FILE_TYPE));
+
     }
 
     @Override
@@ -58,55 +62,26 @@ public class ImportFromFileActivity extends StandardActivity {
         bannerAdManager.onOrientationChanged();
     }
 
-    private void extractNameListInfoFromTextFile() {
-        Handler handler = new Handler();
-        handler.post(() -> {
-            Uri fileUri = Uri.parse(getIntent().getStringExtra(Constants.FILE_URI_KEY));
-            Cursor cursor = getContentResolver().query(
-                    fileUri,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null);
+    private void extractNamesList(int fileType) {
+        Uri fileUri = Uri.parse(getIntent().getStringExtra(Constants.FILE_URI_KEY));
+        switch (fileType) {
+            case FileImportType.TEXT:
+                fileParsingManager.extractNameListFromText(this, fileUri);
+                break;
+            case FileImportType.CSV:
+                fileParsingManager.extractNameListFromCsv(this, fileUri);
+                break;
+        }
+    }
 
-            String listNameText = "";
-            if (cursor != null && cursor.moveToFirst()) {
-                String displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                listNameText = displayName.replace(".txt", "");
-                cursor.close();
-            }
+    @Override
+    public void onFileParsingFailure(int fileParsingError) {
+        UIUtils.showLongToast(fileParsingError, this);
+    }
 
-            StringBuilder namesText = new StringBuilder();
-            InputStream inputStream = null;
-            BufferedReader reader = null;
-            try {
-                inputStream = getContentResolver().openInputStream(fileUri);
-                if (inputStream == null) {
-                    throw new IOException("Unable to find .txt file!");
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (namesText.length() > 0) {
-                        namesText.append("\n");
-                    }
-                    namesText.append(line);
-                }
-                loadUI(listNameText, namesText.toString());
-            } catch (IOException exception) {
-                runOnUiThread(() -> UIUtils.showLongToast(
-                        R.string.load_file_fail, getApplicationContext()));
-                try {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException ignored) {}
-            }
-        });
+    @Override
+    public void onFileParsingSuccess(String listNameText, String namesText) {
+        loadUI(listNameText, namesText);
     }
 
     private void loadUI(String listNameText, String namesListText) {
@@ -119,23 +94,23 @@ public class ImportFromFileActivity extends StandardActivity {
     }
 
     @OnClick(R.id.save)
-    public void importNameList() {
+    public void importNameList(View view) {
         String newListName = listName.getText().toString().trim();
         if (newListName.isEmpty()) {
             UIUtils.showLongToast(R.string.blank_list_name, this);
         } else {
-            DataSource dataSource = new DataSource(this);
-            ListDO newList = dataSource.addNameList(newListName);
+            loading.setVisibility(View.VISIBLE);
+            view.setEnabled(false);
+            fileParsingManager.saveNameList(this, newListName, names.getText().toString().split("\\r?\\n"));
+        }
+    }
 
-            String[] allNames = names.getText().toString().split("\\r?\\n");
-            for (String name : allNames) {
-                String cleanName = name.trim();
-                if (!cleanName.isEmpty()) {
-                    dataSource.addNames(cleanName, 1, newList.getId());
-                }
-            }
+    @Override
+    public void onFileSaved() {
+        runOnUiThread(() -> {
+            loading.setVisibility(View.GONE);
             UIUtils.showShortToast(R.string.import_success, this);
             finish();
-        }
+        });
     }
 }
