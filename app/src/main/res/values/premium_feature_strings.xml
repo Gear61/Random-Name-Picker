@@ -28,6 +28,7 @@
     <string name="set_speech_language_dialog_body">
         If you\'re using the app to speak things in different languages, you can set the proper value here.
     </string>
+    <string name="speech_language_set">Speech language set.</string>
 
     <string name="english">English</string>
     <string name="spanish">Spanish</string>

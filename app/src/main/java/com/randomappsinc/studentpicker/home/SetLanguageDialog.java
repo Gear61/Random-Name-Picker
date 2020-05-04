@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.content.Context;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
@@ -10,14 +9,14 @@ import com.randomappsinc.studentpicker.common.Language;
 public class SetLanguageDialog {
 
     public interface Listener {
-        void onLanguagesSelected(@Language int speechLanguage);
+        void onLanguageSelected(@Language int speechLanguage);
     }
 
     protected Listener listener;
     private MaterialDialog dialog;
     protected Context context;
 
-    public SetLanguageDialog(Context context, Listener listener) {
+    public SetLanguageDialog(Context context, Listener listener, @Language int currentLanguage) {
         this.listener = listener;
         this.context = context;
 
@@ -25,13 +24,11 @@ public class SetLanguageDialog {
                 .title(R.string.set_speech_language_dialog_title)
                 .content(R.string.set_speech_language_dialog_body)
                 .items(context.getResources().getStringArray(R.array.language_options))
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        listener.onLanguagesSelected(which);
-                        return true;
-                    }
-                })
+                .itemsCallbackSingleChoice(
+                        getIndexFromLanguage(currentLanguage),(dialog, itemView, which, text) -> {
+                            listener.onLanguageSelected(getLanguageFromIndex(which));
+                            return true;
+                        })
                 .negativeText(R.string.cancel)
                 .positiveText(R.string.save)
                 .build();

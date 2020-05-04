@@ -75,7 +75,9 @@ public class PremiumOptionsFragment extends Fragment
         csvExporter = new CsvExporter(this);
         txtExporter = new TxtExporter(this);
         choosingMessageDialog = new ChoosingMessageDialog(getContext(), this, listId);
-        setLanguageDialog = new SetLanguageDialog(getContext(), this);
+
+        int currentLanguage = dataSource.getChoosingSettings(listId).getSpeechLanguage();
+        setLanguageDialog = new SetLanguageDialog(getContext(), this, currentLanguage);
     }
 
     @Override
@@ -155,8 +157,9 @@ public class PremiumOptionsFragment extends Fragment
     }
 
     @Override
-    public void onLanguagesSelected(int speechLanguage) {
-
+    public void onLanguageSelected(int speechLanguage) {
+        dataSource.updateSpeechLanguage(listId, speechLanguage);
+        UIUtils.showShortToast(R.string.speech_language_set, getContext());
     }
 
     @Override
