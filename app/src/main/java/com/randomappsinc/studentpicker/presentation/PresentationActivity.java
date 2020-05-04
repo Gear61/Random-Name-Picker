@@ -185,7 +185,7 @@ public class PresentationActivity extends AppCompatActivity
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (settings.getAutomaticTts()) {
-                    textToSpeechManager.speak(chosenNamesText);
+                    textToSpeechManager.speak(chosenNamesText, settings.getSpeechLanguage());
                 }
             }
 
@@ -277,7 +277,7 @@ public class PresentationActivity extends AppCompatActivity
                 showSettingsDialog();
                 return true;
             case R.id.say_names:
-                textToSpeechManager.speak(chosenNamesText);
+                textToSpeechManager.speak(chosenNamesText, settings.getSpeechLanguage());
                 return true;
             case R.id.copy_names:
                 NameUtils.copyNamesToClipboard(

@@ -204,7 +204,7 @@ public class NameChoosingActivity extends AppCompatActivity
 
     @Override
     public void sayNames(String names) {
-        textToSpeechManager.speak(names);
+        textToSpeechManager.speak(names, settings.getSpeechLanguage());
     }
 
     @Override

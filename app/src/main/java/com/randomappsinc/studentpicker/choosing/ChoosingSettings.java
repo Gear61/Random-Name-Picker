@@ -1,5 +1,7 @@
 package com.randomappsinc.studentpicker.choosing;
 
+import com.randomappsinc.studentpicker.common.Language;
+
 public class ChoosingSettings {
 
     private boolean presentationMode;
@@ -7,6 +9,7 @@ public class ChoosingSettings {
     private boolean automaticTts;
     private boolean showAsList;
     private int numNamesToChoose;
+    private @Language int speechLanguage;
 
     public ChoosingSettings() {
         this.numNamesToChoose = 1;
@@ -50,5 +53,14 @@ public class ChoosingSettings {
 
     public void setNumNamesToChoose(int numNamesToChoose) {
         this.numNamesToChoose = Math.max(1, numNamesToChoose);
+    }
+
+    @Language
+    public int getSpeechLanguage() {
+        return speechLanguage;
+    }
+
+    public void setSpeechLanguage(@Language int speechLanguage) {
+        this.speechLanguage = speechLanguage;
     }
 }
