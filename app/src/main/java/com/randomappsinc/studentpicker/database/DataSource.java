@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
+import com.randomappsinc.studentpicker.common.Language;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
@@ -470,6 +471,18 @@ public class DataSource {
 
         ContentValues newValues = new ContentValues();
         newValues.put(DatabaseColumns.CHOOSING_MESSAGE, newMessage);
+        String[] whereArgs = new String[]{String.valueOf(listId)};
+        String whereStatement = DatabaseColumns.ID + " = ?";
+        database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
+
+        close();
+    }
+
+    public void updateSpeechLanguage(int listId, @Language int speechLanguage) {
+        open();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(DatabaseColumns.SPEECH_LANGUAGE, speechLanguage);
         String[] whereArgs = new String[]{String.valueOf(listId)};
         String whereStatement = DatabaseColumns.ID + " = ?";
         database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
