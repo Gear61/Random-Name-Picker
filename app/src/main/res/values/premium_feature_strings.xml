@@ -7,16 +7,54 @@
     <string name="share_list_as_txt_file">Share list as .txt file</string>
     <string name="share_list_as_csv_sheet">Share list as .csv spreadsheet</string>
     <string name="customize_choosing_message">Customize choosing message</string>
+    <string name="set_speech_language">Set speech language</string>
     <string-array name="premium_options">
         <item>@string/share_list_as_txt_file</item>
         <item>@string/share_list_as_csv_sheet</item>
         <item>@string/customize_choosing_message</item>
+        <item>@string/set_speech_language</item>
     </string-array>
 
     <string name="message_icon">{ion-social-wordpress}</string>
+    <string name="microphone_icon">{ion-android-microphone}</string>
     <string-array name="premium_options_icons">
         <item>@string/document_icon</item>
         <item>@string/document_icon</item>
         <item>@string/message_icon</item>
+        <item>@string/microphone_icon</item>
+    </string-array>
+
+    <string name="set_speech_language_dialog_title">Set Speech Language</string>
+    <string name="set_speech_language_dialog_body">
+        If you\'re using the app to speak things in different languages, you can set the proper value here.
+    </string>
+
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="french">French</string>
+    <string name="japanese">Japanese</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="chinese">Chinese</string>
+    <string name="german">German</string>
+    <string name="italian">Italian</string>
+    <string name="korean">Korean</string>
+    <string name="hindi">Hindi</string>
+    <string name="bengali">Bengali</string>
+    <string name="russian">Russian</string>
+    <string name="norwegian">Norwegian</string>
+    <string-array name="language_options">
+        <item>@string/english</item>
+        <item>@string/spanish</item>
+        <item>@string/french</item>
+        <item>@string/japanese</item>
+        <item>@string/portuguese</item>
+        <item>@string/chinese</item>
+        <item>@string/german</item>
+        <item>@string/italian</item>
+        <item>@string/korean</item>
+        <item>@string/hindi</item>
+        <item>@string/bengali</item>
+        <item>@string/russian</item>
+        <item>@string/norwegian</item>
     </string-array>
 </resources>

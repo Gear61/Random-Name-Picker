@@ -17,6 +17,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.export.TxtExporter;
+import com.randomappsinc.studentpicker.home.SetLanguageDialog;
 import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -28,7 +29,7 @@ import butterknife.Unbinder;
 
 public class PremiumOptionsFragment extends Fragment
         implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener,
-        TxtExporter.Listener, ChoosingMessageDialog.Listener {
+        TxtExporter.Listener, ChoosingMessageDialog.Listener, SetLanguageDialog.Listener {
 
     static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
@@ -46,6 +47,7 @@ public class PremiumOptionsFragment extends Fragment
     private CsvExporter csvExporter;
     private TxtExporter txtExporter;
     private ChoosingMessageDialog choosingMessageDialog;
+    private SetLanguageDialog setLanguageDialog;
     private Unbinder unbinder;
 
     @Override
@@ -73,6 +75,7 @@ public class PremiumOptionsFragment extends Fragment
         csvExporter = new CsvExporter(this);
         txtExporter = new TxtExporter(this);
         choosingMessageDialog = new ChoosingMessageDialog(getContext(), this, listId);
+        setLanguageDialog = new SetLanguageDialog(getContext(), this);
     }
 
     @Override
@@ -94,6 +97,9 @@ public class PremiumOptionsFragment extends Fragment
                 break;
             case 2:
                 choosingMessageDialog.show();
+                break;
+            case 3:
+                setLanguageDialog.show();
                 break;
         }
     }
@@ -146,6 +152,11 @@ public class PremiumOptionsFragment extends Fragment
     public void onNewChoosingMessageConfirmed(String newMessage) {
         dataSource.updateChoosingMessage(listId, newMessage);
         UIUtils.showShortToast(R.string.choosing_message_updated, getContext());
+    }
+
+    @Override
+    public void onLanguagesSelected(int speechLanguage) {
+
     }
 
     @Override
