@@ -22,28 +22,45 @@ import de.siegmar.fastcsv.reader.CsvParser;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.CsvRow;
 
-public class FileParsingManager {
+public class FileImportManager {
 
     public interface Listener {
         void onFileParsingFailure(@StringRes int fileParsingError);
 
-        void onFileParsingSuccess(String listNameText, String namesText);
+        void onFileParsingSuccess(String listNameText, String namesListText);
 
         void onFileSaved();
     }
 
+    private Context context;
     private Listener listener;
+    private Uri fileUri;
     private Handler backgroundHandler;
 
-    FileParsingManager(Listener listener) {
+    FileImportManager(Context context, Listener listener, Uri fileUri, int fileType) {
+        this.context = context;
         this.listener = listener;
+        this.fileUri = fileUri;
 
         HandlerThread handlerThread = new HandlerThread("File parsing thread");
         handlerThread.start();
         backgroundHandler = new Handler(handlerThread.getLooper());
+
+        importFile(fileType);
     }
 
-    void extractNameListFromText(Context context, Uri fileUri) {
+    private void importFile(int fileType) {
+        switch (fileType) {
+            case FileImportType.TEXT:
+                extractNameListFromText();
+                break;
+            case FileImportType.CSV:
+                extractNameListFromCsv();
+                break;
+        }
+    }
+
+    private void extractNameListFromText() {
         backgroundHandler.post(() -> {
             Cursor cursor = context.getContentResolver().query(
                     fileUri,
@@ -91,7 +108,7 @@ public class FileParsingManager {
         });
     }
 
-    void extractNameListFromCsv(Context context, Uri fileUri) {
+    private void extractNameListFromCsv() {
         backgroundHandler.post(() -> {
             Cursor cursor = context.getContentResolver().query(
                     fileUri,
