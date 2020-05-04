@@ -23,7 +23,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     // Core fields
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Struct for migration
     private static class NameInfoPod {
@@ -228,6 +228,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database,
                     DatabaseColumns.CHOOSING_MESSAGE,
                     "TEXT",
+                    DatabaseTables.LISTS);
+            oldVersion++;
+        }
+
+        // Add speech language customization
+        if (oldVersion == 5) {
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.SPEECH_LANGUAGE,
+                    " INTEGER DEFAULT -1",
                     DatabaseTables.LISTS);
         }
     }

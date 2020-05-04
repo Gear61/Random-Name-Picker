@@ -50,8 +50,9 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
                 .build();
     }
 
-    public void speak(String text) {
+    public void speak(String text, @Language int language) {
         if (enabled) {
+            textToSpeech.setLanguage(getLocaleFromLanguage(language));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 requestAudioFocusPostO(text);
             } else {
@@ -59,6 +60,39 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
             }
         } else {
             listener.onTextToSpeechFailure();
+        }
+    }
+
+    private Locale getLocaleFromLanguage(@Language int language) {
+        switch (language) {
+            case Language.ENGLISH:
+                return new Locale("en");
+            case Language.SPANISH:
+                return new Locale("es");
+            case Language.FRENCH:
+                return new Locale("fr");
+            case Language.JAPANESE:
+                return new Locale("ja");
+            case Language.PORTUGUESE:
+                return new Locale("pt");
+            case Language.CHINESE:
+                return new Locale("zh");
+            case Language.GERMAN:
+                return new Locale("de");
+            case Language.ITALIAN:
+                return new Locale("it");
+            case Language.KOREAN:
+                return new Locale("ko");
+            case Language.HINDI:
+                return new Locale("hi");
+            case Language.BENGALI:
+                return new Locale("bn");
+            case Language.RUSSIAN:
+                return new Locale("ru");
+            case Language.NORWEGIAN:
+                return new Locale("nb");
+            default:
+                return Locale.getDefault();
         }
     }
 
@@ -144,7 +178,6 @@ public class TextToSpeechManager implements TextToSpeech.OnInitListener {
     }
 
     public void shutdown() {
-        stopSpeaking();
         textToSpeech.shutdown();
         listener = null;
     }

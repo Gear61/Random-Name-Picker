@@ -312,7 +312,8 @@ public class DataSource {
                 DatabaseColumns.WITH_REPLACEMENT,
                 DatabaseColumns.AUTOMATIC_TTS,
                 DatabaseColumns.SHOW_AS_LIST,
-                DatabaseColumns.NUM_NAMES_CHOSEN
+                DatabaseColumns.NUM_NAMES_CHOSEN,
+                DatabaseColumns.SPEECH_LANGUAGE
         };
         String selection = DatabaseColumns.ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
@@ -325,6 +326,7 @@ public class DataSource {
             choosingSettings.setAutomaticTts(cursor.getInt(2) != 0);
             choosingSettings.setShowAsList(cursor.getInt(3) != 0);
             choosingSettings.setNumNamesToChoose(cursor.getInt(4));
+            choosingSettings.setSpeechLanguage(cursor.getInt(5));
         }
         cursor.close();
         close();
