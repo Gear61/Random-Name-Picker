@@ -10,6 +10,11 @@
     <string name="add_name_list">Add name list</string>
     <string name="load_file_fail">We failed to load the contents of your .txt file.</string>
     <string name="import_success">Name list successfully imported.</string>
+    <string name="saving_the_names">Saving the names</string>
+
+    <string name="csv_format_instructions">Make sure first names are in the first column and last names in the second.</string>
+    <string name="csv_read_failed">We failed to parse your .csv file.</string>
 
     <string name="loading">Loading&#8230;</string>
+    <string name="please_wait">Please Wait&#8230;</string>
 </resources>

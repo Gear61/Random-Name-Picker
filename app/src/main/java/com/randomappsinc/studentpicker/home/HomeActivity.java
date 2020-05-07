@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -15,8 +16,10 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
-import com.randomappsinc.studentpicker.importdata.ImportFromTextFileActivity;
+import com.randomappsinc.studentpicker.importdata.FileImportType;
+import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
+import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.payments.PaymentManager;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -26,17 +29,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
+
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
-    private static final int IMPORT_FILE_REQUEST_CODE = 1;
+    private static final int IMPORT_TXT_REQUEST_CODE = 1;
+    private static final int IMPORT_CSV_REQUEST_CODE = 2;
 
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
+    @BindView(R.id.title_import_from_csv) TextView importFromCsv;
 
     private HomepageFragmentController navigationController;
+    private PreferencesManager preferencesManager;
     private CreateListDialog createListDialog;
     private BottomSheetBehavior bottomSheetBehavior;
     private DataSource dataSource;
@@ -70,7 +78,7 @@ public class HomeActivity extends StandardActivity implements
         });
         bottomNavigation.setListener(this);
 
-        PreferencesManager preferencesManager = new PreferencesManager(this);
+        preferencesManager = new PreferencesManager(this);
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
@@ -145,8 +153,27 @@ public class HomeActivity extends StandardActivity implements
         hideBottomSheet();
         Intent txtFileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         txtFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        txtFileIntent.setType("text/*");
-        startActivityForResult(txtFileIntent, IMPORT_FILE_REQUEST_CODE);
+        txtFileIntent.setType("text/plain");
+        startActivityForResult(txtFileIntent, IMPORT_TXT_REQUEST_CODE);
+    }
+
+    @OnClick(R.id.sheet_import_from_csv)
+    public void importFromCsv() {
+        if (preferencesManager.isOnFreeVersion()) {
+            UIUtils.showLongToast(R.string.premium_needed_message, this);
+            Intent intent = new Intent(this, BuyPremiumActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+            return;
+        }
+
+        hideBottomSheet();
+        UIUtils.showLongToast(R.string.csv_format_instructions, this);
+        Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        csvIntent.setType("*/*");
+        csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
+        startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
     }
 
     private void hideBottomSheet() {
@@ -173,23 +200,38 @@ public class HomeActivity extends StandardActivity implements
     public void onStartupFailed() {}
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        importFromCsv.setText(preferencesManager.isOnFreeVersion() ?
+                R.string.import_from_csv_file_premium :
+                R.string.import_from_csv_file);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMPORT_FILE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-                Uri uri = data.getData();
+        if (requestCode == IMPORT_TXT_REQUEST_CODE) {
+            maybeOpenImportFileActivity(resultCode, data, FileImportType.TEXT);
+        } else if (requestCode == IMPORT_CSV_REQUEST_CODE) {
+            maybeOpenImportFileActivity(resultCode, data, FileImportType.CSV);
+        }
+    }
 
-                // Persist ability to read from this file
-                int takeFlags = data.getFlags()
-                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                getContentResolver().takePersistableUriPermission(uri, takeFlags);
+    private void maybeOpenImportFileActivity(int resultCode, Intent data, @FileImportType int fileType) {
+        if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
 
-                String uriString = uri.toString();
-                Intent intent = new Intent(this, ImportFromTextFileActivity.class);
-                intent.putExtra(Constants.FILE_URI_KEY, uriString);
-                startActivity(intent);
-            }
+            // Persist ability to read from this file
+            int takeFlags = data.getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+            String uriString = uri.toString();
+            Intent intent = new Intent(this, ImportFromFileActivity.class);
+            intent.putExtra(Constants.FILE_URI_KEY, uriString);
+            intent.putExtra(FILE_TYPE, fileType);
+            startActivity(intent);
         }
     }
 

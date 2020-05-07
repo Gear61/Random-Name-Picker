@@ -12,6 +12,8 @@
     <string name="add_circle_icon">{ion-android-add-circle}</string>
     <string name="create_name_list">Create name list</string>
     <string name="import_from_txt_file">Import list from .txt file</string>
+    <string name="import_from_csv_file">Import list from .csv file</string>
+    <string name="import_from_csv_file_premium">[PREMIUM] Import list from .csv file</string>
 
     <string name="homepage_empty_text">
         Welcome to Random Name Picker!
