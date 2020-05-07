@@ -5,7 +5,7 @@
     android:id="@+id/homepage_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/screen_background"
     android:focusable="true"
     android:focusableInTouchMode="true"
     >
@@ -25,6 +25,7 @@
             android:gravity="center"
             android:text="@string/clear_icon"
             android:textSize="24dp"
+            android:textColor="@color/text_normal"
             android:layout_alignParentEnd="true"
             />
 
@@ -37,7 +38,7 @@
             android:layout_marginRight="16dp"
             android:layout_toStartOf="@id/dismiss_premium_tooltip"
             android:text="@string/premium_tooltip_title"
-            android:textColor="@color/black"
+            android:textColor="@color/text_title"
             android:textSize="19sp"
             />
 
@@ -51,7 +52,7 @@
             android:layout_marginBottom="16dp"
             android:layout_below="@+id/tooltip_title"
             android:text="@string/premium_tooltip_body"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/text_normal"
             android:textSize="15sp"
             />
 
@@ -102,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="@string/homepage_empty_text"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/text_normal"
             android:textSize="23sp"
             />
 
@@ -151,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/home_add_options_info_text"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/text_normal"
             android:textSize="15sp"
             />
     </LinearLayout>

@@ -30,7 +30,7 @@ public class BottomNavigationView extends FrameLayout {
     @BindView(R.id.add) TextView addButton;
     @BindView(R.id.settings) TextView settingsButton;
 
-    @BindColor(R.color.dark_gray) int darkGray;
+    @BindColor(R.color.bottom_navigation_item_color) int itemColor;
     @BindColor(R.color.app_blue) int blue;
 
     private Listener listener;
@@ -51,7 +51,7 @@ public class BottomNavigationView extends FrameLayout {
         ButterKnife.bind(this);
         currentlySelected = homeButton;
         homeButton.setTextColor(blue);
-        settingsButton.setTextColor(darkGray);
+        settingsButton.setTextColor(itemColor);
     }
 
     public void setListener(Listener listener) {
@@ -64,7 +64,7 @@ public class BottomNavigationView extends FrameLayout {
             return;
         }
 
-        currentlySelected.setTextColor(darkGray);
+        currentlySelected.setTextColor(itemColor);
         currentlySelected = homeButton;
         homeButton.setTextColor(blue);
         listener.onNavItemSelected(R.id.home);
@@ -102,7 +102,7 @@ public class BottomNavigationView extends FrameLayout {
             return;
         }
 
-        currentlySelected.setTextColor(darkGray);
+        currentlySelected.setTextColor(itemColor);
         currentlySelected = settingsButton;
         settingsButton.setTextColor(blue);
         listener.onNavItemSelected(R.id.settings);
