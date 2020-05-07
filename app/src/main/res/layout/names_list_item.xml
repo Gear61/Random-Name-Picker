@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:background="@color/white"
+    android:background="@color/screen_background"
     android:foreground="?android:attr/selectableItemBackground"
     >
 
@@ -19,7 +19,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:textSize="27sp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/text_normal"
         />
 
     <com.joanzapata.iconify.widget.IconTextView
@@ -29,7 +29,7 @@
         android:gravity="center"
         android:text="@string/choose_icon"
         android:textSize="28dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/text_normal"
         android:background="?android:attr/selectableItemBackground"
         />
 </LinearLayout>
