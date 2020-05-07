@@ -58,7 +58,7 @@
             />
 
         <activity
-            android:name=".importdata.ImportFromTextFileActivity"
+            android:name=".importdata.ImportFromFileActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/import_name_list"
             android:windowSoftInputMode="adjustResize"
