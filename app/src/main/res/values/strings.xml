@@ -27,11 +27,6 @@
 
     <string name="no_im_good">No, I\'m good</string>
 
-    <string name="need_record_audio">
-        In order to use speech to text functionality you need to give this app access to your device\'s microphone.
-        Would you like to do that?
-    </string>
-
     <string name="please_rate">
         Hey, it looks like you\'re a frequent user of Random Name Picker!
         If you have a couple seconds, please rate this app in the Play Store.

@@ -15,11 +15,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
@@ -134,23 +132,8 @@ public class EditNameListActivity extends AppCompatActivity implements
         if (PermissionUtils.isPermissionGranted(Manifest.permission.RECORD_AUDIO, this)) {
             speechToTextManager.startSpeechToTextFlow();
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.RECORD_AUDIO)) {
-                new MaterialDialog.Builder(this)
-                        .content(R.string.need_record_audio)
-                        .positiveText(R.string.okay)
-                        .negativeText(R.string.cancel)
-                        .onPositive((dialog, which) ->
-                                PermissionUtils.requestPermission(
-                                        this,
-                                        Manifest.permission.RECORD_AUDIO,
-                                        RECORD_AUDIO_PERMISSION_CODE))
-                        .show();
-            } else {
-                PermissionUtils.requestPermission(
-                        this, Manifest.permission.RECORD_AUDIO, RECORD_AUDIO_PERMISSION_CODE);
-            }
+            PermissionUtils.requestPermission(
+                    this, Manifest.permission.RECORD_AUDIO, RECORD_AUDIO_PERMISSION_CODE);
         }
     }
 
