@@ -54,6 +54,18 @@ public class BottomNavigationView extends FrameLayout {
         settingsButton.setTextColor(itemColor);
     }
 
+    public void setCurrentlySelected(@IdRes int currentlySelected) {
+        if (currentlySelected == R.id.home) {
+            this.currentlySelected = homeButton;
+            homeButton.setTextColor(blue);
+            settingsButton.setTextColor(itemColor);
+        } else if (currentlySelected == R.id.settings) {
+            this.currentlySelected.setTextColor(itemColor);
+            this.currentlySelected = settingsButton;
+            settingsButton.setTextColor(blue);
+        }
+    }
+
     public void setListener(Listener listener) {
         this.listener = listener;
     }

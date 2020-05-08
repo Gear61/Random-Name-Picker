@@ -78,7 +78,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     class SettingViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.settings_icon) TextView icon;
         @BindView(R.id.settings_option) TextView option;
-        @BindView(R.id.shake_toggle) Switch toggle;
+        @BindView(R.id.toggle) Switch toggle;
 
         SettingViewHolder(View view) {
             super(view);
@@ -112,7 +112,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
             }
         }
 
-        @OnClick(R.id.shake_toggle)
+        @OnClick(R.id.toggle)
         void onToggle() {
             if (getAdapterPosition() == shakePosition) {
                 preferencesManager.setShakeEnabled(toggle.isChecked());
