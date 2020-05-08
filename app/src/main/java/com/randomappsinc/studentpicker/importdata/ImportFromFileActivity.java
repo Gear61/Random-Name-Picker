@@ -22,10 +22,11 @@ import butterknife.OnClick;
 
 public class ImportFromFileActivity extends StandardActivity implements FileImportManager.Listener {
 
+    private static final int NUM_NAMES_TO_TRIGGER_LOADING_STATE = 250;
     public static final String FILE_TYPE = "fileType";
 
     @BindView(R.id.list_name) EditText listName;
-    @BindView(R.id.names) EditText names;
+    @BindView(R.id.names) EditText namesInput;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     private BannerAdManager bannerAdManager;
@@ -40,6 +41,12 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
+        progressDialog = new MaterialDialog.Builder(this)
+                .title(R.string.please_wait)
+                .content(R.string.saving_the_names)
+                .progress(true, 0)
+                .cancelable(false)
+                .build();
 
         fileImportManager = new FileImportManager(
                 this,
@@ -64,8 +71,8 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         runOnUiThread(() -> {
             listName.setText(listNameText);
             listName.setHint(R.string.add_list_hint);
-            names.setText(namesListText);
-            names.setHint(R.string.names);
+            namesInput.setText(namesListText);
+            namesInput.setHint(R.string.names);
         });
     }
 
@@ -75,13 +82,12 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         if (newListName.isEmpty()) {
             UIUtils.showLongToast(R.string.blank_list_name, this);
         } else {
-            progressDialog = new MaterialDialog.Builder(this)
-                    .title(R.string.please_wait)
-                    .content(R.string.saving_the_names)
-                    .progress(true, 0)
-                    .cancelable(false)
-                    .show();
-            fileImportManager.saveNameList(this, newListName, names.getText().toString().split("\\r?\\n"));
+            String[] namesList = namesInput.getText().toString().split("\\r?\\n");
+            if (namesList.length >= NUM_NAMES_TO_TRIGGER_LOADING_STATE) {
+                progressDialog.show();
+            }
+            fileImportManager.saveNameList(
+                    this, newListName, namesList);
         }
     }
 
@@ -96,6 +102,8 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        progressDialog.dismiss();
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
