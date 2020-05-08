@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.home;
 import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
@@ -27,8 +29,8 @@ import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -57,6 +59,8 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.no_content) View noListsAtAll;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
 
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
+
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private SpeechToTextManager speechToTextManager;
@@ -82,7 +86,11 @@ public class HomepageFragment extends Fragment implements
 
         nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists(""));
         lists.setAdapter(nameListsAdapter);
-        lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        lists.addItemDecoration(itemDecorator);
         setNoContent();
 
         // When the user is scrolling to browse lists, close the soft keyboard

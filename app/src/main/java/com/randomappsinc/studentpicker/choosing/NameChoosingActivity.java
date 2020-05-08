@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.choosing;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,11 +32,11 @@ import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 import com.squareup.seismic.ShakeDetector;
 
 import java.util.List;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,6 +53,8 @@ public class NameChoosingActivity extends AppCompatActivity
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) RecyclerView namesList;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
+
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
@@ -87,7 +91,11 @@ public class NameChoosingActivity extends AppCompatActivity
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         setTitle(dataSource.getListName(listId));
-        namesList.addItemDecoration(new SimpleDividerItemDecoration(this));
+
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        namesList.addItemDecoration(itemDecorator);
 
         textToSpeechManager = new TextToSpeechManager(this, this);
 
