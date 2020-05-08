@@ -90,7 +90,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
             case 1:
                 int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
                 View firstCell = settingsOptions.getChildAt(shakePosition);
-                Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
+                Switch shakeToggle = firstCell.findViewById(R.id.toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
                 preferencesManager.setShakeEnabled(!currentState);
@@ -98,9 +98,9 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
             case 2:
                 int darkModePosition = preferencesManager.isOnFreeVersion() ? 2 : 1;
                 View secondCell = settingsOptions.getChildAt(darkModePosition);
-                Switch DarkModeToggle = secondCell.findViewById(R.id.shake_toggle);
-                DarkModeToggle.setChecked(!DarkModeToggle.isChecked());
-                int themeMode = DarkModeToggle.isChecked() ? ThemeMode.DARK : ThemeMode.LIGHT;
+                Switch darkModeToggle = secondCell.findViewById(R.id.toggle);
+                darkModeToggle.setChecked(!darkModeToggle.isChecked());
+                int themeMode = darkModeToggle.isChecked() ? ThemeMode.DARK : ThemeMode.LIGHT;
                 preferencesManager.setThemeMode(themeMode);
                 ThemeManager.applyTheme(themeMode);
                 return;

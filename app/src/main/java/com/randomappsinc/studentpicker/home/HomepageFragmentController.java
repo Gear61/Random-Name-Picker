@@ -18,7 +18,6 @@ class HomepageFragmentController {
     HomepageFragmentController(FragmentManager fragmentManager, int containerId) {
         this.fragmentManager = fragmentManager;
         this.containerId = containerId;
-        removeFragmentsOnActivityRecreate();
     }
 
     void onNavItemSelected(@IdRes int viewId) {
@@ -58,14 +57,12 @@ class HomepageFragmentController {
         addFragment(homepageFragment);
     }
 
-    private void addFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().add(containerId, fragment).commit();
+     int getCurrentViewId() {
+        return currentViewId;
     }
 
-    private void removeFragmentsOnActivityRecreate() {
-        for (Fragment fragment : fragmentManager.getFragments()) {
-            fragmentManager.beginTransaction().remove(fragment).commit();
-        }
+    private void addFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().add(containerId, fragment).commit();
     }
 
     private void showFragment(Fragment fragment) {
@@ -74,5 +71,16 @@ class HomepageFragmentController {
 
     private void hideFragment(Fragment fragment) {
         fragmentManager.beginTransaction().hide(fragment).commit();
+    }
+
+    void restoreFragments() {
+        for (Fragment fragment : fragmentManager.getFragments()) {
+            String fragmentName = fragment.getClass().getSimpleName();
+            if (fragmentName.equals(HomepageFragment.class.getSimpleName())) {
+                homepageFragment = (HomepageFragment) fragment;
+            } else if ((fragmentName.equals(SettingsFragment.class.getSimpleName()))) {
+                settingsFragment = (SettingsFragment) fragment;
+            }
+        }
     }
 }
