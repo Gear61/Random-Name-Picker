@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -29,10 +31,10 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +51,8 @@ public class EditNameListActivity extends AppCompatActivity implements
     @BindView(R.id.content_list) RecyclerView namesList;
     @BindView(R.id.plus_icon) ImageView plus;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
+
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private EditNameListAdapter namesAdapter;
     private int listId;
@@ -90,7 +94,11 @@ public class EditNameListActivity extends AppCompatActivity implements
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter = new EditNameListAdapter(noContent, numNames, names, this);
         namesList.setAdapter(namesAdapter);
-        namesList.addItemDecoration(new SimpleDividerItemDecoration(this));
+
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        namesList.addItemDecoration(itemDecorator);
 
         nameEditChoicesDialog = new NameEditChoicesDialog(this, this);
         renameDialog = new RenameDialog(this, this);
