@@ -3,6 +3,7 @@
     <string name="buy_premium">Buy premium</string>
     <string name="buy_button_text">Buy ($0.99)</string>
     <string name="shake_enabled">Shake to choose</string>
+    <string name="dark_mode">Dark mode</string>
     <string name="send_feedback">Send feedback</string>
     <string name="my_other_apps">My other apps</string>
     <string name="rate_this_app">Rate this app</string>
@@ -10,6 +11,7 @@
     <array name="settings_options">
         <item>@string/buy_premium</item>
         <item>@string/shake_enabled</item>
+        <item>@string/dark_mode</item>
         <item>@string/send_feedback</item>
         <item>@string/my_other_apps</item>
         <item>@string/rate_this_app</item>
@@ -23,6 +25,7 @@
     <!-- Icons -->
     <string name="money_icon">{fa-money}</string>
     <string name="shake_icon">{ion-radio-waves}</string>
+    <string name="moon_icon">{fa-moon-o}</string>
     <string name="email_icon">{ion-email}</string>
     <string name="android_icon">{ion-social-android}</string>
     <string name="rate_icon">{ion-thumbsup}</string>
@@ -30,6 +33,7 @@
     <array name="settings_icons">
         <item>@string/money_icon</item>
         <item>@string/shake_icon</item>
+        <item>@string/moon_icon</item>
         <item>@string/email_icon</item>
         <item>@string/android_icon</item>
         <item>@string/rate_icon</item>

@@ -29,6 +29,8 @@ import butterknife.OnClick;
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
+    private static final String PREVIOUS_SELECTED_ID = "previousSelectedId";
+
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
     private static final int IMPORT_FILE_REQUEST_CODE = 1;
@@ -49,7 +51,14 @@ public class HomeActivity extends StandardActivity implements
         ButterKnife.bind(this);
 
         navigationController = new HomepageFragmentController(getSupportFragmentManager(), R.id.container);
-        navigationController.loadHomeInitially();
+        if (savedInstanceState == null) {
+            navigationController.loadHomeInitially();
+        } else {
+            navigationController.restoreFragments();
+            int previousSelectedId = savedInstanceState.getInt(PREVIOUS_SELECTED_ID, R.id.home);
+            navigationController.onNavItemSelected(previousSelectedId);
+            bottomNavigation.setCurrentlySelected(previousSelectedId);
+        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -80,6 +89,12 @@ public class HomeActivity extends StandardActivity implements
         dataSource = new DataSource(this);
         paymentManager = new PaymentManager(this, this);
         paymentManager.setUpAndCheckForPremium();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(PREVIOUS_SELECTED_ID, navigationController.getCurrentViewId());
     }
 
     @Override

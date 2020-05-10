@@ -5,8 +5,8 @@
     >
 
     <gradient
-        android:startColor="@android:color/transparent"
-        android:endColor="@color/shadow_black"
+        android:startColor="@color/bar_shadow_start_color"
+        android:endColor="@color/bar_shadow_end_color"
         android:angle="90"
         />
 </shape>
