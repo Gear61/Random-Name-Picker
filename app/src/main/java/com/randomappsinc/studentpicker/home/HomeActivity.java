@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
-    private static final String PREVIOUS_SELECTED_ID = "previousSelectedId";
+    private static final String PREVIOUSLY_SELECTED_PAGE_ID = "previouslySelectedPageId";
 
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
@@ -45,7 +46,7 @@ public class HomeActivity extends StandardActivity implements
     private PaymentManager paymentManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -55,7 +56,7 @@ public class HomeActivity extends StandardActivity implements
             navigationController.loadHomeInitially();
         } else {
             navigationController.restoreFragments();
-            int previousSelectedId = savedInstanceState.getInt(PREVIOUS_SELECTED_ID, R.id.home);
+            int previousSelectedId = savedInstanceState.getInt(PREVIOUSLY_SELECTED_PAGE_ID, R.id.home);
             navigationController.onNavItemSelected(previousSelectedId);
             bottomNavigation.setCurrentlySelected(previousSelectedId);
         }
@@ -94,7 +95,7 @@ public class HomeActivity extends StandardActivity implements
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(PREVIOUS_SELECTED_ID, navigationController.getCurrentViewId());
+        outState.putInt(PREVIOUSLY_SELECTED_PAGE_ID, navigationController.getCurrentViewId());
     }
 
     @Override

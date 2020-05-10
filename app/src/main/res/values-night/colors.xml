@@ -5,6 +5,7 @@
     <color name="light_gray">#d3d3d3</color>
     <color name="half_white">#80FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="background_inverse">@color/white</color>
     <color name="app_blue">#2196F3</color>
     <color name="bar_shadow_start_color">#C0FFFFFF</color>
     <color name="bar_shadow_end_color">@android:color/transparent</color>
@@ -12,6 +13,7 @@
     <color name="status_bar_color">#101010</color>
     <color name="app_color">#252525</color>
     <color name="screen_background">#363636</color>
+    <color name="dialog_background">#424242</color>
 
     <color name="text_normal">@color/white</color>
     <color name="text_title">@color/white</color>
