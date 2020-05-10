@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.settings;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.theme.ThemeManager;
+import com.randomappsinc.studentpicker.theme.ThemeMode;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -24,7 +27,7 @@ import butterknife.OnClick;
 
 public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingViewHolder> {
 
-    private static final int NUM_SETTINGS_OPTIONS = 6;
+    private static final int NUM_SETTINGS_OPTIONS = 7;
 
     public interface ItemSelectionListener {
         void onItemClick(int position);
@@ -75,29 +78,49 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     class SettingViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.settings_icon) TextView icon;
         @BindView(R.id.settings_option) TextView option;
-        @BindView(R.id.shake_toggle) Switch toggle;
+        @BindView(R.id.toggle) Switch toggle;
 
         SettingViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
+        int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
+        int darkModePosition = preferencesManager.isOnFreeVersion() ? 2 : 1;
+
         void loadSetting(int position) {
             option.setText(options.get(position));
             icon.setText(icons.get(position));
 
-            int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
             if (position == shakePosition) {
                 UIUtils.setCheckedImmediately(toggle, preferencesManager.isShakeEnabled());
                 toggle.setVisibility(View.VISIBLE);
+            } else if (position == darkModePosition) {
+                if (preferencesManager.getThemeMode() == ThemeMode.DARK ||
+                        (preferencesManager.getThemeMode() == ThemeMode.FOLLOW_SYSTEM &&
+                                (toggle.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                                        == Configuration.UI_MODE_NIGHT_YES)) {
+                    UIUtils.setCheckedImmediately(toggle, true);
+                } else {
+                    UIUtils.setCheckedImmediately(toggle, false);
+                }
+
+                toggle.setVisibility(View.VISIBLE);
             } else {
                 toggle.setVisibility(View.GONE);
+
             }
         }
 
-        @OnClick(R.id.shake_toggle)
+        @OnClick(R.id.toggle)
         void onToggle() {
-            preferencesManager.setShakeEnabled(toggle.isChecked());
+            if (getAdapterPosition() == shakePosition) {
+                preferencesManager.setShakeEnabled(toggle.isChecked());
+            } else if (getAdapterPosition() == darkModePosition) {
+                int themeMode = toggle.isChecked() ? ThemeMode.DARK : ThemeMode.LIGHT;
+                preferencesManager.setThemeMode(themeMode);
+                ThemeManager.applyTheme(themeMode);
+            }
         }
 
         @OnClick(R.id.parent)
