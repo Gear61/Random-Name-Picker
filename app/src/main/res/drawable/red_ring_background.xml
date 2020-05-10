@@ -4,7 +4,7 @@
     android:shape="oval"
     >
 
-    <solid android:color="@color/white"/>
+    <solid android:color="@color/dialog_background"/>
 
     <stroke
         android:width="8dp"

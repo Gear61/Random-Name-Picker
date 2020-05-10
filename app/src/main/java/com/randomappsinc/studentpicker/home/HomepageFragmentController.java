@@ -57,7 +57,7 @@ class HomepageFragmentController {
         addFragment(homepageFragment);
     }
 
-     int getCurrentViewId() {
+    int getCurrentViewId() {
         return currentViewId;
     }
 
