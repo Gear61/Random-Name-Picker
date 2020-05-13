@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="17dp"
-            android:textColor="@color/black"
+            android:textColor="@color/text_title"
             android:padding="8dp"
             />
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/text_normal"
             android:padding="8dp"
             />
     </LinearLayout>
