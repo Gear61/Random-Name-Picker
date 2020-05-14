@@ -110,17 +110,4 @@ public class ListInfo {
         }
         return namesText.toString();
     }
-
-    public List<List<String>> groupNamesList(List<List<Integer>> listOfGroups) {
-        List<List<String>> listOfGroupsOfNames = new ArrayList<>();
-        List<String> allNames = getLongList();
-        for (List<Integer> listOfIndicesPerGroup : listOfGroups) {
-            List<String> listOfNames = new ArrayList<>();
-            for (int i = 0; i < listOfIndicesPerGroup.size(); i++) {
-                listOfNames.add(allNames.get(listOfIndicesPerGroup.get(i)));
-            }
-            listOfGroupsOfNames.add(listOfNames);
-        }
-        return listOfGroupsOfNames;
-    }
 }
