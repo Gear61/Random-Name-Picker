@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.common;
+package com.randomappsinc.studentpicker.speech;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+
+import com.randomappsinc.studentpicker.common.Language;
 
 import java.util.HashMap;
 import java.util.Locale;

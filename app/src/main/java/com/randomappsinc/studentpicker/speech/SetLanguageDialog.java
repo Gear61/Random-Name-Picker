@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.home;
+package com.randomappsinc.studentpicker.speech;
 
 import android.content.Context;
 
@@ -14,12 +14,9 @@ public class SetLanguageDialog {
 
     protected Listener listener;
     private MaterialDialog dialog;
-    protected Context context;
 
     public SetLanguageDialog(Context context, Listener listener, @Language int currentLanguage) {
         this.listener = listener;
-        this.context = context;
-
         this.dialog = new MaterialDialog.Builder(context)
                 .title(R.string.set_speech_language_dialog_title)
                 .content(R.string.set_speech_language_dialog_body)

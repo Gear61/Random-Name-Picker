@@ -10,11 +10,6 @@ public class ListDO {
         this.name = name;
     }
 
-    public ListDO(ListDO listDO) {
-        this.id = listDO.id;
-        this.name = listDO.name;
-    }
-
     public int getId() {
         return id;
     }
