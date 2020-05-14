@@ -16,6 +16,7 @@ class ChoosingSettingsViewHolder {
     @BindView(R.id.with_replacement) CheckBox withReplacement;
     @BindView(R.id.automatic_tts) CheckBox automaticTts;
     @BindView(R.id.show_as_list) CheckBox showAsList;
+    @BindView(R.id.prevent_duplicates) CheckBox preventDuplicates;
     @BindView(R.id.num_people_chosen) EditText numChosen;
 
     private ChoosingSettings settings;
@@ -39,6 +40,7 @@ class ChoosingSettingsViewHolder {
         UIUtils.setCheckedImmediately(withReplacement, settings.getWithReplacement());
         UIUtils.setCheckedImmediately(automaticTts, settings.getAutomaticTts());
         UIUtils.setCheckedImmediately(showAsList, settings.getShowAsList());
+        UIUtils.setCheckedImmediately(preventDuplicates, settings.getPreventDuplicates());
     }
 
     void applySettings() {
@@ -46,6 +48,7 @@ class ChoosingSettingsViewHolder {
         settings.setWithReplacement(withReplacement.isChecked());
         settings.setAutomaticTts(automaticTts.isChecked());
         settings.setShowAsList(showAsList.isChecked());
+        settings.setPreventDuplicates(preventDuplicates.isChecked());
         String numChosenText = numChosen.getText().toString();
         if (numChosenText.isEmpty()) {
             numChosen.setText("1");

@@ -40,6 +40,13 @@
         style="@style/setting_checkbox"
         />
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/prevent_duplicates"
+        android:text="@string/prevent_duplicates"
+        app:buttonTint="@color/checkbox_box_color"
+        style="@style/setting_checkbox"
+        />
+
     <LinearLayout
         android:padding="4dp"
         android:layout_width="wrap_content"

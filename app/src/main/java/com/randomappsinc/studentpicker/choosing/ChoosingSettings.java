@@ -65,7 +65,7 @@ public class ChoosingSettings {
         this.speechLanguage = speechLanguage;
     }
 
-    public boolean isPreventDuplicates() {
+    public boolean getPreventDuplicates() {
         return preventDuplicates;
     }
 
