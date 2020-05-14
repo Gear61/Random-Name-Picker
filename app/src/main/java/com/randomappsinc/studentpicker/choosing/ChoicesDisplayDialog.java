@@ -7,6 +7,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
+import java.util.List;
+
 /** Shows the chosen names and their corresponding options in a dialog */
 public class ChoicesDisplayDialog {
 
@@ -16,13 +18,14 @@ public class ChoicesDisplayDialog {
         void copyNamesToClipboard(String chosenNames, int numNames);
     }
 
-    private String chosenNames;
-    private int numNames;
+    private List<String> chosenNames;
+    private ChoosingSettings settings;
     private int listId;
     private MaterialDialog dialog;
 
-    ChoicesDisplayDialog(Listener listener, Context context, int listId) {
+    ChoicesDisplayDialog(Listener listener, Context context, int listId, ChoosingSettings settings) {
         this.listId = listId;
+        this.settings = settings;
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
@@ -30,18 +33,21 @@ public class ChoicesDisplayDialog {
                 .negativeText(R.string.copy_text)
                 .neutralText(R.string.say_name)
                 .onPositive((dialog, which) -> dialog.dismiss())
-                .onNegative((dialog, which) -> listener.copyNamesToClipboard(chosenNames, numNames))
-                .onNeutral((dialog, which) -> listener.sayNames(chosenNames))
+                .onNegative((dialog, which) -> listener.copyNamesToClipboard(
+                        NameUtils.flattenListToString(chosenNames, settings),
+                        chosenNames.size()))
+                .onNeutral((dialog, which) -> listener.sayNames(
+                        NameUtils.flattenListToString(chosenNames, settings)))
                 .autoDismiss(false)
                 .build();
     }
 
-    void showChoices(String chosenNames, int numNames) {
+    void showChoices(List<String> chosenNames) {
         this.chosenNames = chosenNames;
-        this.numNames = numNames;
+        int numNames = chosenNames.size();
 
         dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
-        dialog.setContent(chosenNames);
+        dialog.setContent(NameUtils.flattenListToString(chosenNames, settings));
         dialog.getActionButton(DialogAction.NEUTRAL)
                 .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);
