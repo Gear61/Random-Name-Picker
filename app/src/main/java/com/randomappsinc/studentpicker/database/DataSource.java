@@ -371,6 +371,9 @@ public class DataSource {
                 DatabaseColumns.SHOW_AS_LIST,
                 choosingSettings.getShowAsList() ? 1 : 0);
         newValues.put(
+                DatabaseColumns.PREVENT_DUPLICATES,
+                choosingSettings.getPreventDuplicates() ? 1 : 0);
+        newValues.put(
                 DatabaseColumns.NUM_NAMES_CHOSEN,
                 choosingSettings.getNumNamesToChoose());
         newValues.put(
