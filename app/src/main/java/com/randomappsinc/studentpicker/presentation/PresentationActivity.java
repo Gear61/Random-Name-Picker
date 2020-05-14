@@ -51,7 +51,7 @@ public class PresentationActivity extends AppCompatActivity
     @BindView(R.id.header) TextView header;
     @BindView(R.id.names) TextView names;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
-    @BindColor(R.color.dark_gray) int darkGray;
+    @BindColor(R.color.text_normal) int textNormalColor;
 
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
@@ -93,7 +93,7 @@ public class PresentationActivity extends AppCompatActivity
         }
 
         names.setTextSize(TypedValue.COMPLEX_UNIT_SP, preferencesManager.getPresentationTextSize() * 8);
-        names.setTextColor(preferencesManager.getPresentationTextColor(darkGray));
+        names.setTextColor(preferencesManager.getPresentationTextColor(textNormalColor));
 
         handler = new Handler();
         player = new MediaPlayer();
@@ -215,7 +215,7 @@ public class PresentationActivity extends AppCompatActivity
     private void showColorChooserDialog() {
         new ColorChooserDialog.Builder(this, R.string.set_text_color_title)
                 .dynamicButtonColor(false)
-                .preselect(preferencesManager.getPresentationTextColor(darkGray))
+                .preselect(preferencesManager.getPresentationTextColor(textNormalColor))
                 .show(this);
     }
 

@@ -16,12 +16,12 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/text_normal"
         android:textSize="22dp"
         />
 
     <Switch
-        android:id="@+id/shake_toggle"
+        android:id="@+id/toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -35,10 +35,10 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_toRightOf="@+id/settings_icon"
-        android:layout_toLeftOf="@id/shake_toggle"
+        android:layout_toLeftOf="@id/toggle"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:textSize="18dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/text_normal"
         />
 </RelativeLayout>

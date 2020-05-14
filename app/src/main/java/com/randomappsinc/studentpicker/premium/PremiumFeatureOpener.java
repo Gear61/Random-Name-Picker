@@ -1,7 +1,6 @@
 package com.randomappsinc.studentpicker.premium;
 
 import android.content.Context;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;

@@ -2,5 +2,5 @@
     <item
         android:color="@color/blue_400"
         android:state_checked="true"/>
-    <item android:color="@color/dark_gray"/>
+    <item android:color="@color/text_normal"/>
 </selector>
