@@ -91,7 +91,7 @@ public class ListInfo {
     }
 
     public List<String> chooseNames(ChoosingSettings settings) {
-        List<String> allNames = getLongList();
+        List<String> allNames = settings.getPreventDuplicates() ? uniqueNames : getLongList();
         Collections.shuffle(allNames);
         List<String> chosenNames = new ArrayList<>();
         for (int i = 0; i < Math.min(settings.getNumNamesToChoose(), allNames.size()); i++) {
