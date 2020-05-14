@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.common;
+package com.randomappsinc.studentpicker.speech;
 
 import android.content.Context;
 import android.content.DialogInterface;
