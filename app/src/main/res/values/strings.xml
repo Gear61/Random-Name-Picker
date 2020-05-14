@@ -5,8 +5,6 @@
     <string name="add_list_hint">List name</string>
     <string name="blank_list_name">List names cannot be blank.</string>
 
-    <!-- Common -->
-    <string name="add_description">Add item</string>
     <string name="choose">Choose</string>
     <string name="groups">Groups</string>
     <string name="premium">Premium</string>

@@ -13,7 +13,6 @@ import com.randomappsinc.studentpicker.models.ListInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class NameUtils {
 
@@ -79,14 +78,8 @@ public class NameUtils {
             return groups;
         }
 
-        // Create a "longform" list of all the names, expanding duplicates
-        Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
-        List<String> allNames = new ArrayList<>();
-        for (String name : nameToAmount.keySet()) {
-            for (int i = 0; i < nameToAmount.get(name); i++) {
-                allNames.add(name);
-            }
-        }
+        // Get the "longform" list of all the names, expanding duplicates
+        List<String> allNames = listInfo.getLongList();
 
         // Add as many names lists to fill as we can.
         // This will be minimum of the number of names or the # of groups desired.

@@ -38,7 +38,7 @@ public class ListInfo {
         nameHistory.clear();
     }
 
-    private List<String> getLongList() {
+    public List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : uniqueNames) {
             int amount = nameAmounts.get(name);
