@@ -37,8 +37,4 @@ class GroupMakingSettings {
     int getNameListSize() {
         return nameListSize;
     }
-
-    void setNameListSize(int nameListSize) {
-        this.nameListSize = nameListSize;
-    }
 }
