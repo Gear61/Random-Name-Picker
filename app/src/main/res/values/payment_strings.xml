@@ -18,6 +18,10 @@
         - Clear the clutter, so you can focus on your choosing.
         \n\n{ion-checkmark-circled #4CAF50} <b>List sharing</b> - Export your name lists
         as .txt files or .csv spreadsheets. Send them to your other devices or to your friends.
+        \n\n{ion-checkmark-circled #4CAF50} <b>Extra import methods</b> - Import name lists
+        from .csv spreadsheets on top of .txt files.
+        \n\n{ion-checkmark-circled #4CAF50} <b>Extra customization</b> - Personalize your choosing
+        message and have the app speak in foreign languages.
         \n\n{ion-checkmark-circled #4CAF50} <b>Premium support</b>
         - Your feedback will become the most important and is guaranteed a response.
         If you\'re running into a bug, I will squash it ASAP.
