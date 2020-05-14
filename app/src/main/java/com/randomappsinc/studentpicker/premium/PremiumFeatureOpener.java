@@ -29,18 +29,15 @@ public class PremiumFeatureOpener {
         this.preferencesManager = new PreferencesManager(context);
         if (preferencesManager.isOnFreeVersion()) {
             unlockOptionsDialog = new MaterialDialog.Builder(context)
-                    .content(R.string.unlock_premium_feature_options_prompt)
+                    .title(R.string.unlock_premium_feature_options_prompt)
                     .items(R.array.unlock_premium_feature_options_list)
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                            switch (position) {
-                                case 0:
-                                    delegate.launchBuyPremiumPage();
-                                    break;
-                                case 1:
-                                    break;
-                            }
+                    .itemsCallback((dialog, itemView, position, text) -> {
+                        switch (position) {
+                            case 0:
+                                delegate.launchBuyPremiumPage();
+                                break;
+                            case 1:
+                                break;
                         }
                     })
                     .positiveText(R.string.cancel)

@@ -82,7 +82,7 @@ public class PreferencesManager {
     }
 
     public void onPremiumFeatureUnlockSeen() {
-        prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
+        prefs.edit().putBoolean(HAS_SEEN_PREMIUM_FEATURE_UNLOCK, true).apply();
     }
 
     public boolean hasUnlockedFeature(@PremiumFeature String feature) {

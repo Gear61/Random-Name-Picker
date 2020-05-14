@@ -67,9 +67,7 @@
     </string>
     <string name="got_it">Got It</string>
 
-    <string name="unlock_premium_feature_options_prompt">
-        How do you want to unlock this feature?
-    </string>
+    <string name="unlock_premium_feature_options_prompt">Premium Feature Unlock Options</string>
     <string name="buy_premium_dialog_option">
         Buy Random Name Picker Premium for $0.99 (unlocks all features)
     </string>
