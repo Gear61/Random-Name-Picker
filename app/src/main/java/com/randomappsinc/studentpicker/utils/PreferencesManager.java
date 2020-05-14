@@ -23,6 +23,7 @@ public class PreferencesManager {
     private static final String SHAKE_ENABLED = "shakeEnabled";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
     private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
+    private static final String HAS_SEEN_PREMIUM_FEATURE_UNLOCK = "hasSeenPremiumFeatureUnlock";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
@@ -72,6 +73,14 @@ public class PreferencesManager {
         boolean hasSeenTooltip = prefs.getBoolean(HAS_SEEN_PREMIUM_TOOLTIP, false);
         prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
         return hasSeenTooltip;
+    }
+
+    public boolean hasSeenPremiumFeatureUnlock() {
+        return prefs.getBoolean(HAS_SEEN_PREMIUM_FEATURE_UNLOCK, false);
+    }
+
+    public void onPremiumFeatureUnlockSeen() {
+        prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
     }
 
     /** API dead zone - DO NOT THE USE THE APIS BELOW **/
