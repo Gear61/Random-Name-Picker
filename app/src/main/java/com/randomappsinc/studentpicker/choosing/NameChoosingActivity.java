@@ -118,10 +118,10 @@ public class NameChoosingActivity extends AppCompatActivity
                 .onNegative((dialog, which) -> settingsHolder.revertSettings())
                 .cancelable(false)
                 .build();
-        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId);
 
         settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
+        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, settings);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
     }
@@ -174,16 +174,14 @@ public class NameChoosingActivity extends AppCompatActivity
             if (choicesDisplayDialog.isShowing()) {
                 return;
             }
-            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(settings.getNumNamesToChoose(),
-                    listInfo.getNumInstances() - 1);
-            String chosenNames = listInfo.chooseNames(chosenIndexes, settings);
+            List<String> chosenNames = listInfo.chooseNames(settings);
             if (!settings.getWithReplacement()) {
                 nameChoosingAdapter.notifyDataSetChanged();
                 setViews();
             }
-            choicesDisplayDialog.showChoices(chosenNames, chosenIndexes.size());
+            choicesDisplayDialog.showChoices(chosenNames);
             if (settings.getAutomaticTts()) {
-                sayNames(chosenNames);
+                sayNames(NameUtils.flattenListToString(chosenNames, settings));
             }
         }
     }

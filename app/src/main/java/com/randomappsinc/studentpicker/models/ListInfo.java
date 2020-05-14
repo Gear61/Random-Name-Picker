@@ -1,9 +1,9 @@
 package com.randomappsinc.studentpicker.models;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.utils.NameUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -90,24 +90,18 @@ public class ListInfo {
         removeNames(name, amount);
     }
 
-    public String chooseNames(List<Integer> indexes, ChoosingSettings settings) {
-        StringBuilder namesText = new StringBuilder();
+    public List<String> chooseNames(ChoosingSettings settings) {
         List<String> allNames = getLongList();
-        for (int i = 0; i < indexes.size(); i++) {
-            if (i != 0) {
-                namesText.append("\n");
-            }
-            if (settings.getShowAsList()) {
-                namesText.append(NameUtils.getPrefix(i));
-            }
-
-            String chosenName = allNames.get(indexes.get(i));
-            namesText.append(chosenName);
+        Collections.shuffle(allNames);
+        List<String> chosenNames = new ArrayList<>();
+        for (int i = 0; i < Math.min(settings.getNumNamesToChoose(), allNames.size()); i++) {
+            String chosenName = allNames.get(i);
+            chosenNames.add(chosenName);
             nameHistory.add(chosenName);
             if (!settings.getWithReplacement()) {
                 removeNames(chosenName, 1);
             }
         }
-        return namesText.toString();
+        return chosenNames;
     }
 }

@@ -128,10 +128,8 @@ public class PresentationActivity extends AppCompatActivity
         names.clearAnimation();
         textToSpeechManager.stopSpeaking();
         if (listState.getNumNames() > 0) {
-            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
-                    settings.getNumNamesToChoose(),
-                    listState.getNumInstances() - 1);
-            chosenNamesText = listState.chooseNames(chosenIndexes, settings);
+            List<String> chosenNames = listState.chooseNames(settings);
+            chosenNamesText = NameUtils.flattenListToString(chosenNames, settings);
 
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);

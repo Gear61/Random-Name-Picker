@@ -7,6 +7,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
 
@@ -15,24 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class NameUtils {
-
-    // For the choose multiple names at once case. We're just generating indices
-    public static List<Integer> getRandomNumsInRange(int numNumbers, int capIndex) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i <= capIndex; i++) {
-            list.add(i);
-        }
-        Collections.shuffle(list);
-        if (numNumbers > capIndex) {
-            return list;
-        }
-
-        List<Integer> chosenNumbers = new ArrayList<>();
-        for (int i = 0; i < numNumbers; i++) {
-            chosenNumbers.add(list.get(i));
-        }
-        return chosenNumbers;
-    }
 
     public static void copyNamesToClipboard(String names, int numNames, boolean historyMode, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
@@ -104,5 +87,19 @@ public class NameUtils {
         }
 
         return groups;
+    }
+
+    public static String flattenListToString(List<String> names, ChoosingSettings settings) {
+        StringBuilder namesText = new StringBuilder();
+        for (int i = 0; i < names.size(); i++) {
+            if (namesText.length() > 0) {
+                namesText.append("\n");
+            }
+            if (settings.getShowAsList()) {
+                namesText.append(NameUtils.getPrefix(i));
+            }
+            namesText.append(names.get(i));
+        }
+        return namesText.toString();
     }
 }
