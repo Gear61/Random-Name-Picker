@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
@@ -21,6 +22,7 @@ import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.premium.PaymentManager;
+import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -32,7 +34,8 @@ import butterknife.OnClick;
 import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
 public class HomeActivity extends StandardActivity implements
-        BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
+        BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener,
+        PremiumFeatureOpener.Delegate {
 
     private static final int NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK = 3;
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
@@ -50,6 +53,7 @@ public class HomeActivity extends StandardActivity implements
     private BottomSheetBehavior bottomSheetBehavior;
     private DataSource dataSource;
     private PaymentManager paymentManager;
+    private PremiumFeatureOpener premiumFeatureOpener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,7 @@ public class HomeActivity extends StandardActivity implements
         dataSource = new DataSource(this);
         paymentManager = new PaymentManager(this, this);
         paymentManager.setUpAndCheckForPremium();
+        premiumFeatureOpener = new PremiumFeatureOpener(this, this);
     }
 
     @Override
@@ -170,21 +175,24 @@ public class HomeActivity extends StandardActivity implements
 
     @OnClick(R.id.sheet_import_from_csv)
     public void importFromCsv() {
-        if (preferencesManager.isOnFreeVersion()) {
-            UIUtils.showLongToast(R.string.premium_needed_message, this);
-            Intent intent = new Intent(this, BuyPremiumActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-            return;
-        }
-
         hideBottomSheet();
-        UIUtils.showLongToast(R.string.csv_format_instructions, this);
-        Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        csvIntent.setType("*/*");
-        csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
-        startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
+
+        premiumFeatureOpener.openPremiumFeature(
+                PremiumFeature.IMPORT_FROM_CSV, () -> {
+                    UIUtils.showLongToast(R.string.csv_format_instructions, this);
+                    Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    csvIntent.setType("*/*");
+                    csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
+                    startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
+                });
+    }
+
+    @Override
+    public void launchBuyPremiumPage() {
+        Intent intent = new Intent(this, BuyPremiumActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     private void hideBottomSheet() {
