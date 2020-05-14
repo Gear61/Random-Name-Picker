@@ -66,4 +66,18 @@
         Simply tap an any premium feature and you will get this option.
     </string>
     <string name="got_it">Got It</string>
+
+    <string name="unlock_premium_feature_options_prompt">
+        How do you want to unlock this feature?
+    </string>
+    <string name="buy_premium_dialog_option">
+        Buy Random Name Picker Premium for $0.99 (unlocks all features)
+    </string>
+    <string name="watch_ad_dialog_option">
+        Watch an ad (unlocks just this feature)
+    </string>
+    <string-array name="unlock_premium_feature_options_list">
+        <item>@string/buy_premium_dialog_option</item>
+        <item>@string/watch_ad_dialog_option</item>
+    </string-array>
 </resources>
