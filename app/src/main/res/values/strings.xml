@@ -5,8 +5,6 @@
     <string name="add_list_hint">List name</string>
     <string name="blank_list_name">List names cannot be blank.</string>
 
-    <!-- Common -->
-    <string name="add_description">Add item</string>
     <string name="choose">Choose</string>
     <string name="groups">Groups</string>
     <string name="premium">Premium</string>
@@ -26,11 +24,6 @@
     <string name="speech_to_text_retry_mic_icon">{ion-android-microphone 40dp #1976D2}</string>
 
     <string name="no_im_good">No, I\'m good</string>
-
-    <string name="need_record_audio">
-        In order to use speech to text functionality you need to give this app access to your device\'s microphone.
-        Would you like to do that?
-    </string>
 
     <string name="please_rate">
         Hey, it looks like you\'re a frequent user of Random Name Picker!

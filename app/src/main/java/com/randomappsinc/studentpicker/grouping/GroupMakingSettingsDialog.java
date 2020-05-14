@@ -28,10 +28,6 @@ class GroupMakingSettingsDialog {
         settingsHolder = new GroupMakingSettingsViewHolder(dialog, settings);
     }
 
-    void refreshSetting() {
-        settingsHolder.refreshListSizeSetting();
-    }
-
     void show() {
         dialog.show();
     }

@@ -53,4 +53,23 @@
             style="@style/add_bottom_sheet_text"
             />
     </LinearLayout>
+
+    <View style="@style/white_horizontal_divider"/>
+
+    <LinearLayout
+        android:id="@+id/sheet_import_from_csv"
+        style="@style/add_bottom_sheet_option_container"
+        >
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:text="@string/document_icon"
+            style="@style/add_bottom_sheet_icon"
+            />
+
+        <TextView
+            android:id="@+id/title_import_from_csv"
+            android:text="@string/import_from_csv_file"
+            style="@style/add_bottom_sheet_text"
+            />
+    </LinearLayout>
 </LinearLayout>

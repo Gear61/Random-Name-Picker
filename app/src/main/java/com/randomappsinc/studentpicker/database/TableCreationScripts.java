@@ -19,7 +19,8 @@ class TableCreationScripts {
             + DatabaseColumns.NUM_NAMES_CHOSEN + " INTEGER DEFAULT 1, "
             + DatabaseColumns.NAMES_HISTORY + " TEXT, "
             + DatabaseColumns.CHOOSING_MESSAGE + " TEXT, "
-            + DatabaseColumns.SPEECH_LANGUAGE + " INTEGER DEFAULT -1);";
+            + DatabaseColumns.SPEECH_LANGUAGE + " INTEGER DEFAULT -1, "
+            + DatabaseColumns.PREVENT_DUPLICATES + " BOOLEAN NOT NULL DEFAULT 0);";
 
     static final String CREATE_NAMES_IN_LIST_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
             + DatabaseTables.NAMES_IN_LIST +  "("

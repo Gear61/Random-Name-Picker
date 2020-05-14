@@ -21,9 +21,8 @@ import java.util.Set;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    // Core fields
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // Struct for migration
     private static class NameInfoPod {
@@ -238,6 +237,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database,
                     DatabaseColumns.SPEECH_LANGUAGE,
                     " INTEGER DEFAULT -1",
+                    DatabaseTables.LISTS);
+            oldVersion++;
+        }
+
+        // Add speech language customization
+        if (oldVersion == 6) {
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.PREVENT_DUPLICATES,
+                    " BOOLEAN NOT NULL DEFAULT 0",
                     DatabaseTables.LISTS);
         }
     }

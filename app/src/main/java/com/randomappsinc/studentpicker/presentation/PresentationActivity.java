@@ -28,9 +28,9 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.common.TextToSpeechManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.speech.TextToSpeechManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -128,10 +128,8 @@ public class PresentationActivity extends AppCompatActivity
         names.clearAnimation();
         textToSpeechManager.stopSpeaking();
         if (listState.getNumNames() > 0) {
-            List<Integer> chosenIndexes = NameUtils.getRandomNumsInRange(
-                    settings.getNumNamesToChoose(),
-                    listState.getNumInstances() - 1);
-            chosenNamesText = listState.chooseNames(chosenIndexes, settings);
+            List<String> chosenNames = listState.chooseNames(settings);
+            chosenNamesText = NameUtils.flattenListToString(chosenNames, settings);
 
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);

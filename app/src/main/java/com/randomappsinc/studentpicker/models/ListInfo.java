@@ -1,9 +1,9 @@
 package com.randomappsinc.studentpicker.models;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.utils.NameUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +38,7 @@ public class ListInfo {
         nameHistory.clear();
     }
 
-    private List<String> getLongList() {
+    public List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : uniqueNames) {
             int amount = nameAmounts.get(name);
@@ -90,37 +90,18 @@ public class ListInfo {
         removeNames(name, amount);
     }
 
-    public String chooseNames(List<Integer> indexes, ChoosingSettings settings) {
-        StringBuilder namesText = new StringBuilder();
-        List<String> allNames = getLongList();
-        for (int i = 0; i < indexes.size(); i++) {
-            if (i != 0) {
-                namesText.append("\n");
-            }
-            if (settings.getShowAsList()) {
-                namesText.append(NameUtils.getPrefix(i));
-            }
-
-            String chosenName = allNames.get(indexes.get(i));
-            namesText.append(chosenName);
+    public List<String> chooseNames(ChoosingSettings settings) {
+        List<String> allNames = settings.getPreventDuplicates() ? uniqueNames : getLongList();
+        Collections.shuffle(allNames);
+        List<String> chosenNames = new ArrayList<>();
+        for (int i = 0; i < Math.min(settings.getNumNamesToChoose(), allNames.size()); i++) {
+            String chosenName = allNames.get(i);
+            chosenNames.add(chosenName);
             nameHistory.add(chosenName);
             if (!settings.getWithReplacement()) {
                 removeNames(chosenName, 1);
             }
         }
-        return namesText.toString();
-    }
-
-    public List<List<String>> groupNamesList(List<List<Integer>> listOfGroups) {
-        List<List<String>> listOfGroupsOfNames = new ArrayList<>();
-        List<String> allNames = getLongList();
-        for (List<Integer> listOfIndicesPerGroup : listOfGroups) {
-            List<String> listOfNames = new ArrayList<>();
-            for (int i = 0; i < listOfIndicesPerGroup.size(); i++) {
-                listOfNames.add(allNames.get(listOfIndicesPerGroup.get(i)));
-            }
-            listOfGroupsOfNames.add(listOfNames);
-        }
-        return listOfGroupsOfNames;
+        return chosenNames;
     }
 }

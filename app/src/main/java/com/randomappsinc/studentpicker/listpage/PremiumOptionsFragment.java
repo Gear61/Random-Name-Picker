@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.listpage;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
@@ -17,12 +19,12 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.export.TxtExporter;
-import com.randomappsinc.studentpicker.home.SetLanguageDialog;
-import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.speech.SetLanguageDialog;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -40,6 +42,7 @@ public class PremiumOptionsFragment extends Fragment
     }
 
     @BindView(R.id.recycler_view) RecyclerView premiumOptions;
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private int listId;
     private PreferencesManager preferencesManager;
@@ -65,7 +68,10 @@ public class PremiumOptionsFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         preferencesManager = new PreferencesManager(getContext());
-        premiumOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        premiumOptions.addItemDecoration(itemDecorator);
         premiumOptions.setAdapter(new ListOptionsAdapter(
                 getActivity(),
                 this,
