@@ -8,10 +8,12 @@ import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.models.ListInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class NameUtils {
 
@@ -31,29 +33,6 @@ public class NameUtils {
             chosenNumbers.add(list.get(i));
         }
         return chosenNumbers;
-    }
-
-    public static List<List<Integer>> getRandomGroups(int namesPerGroup, int numberOfGroups, int capIndex) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i <= capIndex; i++) {
-            list.add(i);
-        }
-
-        Collections.shuffle(list);
-        int chosenCounter = 0;
-        List<List<Integer>> listOfGroups = new ArrayList<>();
-        for (int i = 0; i < numberOfGroups; i++) {
-            List<Integer> listOfNamesPerGroup = new ArrayList<>();
-            int j = 0;
-            while (capIndex != -1 && j < namesPerGroup) {
-                listOfNamesPerGroup.add(list.get(chosenCounter++));
-                capIndex--;
-                j++;
-            }
-            listOfGroups.add(listOfNamesPerGroup);
-            if (capIndex == -1) break;
-        }
-        return listOfGroups;
     }
 
     public static void copyNamesToClipboard(String names, int numNames, boolean historyMode, Context context) {
@@ -92,5 +71,45 @@ public class NameUtils {
                     : context.getString(R.string.names_chosen);
         }
         return choosingMessage;
+    }
+
+    public static List<List<String>> createGroups(ListInfo listInfo, int namesPerGroup, int numGroups) {
+        List<List<String>> groups = new ArrayList<>();
+        if (numGroups == 0 || namesPerGroup == 0) {
+            return groups;
+        }
+
+        // Create a "longform" list of all the names, expanding duplicates
+        Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
+        List<String> allNames = new ArrayList<>();
+        for (String name : nameToAmount.keySet()) {
+            for (int i = 0; i < nameToAmount.get(name); i++) {
+                allNames.add(name);
+            }
+        }
+
+        // Add as many names lists to fill as we can.
+        // This will be minimum of the number of names or the # of groups desired.
+        for (int i = 0; i < Math.min(allNames.size(), numGroups); i++) {
+            groups.add(new ArrayList<>());
+        }
+
+        // Put names into lists until we have all the names we need or run out of names
+        int totalNamesToAttemptToAdd = numGroups * namesPerGroup;
+        int numNamesAdded = 0;
+        Collections.shuffle(allNames);
+        while (numNamesAdded < Math.min(allNames.size(), totalNamesToAttemptToAdd)) {
+            // Go through every list and add a single name. This will prevent uneven groups.
+            for (List<String> nameList : groups) {
+                nameList.add(allNames.get(numNamesAdded));
+                numNamesAdded++;
+
+                if (numNamesAdded >= Math.min(allNames.size(), totalNamesToAttemptToAdd)) {
+                    break;
+                }
+            }
+        }
+
+        return groups;
     }
 }
