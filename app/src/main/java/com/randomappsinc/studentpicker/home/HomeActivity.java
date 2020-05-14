@@ -34,6 +34,7 @@ import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.
 public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
+    private static final int NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK = 3;
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
     private static final int IMPORT_TXT_REQUEST_CODE = 1;
@@ -82,6 +83,16 @@ public class HomeActivity extends StandardActivity implements
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
+        } else if (!preferencesManager.hasSeenPremiumFeatureUnlock()
+                && preferencesManager.isOnFreeVersion()
+                && preferencesManager.getNumAppOpens() >= NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK) {
+            preferencesManager.onPremiumFeatureUnlockSeen();
+            new MaterialDialog.Builder(this)
+                    .title(R.string.unlock_premium_features_for_free_title)
+                    .content(R.string.unlock_premium_features_for_free_body)
+                    .positiveText(R.string.got_it)
+                    .cancelable(false)
+                    .show();
         }
 
         createListDialog = new CreateListDialog(this, this);
