@@ -19,7 +19,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.export.TxtExporter;
-import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.speech.SetLanguageDialog;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;

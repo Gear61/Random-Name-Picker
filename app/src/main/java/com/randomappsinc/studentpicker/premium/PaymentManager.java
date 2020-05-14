@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.payments;
+package com.randomappsinc.studentpicker.premium;
 
 import android.app.Activity;
 
