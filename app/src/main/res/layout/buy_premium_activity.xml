@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/screen_background"
     >
 
     <ScrollView
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/premium_intro"
-                android:textColor="@color/dark_gray"
+                android:textColor="@color/text_normal"
                 android:textSize="23sp"
                 />
 
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/premium_feature_list"
-                android:textColor="@color/dark_gray"
+                android:textColor="@color/text_normal"
                 android:textSize="19sp"
                 />
 
@@ -46,7 +46,7 @@
                 android:layout_marginTop="40dp"
                 android:gravity="center_horizontal"
                 android:text="@string/post_payment_thank_you"
-                android:textColor="@color/black"
+                android:textColor="@color/text_title"
                 android:textSize="25sp"
                 android:visibility="gone"
                 />
@@ -60,7 +60,7 @@
                 android:layout_marginRight="16dp"
                 android:gravity="center_horizontal"
                 android:text="@string/payment_thank_you"
-                android:textColor="@color/dark_gray"
+                android:textColor="@color/text_normal"
                 android:textSize="17sp"
                 android:visibility="gone"
                 />

@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.theme.ThemeManager;
+import com.randomappsinc.studentpicker.theme.ThemeMode;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -88,12 +90,21 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
             case 1:
                 int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
                 View firstCell = settingsOptions.getChildAt(shakePosition);
-                Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
+                Switch shakeToggle = firstCell.findViewById(R.id.toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
                 preferencesManager.setShakeEnabled(!currentState);
                 return;
             case 2:
+                int darkModePosition = preferencesManager.isOnFreeVersion() ? 2 : 1;
+                View secondCell = settingsOptions.getChildAt(darkModePosition);
+                Switch darkModeToggle = secondCell.findViewById(R.id.toggle);
+                darkModeToggle.setChecked(!darkModeToggle.isChecked());
+                int themeMode = darkModeToggle.isChecked() ? ThemeMode.DARK : ThemeMode.LIGHT;
+                preferencesManager.setThemeMode(themeMode);
+                ThemeManager.applyTheme(themeMode);
+                return;
+            case 3:
                 String uriText = "mailto:" + SUPPORT_EMAIL
                         + "?subject=" + Uri.encode(preferencesManager.isOnFreeVersion()
                         ? feedbackSubject
@@ -103,18 +114,18 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 3:
+            case 4:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 4:
-                Uri uri =  Uri.parse("market://details?id=" + getContext().getPackageName());
+            case 5:
+                Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getContext().getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
                     UIUtils.showLongToast(R.string.play_store_error, getContext());
                     return;
                 }
                 break;
-            case 5:
+            case 6:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }

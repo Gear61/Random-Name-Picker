@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.theme.ThemeMode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_ENABLED = "shakeEnabled";
+    private static final String THEME_MODE = "themeMode";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
     private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
     private static final String HAS_SEEN_PREMIUM_FEATURE_UNLOCK = "hasSeenPremiumFeatureUnlock";
@@ -55,12 +57,21 @@ public class PreferencesManager {
     public void setPresentationTextColor(int newColor) {
         prefs.edit().putInt(PRESENTATION_TEXT_COLOR_KEY, newColor).apply();
     }
+
     public void setShakeEnabled(boolean shakeEnabled) {
         prefs.edit().putBoolean(SHAKE_ENABLED, shakeEnabled).apply();
     }
 
     public boolean isShakeEnabled() {
         return prefs.getBoolean(SHAKE_ENABLED, false);
+    }
+
+    public void setThemeMode(@ThemeMode int themeMode) {
+        prefs.edit().putInt(THEME_MODE, themeMode).apply();
+    }
+
+    public int getThemeMode() {
+        return prefs.getInt(THEME_MODE, ThemeMode.FOLLOW_SYSTEM);
     }
 
     public void setIsOnFreeVersion(boolean shouldShowAds) {

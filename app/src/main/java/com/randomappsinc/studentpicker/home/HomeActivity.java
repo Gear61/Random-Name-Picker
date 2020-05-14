@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -37,6 +38,7 @@ public class HomeActivity extends StandardActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener,
         PremiumFeatureOpener.Delegate {
 
+    private static final String PREVIOUSLY_SELECTED_PAGE_ID = "previouslySelectedPageId";
     private static final int NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK = 3;
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
@@ -56,13 +58,20 @@ public class HomeActivity extends StandardActivity implements
     private PremiumFeatureOpener premiumFeatureOpener;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
         navigationController = new HomepageFragmentController(getSupportFragmentManager(), R.id.container);
-        navigationController.loadHomeInitially();
+        if (savedInstanceState == null) {
+            navigationController.loadHomeInitially();
+        } else {
+            navigationController.restoreFragments();
+            int previousSelectedId = savedInstanceState.getInt(PREVIOUSLY_SELECTED_PAGE_ID, R.id.home);
+            navigationController.onNavItemSelected(previousSelectedId);
+            bottomNavigation.setCurrentlySelected(previousSelectedId);
+        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -104,6 +113,12 @@ public class HomeActivity extends StandardActivity implements
         paymentManager = new PaymentManager(this, this);
         paymentManager.setUpAndCheckForPremium();
         premiumFeatureOpener = new PremiumFeatureOpener(this, this);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(PREVIOUSLY_SELECTED_PAGE_ID, navigationController.getCurrentViewId());
     }
 
     @Override

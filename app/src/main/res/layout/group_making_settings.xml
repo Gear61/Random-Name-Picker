@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/dialog_background"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:ignore="SpUsage"
@@ -18,7 +18,7 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:textSize="17dp"
-        android:textColor="@color/dark_gray"
+        android:textColor="@color/text_normal"
         />
 
     <LinearLayout
@@ -29,12 +29,8 @@
         >
 
         <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/num_of_names_in_group"
-            android:textSize="15dp"
-            android:textColor="@color/black"
+            style="@style/setting_input_label"
             />
 
         <EditText
@@ -52,12 +48,8 @@
         >
 
         <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/num_of_groups"
-            android:textSize="15dp"
-            android:textColor="@color/black"
+            style="@style/setting_input_label"
             />
 
         <EditText
