@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.listpage;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
@@ -18,10 +20,10 @@ import com.randomappsinc.studentpicker.editing.NameListImporterDialog;
 import com.randomappsinc.studentpicker.home.RenameListDialog;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
 import java.util.List;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -30,7 +32,7 @@ public class EditListOptionsFragment extends Fragment
         implements ListOptionsAdapter.ItemSelectionListener, RenameListDialog.Listener,
         NameListImporterDialog.Listener {
 
-    public static EditListOptionsFragment getInstance(int listId) {
+    static EditListOptionsFragment getInstance(int listId) {
         EditListOptionsFragment fragment = new EditListOptionsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LIST_ID_KEY, listId);
@@ -39,6 +41,7 @@ public class EditListOptionsFragment extends Fragment
     }
 
     @BindView(R.id.recycler_view) RecyclerView editListOptions;
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private int listId;
     private RenameListDialog renameListDialog;
@@ -61,7 +64,10 @@ public class EditListOptionsFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getContext());
-        editListOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        editListOptions.addItemDecoration(itemDecorator);
         editListOptions.setAdapter(new ListOptionsAdapter(
                 getActivity(),
                 this,

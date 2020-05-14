@@ -1,6 +1,7 @@
 package com.randomappsinc.studentpicker.listpage;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,21 +9,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.grouping.GroupMakingActivity;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdapter.ItemSelectionListener {
 
-    public static ChoosingOptionsFragment getInstance(int listId) {
+    static ChoosingOptionsFragment getInstance(int listId) {
         ChoosingOptionsFragment fragment = new ChoosingOptionsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LIST_ID_KEY, listId);
@@ -31,6 +33,7 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
     }
 
     @BindView(R.id.recycler_view) RecyclerView choosingOptions;
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private int listId;
     private Unbinder unbinder;
@@ -49,7 +52,10 @@ public class ChoosingOptionsFragment extends Fragment implements ListOptionsAdap
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        choosingOptions.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        choosingOptions.addItemDecoration(itemDecorator);
         choosingOptions.setAdapter(new ListOptionsAdapter(
                 getActivity(),
                 this,

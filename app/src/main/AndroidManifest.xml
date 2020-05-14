@@ -2,6 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="auto"
     package="com.randomappsinc.studentpicker"
     >
 
@@ -58,7 +59,7 @@
             />
 
         <activity
-            android:name=".importdata.ImportFromTextFileActivity"
+            android:name=".importdata.ImportFromFileActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/import_name_list"
             android:windowSoftInputMode="adjustResize"
@@ -71,7 +72,7 @@
             />
 
         <activity
-            android:name=".payments.BuyPremiumActivity"
+            android:name=".premium.BuyPremiumActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/buy_premium_title"
             />

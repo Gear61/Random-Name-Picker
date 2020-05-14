@@ -36,6 +36,7 @@
     <string name="with_replacement">With replacement</string>
     <string name="automatic_tts">Automatically say chosen names</string>
     <string name="show_as_list">Show chosen names as list</string>
+    <string name="prevent_duplicates">Prevent duplicates when choosing multiple names at once</string>
     <string name="num_people_chosen"># of names chosen:</string>
     <string name="default_num_names_chosen">1</string>
     <string name="settings_applied">Your settings have been applied.</string>

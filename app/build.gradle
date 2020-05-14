@@ -5,7 +5,7 @@ android {
 
     def versionMajor = 4
     def versionMinor = 1
-    def versionPatch = 4
+    def versionPatch = 7
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.squareup:seismic:1.0.2'
-    implementation 'com.google.android.gms:play-services-ads:19.0.1'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'de.siegmar:fastcsv:1.0.3'
 }

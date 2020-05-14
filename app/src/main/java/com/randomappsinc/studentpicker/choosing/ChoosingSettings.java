@@ -10,6 +10,7 @@ public class ChoosingSettings {
     private boolean showAsList;
     private int numNamesToChoose;
     private @Language int speechLanguage;
+    private boolean preventDuplicates;
 
     public ChoosingSettings() {
         this.numNamesToChoose = 1;
@@ -62,5 +63,13 @@ public class ChoosingSettings {
 
     public void setSpeechLanguage(@Language int speechLanguage) {
         this.speechLanguage = speechLanguage;
+    }
+
+    public boolean getPreventDuplicates() {
+        return preventDuplicates;
+    }
+
+    public void setPreventDuplicates(boolean preventDuplicates) {
+        this.preventDuplicates = preventDuplicates;
     }
 }

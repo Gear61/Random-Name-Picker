@@ -2,7 +2,7 @@
 <resources>
     <string name="premium_tooltip_title">Hate Ads?</string>
     <string name="premium_tooltip_body">
-        For just $0.99, you can remove ads, unlock premium support, and constantly get exclusive features.
+        For just $0.99, you can remove ads, get premium support, and unlock several exclusive features.
         Simply tap here to learn more.
     </string>
 
@@ -12,6 +12,8 @@
     <string name="add_circle_icon">{ion-android-add-circle}</string>
     <string name="create_name_list">Create name list</string>
     <string name="import_from_txt_file">Import list from .txt file</string>
+    <string name="import_from_csv_file">Import list from .csv file</string>
+    <string name="import_from_csv_file_premium">[PREMIUM] Import list from .csv file</string>
 
     <string name="homepage_empty_text">
         Welcome to Random Name Picker!

@@ -7,54 +7,15 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
+import com.randomappsinc.studentpicker.models.ListInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class NameUtils {
-
-    // For the choose multiple names at once case. We're just generating indices
-    public static List<Integer> getRandomNumsInRange(int numNumbers, int capIndex) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i <= capIndex; i++) {
-            list.add(i);
-        }
-        Collections.shuffle(list);
-        if (numNumbers > capIndex) {
-            return list;
-        }
-
-        List<Integer> chosenNumbers = new ArrayList<>();
-        for (int i = 0; i < numNumbers; i++) {
-            chosenNumbers.add(list.get(i));
-        }
-        return chosenNumbers;
-    }
-
-    public static List<List<Integer>> getRandomGroups(int namesPerGroup, int numberOfGroups, int capIndex) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i <= capIndex; i++) {
-            list.add(i);
-        }
-
-        Collections.shuffle(list);
-        int chosenCounter = 0;
-        List<List<Integer>> listOfGroups = new ArrayList<>();
-        for (int i = 0; i < numberOfGroups; i++) {
-            List<Integer> listOfNamesPerGroup = new ArrayList<>();
-            int j = 0;
-            while (capIndex != -1 && j < namesPerGroup) {
-                listOfNamesPerGroup.add(list.get(chosenCounter++));
-                capIndex--;
-                j++;
-            }
-            listOfGroups.add(listOfNamesPerGroup);
-            if (capIndex == -1) break;
-        }
-        return listOfGroups;
-    }
 
     public static void copyNamesToClipboard(String names, int numNames, boolean historyMode, Context context) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Activity.CLIPBOARD_SERVICE);
@@ -92,5 +53,53 @@ public class NameUtils {
                     : context.getString(R.string.names_chosen);
         }
         return choosingMessage;
+    }
+
+    public static List<List<String>> createGroups(ListInfo listInfo, int namesPerGroup, int numGroups) {
+        List<List<String>> groups = new ArrayList<>();
+        if (numGroups == 0 || namesPerGroup == 0) {
+            return groups;
+        }
+
+        // Get the "longform" list of all the names, expanding duplicates
+        List<String> allNames = listInfo.getLongList();
+
+        // Add as many names lists to fill as we can.
+        // This will be minimum of the number of names or the # of groups desired.
+        for (int i = 0; i < Math.min(allNames.size(), numGroups); i++) {
+            groups.add(new ArrayList<>());
+        }
+
+        // Put names into lists until we have all the names we need or run out of names
+        int totalNamesToAttemptToAdd = numGroups * namesPerGroup;
+        int numNamesAdded = 0;
+        Collections.shuffle(allNames);
+        while (numNamesAdded < Math.min(allNames.size(), totalNamesToAttemptToAdd)) {
+            // Go through every list and add a single name. This will prevent uneven groups.
+            for (List<String> nameList : groups) {
+                nameList.add(allNames.get(numNamesAdded));
+                numNamesAdded++;
+
+                if (numNamesAdded >= Math.min(allNames.size(), totalNamesToAttemptToAdd)) {
+                    break;
+                }
+            }
+        }
+
+        return groups;
+    }
+
+    public static String flattenListToString(List<String> names, ChoosingSettings settings) {
+        StringBuilder namesText = new StringBuilder();
+        for (int i = 0; i < names.size(); i++) {
+            if (namesText.length() > 0) {
+                namesText.append("\n");
+            }
+            if (settings.getShowAsList()) {
+                namesText.append(NameUtils.getPrefix(i));
+            }
+            namesText.append(names.get(i));
+        }
+        return namesText.toString();
     }
 }

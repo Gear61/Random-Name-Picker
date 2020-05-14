@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.home;
 import android.Manifest;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -13,22 +14,23 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.SpeechToTextManager;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
-import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.speech.SpeechToTextManager;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
-import com.randomappsinc.studentpicker.views.SimpleDividerItemDecoration;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,7 +44,7 @@ public class HomepageFragment extends Fragment implements
         return new HomepageFragment();
     }
 
-    private static final int NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP = 10;
+    private static final int NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP = 7;
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
@@ -56,6 +58,8 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
+
+    @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
@@ -82,7 +86,11 @@ public class HomepageFragment extends Fragment implements
 
         nameListsAdapter = new NameListsAdapter(this, dataSource.getNameLists(""));
         lists.setAdapter(nameListsAdapter);
-        lists.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(lineDivider);
+        lists.addItemDecoration(itemDecorator);
         setNoContent();
 
         // When the user is scrolling to browse lists, close the soft keyboard

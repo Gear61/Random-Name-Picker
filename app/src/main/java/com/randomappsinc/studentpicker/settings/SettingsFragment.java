@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
-import com.randomappsinc.studentpicker.payments.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.theme.ThemeManager;
 import com.randomappsinc.studentpicker.theme.ThemeMode;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;

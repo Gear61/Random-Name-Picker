@@ -72,10 +72,8 @@ public class GroupMakingActivity extends AppCompatActivity {
             return;
         }
 
-        List<List<Integer>> listOfGroups = NameUtils.getRandomGroups(settings.getNumOfNamesPerGroup(),
-                settings.getNumOfGroups(),
-                listInfo.getNumInstances() - 1);
-        List<List<String>> listOfNamesPerGroup = listInfo.groupNamesList(listOfGroups);
+        List<List<String>> listOfNamesPerGroup = NameUtils.createGroups(
+                listInfo, settings.getNumOfNamesPerGroup(), settings.getNumOfGroups());
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
         noGroups.setVisibility(View.GONE);
         groupsList.setVisibility(View.VISIBLE);
