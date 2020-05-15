@@ -91,7 +91,7 @@ public class HomepageFragment extends Fragment implements
         lists.setAdapter(nameListsAdapter);
 
         DividerItemDecoration itemDecorator =
-                new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+                new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(lineDivider);
         lists.addItemDecoration(itemDecorator);
         setNoContent();
@@ -102,7 +102,7 @@ public class HomepageFragment extends Fragment implements
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    UIUtils.hideKeyboard(getActivity());
+                    UIUtils.hideKeyboard(requireActivity());
                     rootView.requestFocus();
                 }
             }
@@ -124,8 +124,8 @@ public class HomepageFragment extends Fragment implements
     @OnClick(R.id.buy_premium_tooltip)
     void buyPremium() {
         Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
-        getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        requireActivity().startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
         buyPremiumTooltip.setVisibility(View.GONE);
     }
 
@@ -164,17 +164,17 @@ public class HomepageFragment extends Fragment implements
 
     @OnClick(R.id.create_name_list_button)
     void createNameList() {
-        ((HomeActivity) getActivity()).createNameList();
+        ((HomeActivity) requireActivity()).createNameList();
     }
 
     @OnClick(R.id.import_from_txt_button)
     void importFromTextFile() {
-        ((HomeActivity) getActivity()).importFromTextFile();
+        ((HomeActivity) requireActivity()).importFromTextFile();
     }
 
     @OnClick(R.id.import_from_csv_button)
     void importFromCsvFile() {
-        ((HomeActivity) getActivity()).importFromCsvFile();
+        ((HomeActivity) requireActivity()).importFromCsvFile();
     }
 
     @Override
@@ -202,16 +202,16 @@ public class HomepageFragment extends Fragment implements
     public void onItemClick(ListDO listDO) {
         Intent intent = new Intent(getActivity(), ListLandingPageActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
-        getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        requireActivity().startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
     public void onChooseButtonClicked(ListDO listDO) {
         Intent intent = new Intent(getActivity(), NameChoosingActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
-        getActivity().startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        requireActivity().startActivity(intent);
+        requireActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
