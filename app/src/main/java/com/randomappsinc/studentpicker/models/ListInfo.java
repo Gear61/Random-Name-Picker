@@ -91,10 +91,12 @@ public class ListInfo {
     }
 
     public List<String> chooseNames(ChoosingSettings settings) {
-        List<String> allNames = settings.getPreventDuplicates() ? uniqueNames : getLongList();
+        List<String> allNames = settings.getPreventDuplicates() ? new ArrayList<>(uniqueNames) : getLongList();
         Collections.shuffle(allNames);
         List<String> chosenNames = new ArrayList<>();
-        for (int i = 0; i < Math.min(settings.getNumNamesToChoose(), allNames.size()); i++) {
+
+        int namesToAdd = Math.min(settings.getNumNamesToChoose(), allNames.size());
+        for (int i = 0; i < namesToAdd; i++) {
             String chosenName = allNames.get(i);
             chosenNames.add(chosenName);
             nameHistory.add(chosenName);
