@@ -7,6 +7,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.FullScreenAdManager;
 import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 public class PremiumFeatureOpener {
 
@@ -18,14 +19,14 @@ public class PremiumFeatureOpener {
         void openFeature();
     }
 
-    private Delegate delegate;
     private FullScreenAdManager fullScreenAdManager;
     private PreferencesManager preferencesManager;
     private MaterialDialog unlockOptionsDialog;
+    private @PremiumFeature String currentFeature;
 
     public PremiumFeatureOpener(Context context, Delegate delegate) {
-        this.delegate = delegate;
         this.preferencesManager = new PreferencesManager(context);
+        this.fullScreenAdManager = new FullScreenAdManager(context);
         if (preferencesManager.isOnFreeVersion()) {
             unlockOptionsDialog = new MaterialDialog.Builder(context)
                     .title(R.string.unlock_premium_feature_options_prompt)
@@ -36,6 +37,11 @@ public class PremiumFeatureOpener {
                                 delegate.launchBuyPremiumPage();
                                 break;
                             case 1:
+                                if (fullScreenAdManager.showAd()) {
+                                    preferencesManager.unlockFeature(currentFeature);
+                                } else {
+                                    UIUtils.showLongToast(R.string.ad_not_ready_yet, dialog.getContext());
+                                }
                                 break;
                         }
                     })
@@ -45,6 +51,7 @@ public class PremiumFeatureOpener {
     }
 
     public void openPremiumFeature(@PremiumFeature String feature, FeatureHandler featureHandler) {
+        currentFeature = feature;
         if (preferencesManager.hasUnlockedFeature(feature)) {
             featureHandler.openFeature();
         } else {
