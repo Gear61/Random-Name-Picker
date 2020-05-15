@@ -23,7 +23,6 @@ import com.randomappsinc.studentpicker.export.TxtExporter;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.speech.SetLanguageDialog;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindDrawable;
