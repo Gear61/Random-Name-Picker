@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
@@ -11,7 +12,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.home.DeleteListDialog;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -20,7 +20,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListLandingPageActivity extends StandardActivity implements DeleteListDialog.Listener {
+public class ListLandingPageActivity extends AppCompatActivity implements DeleteListDialog.Listener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
