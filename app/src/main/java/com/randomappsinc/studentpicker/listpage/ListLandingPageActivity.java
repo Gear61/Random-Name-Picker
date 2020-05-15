@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.home.DeleteListDialog;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -20,7 +21,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListLandingPageActivity extends StandardActivity implements DeleteListDialog.Listener {
+public class ListLandingPageActivity extends AppCompatActivity implements DeleteListDialog.Listener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.name_list_pager) ViewPager nameListPager;
@@ -39,6 +40,10 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                        .colorRes(R.color.white)
+                        .actionBarSize());
 
         listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
         dataSource = new DataSource(this);
@@ -63,6 +68,12 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_from_top);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_page_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.delete_list, IoniconsIcons.ion_android_delete, this);
@@ -71,9 +82,15 @@ public class ListLandingPageActivity extends StandardActivity implements DeleteL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.delete_list) {
-            deleteListDialog.presentForList(dataSource.getListName(listId));
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.delete_list:
+                deleteListDialog.presentForList(dataSource.getListName(listId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

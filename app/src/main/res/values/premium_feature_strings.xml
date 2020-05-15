@@ -78,4 +78,6 @@
         <item>@string/buy_premium_dialog_option</item>
         <item>@string/watch_ad_dialog_option</item>
     </string-array>
+    <string name="ad_not_ready_yet">The ad is still loading. Please try again later.</string>
+    <string name="premium_feature_unlocked">Premium feature unlocked!</string>
 </resources>

@@ -191,15 +191,14 @@ public class HomepageFragment extends Fragment implements
     public void onItemClick(ListDO listDO) {
         Intent intent = new Intent(getActivity(), ListLandingPageActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
     public void onChooseButtonClicked(ListDO listDO) {
         Intent intent = new Intent(getActivity(), NameChoosingActivity.class);
         intent.putExtra(Constants.LIST_ID_KEY, listDO.getId());
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         getActivity().startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
