@@ -25,7 +25,6 @@ public class FullScreenAdManager {
             public void onAdClosed() {
                 // Load another ad when the ad is closed
                 interstitialAd.loadAd(new AdRequest.Builder().build());
-
                 UIUtils.showLongToast(R.string.premium_feature_unlocked, context);
             }
         });

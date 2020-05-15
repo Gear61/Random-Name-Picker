@@ -189,9 +189,8 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     @OnClick(R.id.sheet_import_from_csv)
-    public void importFromCsv() {
+    public void importFromCsvFile() {
         hideBottomSheet();
-
         premiumFeatureOpener.openPremiumFeature(
                 PremiumFeature.IMPORT_FROM_CSV, () -> {
                     UIUtils.showLongToast(R.string.csv_format_instructions, this);
