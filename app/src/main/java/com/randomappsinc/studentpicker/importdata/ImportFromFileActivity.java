@@ -42,8 +42,7 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
         progressDialog = new MaterialDialog.Builder(this)
-                .title(R.string.please_wait)
-                .content(R.string.saving_the_names)
+                .title(R.string.creating_your_name_list)
                 .progress(true, 0)
                 .cancelable(false)
                 .build();
@@ -92,18 +91,13 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
     }
 
     @Override
-    public void onFileSaved() {
+    public void onNameListCreated() {
         runOnUiThread(() -> {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
             UIUtils.showShortToast(R.string.import_success, this);
             finish();
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
     }
 }
