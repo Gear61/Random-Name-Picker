@@ -149,6 +149,26 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/import_from_csv_button"
+            android:layout_marginBottom="8dp"
+            style="@style/no_lists_option_card"
+            >
+
+            <LinearLayout style="@style/home_empty_state_option_container">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:text="@string/document_icon"
+                    style="@style/home_empty_state_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/import_from_csv_empty_state_text"
+                    style="@style/home_empty_state_text"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <com.joanzapata.iconify.widget.IconTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

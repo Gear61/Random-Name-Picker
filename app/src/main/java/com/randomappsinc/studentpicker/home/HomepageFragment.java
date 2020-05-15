@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
@@ -57,6 +59,7 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
+    @BindView(R.id.import_from_csv_empty_state_text) TextView importFromCsvEmptyStateText;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
@@ -169,10 +172,18 @@ public class HomepageFragment extends Fragment implements
         ((HomeActivity) getActivity()).importFromTextFile();
     }
 
+    @OnClick(R.id.import_from_csv_button)
+    void importFromCsvFile() {
+        ((HomeActivity) getActivity()).importFromCsvFile();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         bannerAdManager.loadOrRemoveAd();
+        importFromCsvEmptyStateText.setText(preferencesManager.hasUnlockedFeature(PremiumFeature.IMPORT_FROM_CSV)
+                ? R.string.import_from_csv_file
+                : R.string.import_from_csv_file_premium);
         if (!preferencesManager.isOnFreeVersion() && buyPremiumTooltip.getVisibility() == View.VISIBLE) {
             buyPremiumTooltip.setVisibility(View.GONE);
         }
