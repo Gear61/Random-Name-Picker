@@ -29,7 +29,7 @@ public class FileImportManager {
 
         void onFileParsingSuccess(String listNameText, String namesListText);
 
-        void onFileSaved();
+        void onNameListCreated();
     }
 
     private Context context;
@@ -183,7 +183,7 @@ public class FileImportManager {
                 }
             }
 
-            listener.onFileSaved();
+            listener.onNameListCreated();
         });
     }
 }
