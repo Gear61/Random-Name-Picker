@@ -9,13 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.PremiumFeature;
-import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.importdata.FileImportType;
@@ -34,7 +34,7 @@ import butterknife.OnClick;
 
 import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
-public class HomeActivity extends StandardActivity implements
+public class HomeActivity extends AppCompatActivity implements
         BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener,
         PremiumFeatureOpener.Delegate {
 
@@ -236,9 +236,9 @@ public class HomeActivity extends StandardActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        importFromCsv.setText(preferencesManager.isOnFreeVersion() ?
-                R.string.import_from_csv_file_premium :
-                R.string.import_from_csv_file);
+        importFromCsv.setText(preferencesManager.hasUnlockedFeature(PremiumFeature.IMPORT_FROM_CSV)
+                ? R.string.import_from_csv_file_premium
+                : R.string.import_from_csv_file);
     }
 
     @Override

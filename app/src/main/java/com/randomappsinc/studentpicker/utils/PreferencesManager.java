@@ -100,7 +100,7 @@ public class PreferencesManager {
         return !isOnFreeVersion() || prefs.getBoolean(PREMIUM_FEATURE_PREFIX + feature, false);
     }
 
-    public void unlockedFeature(@PremiumFeature String feature) {
+    public void unlockFeature(@PremiumFeature String feature) {
         prefs.edit().putBoolean(PREMIUM_FEATURE_PREFIX + feature, true).apply();
     }
 
