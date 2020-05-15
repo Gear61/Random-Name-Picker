@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingMessageDialog;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.export.TxtExporter;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.speech.SetLanguageDialog;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -31,7 +33,8 @@ import butterknife.Unbinder;
 
 public class PremiumOptionsFragment extends Fragment
         implements ListOptionsAdapter.ItemSelectionListener, CsvExporter.Listener,
-        TxtExporter.Listener, ChoosingMessageDialog.Listener, SetLanguageDialog.Listener {
+        TxtExporter.Listener, ChoosingMessageDialog.Listener, SetLanguageDialog.Listener,
+        PremiumFeatureOpener.Delegate {
 
     static PremiumOptionsFragment getInstance(int listId) {
         PremiumOptionsFragment fragment = new PremiumOptionsFragment();
@@ -45,12 +48,12 @@ public class PremiumOptionsFragment extends Fragment
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private int listId;
-    private PreferencesManager preferencesManager;
     private DataSource dataSource;
     private CsvExporter csvExporter;
     private TxtExporter txtExporter;
     private ChoosingMessageDialog choosingMessageDialog;
     private SetLanguageDialog setLanguageDialog;
+    private PremiumFeatureOpener premiumFeatureOpener;
     private Unbinder unbinder;
 
     @Override
@@ -67,7 +70,6 @@ public class PremiumOptionsFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        preferencesManager = new PreferencesManager(getContext());
         DividerItemDecoration itemDecorator =
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(lineDivider);
@@ -84,32 +86,36 @@ public class PremiumOptionsFragment extends Fragment
 
         int currentLanguage = dataSource.getChoosingSettings(listId).getSpeechLanguage();
         setLanguageDialog = new SetLanguageDialog(getContext(), this, currentLanguage);
+        premiumFeatureOpener = new PremiumFeatureOpener(getContext(), this);
     }
 
     @Override
     public void onItemClick(int position) {
-        if (preferencesManager.isOnFreeVersion()) {
-            UIUtils.showLongToast(R.string.premium_needed_message, getContext());
-            Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
-            getActivity().startActivity(intent);
-            getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-            return;
-        }
-
         switch (position) {
             case 0:
-                txtExporter.turnListIntoTxt(listId, getContext());
+                premiumFeatureOpener.openPremiumFeature(
+                        PremiumFeature.SHARE_AS_TXT, () -> txtExporter.turnListIntoTxt(listId, getContext()));
                 break;
             case 1:
-                csvExporter.turnListIntoCsv(listId, getContext());
+                premiumFeatureOpener.openPremiumFeature(
+                        PremiumFeature.SHARE_AS_CSV, () -> csvExporter.turnListIntoCsv(listId, getContext()));
                 break;
             case 2:
-                choosingMessageDialog.show();
+                premiumFeatureOpener.openPremiumFeature(
+                        PremiumFeature.CUSTOMIZE_CHOOSING_MESSAGE, () -> choosingMessageDialog.show());
                 break;
             case 3:
-                setLanguageDialog.show();
+                premiumFeatureOpener.openPremiumFeature(
+                        PremiumFeature.SET_SPEECH_LANGUAGE, () -> setLanguageDialog.show());
                 break;
         }
+    }
+
+    @Override
+    public void launchBuyPremiumPage() {
+        Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
+        getActivity().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override

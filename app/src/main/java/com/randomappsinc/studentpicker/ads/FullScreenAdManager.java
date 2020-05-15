@@ -6,6 +6,8 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.randomappsinc.studentpicker.BuildConfig;
+import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.utils.UIUtils;
 
 public class FullScreenAdManager {
 
@@ -23,6 +25,8 @@ public class FullScreenAdManager {
             public void onAdClosed() {
                 // Load another ad when the ad is closed
                 interstitialAd.loadAd(new AdRequest.Builder().build());
+
+                UIUtils.showLongToast(R.string.premium_feature_unlocked, context);
             }
         });
     }
