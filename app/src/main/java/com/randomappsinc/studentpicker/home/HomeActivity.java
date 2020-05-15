@@ -237,8 +237,8 @@ public class HomeActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         importFromCsv.setText(preferencesManager.hasUnlockedFeature(PremiumFeature.IMPORT_FROM_CSV)
-                ? R.string.import_from_csv_file_premium
-                : R.string.import_from_csv_file);
+                ? R.string.import_from_csv_file
+                : R.string.import_from_csv_file_premium);
     }
 
     @Override

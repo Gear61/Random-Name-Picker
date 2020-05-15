@@ -18,7 +18,6 @@ public class FullScreenAdManager {
         interstitialAd = new InterstitialAd(context);
         interstitialAd.setAdUnitId(BuildConfig.DEBUG ? DEBUG_AD_ID : PROD_AD_ID);
         interstitialAd.loadAd(new AdRequest.Builder().build());
-
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -32,8 +31,7 @@ public class FullScreenAdManager {
         if (interstitialAd.isLoaded()) {
             interstitialAd.show();
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }
