@@ -3,8 +3,10 @@ package com.randomappsinc.studentpicker.presentation;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -134,10 +136,18 @@ public class PresentationActivity extends AppCompatActivity
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);
 
-            playSound();
+            if (isMediaVolumeMuted()) {
+                handleNamesAnimations(300);
+            } else {
+                playSound();
+            }
         } else {
             UIUtils.showLongToast(R.string.no_names_left, this);
         }
+    }
+
+    private boolean isMediaVolumeMuted() {
+        return ((AudioManager) getSystemService(Context.AUDIO_SERVICE)).getStreamVolume(AudioManager.STREAM_MUSIC) == 0;
     }
 
     private void playSound() {
@@ -154,8 +164,12 @@ public class PresentationActivity extends AppCompatActivity
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
 
+        handleNamesAnimations(2600);
+    }
+
+    private void handleNamesAnimations(int delay) {
         handler.removeCallbacks(animateNamesTask);
-        handler.postDelayed(animateNamesTask, 2600);
+        handler.postDelayed(animateNamesTask, delay);
     }
 
     private void animateNames() {
