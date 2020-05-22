@@ -136,18 +136,14 @@ public class PresentationActivity extends AppCompatActivity
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);
 
-            if (isMediaVolumeMuted()) {
-                handleNamesAnimations(300);
+            if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                playNamesAnimation(getResources().getInteger(R.integer.default_anim_length));
             } else {
                 playSound();
             }
         } else {
             UIUtils.showLongToast(R.string.no_names_left, this);
         }
-    }
-
-    private boolean isMediaVolumeMuted() {
-        return ((AudioManager) getSystemService(Context.AUDIO_SERVICE)).getStreamVolume(AudioManager.STREAM_MUSIC) == 0;
     }
 
     private void playSound() {
@@ -164,17 +160,17 @@ public class PresentationActivity extends AppCompatActivity
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
 
-        handleNamesAnimations(2600);
+        playNamesAnimation(2600);
     }
 
-    private void handleNamesAnimations(int delay) {
+    private void playNamesAnimation(int delayMs) {
         handler.removeCallbacks(animateNamesTask);
-        handler.postDelayed(animateNamesTask, delay);
+        handler.postDelayed(animateNamesTask, delayMs);
     }
 
     private void animateNames() {
         ObjectAnimator fadeIn = ObjectAnimator
-                .ofFloat(names, "alpha", 1.0f).setDuration(250);
+                .ofFloat(names, "alpha", 1.0f).setDuration(getResources().getInteger(R.integer.default_anim_length));
         fadeIn.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet scaleSet = new AnimatorSet();
