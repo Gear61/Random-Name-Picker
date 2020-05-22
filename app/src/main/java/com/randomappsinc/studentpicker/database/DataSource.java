@@ -134,7 +134,11 @@ public class DataSource {
         List<NameDO> nameDOs = new ArrayList<>();
         open();
         String[] columns = {
-                DatabaseColumns.ID, DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
+                DatabaseColumns.ID,
+                DatabaseColumns.NAME,
+                DatabaseColumns.NAME_COUNT,
+                DatabaseColumns.PHOTO_URI
+        };
         String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
         Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
@@ -143,8 +147,8 @@ public class DataSource {
             int nameId = cursor.getInt(0);
             String name = cursor.getString(1);
             int nameAmount = cursor.getInt(2);
-
-            nameDOs.add(new NameDO(nameId, name, nameAmount));
+            String photoUri = cursor.getString(3);
+            nameDOs.add(new NameDO(nameId, name, nameAmount, photoUri));
         }
         cursor.close();
         close();

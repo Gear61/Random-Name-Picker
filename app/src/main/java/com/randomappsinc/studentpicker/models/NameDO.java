@@ -1,17 +1,21 @@
 package com.randomappsinc.studentpicker.models;
 
+import androidx.annotation.Nullable;
+
 public class NameDO {
 
     private int id;
     private String name;
     private int amount;
+    private @Nullable String photoUri;
 
     public NameDO() {}
 
-    public NameDO(int id, String name, int amount) {
+    public NameDO(int id, String name, int amount, @Nullable String photoUri) {
         this.id = id;
         this.name = name;
         this.amount = amount;
+        this.photoUri = photoUri;
     }
 
     public int getId() {
@@ -32,5 +36,10 @@ public class NameDO {
 
     public int getAmount() {
         return amount;
+    }
+
+    @Nullable
+    public String getPhotoUri() {
+        return photoUri;
     }
 }
