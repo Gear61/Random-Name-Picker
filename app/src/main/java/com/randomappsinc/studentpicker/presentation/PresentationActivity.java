@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -40,6 +41,7 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 import java.util.List;
 
 import butterknife.BindColor;
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,6 +56,7 @@ public class PresentationActivity extends AppCompatActivity
     @BindView(R.id.names) TextView names;
     @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
     @BindColor(R.color.text_normal) int textNormalColor;
+    @BindInt(R.integer.default_anim_length) int defaultAnimationLengthMs;
 
     private PreferencesManager preferencesManager;
     private DataSource dataSource;
@@ -136,8 +139,9 @@ public class PresentationActivity extends AppCompatActivity
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);
 
-            if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-                playNamesAnimation(getResources().getInteger(R.integer.default_anim_length));
+            if (((AudioManager) getSystemService(Context.AUDIO_SERVICE))
+                    .getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                playNamesAnimation(defaultAnimationLengthMs);
             } else {
                 playSound();
             }
@@ -170,15 +174,16 @@ public class PresentationActivity extends AppCompatActivity
 
     private void animateNames() {
         ObjectAnimator fadeIn = ObjectAnimator
-                .ofFloat(names, "alpha", 1.0f).setDuration(getResources().getInteger(R.integer.default_anim_length));
+                .ofFloat(names, View.ALPHA, 1.0f)
+                .setDuration(defaultAnimationLengthMs);
         fadeIn.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet scaleSet = new AnimatorSet();
         ObjectAnimator scaleX = ObjectAnimator
-                .ofFloat(names, "scaleX", 1.0f, 3.0f, 1.0f)
+                .ofFloat(names, View.SCALE_X, 1.0f, 3.0f, 1.0f)
                 .setDuration(250);
         ObjectAnimator scaleY = ObjectAnimator
-                .ofFloat(names, "scaleY", 1.0f, 3.0f, 1.0f)
+                .ofFloat(names, View.SCALE_Y, 1.0f, 3.0f, 1.0f)
                 .setDuration(250);
         scaleSet.setInterpolator(new DecelerateInterpolator());
         scaleSet.playTogether(scaleX, scaleY);
