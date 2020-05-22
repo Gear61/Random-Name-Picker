@@ -7,11 +7,13 @@
     >
 
     <uses-feature android:name="android.hardware.microphone"/>
+    <uses-feature android:name="android.hardware.camera"/>
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         tools:replace="android:label"
