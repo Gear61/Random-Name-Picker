@@ -9,6 +9,7 @@ class DatabaseColumns {
     static final String LIST_NAME = "list_name";
     static final String NAME = "name";
     static final String NAME_COUNT = "name_count";
+    static final String PHOTO_URI = "photo_uri";
 
     // Choosing settings columns
     static final String PRESENTATION_MODE = "presentation_mode";
