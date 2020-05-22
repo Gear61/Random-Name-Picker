@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:foreground="?android:attr/selectableItemBackground"
+    tools:ignore="SpUsage"
     >
 
+    <ImageView
+        android:id="@+id/person_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        />
+
     <com.joanzapata.iconify.widget.IconTextView
-        android:id="@+id/options_icon"
-        android:text="@string/list_icon"
-        android:layout_alignParentRight="true"
-        style="@style/list_item_button"
+        android:id="@+id/no_image_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="@string/image_icon"
+        android:textColor="@color/text_normal"
+        android:textSize="44dp"
+        android:visibility="gone"
+        android:gravity="center"
         />
 
     <TextView
         android:id="@+id/person_name"
-        android:layout_toLeftOf="@+id/options_icon"
-        style="@style/item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/text_normal"
+        android:textSize="29dp"
         />
-</RelativeLayout>
+</LinearLayout>

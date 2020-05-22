@@ -27,7 +27,6 @@
     <string name="deleted_name">\"%s\" deleted from the list.</string>
 
     <!-- Name options -->
-    <string name="list_icon">{ion-android-list}</string>
     <string name="rename_person">Rename \"%s\"</string>
     <string name="delete_name">Delete \"%s\"</string>
     <string name="duplicate">Duplicate \"%s\"</string>

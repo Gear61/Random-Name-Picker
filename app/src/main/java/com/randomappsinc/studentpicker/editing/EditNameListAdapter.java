@@ -1,9 +1,11 @@
 package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -90,6 +92,8 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
     }
 
     class NameViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.person_image) ImageView personImageView;
+        @BindView(R.id.no_image_icon) View noImageIcon;
         @BindView(R.id.person_name) TextView nameTextView;
 
         private NameViewHolder(View view) {
@@ -98,11 +102,19 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         }
 
         private void loadName(int position) {
+            boolean nameHasPhoto = !TextUtils.isEmpty(names.get(position).getPhotoUri());
+            personImageView.setVisibility(nameHasPhoto ? View.VISIBLE : View.GONE);
+            noImageIcon.setVisibility(nameHasPhoto ? View.GONE : View.VISIBLE);
+
             String name = names.get(position).getName();
             int amount = names.get(position).getAmount();
             String nameText = amount == 1 ? name : name + " (" + amount + ")";
-
             nameTextView.setText(nameText);
+        }
+
+        @OnClick(R.id.no_image_icon)
+        void onNoImageClick() {
+
         }
 
         @OnClick(R.id.parent)
