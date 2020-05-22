@@ -3,8 +3,10 @@ package com.randomappsinc.studentpicker.presentation;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -134,7 +136,11 @@ public class PresentationActivity extends AppCompatActivity
             names.setAlpha(0.0f);
             names.setText(chosenNamesText);
 
-            playSound();
+            if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                playNamesAnimation(getResources().getInteger(R.integer.default_anim_length));
+            } else {
+                playSound();
+            }
         } else {
             UIUtils.showLongToast(R.string.no_names_left, this);
         }
@@ -154,13 +160,17 @@ public class PresentationActivity extends AppCompatActivity
             UIUtils.showLongToast(R.string.drumroll_error, this);
         }
 
+        playNamesAnimation(2600);
+    }
+
+    private void playNamesAnimation(int delayMs) {
         handler.removeCallbacks(animateNamesTask);
-        handler.postDelayed(animateNamesTask, 2600);
+        handler.postDelayed(animateNamesTask, delayMs);
     }
 
     private void animateNames() {
         ObjectAnimator fadeIn = ObjectAnimator
-                .ofFloat(names, "alpha", 1.0f).setDuration(250);
+                .ofFloat(names, "alpha", 1.0f).setDuration(getResources().getInteger(R.integer.default_anim_length));
         fadeIn.setInterpolator(new AccelerateInterpolator());
 
         AnimatorSet scaleSet = new AnimatorSet();
