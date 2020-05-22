@@ -46,7 +46,7 @@ public class HomepageFragment extends Fragment implements
         return new HomepageFragment();
     }
 
-    private static final int NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP = 7;
+    private static final int NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP = 5;
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
 
