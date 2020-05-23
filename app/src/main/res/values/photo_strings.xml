@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="photo_import_dialog_title">Photo Adding Options</string>
+    <string-array name="photo_import_options">
+        <item>Import from gallery</item>
+        <item>Take picture with camera</item>
+    </string-array>
+</resources>
