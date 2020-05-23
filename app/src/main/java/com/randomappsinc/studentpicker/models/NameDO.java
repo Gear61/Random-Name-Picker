@@ -42,4 +42,8 @@ public class NameDO {
     public String getPhotoUri() {
         return photoUri;
     }
+
+    public void setPhotoUri(@Nullable String photoUri) {
+        this.photoUri = photoUri;
+    }
 }

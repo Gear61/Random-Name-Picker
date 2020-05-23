@@ -10,9 +10,9 @@ import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 public class PhotoImportOptionsDialog {
 
     public interface Delegate extends PremiumFeatureOpener.Delegate {
-        void takePictureWithCamera();
+        void addWithCamera();
 
-        void importImageFromGallery();
+        void addWithGallery();
     }
 
     private Delegate delegate;
@@ -28,10 +28,10 @@ public class PhotoImportOptionsDialog {
                 .itemsCallback((dialog, itemView, position, text) -> {
                     switch (position) {
                         case 0:
-                            maybeOpenCamera();
+                            maybeOpenGallery();
                             break;
                         case 1:
-                            maybeOpenGallery();
+                            maybeOpenCamera();
                             break;
                     }
                 })
@@ -43,13 +43,13 @@ public class PhotoImportOptionsDialog {
         optionsDialog.show();
     }
 
-    private void maybeOpenCamera() {
-        premiumFeatureOpener.openPremiumFeature(
-                PremiumFeature.ADD_PHOTO_FROM_GALLERY, () -> delegate.takePictureWithCamera());
-    }
-
     private void maybeOpenGallery() {
         premiumFeatureOpener.openPremiumFeature(
-                PremiumFeature.ADD_PHOTO_WITH_CAMERA, () -> delegate.importImageFromGallery());
+                PremiumFeature.ADD_PHOTO_FROM_GALLERY, () -> delegate.addWithGallery());
+    }
+
+    private void maybeOpenCamera() {
+        premiumFeatureOpener.openPremiumFeature(
+                PremiumFeature.ADD_PHOTO_WITH_CAMERA, () -> delegate.addWithCamera());
     }
 }
