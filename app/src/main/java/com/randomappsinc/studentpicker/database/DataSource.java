@@ -156,43 +156,56 @@ public class DataSource {
     }
 
     public ListInfo getListInfo(int listId) {
-        Map<String, Integer> nameAmounts = new HashMap<>();
+        Map<String, NameDO> nameMap = new HashMap<>();
         List<String> names = new ArrayList<>();
         int totalAmountOfNames = 0;
         open();
-        String[] columns = {DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
+        String[] columns = {
+                DatabaseColumns.ID,
+                DatabaseColumns.NAME,
+                DatabaseColumns.NAME_COUNT,
+                DatabaseColumns.PHOTO_URI
+        };
         String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
         Cursor cursor = database.query(DatabaseTables.NAMES, columns, selection,
                 selectionArgs, null, null, DatabaseColumns.NAME + " ASC");
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            int nameAmount = cursor.getInt(1);
+            int nameId = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int nameAmount = cursor.getInt(2);
+            String photoUri = cursor.getString(3);
 
-            nameAmounts.put(name, nameAmount);
+            nameMap.put(name, new NameDO(nameId, name, nameAmount, photoUri));
             names.add(name);
             totalAmountOfNames += nameAmount;
         }
         cursor.close();
         close();
-        return new ListInfo(nameAmounts, names, totalAmountOfNames, new ArrayList<>());
+        return new ListInfo(nameMap, names, totalAmountOfNames, new ArrayList<>());
     }
 
     public ListInfo getChoosingStateListInfo(int listId) {
-        Map<String, Integer> nameAmounts = new HashMap<>();
+        Map<String, NameDO> nameMap = new HashMap<>();
         List<String> names = new ArrayList<>();
         int totalAmountOfNames = 0;
         open();
-        String[] columns = {DatabaseColumns.NAME, DatabaseColumns.NAME_COUNT};
-        String selection = DatabaseColumns.LIST_ID + " = ?";
         String[] selectionArgs = {String.valueOf(listId)};
-        Cursor cursor = database.query(DatabaseTables.NAMES_IN_LIST, columns, selection,
-                selectionArgs, null, null, DatabaseColumns.NAME + " ASC");
+        String query = "SELECT NamesInList.name, NamesInList.name_count, Names.photo_uri " +
+                "FROM NamesInList " +
+                "LEFT JOIN Names ON NamesInList.list_id = Names.list_id " +
+                "AND NamesInList.name = Names.name " +
+                "WHERE NamesInList.list_id = ? " +
+                "ORDER BY NamesInList.name ASC";
+        Cursor cursor = database.rawQuery(query, selectionArgs);
         while (cursor.moveToNext()) {
+            NameDO nameDO = new NameDO();
             String name = cursor.getString(0);
+            nameDO.setName(name);
             int nameAmount = cursor.getInt(1);
-
-            nameAmounts.put(name, nameAmount);
+            nameDO.setAmount(nameAmount);
+            nameDO.setPhotoUri(cursor.getString(2));
+            nameMap.put(name, nameDO);
             names.add(name);
             totalAmountOfNames += nameAmount;
         }
@@ -216,7 +229,7 @@ public class DataSource {
         historyCursor.close();
 
         close();
-        return new ListInfo(nameAmounts, names, totalAmountOfNames, namesHistory);
+        return new ListInfo(nameMap, names, totalAmountOfNames, namesHistory);
     }
 
     public void addNames(String name, int amount, int listId) {
@@ -351,12 +364,12 @@ public class DataSource {
                 DatabaseColumns.LIST_ID + " = ?",
                 whereArgsToClearNamesState);
 
-        Map<String, Integer> nameAmounts = listInfo.getNameAmounts();
+        Map<String, NameDO> nameAmounts = listInfo.getNameMap();
         for (String name : nameAmounts.keySet()) {
             ContentValues values = new ContentValues();
             values.put(DatabaseColumns.LIST_ID, listId);
             values.put(DatabaseColumns.NAME, name);
-            values.put(DatabaseColumns.NAME_COUNT, nameAmounts.get(name));
+            values.put(DatabaseColumns.NAME_COUNT, nameAmounts.get(name).getAmount());
             database.insert(DatabaseTables.NAMES_IN_LIST, null, values);
         }
 

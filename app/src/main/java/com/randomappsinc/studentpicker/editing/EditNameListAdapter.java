@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -127,10 +128,7 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
                         .into(personImageView);
             }
 
-            String name = nameDO.getName();
-            int amount = nameDO.getAmount();
-            String nameText = amount == 1 ? name : name + " (" + amount + ")";
-            nameTextView.setText(nameText);
+            nameTextView.setText(NameUtils.getDisplayTextForName(nameDO));
         }
 
         @OnClick(R.id.person_image)

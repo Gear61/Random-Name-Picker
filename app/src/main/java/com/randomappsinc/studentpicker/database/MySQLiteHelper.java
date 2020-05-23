@@ -10,6 +10,7 @@ import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.init.MyApplication;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.JSONUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 
@@ -177,12 +178,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 ListInfo listInfo = preferencesManager.getNameListState(listDO.getName());
 
                 if (listInfo != null) {
-                    Map<String, Integer> nameToAmount = listInfo.getNameAmounts();
+                    Map<String, NameDO> nameToAmount = listInfo.getNameMap();
                     for (String name : nameToAmount.keySet()) {
                         ContentValues values = new ContentValues();
                         values.put(DatabaseColumns.LIST_ID, listDO.getId());
                         values.put(DatabaseColumns.NAME, name);
-                        values.put(DatabaseColumns.NAME_COUNT, nameToAmount.get(name));
+                        values.put(DatabaseColumns.NAME_COUNT, nameToAmount.get(name).getAmount());
                         database.insert(DatabaseTables.NAMES_IN_LIST, null, values);
                     }
                 }

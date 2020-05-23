@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class JSONUtils {
             return null;
         }
 
-        Map<String, Integer> nameAmounts = new HashMap<>();
+        Map<String, NameDO> nameMap = new HashMap<>();
         List<String> names = new ArrayList<>();
         int numNames = 0;
         List<String> alreadyChosenNames = new ArrayList<>();
@@ -41,11 +42,11 @@ public class JSONUtils {
             JSONArray namesArray = nameListJson.getJSONArray(NAMES_KEY);
             for (int i = 0; i < namesArray.length(); i++) {
                 String name = namesArray.getString(i);
-                if (nameAmounts.containsKey(name)) {
-                    int currentAmount = nameAmounts.get(name);
-                    nameAmounts.put(name, currentAmount + 1);
+                if (nameMap.containsKey(name)) {
+                    int currentAmount = nameMap.get(name).getAmount();
+                    nameMap.get(name).setAmount(currentAmount + 1);
                 } else {
-                    nameAmounts.put(name, 1);
+                    nameMap.put(name, new NameDO(-1, name, 1, null));
                     names.add(name);
                 }
                 numNames++;
@@ -59,7 +60,7 @@ public class JSONUtils {
         }
         catch (JSONException ignored) {}
 
-        return new ListInfo(nameAmounts, names, numNames, alreadyChosenNames);
+        return new ListInfo(nameMap, names, numNames, alreadyChosenNames);
     }
 
     @Deprecated
