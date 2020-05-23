@@ -8,4 +8,5 @@
     <string name="take_photo_with_camera_failed">
         Sorry, we are unable to work with your device\'s camera.
     </string>
+    <string name="photo_processing_failure">We failed to process your photo.</string>
 </resources>

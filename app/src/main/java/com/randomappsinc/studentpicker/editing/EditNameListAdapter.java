@@ -119,11 +119,13 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
             noImageIcon.setVisibility(nameHasPhoto ? View.GONE : View.VISIBLE);
 
             personImageView.setVisibility(nameHasPhoto ? View.VISIBLE : View.GONE);
-            Picasso.get()
-                    .load(nameDO.getPhotoUri())
-                    .fit()
-                    .centerCrop()
-                    .into(personImageView);
+            if (nameHasPhoto) {
+                Picasso.get()
+                        .load(nameDO.getPhotoUri())
+                        .fit()
+                        .centerCrop()
+                        .into(personImageView);
+            }
 
             String name = nameDO.getName();
             int amount = nameDO.getAmount();
