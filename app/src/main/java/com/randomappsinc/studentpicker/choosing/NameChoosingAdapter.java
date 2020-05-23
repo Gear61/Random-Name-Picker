@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.choosing;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
 
     class NameViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.person_image) ImageView personImageView;
         @BindView(R.id.person_name) TextView name;
 
         NameViewHolder(View view) {

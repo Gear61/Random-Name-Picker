@@ -38,6 +38,10 @@ public class NameDO {
         return amount;
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
     @Nullable
     public String getPhotoUri() {
         return photoUri;

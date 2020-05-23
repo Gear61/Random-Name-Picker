@@ -10,6 +10,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,5 +102,11 @@ public class NameUtils {
             namesText.append(names.get(i));
         }
         return namesText.toString();
+    }
+
+    public static String getDisplayTextForName(NameDO nameDO) {
+        String name = nameDO.getName();
+        int amount = nameDO.getAmount();
+        return amount == 1 ? name : name + " (" + amount + ")";
     }
 }

@@ -103,7 +103,7 @@ public class NameChoosingActivity extends AppCompatActivity
         setViews();
 
         nameChoosingHistoryManager = new NameChoosingHistoryManager(this, this);
-        nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
+        nameChoosingAdapter = new NameChoosingAdapter(dataSource.getChoosingStateListInfo(listId), this);
         namesList.setAdapter(nameChoosingAdapter);
 
         settingsDialog = new MaterialDialog.Builder(this)
@@ -193,14 +193,14 @@ public class NameChoosingActivity extends AppCompatActivity
             case PRESENTATION_MODE_REQUEST_CODE:
                 // Presentation mode mutates the choosing state, so trigger a refresh here
                 listInfo = dataSource.getChoosingStateListInfo(listId);
-                nameChoosingAdapter.refreshList(listInfo);
+                nameChoosingAdapter.refreshList(dataSource.getChoosingStateListInfo(listId));
                 setViews();
                 break;
             case EDIT_LIST_REQUEST_CODE:
                 // If list was changed on edit page, also trigger a refresh
                 if (resultCode == Constants.LIST_UPDATED_RESULT_CODE) {
                     listInfo = dataSource.getChoosingStateListInfo(listId);
-                    nameChoosingAdapter.refreshList(listInfo);
+                    nameChoosingAdapter.refreshList(dataSource.getChoosingStateListInfo(listId));
                     setViews();
                     break;
                 }
@@ -284,7 +284,7 @@ public class NameChoosingActivity extends AppCompatActivity
                 return true;
             case R.id.reset:
                 listInfo = dataSource.getListInfo(listId);
-                nameChoosingAdapter.refreshList(listInfo);
+                nameChoosingAdapter.refreshList(dataSource.getListInfo(listId));
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, this);
                 return true;

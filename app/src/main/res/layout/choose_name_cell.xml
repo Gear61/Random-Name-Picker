@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:ignore="SpUsage"
     >
 
-    <com.joanzapata.iconify.widget.IconTextView
-        android:id="@+id/delete_icon"
-        android:text="@string/delete_icon"
-        android:layout_alignParentRight="true"
-        style="@style/list_item_button"
+    <ImageView
+        android:id="@+id/person_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
         />
 
     <TextView
         android:id="@+id/person_name"
-        android:layout_toLeftOf="@+id/delete_icon"
-        style="@style/item_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/text_normal"
+        android:textSize="27dp"
         />
-</RelativeLayout>
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/delete_icon"
+        android:text="@string/delete_icon"
+        android:layout_marginStart="8dp"
+        style="@style/list_item_button"
+        />
+</LinearLayout>

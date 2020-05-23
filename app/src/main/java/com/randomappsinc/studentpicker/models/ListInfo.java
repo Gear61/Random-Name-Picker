@@ -10,24 +10,24 @@ import java.util.Map;
 /** Represents the choosing state of a name list */
 public class ListInfo {
 
-    private Map<String, Integer> nameAmounts;
+    private Map<String, NameDO> nameMap;
     private List<String> uniqueNames;
     private int numInstances;
     private List<String> nameHistory;
 
     public ListInfo(
-            Map<String, Integer> nameToAmount,
+            Map<String, NameDO> nameMap,
             List<String> uniqueNames,
             int numInstances,
             List<String> history) {
-        this.nameAmounts = nameToAmount;
+        this.nameMap = nameMap;
         this.uniqueNames = uniqueNames;
         this.numInstances = numInstances;
         this.nameHistory = history;
     }
 
-    public Map<String, Integer> getNameAmounts() {
-        return nameAmounts;
+    public Map<String, NameDO> getNameMap() {
+        return nameMap;
     }
 
     public List<String> getNameHistory() {
@@ -41,7 +41,7 @@ public class ListInfo {
     public List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : uniqueNames) {
-            int amount = nameAmounts.get(name);
+            int amount = nameMap.get(name).getAmount();
             for (int i = 0; i < amount; i++) {
                 longList.add(name);
             }
@@ -50,17 +50,18 @@ public class ListInfo {
     }
 
     private void removeNames(String name, int amount) {
-        if (nameAmounts.containsKey(name)) {
-            int currentAmount = nameAmounts.get(name);
+        if (nameMap.containsKey(name)) {
+            int currentAmount = nameMap.get(name).getAmount();
             if (currentAmount - amount <= 0) {
-                nameAmounts.remove(name);
+                nameMap.remove(name);
                 uniqueNames.remove(name);
 
                 // If we're removing more instances than there currently are, make sure
                 // we remove the current amount instead so we don't go negative
                 numInstances -= currentAmount;
             } else {
-                nameAmounts.put(name, currentAmount - amount);
+                int newAmount = currentAmount - amount;
+                nameMap.get(name).setAmount(newAmount);
                 numInstances -= amount;
             }
         }
@@ -72,7 +73,7 @@ public class ListInfo {
 
     public String getNameText(int position) {
         String name = uniqueNames.get(position);
-        int amount = nameAmounts.get(name);
+        int amount = nameMap.get(name).getAmount();
         return amount == 1 ? name : name + " (" + amount + ")";
     }
 
@@ -86,7 +87,7 @@ public class ListInfo {
 
     public void removeAllInstancesOfName(int position) {
         String name = getName(position);
-        int amount = nameAmounts.get(name);
+        int amount = nameMap.get(name).getAmount();
         removeNames(name, amount);
     }
 
