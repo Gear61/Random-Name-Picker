@@ -67,14 +67,8 @@ public class ListInfo {
         }
     }
 
-    public String getName(int position) {
-        return uniqueNames.get(position);
-    }
-
-    public String getNameText(int position) {
-        String name = uniqueNames.get(position);
-        int amount = nameMap.get(name).getAmount();
-        return amount == 1 ? name : name + " (" + amount + ")";
+    public NameDO getNameDO(int position) {
+        return nameMap.get(uniqueNames.get(position));
     }
 
     public int getNumNames() {
@@ -86,7 +80,7 @@ public class ListInfo {
     }
 
     public void removeAllInstancesOfName(int position) {
-        String name = getName(position);
+        String name = uniqueNames.get(position);
         int amount = nameMap.get(name).getAmount();
         removeNames(name, amount);
     }

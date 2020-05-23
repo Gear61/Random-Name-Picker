@@ -279,6 +279,7 @@ public class EditNameListActivity extends AppCompatActivity implements
         switch(requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    UIUtils.showShortToast(R.string.processing_your_photo, this);
                     photoImportManager.processTakenPhoto(this);
                 } else if (resultCode == RESULT_CANCELED) {
                     photoImportManager.deleteLastTakenPhoto();
@@ -286,12 +287,12 @@ public class EditNameListActivity extends AppCompatActivity implements
                 break;
             case GALLERY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    UIUtils.showShortToast(R.string.processing_your_photo, this);
                     photoImportManager.processSelectedPhoto(this, data);
                 }
                 break;
         }
     }
-
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
