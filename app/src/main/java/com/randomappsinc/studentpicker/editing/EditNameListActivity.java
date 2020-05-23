@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,9 @@ import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.photo.PhotoImportManager;
+import com.randomappsinc.studentpicker.photo.PhotoImportOptionsDialog;
+import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.speech.SpeechToTextManager;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -39,9 +43,15 @@ import butterknife.OnClick;
 
 public class EditNameListActivity extends AppCompatActivity implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener {
+        DuplicationDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener,
+        PhotoImportOptionsDialog.Delegate, PhotoImportManager.Listener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
+    private static final int CAMERA_PERMISSION_CODE = 2;
+    private static final int GALLERY_PERMISSION_CODE = 3;
+
+    private static final int CAMERA_REQUEST_CODE = 1;
+    private static final int GALLERY_REQUEST_CODE = 2;
 
     @BindView(R.id.item_name_input) AutoCompleteTextView newNameInput;
     @BindView(R.id.no_content) TextView noContent;
@@ -61,6 +71,8 @@ public class EditNameListActivity extends AppCompatActivity implements
     private DuplicationDialog duplicationDialog;
     private SpeechToTextManager speechToTextManager;
     private boolean listHasChanged = false;
+    private PhotoImportOptionsDialog photoOptionsDialog;
+    private PhotoImportManager photoImportManager;
     private BannerAdManager bannerAdManager;
 
     @Override
@@ -102,6 +114,8 @@ public class EditNameListActivity extends AppCompatActivity implements
         renameDialog = new RenameDialog(this, this);
         deleteNameDialog = new DeleteNameDialog(this, this);
         duplicationDialog = new DuplicationDialog(this, this);
+        photoOptionsDialog = new PhotoImportOptionsDialog(this, this);
+        photoImportManager = new PhotoImportManager(this);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
     }
@@ -183,19 +197,71 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(
-            int requestCode,
-            @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            speechToTextManager.startSpeechToTextFlow();
+    public void onTextSpoken(String spokenText) {
+        newNameInput.setText(spokenText);
+        newNameInput.setSelection(spokenText.length());
+    }
+
+    @Override
+    public void showPhotoOptions() {
+        photoOptionsDialog.showPhotoOptions();
+    }
+
+    @Override
+    public void addWithCamera() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.CAMERA, this)) {
+            startCameraPage();
+        } else {
+            PermissionUtils.requestPermission(this, Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
+        }
+    }
+
+    private void startCameraPage() {
+        Intent takePhotoIntent = photoImportManager.getPhotoTakingIntent(this);
+        if (takePhotoIntent == null) {
+            UIUtils.showLongToast(
+                    R.string.take_photo_with_camera_failed, this);
+        } else {
+            startActivityForResult(takePhotoIntent, CAMERA_REQUEST_CODE);
         }
     }
 
     @Override
-    public void onTextSpoken(String spokenText) {
-        newNameInput.setText(spokenText);
-        newNameInput.setSelection(spokenText.length());
+    public void addWithGallery() {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
+            openFilePicker();
+        } else {
+            PermissionUtils.requestPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    GALLERY_PERMISSION_CODE);
+        }
+    }
+
+    private void openFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onAddPhotoFailure() {
+
+    }
+
+    @Override
+    public void onAddPhotoSuccess(Uri takenPhotoUri) {
+        NameDO nameDO = namesAdapter.getCurrentlySelectedName();
+        nameDO.setPhotoUri(takenPhotoUri.toString());
+        namesAdapter.refreshSelectedItem();
+    }
+
+    @Override
+    public void launchBuyPremiumPage() {
+        Intent intent = new Intent(this, BuyPremiumActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
     }
 
     @Override
@@ -205,10 +271,49 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case CAMERA_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    photoImportManager.processTakenPhoto(this);
+                } else if (resultCode == RESULT_CANCELED) {
+                    photoImportManager.deleteLastTakenPhoto();
+                }
+                break;
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    photoImportManager.processSelectedPhoto(this, data);
+                }
+                break;
+        }
+    }
+
+
+    @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         UIUtils.hideKeyboard(this);
         super.startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        switch (requestCode) {
+            case CAMERA_PERMISSION_CODE:
+                startCameraPage();
+                break;
+            case GALLERY_PERMISSION_CODE:
+                openFilePicker();
+                break;
+            case RECORD_AUDIO_PERMISSION_CODE:
+                speechToTextManager.startSpeechToTextFlow();
+                break;
+        }
     }
 
     @Override

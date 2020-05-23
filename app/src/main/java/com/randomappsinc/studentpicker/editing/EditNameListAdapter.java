@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,12 +26,15 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
 
     public interface Listener {
         void showNameOptions(NameDO nameDO);
+
+        void showPhotoOptions();
     }
 
     private List<NameDO> names;
     private TextView noContent;
     private TextView numNames;
     private Listener listener;
+    private int lastClickedPosition;
 
     EditNameListAdapter(TextView noContent, TextView numNames, List<NameDO> nameList, Listener listener) {
         this.names = nameList;
@@ -68,6 +72,14 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         setViews();
     }
 
+    NameDO getCurrentlySelectedName() {
+        return names.get(lastClickedPosition);
+    }
+
+    void refreshSelectedItem() {
+        notifyItemChanged(lastClickedPosition);
+    }
+
     @NonNull
     @Override
     public NameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -102,24 +114,39 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         }
 
         private void loadName(int position) {
-            boolean nameHasPhoto = !TextUtils.isEmpty(names.get(position).getPhotoUri());
-            personImageView.setVisibility(nameHasPhoto ? View.VISIBLE : View.GONE);
+            NameDO nameDO = names.get(position);
+            boolean nameHasPhoto = !TextUtils.isEmpty(nameDO.getPhotoUri());
             noImageIcon.setVisibility(nameHasPhoto ? View.GONE : View.VISIBLE);
 
-            String name = names.get(position).getName();
-            int amount = names.get(position).getAmount();
+            personImageView.setVisibility(nameHasPhoto ? View.VISIBLE : View.GONE);
+            Picasso.get()
+                    .load(nameDO.getPhotoUri())
+                    .fit()
+                    .centerCrop()
+                    .into(personImageView);
+
+            String name = nameDO.getName();
+            int amount = nameDO.getAmount();
             String nameText = amount == 1 ? name : name + " (" + amount + ")";
             nameTextView.setText(nameText);
         }
 
+        @OnClick(R.id.person_image)
+        void onImageClick() {
+            lastClickedPosition = getAdapterPosition();
+            listener.showPhotoOptions();
+        }
+
         @OnClick(R.id.no_image_icon)
         void onNoImageClick() {
-
+            lastClickedPosition = getAdapterPosition();
+            listener.showPhotoOptions();
         }
 
         @OnClick(R.id.parent)
         void onClick() {
-            listener.showNameOptions(names.get(getAdapterPosition()));
+            lastClickedPosition = getAdapterPosition();
+            listener.showNameOptions(names.get(lastClickedPosition));
         }
     }
 }

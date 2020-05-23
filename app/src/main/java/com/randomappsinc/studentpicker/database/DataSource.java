@@ -498,4 +498,15 @@ public class DataSource {
 
         close();
     }
+    public void updateNamePhoto(int nameId, String photoUri) {
+        open();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(DatabaseColumns.PHOTO_URI, photoUri);
+        String[] whereArgs = new String[]{String.valueOf(nameId)};
+        String whereStatement = DatabaseColumns.ID + " = ?";
+        database.update(DatabaseTables.NAMES, newValues, whereStatement, whereArgs);
+
+        close();
+    }
 }

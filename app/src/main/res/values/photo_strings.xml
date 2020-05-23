@@ -5,4 +5,7 @@
         <item>Import from gallery</item>
         <item>Take picture with camera</item>
     </string-array>
+    <string name="take_photo_with_camera_failed">
+        Sorry, we are unable to work with your device\'s camera.
+    </string>
 </resources>
