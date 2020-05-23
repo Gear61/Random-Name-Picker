@@ -9,4 +9,5 @@
         Sorry, we are unable to work with your device\'s camera.
     </string>
     <string name="photo_processing_failure">We failed to process your photo.</string>
+    <string name="processing_your_photo">Processing your photo&#8230;</string>
 </resources>

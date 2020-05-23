@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.choosing;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.utils.NameUtils;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +44,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NameViewHolder holder, int position) {
-        holder.loadName();
+        holder.loadName(position);
     }
 
     @Override
@@ -63,14 +67,30 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
             ButterKnife.bind(this, view);
         }
 
-        void loadName() {
-            name.setText(currentState.getNameText(getAdapterPosition()));
+        void loadName(int position) {
+            NameDO nameDO = currentState.getNameDO(position);
+            name.setText(NameUtils.getDisplayTextForName(nameDO));
+
+            String photoUri = nameDO.getPhotoUri();
+            boolean nameHasPhoto = !TextUtils.isEmpty(photoUri);
+            personImageView.setVisibility(nameHasPhoto ? View.VISIBLE : View.GONE);
+            if (nameHasPhoto) {
+                Picasso.get()
+                        .load(photoUri)
+                        .fit()
+                        .centerCrop()
+                        .into(personImageView);
+            }
         }
 
         @OnClick(R.id.delete_icon)
         void deleteName() {
             currentState.removeAllInstancesOfName(getAdapterPosition());
-            notifyDataSetChanged();
+            if (getItemCount() == 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyItemRemoved(getAdapterPosition());
+            }
             listener.onNameRemoved();
         }
     }
