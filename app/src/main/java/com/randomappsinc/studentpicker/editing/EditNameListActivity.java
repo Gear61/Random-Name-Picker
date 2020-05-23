@@ -247,14 +247,17 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void onAddPhotoFailure() {
-
+        UIUtils.showLongToast(R.string.photo_processing_failure, this);
     }
 
     @Override
     public void onAddPhotoSuccess(Uri takenPhotoUri) {
-        NameDO nameDO = namesAdapter.getCurrentlySelectedName();
-        nameDO.setPhotoUri(takenPhotoUri.toString());
-        namesAdapter.refreshSelectedItem();
+        runOnUiThread(() -> {
+            NameDO nameDO = namesAdapter.getCurrentlySelectedName();
+            nameDO.setPhotoUri(takenPhotoUri.toString());
+            namesAdapter.refreshSelectedItem();
+            dataSource.updateNamePhoto(nameDO.getId(), takenPhotoUri.toString());
+        });
     }
 
     @Override
