@@ -22,6 +22,10 @@ class DatabaseColumns {
     static final String SPEECH_LANGUAGE = "speech_language";
     static final String PREVENT_DUPLICATES = "prevent_duplicates";
 
+    // Grouping settings columns
+    static final String NAMES_PER_GROUP = "names_per_group";
+    static final String NUMBER_OF_GROUPS = "number_of_groups";
+
     // LEGACY
     static final String PERSON_NAME_LEGACY = "student_name";
 }
