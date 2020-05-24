@@ -23,7 +23,7 @@ import java.util.Set;
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "studentpicker.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // Struct for migration
     private static class NameInfoPod {
@@ -142,13 +142,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             safelyAddColumnToTable(
                     database,
                     DatabaseColumns.SHOW_AS_LIST,
-                    "INTEGER DEFAULT 1",
+                    "BOOLEAN NOT NULL DEFAULT 0",
                     DatabaseTables.LISTS);
 
             safelyAddColumnToTable(
                     database,
                     DatabaseColumns.NUM_NAMES_CHOSEN,
-                    "BOOLEAN NOT NULL DEFAULT 0",
+                    "INTEGER DEFAULT 1",
                     DatabaseTables.LISTS);
 
             safelyAddColumnToTable(
@@ -258,6 +258,22 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database,
                     DatabaseColumns.PHOTO_URI,
                     "TEXT",
+                    DatabaseTables.NAMES);
+            oldVersion++;
+        }
+
+        // Store grouping settings in DB
+        if (oldVersion == 8) {
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.NAMES_PER_GROUP,
+                    "INTEGER DEFAULT 2",
+                    DatabaseTables.NAMES);
+
+            safelyAddColumnToTable(
+                    database,
+                    DatabaseColumns.NUMBER_OF_GROUPS,
+                    "INTEGER DEFAULT 1",
                     DatabaseTables.NAMES);
         }
     }
