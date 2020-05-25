@@ -86,11 +86,7 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
         @OnClick(R.id.delete_icon)
         void deleteName() {
             currentState.removeAllInstancesOfName(getAdapterPosition());
-            if (getItemCount() == 0) {
-                notifyDataSetChanged();
-            } else {
-                notifyItemRemoved(getAdapterPosition());
-            }
+            notifyDataSetChanged();
             listener.onNameRemoved();
         }
     }
