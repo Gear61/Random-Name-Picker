@@ -40,7 +40,9 @@ public class PremiumFeatureOpener {
                                 if (fullScreenAdManager.showAd()) {
                                     preferencesManager.unlockFeature(currentFeature);
                                 } else {
-                                    UIUtils.showLongToast(R.string.ad_not_ready_yet, dialog.getContext());
+                                    UIUtils.showLongToast(
+                                            R.string.ad_not_ready_yet,
+                                            dialog.getContext());
                                 }
                                 break;
                         }
