@@ -1,6 +1,6 @@
 package com.randomappsinc.studentpicker.grouping;
 
-class GroupMakingSettings {
+public class GroupMakingSettings {
 
     private static final int DEFAULT_NAMES_PER_GROUP = 2;
 
@@ -8,30 +8,32 @@ class GroupMakingSettings {
     private int numOfNamesPerGroup;
     private int numOfGroups;
 
-    GroupMakingSettings(int nameListSize) {
+    public GroupMakingSettings(int nameListSize) {
         this.nameListSize = nameListSize;
         this.numOfNamesPerGroup = DEFAULT_NAMES_PER_GROUP;
-
-        int numGroupsToFill = nameListSize / DEFAULT_NAMES_PER_GROUP;
-        numOfGroups = (nameListSize % DEFAULT_NAMES_PER_GROUP) > 0
-                ? numGroupsToFill + 1
-                : numGroupsToFill;
     }
 
-    int getNumOfNamesPerGroup() {
+    public int getNumOfNamesPerGroup() {
         return numOfNamesPerGroup;
     }
 
-    void setNumOfNamesPerGroup(int numNamesPerGroup) {
+    public void setNumOfNamesPerGroup(int numNamesPerGroup) {
         this.numOfNamesPerGroup = numNamesPerGroup;
     }
 
-    int getNumOfGroups() {
+    public int getNumOfGroups() {
         return numOfGroups;
     }
 
-    void setNumOfGroups(int numOfGroups) {
-        this.numOfGroups = numOfGroups;
+    public void setNumOfGroups(int numOfGroups) {
+        if (numOfGroups != 0) {
+            this.numOfGroups = numOfGroups;
+        } else {
+            int numGroupsToFill = nameListSize / DEFAULT_NAMES_PER_GROUP;
+            this.numOfGroups = (nameListSize % DEFAULT_NAMES_PER_GROUP) > 0
+                    ? numGroupsToFill + 1
+                    : numGroupsToFill;
+        }
     }
 
     int getNameListSize() {
