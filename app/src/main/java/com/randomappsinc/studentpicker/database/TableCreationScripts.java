@@ -23,7 +23,7 @@ class TableCreationScripts {
             + DatabaseColumns.SPEECH_LANGUAGE + " INTEGER DEFAULT -1, "
             + DatabaseColumns.PREVENT_DUPLICATES + " BOOLEAN NOT NULL DEFAULT 0, "
             + DatabaseColumns.NAMES_PER_GROUP + " INTEGER DEFAULT 2, "
-            + DatabaseColumns.NUMBER_OF_GROUPS + " INTEGER DEFAULT 1);";
+            + DatabaseColumns.NUMBER_OF_GROUPS + " INTEGER DEFAULT 0);";
 
     static final String CREATE_NAMES_IN_LIST_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS "
             + DatabaseTables.NAMES_IN_LIST +  "("
