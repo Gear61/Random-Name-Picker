@@ -20,7 +20,6 @@
         android:background="@drawable/rounded_blue_rectangle_border"
         android:singleLine="true"
         android:imeOptions="actionDone"
-        android:inputType="text"
         />
 
     <com.joanzapata.iconify.widget.IconTextView

@@ -30,6 +30,10 @@ public class BannerAdManager extends AdListener {
 
     // Removes the current ad (if applicable) and replaces it with a new one
     private void reloadAd() {
+        if (!preferencesManager.isOnFreeVersion()) {
+            return;
+        }
+
         if (adView != null) {
             adContainerView.removeView(adView);
         }
