@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.common.Language;
+import com.randomappsinc.studentpicker.grouping.GroupMakingSettings;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
@@ -354,6 +355,27 @@ public class DataSource {
         return choosingSettings;
     }
 
+    public GroupMakingSettings getGroupMakingSettings(int listId, int listSize) {
+        open();
+        String[] columns = {
+                DatabaseColumns.NAMES_PER_GROUP,
+                DatabaseColumns.NUMBER_OF_GROUPS
+        };
+        String selection = DatabaseColumns.ID + " = ?";
+        String[] selectionArgs = {String.valueOf(listId)};
+        Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
+                selectionArgs, null, null, null);
+        GroupMakingSettings groupMakingSettings = new GroupMakingSettings(listSize);
+        if (cursor.moveToFirst()) {
+            groupMakingSettings.setNumOfNamesPerGroup(cursor.getInt(0));
+            groupMakingSettings.setNumOfGroups(cursor.getInt(1));
+        }
+        cursor.close();
+        close();
+
+        return groupMakingSettings;
+    }
+
     public void saveNameListState(int listId, ListInfo listInfo, ChoosingSettings choosingSettings) {
         open();
 
@@ -401,6 +423,20 @@ public class DataSource {
         database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
 
         close();
+    }
+
+    public void saveGroupMakingSettingState(int listId, GroupMakingSettings groupMakingSettings) {
+        open();
+        ContentValues newValues = new ContentValues();
+        newValues.put(
+                DatabaseColumns.NAMES_PER_GROUP,
+                groupMakingSettings.getNumOfNamesPerGroup());
+        newValues.put(
+                DatabaseColumns.NUMBER_OF_GROUPS,
+                groupMakingSettings.getNumOfGroups());
+        String[] whereArgs = new String[]{String.valueOf(listId)};
+        String whereStatement = DatabaseColumns.ID + " = ?";
+        database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
     }
 
     public List<ListDO> getNonEmptyOtherLists(int listIdToExclude) {
