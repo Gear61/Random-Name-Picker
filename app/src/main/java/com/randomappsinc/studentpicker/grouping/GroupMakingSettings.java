@@ -26,14 +26,7 @@ public class GroupMakingSettings {
     }
 
     public void setNumOfGroups(int numOfGroups) {
-        if (numOfGroups != 0) {
-            this.numOfGroups = numOfGroups;
-        } else {
-            int numGroupsToFill = nameListSize / DEFAULT_NAMES_PER_GROUP;
-            this.numOfGroups = (nameListSize % DEFAULT_NAMES_PER_GROUP) > 0
-                    ? numGroupsToFill + 1
-                    : numGroupsToFill;
-        }
+        this.numOfGroups = numOfGroups;
     }
 
     int getNameListSize() {

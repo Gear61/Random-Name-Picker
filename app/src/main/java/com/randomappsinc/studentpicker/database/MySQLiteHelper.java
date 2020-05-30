@@ -273,7 +273,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             safelyAddColumnToTable(
                     database,
                     DatabaseColumns.NUMBER_OF_GROUPS,
-                    "INTEGER DEFAULT 0",
+                    "INTEGER DEFAULT 1",
                     DatabaseTables.NAMES);
         }
     }
