@@ -36,6 +36,8 @@ public class GroupMakingActivity extends AppCompatActivity {
 
     private GroupMakingSettings settings;
     private GroupMakingSettingsDialog settingsDialog;
+    private int listId;
+    private DataSource dataSource;
     private ListInfo listInfo;
     private GroupMakingAdapter groupsMakingListAdapter;
     private BannerAdManager bannerAdManager;
@@ -51,15 +53,15 @@ public class GroupMakingActivity extends AppCompatActivity {
                         .colorRes(R.color.white)
                         .actionBarSize());
 
-        int listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
-        DataSource dataSource = new DataSource(this);
+        listId = getIntent().getIntExtra(Constants.LIST_ID_KEY, 0);
+        dataSource = new DataSource(this);
         setTitle(dataSource.getListName(listId));
         listInfo = dataSource.getListInfo(listId);
 
         groupsMakingListAdapter = new GroupMakingAdapter();
         groupsList.setAdapter(groupsMakingListAdapter);
 
-        settings = new GroupMakingSettings(listInfo.getNumInstances());
+        settings = dataSource.getGroupMakingSettings(listId, listInfo.getNumInstances());
         settingsDialog = new GroupMakingSettingsDialog(this, settings);
         bannerAdManager = new BannerAdManager(bannerAdContainer);
         bannerAdManager.loadOrRemoveAd();
@@ -77,6 +79,12 @@ public class GroupMakingActivity extends AppCompatActivity {
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
         noGroups.setVisibility(View.GONE);
         groupsList.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataSource.saveGroupMakingSettingState(listId, settings);
     }
 
     @Override
