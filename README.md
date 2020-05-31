@@ -5,7 +5,7 @@
 
 The Code Doesn't Compile?
 =======
-If you run this code, you will get a compilation error telling you that the AdsBackDoor class doesn't exist. The purpose of this class is to create a password that developers (and friends of the developers) can enter in to get Random Name Picker Premium for free. Simply create your own AdsBackDoor.java with a public constant variable named "PASSWORD". You can set it to whatever you wish. When you type that string into the name list creator, you will get Random Name Picker Premium.
+If you run this code, you will get a compilation error telling you that the PremiumBackDoor class doesn't exist. The purpose of this class is to create a password that developers (and friends of the developers) can enter in to get Random Name Picker Premium for free. Simply create your own PremiumBackDoor.java with a public constant variable named "PASSWORD". You can set it to whatever you wish. When you type that string into the name list creator, you will get Random Name Picker Premium.
 
 License
 =======
