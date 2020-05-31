@@ -57,7 +57,7 @@ public class NameChoosingActivity extends AppCompatActivity
     private ChoicesDisplayDialog choicesDisplayDialog;
     private boolean canShowPresentationScreen;
     private int listId;
-    private ListInfo listInfo;
+    private ListInfo choosingStateListInfo;
     private TextToSpeechManager textToSpeechManager;
     private NameChoosingHistoryManager nameChoosingHistoryManager;
     private DataSource dataSource;
@@ -92,11 +92,11 @@ public class NameChoosingActivity extends AppCompatActivity
 
         textToSpeechManager = new TextToSpeechManager(this, this);
 
-        listInfo = dataSource.getChoosingStateListInfo(listId);
+        choosingStateListInfo = dataSource.getChoosingStateListInfo(listId);
         setViews();
 
         nameChoosingHistoryManager = new NameChoosingHistoryManager(this, this);
-        nameChoosingAdapter = new NameChoosingAdapter(listInfo, this);
+        nameChoosingAdapter = new NameChoosingAdapter(choosingStateListInfo, this);
         namesList.setAdapter(nameChoosingAdapter);
 
         settingsDialog = new MaterialDialog.Builder(this)
@@ -114,12 +114,13 @@ public class NameChoosingActivity extends AppCompatActivity
 
         settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
-        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, settings);
+        ListInfo listInfo = dataSource.getListInfo(listId);
+        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, listInfo, settings);
     }
 
     @Override
-    public ListInfo getListInfo() {
-        return listInfo;
+    public ListInfo getChoosingStateListInfo() {
+        return choosingStateListInfo;
     }
 
     @Override
@@ -133,15 +134,15 @@ public class NameChoosingActivity extends AppCompatActivity
         } else {
             noNamesToChoose.setText(R.string.out_of_names);
         }
-        if (listInfo.getNumInstances() == 0) {
+        if (choosingStateListInfo.getNumInstances() == 0) {
             numNames.setVisibility(View.GONE);
             noNamesToChoose.setVisibility(View.VISIBLE);
         } else {
             noNamesToChoose.setVisibility(View.GONE);
             Context context = numNames.getContext();
-            String namesText = listInfo.getNumInstances() == 1
+            String namesText = choosingStateListInfo.getNumInstances() == 1
                     ? context.getString(R.string.one_name)
-                    : context.getString(R.string.x_names, listInfo.getNumInstances());
+                    : context.getString(R.string.x_names, choosingStateListInfo.getNumInstances());
             numNames.setText(namesText);
             numNames.setVisibility(View.VISIBLE);
         }
@@ -149,7 +150,7 @@ public class NameChoosingActivity extends AppCompatActivity
 
     @OnClick(R.id.choose)
     public void choose() {
-        if (listInfo.getNumNames() == 0) {
+        if (choosingStateListInfo.getNumNames() == 0) {
             return;
         }
         if (settings.isPresentationModeEnabled()) {
@@ -165,7 +166,7 @@ public class NameChoosingActivity extends AppCompatActivity
             if (choicesDisplayDialog.isShowing()) {
                 return;
             }
-            List<String> chosenNames = listInfo.chooseNames(settings);
+            List<String> chosenNames = choosingStateListInfo.chooseNames(settings);
             if (!settings.getWithReplacement()) {
                 nameChoosingAdapter.notifyDataSetChanged();
                 setViews();
@@ -183,15 +184,15 @@ public class NameChoosingActivity extends AppCompatActivity
         switch (requestCode) {
             case PRESENTATION_MODE_REQUEST_CODE:
                 // Presentation mode mutates the choosing state, so trigger a refresh here
-                listInfo = dataSource.getChoosingStateListInfo(listId);
-                nameChoosingAdapter.refreshList(listInfo);
+                choosingStateListInfo = dataSource.getChoosingStateListInfo(listId);
+                nameChoosingAdapter.refreshList(choosingStateListInfo);
                 setViews();
                 break;
             case EDIT_LIST_REQUEST_CODE:
                 // If list was changed on edit page, also trigger a refresh
                 if (resultCode == Constants.LIST_UPDATED_RESULT_CODE) {
-                    listInfo = dataSource.getChoosingStateListInfo(listId);
-                    nameChoosingAdapter.refreshList(listInfo);
+                    choosingStateListInfo = dataSource.getChoosingStateListInfo(listId);
+                    nameChoosingAdapter.refreshList(choosingStateListInfo);
                     setViews();
                     break;
                 }
@@ -217,7 +218,7 @@ public class NameChoosingActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        dataSource.saveNameListState(listId, listInfo, settings);
+        dataSource.saveNameListState(listId, choosingStateListInfo, settings);
     }
 
     @Override
@@ -268,8 +269,8 @@ public class NameChoosingActivity extends AppCompatActivity
                 settingsDialog.show();
                 return true;
             case R.id.reset:
-                listInfo = dataSource.getListInfo(listId);
-                nameChoosingAdapter.refreshList(listInfo);
+                choosingStateListInfo = dataSource.getListInfo(listId);
+                nameChoosingAdapter.refreshList(choosingStateListInfo);
                 setViews();
                 UIUtils.showShortToast(R.string.list_reset_confirmation, this);
                 return true;
