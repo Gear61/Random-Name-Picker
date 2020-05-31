@@ -82,10 +82,10 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                     billingClient.acknowledgePurchase(ackParams, this);
                 }
             }
-            preferencesManager.setIsOnFreeVersion(false);
+            preferencesManager.onPremiumAcquired();
             listener.onPremiumPurchaseSuccessful();
         } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            preferencesManager.setIsOnFreeVersion(false);
+            preferencesManager.onPremiumAcquired();
             listener.onPremiumAlreadyOwned();
         } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.USER_CANCELED) {
             listener.onPaymentFailed();
@@ -95,7 +95,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     @Override
     public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            preferencesManager.setIsOnFreeVersion(false);
+            preferencesManager.onPremiumAcquired();
             listener.onPremiumAlreadyOwned();
         }
     }
@@ -104,7 +104,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            preferencesManager.setIsOnFreeVersion(false);
+            preferencesManager.onPremiumAcquired();
             listener.onPremiumAlreadyOwned();
             return;
         }
@@ -121,7 +121,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                                 .build();
                         billingClient.acknowledgePurchase(ackParams, this);
                     }
-                    preferencesManager.setIsOnFreeVersion(false);
+                    preferencesManager.onPremiumAcquired();
                     listener.onPremiumAlreadyOwned();
                 }
             }
@@ -142,7 +142,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     @Override
     public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            preferencesManager.setIsOnFreeVersion(false);
+            preferencesManager.onPremiumAcquired();
             listener.onPremiumAlreadyOwned();
         } else if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
             listener.onStartupFailed();

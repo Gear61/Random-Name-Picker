@@ -71,8 +71,8 @@ public class PreferencesManager {
         return prefs.getInt(THEME_MODE, ThemeMode.FOLLOW_SYSTEM);
     }
 
-    public void setIsOnFreeVersion(boolean shouldShowAds) {
-        prefs.edit().putBoolean(SHOULD_SHOW_ADS_KEY, shouldShowAds).apply();
+    public void onPremiumAcquired() {
+        prefs.edit().putBoolean(SHOULD_SHOW_ADS_KEY, false).apply();
     }
 
     public boolean isOnFreeVersion() {
