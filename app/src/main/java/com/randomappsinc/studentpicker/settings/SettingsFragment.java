@@ -1,14 +1,12 @@
 package com.randomappsinc.studentpicker.settings;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -17,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.theme.ThemeManager;
 import com.randomappsinc.studentpicker.theme.ThemeMode;
@@ -40,7 +37,6 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     private static final String OTHER_APPS_URL = "https://play.google.com/store/apps/dev?id=9093438553713389916";
     private static final String REPO_URL = "https://github.com/Gear61/Random-Name-Picker";
 
-    @BindView(R.id.settings_root) LinearLayout rootView;
     @BindView(R.id.settings_options) RecyclerView settingsOptions;
     @BindString(R.string.feedback_subject) String feedbackSubject;
     @BindString(R.string.premium_feedback_subject) String premiumFeedbackSubject;
@@ -50,7 +46,6 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
 
     private PreferencesManager preferencesManager;
     private SettingsAdapter settingsAdapter;
-    private BannerAdManager bannerAdManager;
     private Unbinder unbinder;
 
     @Override
@@ -73,7 +68,6 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
         settingsOptions.addItemDecoration(itemDecorator);
         settingsAdapter = new SettingsAdapter(getContext(), this);
         settingsOptions.setAdapter(settingsAdapter);
-        bannerAdManager = new BannerAdManager(rootView);
     }
 
     @Override
@@ -136,14 +130,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.loadOrRemoveAd();
         settingsAdapter.maybeRefreshList();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

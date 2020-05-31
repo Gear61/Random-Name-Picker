@@ -1,17 +1,13 @@
 package com.randomappsinc.studentpicker.importdata;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.utils.UIUtils;
@@ -27,9 +23,7 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
 
     @BindView(R.id.list_name) EditText listName;
     @BindView(R.id.names) EditText namesInput;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
-    private BannerAdManager bannerAdManager;
     private FileImportManager fileImportManager;
     private MaterialDialog progressDialog;
 
@@ -39,8 +33,6 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         setContentView(R.layout.import_name_list);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.loadOrRemoveAd();
         progressDialog = new MaterialDialog.Builder(this)
                 .title(R.string.creating_your_name_list)
                 .progress(true, 0)
@@ -52,12 +44,6 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
                 this,
                 Uri.parse(getIntent().getStringExtra(Constants.FILE_URI_KEY)),
                 getIntent().getIntExtra(FILE_TYPE, FileImportType.TEXT));
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

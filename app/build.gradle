@@ -4,8 +4,8 @@ android {
     compileSdkVersion 29
 
     def versionMajor = 4
-    def versionMinor = 2
-    def versionPatch = 2
+    def versionMinor = 3
+    def versionPatch = 0
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
@@ -55,7 +55,6 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.squareup:seismic:1.0.2'
-    implementation 'com.google.android.gms:play-services-ads:19.1.0'
     implementation 'com.android.billingclient:billing:2.2.0'
     implementation 'de.siegmar:fastcsv:1.0.3'
     implementation ('com.squareup.picasso:picasso:2.71828') {

@@ -15,7 +15,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.importdata.FileImportType;
@@ -23,7 +22,6 @@ import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.premium.PaymentManager;
-import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -35,11 +33,9 @@ import butterknife.OnClick;
 import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
 public class HomeActivity extends AppCompatActivity implements
-        BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener,
-        PremiumFeatureOpener.Delegate {
+        BottomNavigationView.Listener, CreateListDialog.Listener, PaymentManager.Listener {
 
     private static final String PREVIOUSLY_SELECTED_PAGE_ID = "previouslySelectedPageId";
-    private static final int NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK = 3;
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
 
     private static final int IMPORT_TXT_REQUEST_CODE = 1;
@@ -55,7 +51,6 @@ public class HomeActivity extends AppCompatActivity implements
     private BottomSheetBehavior bottomSheetBehavior;
     private DataSource dataSource;
     private PaymentManager paymentManager;
-    private PremiumFeatureOpener premiumFeatureOpener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,23 +91,12 @@ public class HomeActivity extends AppCompatActivity implements
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
-        } else if (!preferencesManager.hasSeenPremiumFeatureUnlock()
-                && preferencesManager.isOnFreeVersion()
-                && preferencesManager.getNumAppOpens() >= NUM_APP_OPENS_FOR_PREMIUM_FEATURE_UNLOCK) {
-            preferencesManager.onPremiumFeatureUnlockSeen();
-            new MaterialDialog.Builder(this)
-                    .title(R.string.unlock_premium_features_for_free_title)
-                    .content(R.string.unlock_premium_features_for_free_body)
-                    .positiveText(R.string.got_it)
-                    .cancelable(false)
-                    .show();
         }
 
         createListDialog = new CreateListDialog(this, this);
         dataSource = new DataSource(this);
         paymentManager = new PaymentManager(this, this);
         paymentManager.setUpAndCheckForPremium();
-        premiumFeatureOpener = new PremiumFeatureOpener(this, this);
     }
 
     @Override
@@ -191,18 +175,23 @@ public class HomeActivity extends AppCompatActivity implements
     @OnClick(R.id.sheet_import_from_csv)
     public void importFromCsvFile() {
         hideBottomSheet();
-        premiumFeatureOpener.openPremiumFeature(
-                PremiumFeature.IMPORT_FROM_CSV, () -> {
-                    UIUtils.showLongToast(R.string.csv_format_instructions, this);
-                    Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    csvIntent.setType("*/*");
-                    csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
-                    startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
-                });
+
+        if (preferencesManager.isOnFreeVersion()) {
+            UIUtils.showLongToast(R.string.premium_needed_message, this);
+            Intent intent = new Intent(this, BuyPremiumActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+            return;
+        }
+
+        UIUtils.showLongToast(R.string.csv_format_instructions, this);
+        Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        csvIntent.setType("*/*");
+        csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
+        startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
     }
 
-    @Override
     public void launchBuyPremiumPage() {
         Intent intent = new Intent(this, BuyPremiumActivity.class);
         startActivity(intent);
@@ -235,9 +224,9 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        importFromCsv.setText(preferencesManager.hasUnlockedFeature(PremiumFeature.IMPORT_FROM_CSV)
-                ? R.string.import_from_csv_file
-                : R.string.import_from_csv_file_premium);
+        importFromCsv.setText(preferencesManager.isOnFreeVersion()
+                ? R.string.import_from_csv_file_premium
+                : R.string.import_from_csv_file);
     }
 
     @Override

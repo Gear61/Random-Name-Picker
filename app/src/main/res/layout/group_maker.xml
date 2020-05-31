@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/screen_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
     <com.joanzapata.iconify.widget.IconTextView
@@ -17,8 +18,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groups_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_ad_banner_container"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:paddingStart="8dp"
@@ -27,17 +28,9 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
-    <FrameLayout
-        android:id="@+id/bottom_ad_banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/make_groups"
-        />
-
     <TextView
         android:id="@+id/make_groups"
         android:text="@string/make_groups_button_text"
-        android:layout_alignParentBottom="true"
         style="@style/button"
         />
-</RelativeLayout>
+</LinearLayout>
