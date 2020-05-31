@@ -31,6 +31,9 @@ public class DataSource {
 
     public DataSource(Context context) {
         dbHelper = new MySQLiteHelper(context);
+
+        // We botched the database upgrade for group settings, so we need this safety for a while
+        dbHelper.addGroupColumns();
     }
 
     // Open connection to database

@@ -150,14 +150,29 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database,
                     DatabaseColumns.NAMES_PER_GROUP,
                     "INTEGER DEFAULT 2",
-                    DatabaseTables.NAMES);
+                    DatabaseTables.LISTS);
 
             safelyAddColumnToTable(
                     database,
                     DatabaseColumns.NUMBER_OF_GROUPS,
                     "INTEGER DEFAULT 1",
-                    DatabaseTables.NAMES);
+                    DatabaseTables.LISTS);
         }
+    }
+
+    // Keep this code until July as users correct their bad upgrade code from before
+    public void addGroupColumns() {
+        safelyAddColumnToTable(
+                getWritableDatabase(),
+                DatabaseColumns.NAMES_PER_GROUP,
+                "INTEGER DEFAULT 2",
+                DatabaseTables.LISTS);
+
+        safelyAddColumnToTable(
+                getWritableDatabase(),
+                DatabaseColumns.NUMBER_OF_GROUPS,
+                "INTEGER DEFAULT 1",
+                DatabaseTables.LISTS);
     }
 
     // Checks to see if the given column exists in the given table and adds it if it doesn't exist
