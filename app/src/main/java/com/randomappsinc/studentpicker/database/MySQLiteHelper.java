@@ -150,13 +150,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     database,
                     DatabaseColumns.NAMES_PER_GROUP,
                     "INTEGER DEFAULT 2",
-                    DatabaseTables.NAMES);
+                    DatabaseTables.LISTS);
 
             safelyAddColumnToTable(
                     database,
                     DatabaseColumns.NUMBER_OF_GROUPS,
                     "INTEGER DEFAULT 1",
-                    DatabaseTables.NAMES);
+                    DatabaseTables.LISTS);
         }
     }
 
