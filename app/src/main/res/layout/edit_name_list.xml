@@ -1,99 +1,85 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/focal_point"
     android:background="@color/screen_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:ignore="SpUsage, ContentDescription, RtlHardcoded"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
 
-    <LinearLayout
-        android:id="@+id/focal_point"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_ad_banner_container"
-        android:orientation="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         >
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/add_item"
+            android:layout_gravity="end|center_vertical"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            card_view:contentPadding="5dp"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/app_blue"
+            card_view:cardCornerRadius="3dp"
+            card_view:cardElevation="2dp"
             >
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/add_item"
-                android:layout_gravity="end|center_vertical"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                card_view:contentPadding="5dp"
-                card_view:cardUseCompatPadding="true"
-                card_view:cardBackgroundColor="@color/app_blue"
-                card_view:cardCornerRadius="3dp"
-                card_view:cardElevation="2dp"
-                >
-
-                <ImageView
-                    android:id="@+id/plus_icon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-            </androidx.cardview.widget.CardView>
-
-            <AutoCompleteTextView
-                android:id="@+id/item_name_input"
+            <ImageView
+                android:id="@+id/plus_icon"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="55dp"
-                android:hint="@string/name_hint"
-                android:inputType="textCapWords"
-                android:completionThreshold="1"
-                android:padding="8dp"
-                android:textColor="@color/text_normal"
-                android:textSize="17dp"
-                android:background="@drawable/rounded_blue_rectangle_border"
-                android:singleLine="true"
-                android:imeOptions="actionDone"
-                android:importantForAutofill="no"
+                android:layout_height="match_parent"
                 />
+        </androidx.cardview.widget.CardView>
 
-            <com.joanzapata.iconify.widget.IconTextView
-                android:id="@+id/voice_entry_icon"
-                style="@style/voice_input_icon"
-                />
-        </FrameLayout>
+        <AutoCompleteTextView
+            android:id="@+id/item_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="55dp"
+            android:hint="@string/name_hint"
+            android:inputType="textCapWords"
+            android:completionThreshold="1"
+            android:padding="8dp"
+            android:textColor="@color/text_normal"
+            android:textSize="17dp"
+            android:background="@drawable/rounded_blue_rectangle_border"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            />
 
         <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/no_content"
-            android:text="@string/no_names_for_edit"
-            style="@style/empty_state_text"
+            android:id="@+id/voice_entry_icon"
+            style="@style/voice_input_icon"
             />
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/num_names"
-            android:visibility="gone"
-            style="@style/num_names"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/content_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_ad_banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/no_content"
+        android:text="@string/no_names_for_edit"
+        style="@style/empty_state_text"
         />
-</RelativeLayout>
+
+    <TextView
+        android:id="@+id/num_names"
+        android:visibility="gone"
+        style="@style/num_names"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/content_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+</LinearLayout>
