@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
 
     def versionMajor = 4
     def versionMinor = 3
-    def versionPatch = 0
+    def versionPatch = 1
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"
@@ -54,6 +55,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     implementation 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
 import java.util.List;
@@ -22,13 +23,15 @@ public class ChoicesDisplayDialog {
     private ChoosingSettings settings;
     private int listId;
     private MaterialDialog dialog;
+    private ChoicesDisplayViewHolder choicesDisplayViewHolder;
 
-    ChoicesDisplayDialog(Listener listener, Context context, int listId, ChoosingSettings settings) {
+    ChoicesDisplayDialog(Listener listener, Context context, int listId, ListInfo listInfo, ChoosingSettings settings) {
         this.listId = listId;
         this.settings = settings;
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
+                .customView(R.layout.name_choices_dialog, false)
                 .positiveText(android.R.string.yes)
                 .negativeText(R.string.copy_text)
                 .neutralText(R.string.say_name)
@@ -40,6 +43,8 @@ public class ChoicesDisplayDialog {
                         NameUtils.flattenListToString(chosenNames, settings)))
                 .autoDismiss(false)
                 .build();
+
+        choicesDisplayViewHolder = new ChoicesDisplayViewHolder(dialog.getView(), listInfo);
     }
 
     void showChoices(List<String> chosenNames) {
@@ -47,7 +52,7 @@ public class ChoicesDisplayDialog {
         int numNames = chosenNames.size();
 
         dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
-        dialog.setContent(NameUtils.flattenListToString(chosenNames, settings));
+        choicesDisplayViewHolder.showChosenNames(chosenNames, settings.getShowAsList());
         dialog.getActionButton(DialogAction.NEUTRAL)
                 .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);
