@@ -3,21 +3,13 @@ package com.randomappsinc.studentpicker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.annotation.Nullable;
-
-import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.theme.ThemeMode;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class PreferencesManager {
 
     private SharedPreferences prefs;
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
-    private static final String STUDENT_LISTS_KEY = "com.randomappsinc.studentpicker.studentLists";
     private static final String NUM_APP_OPENS = "numAppOpens";
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
@@ -83,23 +75,5 @@ public class PreferencesManager {
         boolean hasSeenTooltip = prefs.getBoolean(HAS_SEEN_PREMIUM_TOOLTIP, false);
         prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
         return hasSeenTooltip;
-    }
-
-    /** API dead zone - DO NOT THE USE THE APIS BELOW **/
-    @Deprecated
-    public Set<String> getNameLists() {
-        return prefs.getStringSet(STUDENT_LISTS_KEY, new HashSet<>());
-    }
-
-    @Deprecated
-    @Nullable
-    public ListInfo getNameListState(String listName) {
-        return JSONUtils.extractChoosingState(prefs.getString(listName, ""));
-    }
-
-    @Deprecated
-    @Nullable
-    public ChoosingSettings getChoosingSettings(String listName) {
-        return JSONUtils.extractChoosingSettings(prefs.getString(listName, ""));
     }
 }
