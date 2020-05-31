@@ -20,8 +20,8 @@ import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.importdata.FileImportType;
 import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
-import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.premium.PaymentManager;
+import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -175,27 +175,14 @@ public class HomeActivity extends AppCompatActivity implements
     @OnClick(R.id.sheet_import_from_csv)
     public void importFromCsvFile() {
         hideBottomSheet();
-
-        if (preferencesManager.isOnFreeVersion()) {
-            UIUtils.showLongToast(R.string.premium_needed_message, this);
-            Intent intent = new Intent(this, BuyPremiumActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-            return;
-        }
-
-        UIUtils.showLongToast(R.string.csv_format_instructions, this);
-        Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        csvIntent.setType("*/*");
-        csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
-        startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
-    }
-
-    public void launchBuyPremiumPage() {
-        Intent intent = new Intent(this, BuyPremiumActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+        PremiumFeatureOpener.openFeature(R.string.import_from_csv_feature_name, this, () -> {
+            UIUtils.showLongToast(R.string.csv_format_instructions, this);
+            Intent csvIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            csvIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            csvIntent.setType("*/*");
+            csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
+            startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
+        });
     }
 
     private void hideBottomSheet() {

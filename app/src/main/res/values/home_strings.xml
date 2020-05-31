@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="premium_tooltip_title">Hate Ads?</string>
+    <string name="premium_tooltip_title">Want A Better Experience?</string>
     <string name="premium_tooltip_body">
-        For just $0.99, you can remove ads, get premium support, and unlock several exclusive features.
+        For just $0.99, you can get premium support and unlock several exclusive features.
         Simply tap here to learn more.
     </string>
 

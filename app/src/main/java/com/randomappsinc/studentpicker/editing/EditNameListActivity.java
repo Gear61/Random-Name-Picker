@@ -26,10 +26,9 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.photo.PhotoImportManager;
 import com.randomappsinc.studentpicker.photo.PhotoImportOptionsDialog;
-import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.speech.SpeechToTextManager;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -69,7 +68,6 @@ public class EditNameListActivity extends AppCompatActivity implements
     private SpeechToTextManager speechToTextManager;
     private boolean listHasChanged = false;
     private PhotoImportOptionsDialog photoOptionsDialog;
-    private PreferencesManager preferencesManager;
     private PhotoImportManager photoImportManager;
 
     @Override
@@ -97,7 +95,6 @@ public class EditNameListActivity extends AppCompatActivity implements
 
         speechToTextManager = new SpeechToTextManager(this, this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
-        preferencesManager = new PreferencesManager(this);
 
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter = new EditNameListAdapter(noContent, numNames, names, this);
@@ -200,15 +197,10 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void showPhotoOptions() {
-        if (preferencesManager.isOnFreeVersion()) {
-            UIUtils.showLongToast(R.string.premium_needed_message, this);
-            Intent intent = new Intent(this, BuyPremiumActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-            return;
-        }
-
-        photoOptionsDialog.showPhotoOptions();
+        PremiumFeatureOpener.openFeature(
+                R.string.attaching_image_to_names,
+                this,
+                () -> photoOptionsDialog.showPhotoOptions());
     }
 
     @Override

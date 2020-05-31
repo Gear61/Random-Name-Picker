@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="premium_needed_message">
-        Please buy Random Name Picker Premium to access this feature.
+        Please buy Random Name Picker Premium to access this feature: %s
     </string>
+
+    <string name="import_from_csv_feature_name">Importing from .csv spreadsheets</string>
+    <string name="share_list_as_txt_file_name">Sharing lists as .txt files</string>
+    <string name="share_list_as_csv_sheet_name">Sharing lists as .csv spreadsheets</string>
+    <string name="customize_choosing_message_name">Customizing choosing preface message</string>
+    <string name="set_speech_language_name">Setting app\'s speaking language</string>
+    <string name="attaching_image_to_names">Attaching images to names</string>
 
     <string name="share_list_as_txt_file">Share list as .txt file</string>
     <string name="share_list_as_csv_sheet">Share list as .csv spreadsheet</string>
