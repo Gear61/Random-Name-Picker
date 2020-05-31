@@ -2,12 +2,15 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Shows the chosen names and their corresponding options in a dialog */
@@ -23,15 +26,17 @@ public class ChoicesDisplayDialog {
     private ChoosingSettings settings;
     private int listId;
     private MaterialDialog dialog;
-    private ChoicesDisplayViewHolder choicesDisplayViewHolder;
+    private ChooseNameDialogAdapter chooseNameDialogAdapter;
 
     ChoicesDisplayDialog(Listener listener, Context context, int listId, ListInfo listInfo, ChoosingSettings settings) {
         this.listId = listId;
         this.settings = settings;
+        chooseNameDialogAdapter = new ChooseNameDialogAdapter(new ArrayList<>(), listInfo);
+
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
-                .customView(R.layout.name_choices_dialog, false)
+                .adapter(chooseNameDialogAdapter, new LinearLayoutManager(context))
                 .positiveText(android.R.string.yes)
                 .negativeText(R.string.copy_text)
                 .neutralText(R.string.say_name)
@@ -43,8 +48,6 @@ public class ChoicesDisplayDialog {
                         NameUtils.flattenListToString(chosenNames, settings)))
                 .autoDismiss(false)
                 .build();
-
-        choicesDisplayViewHolder = new ChoicesDisplayViewHolder(dialog.getView(), listInfo);
     }
 
     void showChoices(List<String> chosenNames) {
@@ -52,7 +55,8 @@ public class ChoicesDisplayDialog {
         int numNames = chosenNames.size();
 
         dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
-        choicesDisplayViewHolder.showChosenNames(chosenNames, settings.getShowAsList());
+        chooseNameDialogAdapter.setChosenNames(chosenNames);
+        chooseNameDialogAdapter.setShowAsList(settings.getShowAsList());
         dialog.getActionButton(DialogAction.NEUTRAL)
                 .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);

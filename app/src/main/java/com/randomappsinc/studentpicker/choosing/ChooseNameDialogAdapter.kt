@@ -1,6 +1,5 @@
 package com.randomappsinc.studentpicker.choosing
 
-import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import com.randomappsinc.studentpicker.R
-import com.randomappsinc.studentpicker.extentions.maybeVisible
+import com.randomappsinc.studentpicker.databinding.ChooseNameDialogCellBinding
 import com.randomappsinc.studentpicker.models.ListInfo
 import com.randomappsinc.studentpicker.models.NameDO
 import com.randomappsinc.studentpicker.utils.NameUtils
@@ -33,8 +29,9 @@ class ChooseNameDialogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(parent.context)
-                        .inflate(R.layout.choose_name_dialog_cell, parent, false))
+                ChooseNameDialogCellBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false))
+
     }
 
     override fun getItemCount(): Int {
@@ -45,24 +42,20 @@ class ChooseNameDialogAdapter(
         holder.loadName(position)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(itemBinding: ChooseNameDialogCellBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
-        @BindView(R.id.person_number) lateinit var nameNumber: TextView
-        @BindView(R.id.person_image) lateinit var personImageView: ImageView
-        @BindView(R.id.person_name) lateinit var name: TextView
+        private val nameNumber: TextView = itemBinding.personNumber
+        private val personImageView: ImageView = itemBinding.personImage
+        private val name: TextView = itemBinding.personName
 
-        init {
-            ButterKnife.bind(this, view)
-        }
-
-        @SuppressLint("SetTextI18n")
         fun loadName(position: Int) {
             val nameDO: NameDO = currentState.getNameDO(chosenNames[position])
-            nameNumber.maybeVisible(showAsList)
             if (showAsList) {
+                nameNumber.visibility = View.VISIBLE
                 nameNumber.text = NameUtils.getPrefix(position)
                 name.text = NameUtils.getDisplayTextForName(nameDO)
             } else {
+                nameNumber.visibility = View.GONE
                 name.text = NameUtils.getDisplayTextForName(nameDO)
             }
             val photoUri = nameDO.photoUri
