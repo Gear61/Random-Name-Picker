@@ -6,37 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.init.MyApplication;
-import com.randomappsinc.studentpicker.models.ListDO;
-import com.randomappsinc.studentpicker.models.ListInfo;
-import com.randomappsinc.studentpicker.models.NameDO;
-import com.randomappsinc.studentpicker.utils.JSONUtils;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "studentpicker.db";
     private static final int DATABASE_VERSION = 9;
-
-    // Struct for migration
-    private static class NameInfoPod {
-        final String listName;
-        public final String name;
-        final int amount;
-
-        NameInfoPod(String listName, String name, int amount) {
-            this.listName = listName;
-            this.name = name;
-            this.amount = amount;
-        }
-    }
 
     MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -81,41 +59,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if (oldVersion == 2) {
             database.execSQL(TableCreationScripts.CREATE_LISTS_TABLE_QUERY);
             database.execSQL(TableCreationScripts.CREATE_NAMES_TABLE_QUERY);
-
-            PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
-            Set<String> listNames = preferencesManager.getNameLists();
-
-            Map<String, Integer> listNamesToIdsMap = new HashMap<>();
-            for (String listName : listNames) {
-                ContentValues values = new ContentValues();
-                values.put(DatabaseColumns.LIST_NAME, listName);
-                int result = (int) database.insert(DatabaseTables.LISTS, null, values);
-                listNamesToIdsMap.put(listName, result);
-            }
-
-            List<NameInfoPod> namesToMigrate = new ArrayList<>();
-            Cursor nameInfoCursor = database.rawQuery(
-                    "SELECT * FROM " + DatabaseTables.LEGACY_TABLE_NAME, null);
-            if (nameInfoCursor.moveToFirst()){
-                do {
-                    String listName = nameInfoCursor.getString(
-                            nameInfoCursor.getColumnIndex(DatabaseColumns.LIST_NAME));
-                    String name = nameInfoCursor
-                            .getString(nameInfoCursor.getColumnIndex(DatabaseColumns.PERSON_NAME_LEGACY));
-                    int amount = nameInfoCursor.getInt(
-                            nameInfoCursor.getColumnIndex(DatabaseColumns.NAME_COUNT));
-                    namesToMigrate.add(new NameInfoPod(listName, name, amount));
-                } while (nameInfoCursor.moveToNext());
-            }
-            nameInfoCursor.close();
-
-            for (NameInfoPod nameInfoPod : namesToMigrate) {
-                ContentValues values = new ContentValues();
-                values.put(DatabaseColumns.LIST_ID, listNamesToIdsMap.get(nameInfoPod.listName));
-                values.put(DatabaseColumns.NAME, nameInfoPod.name);
-                values.put(DatabaseColumns.NAME_COUNT, nameInfoPod.amount);
-                database.insert(DatabaseTables.NAMES, null, values);
-            }
             oldVersion++;
         }
 
@@ -158,67 +101,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                     DatabaseTables.LISTS);
 
             database.execSQL(TableCreationScripts.CREATE_NAMES_IN_LIST_TABLE_QUERY);
-
-            List<ListDO> listsToMigrate = new ArrayList<>();
-            Cursor listInfoCursor = database.rawQuery(
-                    "SELECT * FROM " + DatabaseTables.LISTS, null);
-            if (listInfoCursor.moveToFirst()){
-                do {
-                    String listName = listInfoCursor.getString(
-                            listInfoCursor.getColumnIndex(DatabaseColumns.LIST_NAME));
-                    int listId = listInfoCursor
-                            .getInt(listInfoCursor.getColumnIndex(DatabaseColumns.ID));
-                    listsToMigrate.add(new ListDO(listId, listName));
-                } while (listInfoCursor.moveToNext());
-            }
-            listInfoCursor.close();
-
-            PreferencesManager preferencesManager = new PreferencesManager(MyApplication.getAppContext());
-            for (ListDO listDO : listsToMigrate) {
-                ListInfo listInfo = preferencesManager.getNameListState(listDO.getName());
-
-                if (listInfo != null) {
-                    Map<String, NameDO> nameToAmount = listInfo.getNameMap();
-                    for (String name : nameToAmount.keySet()) {
-                        ContentValues values = new ContentValues();
-                        values.put(DatabaseColumns.LIST_ID, listDO.getId());
-                        values.put(DatabaseColumns.NAME, name);
-                        values.put(DatabaseColumns.NAME_COUNT, nameToAmount.get(name).getAmount());
-                        database.insert(DatabaseTables.NAMES_IN_LIST, null, values);
-                    }
-                }
-
-                ChoosingSettings choosingSettings = preferencesManager.getChoosingSettings(listDO.getName());
-
-                if (choosingSettings != null) {
-                    ContentValues newValues = new ContentValues();
-                    newValues.put(
-                            DatabaseColumns.PRESENTATION_MODE,
-                            choosingSettings.isPresentationModeEnabled() ? 1 : 0);
-                    newValues.put(
-                            DatabaseColumns.WITH_REPLACEMENT,
-                            choosingSettings.getWithReplacement() ? 1 : 0);
-                    newValues.put(
-                            DatabaseColumns.AUTOMATIC_TTS,
-                            choosingSettings.getAutomaticTts() ? 1 : 0);
-                    newValues.put(
-                            DatabaseColumns.SHOW_AS_LIST,
-                            choosingSettings.getShowAsList() ? 1 : 0);
-                    newValues.put(
-                            DatabaseColumns.NUM_NAMES_CHOSEN,
-                            choosingSettings.getNumNamesToChoose());
-
-                    if (listInfo != null) {
-                        newValues.put(
-                                DatabaseColumns.NAMES_HISTORY,
-                                JSONUtils.namesArrayToJsonString(listInfo.getNameHistory()));
-                    }
-
-                    String[] whereArgs = new String[]{String.valueOf(listDO.getId())};
-                    String whereStatement = DatabaseColumns.ID + " = ?";
-                    database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
-                }
-            }
             oldVersion++;
         }
 
