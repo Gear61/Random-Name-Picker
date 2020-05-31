@@ -56,7 +56,7 @@
     <string name="search_icon">{ion-android-search}</string>
     <string name="thank_you_for_support">Thank You For Your Support</string>
 
-    <string name="ads_back_door_unlocked">
-        Hello friend of Alex. Ads will be turned off from now on.
+    <string name="premium_back_door_triggered">
+        Hello friend of Alex. Enjoy your free Random Name Picker Premium.
     </string>
 </resources>
