@@ -50,7 +50,6 @@ public class NameChoosingActivity extends AppCompatActivity
     @BindView(R.id.names_list) RecyclerView namesList;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
-
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
     private ChoosingSettingsViewHolder settingsHolder;

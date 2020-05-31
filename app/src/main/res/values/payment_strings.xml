@@ -14,8 +14,8 @@
     <string name="premium_intro">
         For just $0.99, you get the following with Random Name Picker Premium:
     </string>
-    <string name="premium_feature_list">{ion-checkmark-circled #4CAF50} <b>No ads</b>
-        - Clear the clutter, so you can focus on your choosing.
+    <string name="premium_feature_list">{ion-checkmark-circled #4CAF50} <b>Attach images</b>
+        - Add images to names for a richer experience.
         \n\n{ion-checkmark-circled #4CAF50} <b>List sharing</b> - Export your name lists
         as .txt files or .csv spreadsheets. Send them to your other devices or to your friends.
         \n\n{ion-checkmark-circled #4CAF50} <b>Extra import methods</b> - Import name lists

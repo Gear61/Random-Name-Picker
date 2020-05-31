@@ -19,9 +19,8 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.export.CsvExporter;
 import com.randomappsinc.studentpicker.export.TxtExporter;
-import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
+import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.speech.SetLanguageDialog;
-import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import butterknife.BindDrawable;
@@ -50,7 +49,6 @@ public class PremiumOptionsFragment extends Fragment
     private TxtExporter txtExporter;
     private ChoosingMessageDialog choosingMessageDialog;
     private SetLanguageDialog setLanguageDialog;
-    private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
     @Override
@@ -80,7 +78,6 @@ public class PremiumOptionsFragment extends Fragment
         csvExporter = new CsvExporter(this);
         txtExporter = new TxtExporter(this);
         choosingMessageDialog = new ChoosingMessageDialog(getContext(), this, listId);
-        preferencesManager = new PreferencesManager(getContext());
 
         int currentLanguage = dataSource.getChoosingSettings(listId).getSpeechLanguage();
         setLanguageDialog = new SetLanguageDialog(getContext(), this, currentLanguage);
@@ -88,26 +85,30 @@ public class PremiumOptionsFragment extends Fragment
 
     @Override
     public void onItemClick(int position) {
-        if (preferencesManager.isOnFreeVersion()) {
-            UIUtils.showLongToast(R.string.premium_needed_message, getContext());
-            Intent intent = new Intent(getActivity(), BuyPremiumActivity.class);
-            startActivity(intent);
-            getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-            return;
-        }
-
         switch (position) {
             case 0:
-                txtExporter.turnListIntoTxt(listId, getContext());
+                PremiumFeatureOpener.openFeature(
+                        R.string.share_list_as_txt_file_name,
+                        getActivity(),
+                        () -> txtExporter.turnListIntoTxt(listId, getContext()));
                 break;
             case 1:
-                csvExporter.turnListIntoCsv(listId, getContext());
+                PremiumFeatureOpener.openFeature(
+                        R.string.share_list_as_csv_sheet_name,
+                        getActivity(),
+                        () -> csvExporter.turnListIntoCsv(listId, getContext()));
                 break;
             case 2:
-                choosingMessageDialog.show();
+                PremiumFeatureOpener.openFeature(
+                        R.string.customize_choosing_message_name,
+                        getActivity(),
+                        () -> choosingMessageDialog.show());
                 break;
             case 3:
-                setLanguageDialog.show();
+                PremiumFeatureOpener.openFeature(
+                        R.string.set_speech_language_name,
+                        getActivity(),
+                        () -> setLanguageDialog.show());
                 break;
         }
     }
