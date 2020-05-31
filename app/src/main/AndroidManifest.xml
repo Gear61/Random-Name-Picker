@@ -25,11 +25,6 @@
         android:theme="@style/AppTheme"
         >
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3903394384020535~6080924821"
-            />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.randomappsinc.studentpicker.provider"

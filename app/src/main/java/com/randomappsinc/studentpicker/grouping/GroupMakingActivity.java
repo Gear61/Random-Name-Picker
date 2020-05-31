@@ -1,11 +1,9 @@
 package com.randomappsinc.studentpicker.grouping;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -32,13 +29,11 @@ public class GroupMakingActivity extends AppCompatActivity {
 
     @BindView(R.id.no_groups) TextView noGroups;
     @BindView(R.id.groups_list) RecyclerView groupsList;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     private GroupMakingSettings settings;
     private GroupMakingSettingsDialog settingsDialog;
     private ListInfo listInfo;
     private GroupMakingAdapter groupsMakingListAdapter;
-    private BannerAdManager bannerAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +56,6 @@ public class GroupMakingActivity extends AppCompatActivity {
 
         settings = new GroupMakingSettings(listInfo.getNumInstances());
         settingsDialog = new GroupMakingSettingsDialog(this, settings);
-        bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.loadOrRemoveAd();
     }
 
     @OnClick(R.id.make_groups)
@@ -77,12 +70,6 @@ public class GroupMakingActivity extends AppCompatActivity {
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
         noGroups.setVisibility(View.GONE);
         groupsList.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

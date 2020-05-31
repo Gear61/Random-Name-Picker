@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homepage_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/screen_background"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -68,7 +69,6 @@
 
     <include
         android:id="@+id/search_bar"
-        android:layout_below="@id/buy_premium_tooltip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/search_bar"
@@ -77,7 +77,6 @@
     <TextView
         android:id="@+id/no_lists_match"
         android:text="@string/no_lists_search"
-        android:layout_below="@id/search_bar"
         style="@style/empty_state_text"
         />
 
@@ -85,8 +84,6 @@
         android:id="@+id/user_lists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_bar"
-        android:layout_above="@id/bottom_ad_banner_container"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
@@ -95,7 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
-        android:layout_below="@id/buy_premium_tooltip"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         >
@@ -178,11 +174,4 @@
             android:textSize="15sp"
             />
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_ad_banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        />
-</RelativeLayout>
+</LinearLayout>

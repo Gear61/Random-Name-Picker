@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.Nullable;
 
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
-import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.theme.ThemeMode;
 
@@ -26,8 +25,6 @@ public class PreferencesManager {
     private static final String THEME_MODE = "themeMode";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
     private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
-    private static final String HAS_SEEN_PREMIUM_FEATURE_UNLOCK = "hasSeenPremiumFeatureUnlock";
-    private static final String PREMIUM_FEATURE_PREFIX = "premium_feature_";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
@@ -86,22 +83,6 @@ public class PreferencesManager {
         boolean hasSeenTooltip = prefs.getBoolean(HAS_SEEN_PREMIUM_TOOLTIP, false);
         prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
         return hasSeenTooltip;
-    }
-
-    public boolean hasSeenPremiumFeatureUnlock() {
-        return prefs.getBoolean(HAS_SEEN_PREMIUM_FEATURE_UNLOCK, false);
-    }
-
-    public void onPremiumFeatureUnlockSeen() {
-        prefs.edit().putBoolean(HAS_SEEN_PREMIUM_FEATURE_UNLOCK, true).apply();
-    }
-
-    public boolean hasUnlockedFeature(@PremiumFeature String feature) {
-        return !isOnFreeVersion() || prefs.getBoolean(PREMIUM_FEATURE_PREFIX + feature, false);
-    }
-
-    public void unlockFeature(@PremiumFeature String feature) {
-        prefs.edit().putBoolean(PREMIUM_FEATURE_PREFIX + feature, true).apply();
     }
 
     /** API dead zone - DO NOT THE USE THE APIS BELOW **/

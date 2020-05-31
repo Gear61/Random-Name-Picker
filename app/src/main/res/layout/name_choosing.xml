@@ -1,47 +1,33 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/screen_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
-    <LinearLayout
-        android:orientation="vertical"
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/empty_text_for_choosing"
+        style="@style/empty_state_text"
+        />
+
+    <TextView
+        android:id="@+id/num_names"
+        style="@style/num_names"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/names_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_ad_banner_container"
-        >
-
-        <com.joanzapata.iconify.widget.IconTextView
-            android:id="@+id/empty_text_for_choosing"
-            style="@style/empty_state_text"
-            />
-
-        <TextView
-            android:id="@+id/num_names"
-            style="@style/num_names"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/names_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_ad_banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/choose"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
     <TextView
         android:id="@+id/choose"
         android:text="@string/choose"
-        android:layout_alignParentBottom="true"
         style="@style/button"
         />
-</RelativeLayout>
+</LinearLayout>

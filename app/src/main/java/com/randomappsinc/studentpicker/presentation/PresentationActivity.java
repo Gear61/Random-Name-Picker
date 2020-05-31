@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +27,6 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -54,7 +51,6 @@ public class PresentationActivity extends AppCompatActivity
 
     @BindView(R.id.header) TextView header;
     @BindView(R.id.names) TextView names;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
     @BindColor(R.color.text_normal) int textNormalColor;
     @BindInt(R.integer.default_anim_length) int defaultAnimationLengthMs;
 
@@ -68,7 +64,6 @@ public class PresentationActivity extends AppCompatActivity
     private MaterialDialog setTextSizeDialog;
     private SetTextSizeViewHolder setTextViewHolder;
     private TextToSpeechManager textToSpeechManager;
-    private BannerAdManager bannerAdManager;
     private Handler handler;
     private Runnable animateNamesTask = this::animateNames;
 
@@ -118,8 +113,6 @@ public class PresentationActivity extends AppCompatActivity
                 })
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
-        bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.loadOrRemoveAd();
 
         chooseNames();
     }
@@ -246,12 +239,6 @@ public class PresentationActivity extends AppCompatActivity
     @Override
     public void onTextToSpeechFailure() {
         UIUtils.showLongToast(R.string.text_to_speech_fail, this);
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

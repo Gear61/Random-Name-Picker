@@ -3,14 +3,12 @@ package com.randomappsinc.studentpicker.editing;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -32,6 +29,7 @@ import com.randomappsinc.studentpicker.photo.PhotoImportOptionsDialog;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.speech.SpeechToTextManager;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
+import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
 import java.util.List;
@@ -58,7 +56,6 @@ public class EditNameListActivity extends AppCompatActivity implements
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.content_list) RecyclerView namesList;
     @BindView(R.id.plus_icon) ImageView plus;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
@@ -72,8 +69,8 @@ public class EditNameListActivity extends AppCompatActivity implements
     private SpeechToTextManager speechToTextManager;
     private boolean listHasChanged = false;
     private PhotoImportOptionsDialog photoOptionsDialog;
+    private PreferencesManager preferencesManager;
     private PhotoImportManager photoImportManager;
-    private BannerAdManager bannerAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +97,7 @@ public class EditNameListActivity extends AppCompatActivity implements
 
         speechToTextManager = new SpeechToTextManager(this, this);
         speechToTextManager.setListeningPrompt(R.string.name_input_with_speech_prompt);
+        preferencesManager = new PreferencesManager(this);
 
         List<NameDO> names = dataSource.getNamesInList(listId);
         namesAdapter = new EditNameListAdapter(noContent, numNames, names, this);
@@ -116,8 +114,6 @@ public class EditNameListActivity extends AppCompatActivity implements
         duplicationDialog = new DuplicationDialog(this, this);
         photoOptionsDialog = new PhotoImportOptionsDialog(this, this);
         photoImportManager = new PhotoImportManager(this);
-        bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.loadOrRemoveAd();
     }
 
     @OnClick(R.id.add_item)
@@ -204,6 +200,14 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void showPhotoOptions() {
+        if (preferencesManager.isOnFreeVersion()) {
+            UIUtils.showLongToast(R.string.premium_needed_message, this);
+            Intent intent = new Intent(this, BuyPremiumActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
+            return;
+        }
+
         photoOptionsDialog.showPhotoOptions();
     }
 
@@ -258,19 +262,6 @@ public class EditNameListActivity extends AppCompatActivity implements
             namesAdapter.refreshSelectedItem();
             dataSource.updateNamePhoto(nameDO.getId(), takenPhotoUri.toString());
         });
-    }
-
-    @Override
-    public void launchBuyPremiumPage() {
-        Intent intent = new Intent(this, BuyPremiumActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

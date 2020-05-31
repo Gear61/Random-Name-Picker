@@ -2,17 +2,14 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +19,6 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
@@ -52,7 +48,6 @@ public class NameChoosingActivity extends AppCompatActivity
     @BindView(R.id.empty_text_for_choosing) TextView noNamesToChoose;
     @BindView(R.id.num_names) TextView numNames;
     @BindView(R.id.names_list) RecyclerView namesList;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bannerAdContainer;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
@@ -69,7 +64,6 @@ public class NameChoosingActivity extends AppCompatActivity
     private DataSource dataSource;
     private PreferencesManager preferencesManager;
     private ShakeDetector shakeDetector;
-    private BannerAdManager bannerAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +116,6 @@ public class NameChoosingActivity extends AppCompatActivity
         settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
         choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, settings);
-        bannerAdManager = new BannerAdManager(bannerAdContainer);
-        bannerAdManager.loadOrRemoveAd();
     }
 
     @Override
@@ -233,12 +225,6 @@ public class NameChoosingActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         canShowPresentationScreen = true;
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

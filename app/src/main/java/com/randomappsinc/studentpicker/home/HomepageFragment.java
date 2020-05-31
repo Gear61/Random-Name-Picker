@@ -2,7 +2,6 @@ package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,10 +17,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.BannerAdManager;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.common.PremiumFeature;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.listpage.ListLandingPageActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
@@ -60,14 +56,12 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
     @BindView(R.id.import_from_csv_empty_state_text) TextView importFromCsvEmptyStateText;
-    @BindView(R.id.bottom_ad_banner_container) FrameLayout bottomAdBannerContainer;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
     private DataSource dataSource;
     private NameListsAdapter nameListsAdapter;
     private SpeechToTextManager speechToTextManager;
-    private BannerAdManager bannerAdManager;
     private PreferencesManager preferencesManager;
     private Unbinder unbinder;
 
@@ -110,8 +104,6 @@ public class HomepageFragment extends Fragment implements
 
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
-
-        bannerAdManager = new BannerAdManager(bottomAdBannerContainer);
 
         preferencesManager = new PreferencesManager(getContext());
         if (preferencesManager.isOnFreeVersion() &&
@@ -180,22 +172,15 @@ public class HomepageFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        bannerAdManager.loadOrRemoveAd();
-        importFromCsvEmptyStateText.setText(preferencesManager.hasUnlockedFeature(PremiumFeature.IMPORT_FROM_CSV)
-                ? R.string.import_from_csv_file
-                : R.string.import_from_csv_file_premium);
+        importFromCsvEmptyStateText.setText(preferencesManager.isOnFreeVersion()
+                ? R.string.import_from_csv_file_premium
+                : R.string.import_from_csv_file);
         if (!preferencesManager.isOnFreeVersion() && buyPremiumTooltip.getVisibility() == View.VISIBLE) {
             buyPremiumTooltip.setVisibility(View.GONE);
         }
         rootView.requestFocus();
         nameListsAdapter.refresh(dataSource.getNameLists(searchInput.getText().toString()));
         setNoContent();
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        bannerAdManager.onOrientationChanged();
     }
 
     @Override

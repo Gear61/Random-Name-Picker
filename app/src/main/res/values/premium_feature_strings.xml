@@ -59,25 +59,5 @@
         <item>@string/norwegian</item>
     </string-array>
 
-    <string name="unlock_premium_features_for_free_title">Unlock Premium Features For Free!</string>
-    <string name="unlock_premium_features_for_free_body">
-        Don\'t want to pay $0.99 for Random Name Picker premium? No problem!
-        To keep Random Name Picker accessible for all, you can now simply view an ad to unlock any premium feature!
-        Simply tap an any premium feature and you will get this option.
-    </string>
     <string name="got_it">Got It</string>
-
-    <string name="unlock_premium_feature_options_prompt">Premium Feature Unlock Options</string>
-    <string name="buy_premium_dialog_option">
-        Buy Random Name Picker Premium for $0.99 (unlocks all features)
-    </string>
-    <string name="watch_ad_dialog_option">
-        Watch an ad (unlocks just this feature)
-    </string>
-    <string-array name="unlock_premium_feature_options_list">
-        <item>@string/buy_premium_dialog_option</item>
-        <item>@string/watch_ad_dialog_option</item>
-    </string-array>
-    <string name="ad_not_ready_yet">The ad is still loading. Please try again later.</string>
-    <string name="premium_feature_unlocked">Premium feature unlocked!</string>
 </resources>
