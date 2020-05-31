@@ -39,7 +39,7 @@ public class CreateListDialog {
 
                     if (preferencesManager.isOnFreeVersion()
                             && listName.toLowerCase().equals(PremiumBackDoor.PASSWORD.toLowerCase())) {
-                        preferencesManager.setIsOnFreeVersion(false);
+                        preferencesManager.onPremiumAcquired();
                         UIUtils.showLongToast(
                                 R.string.premium_back_door_triggered, dialog.getContext());
                         return;
