@@ -31,7 +31,6 @@ class ChooseNameDialogAdapter(
         return ViewHolder(
                 ChooseNameDialogCellBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false))
-
     }
 
     override fun getItemCount(): Int {
