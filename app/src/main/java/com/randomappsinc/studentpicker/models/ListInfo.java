@@ -71,6 +71,10 @@ public class ListInfo {
         return nameMap.get(uniqueNames.get(position));
     }
 
+    public NameDO getNameDO(String name) {
+        return nameMap.get(name);
+    }
+
     public int getNumNames() {
         return uniqueNames.size();
     }
