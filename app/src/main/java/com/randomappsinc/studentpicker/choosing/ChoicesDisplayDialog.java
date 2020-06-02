@@ -2,6 +2,8 @@ package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -28,7 +30,8 @@ public class ChoicesDisplayDialog {
     private MaterialDialog dialog;
     private ChooseNameDialogAdapter chooseNameDialogAdapter;
 
-    ChoicesDisplayDialog(Listener listener, Context context, int listId, ListInfo listInfo, ChoosingSettings settings) {
+    ChoicesDisplayDialog(
+            Listener listener, Context context, int listId, ListInfo listInfo, ChoosingSettings settings) {
         this.listId = listId;
         this.settings = settings;
         chooseNameDialogAdapter = new ChooseNameDialogAdapter(new ArrayList<>(), listInfo);
@@ -48,6 +51,11 @@ public class ChoicesDisplayDialog {
                         NameUtils.flattenListToString(chosenNames, settings)))
                 .autoDismiss(false)
                 .build();
+
+        DividerItemDecoration itemDecorator =
+                new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(ContextCompat.getDrawable(context, R.drawable.line_divider));
+        dialog.getRecyclerView().addItemDecoration(itemDecorator);
     }
 
     void showChoices(List<String> chosenNames) {
