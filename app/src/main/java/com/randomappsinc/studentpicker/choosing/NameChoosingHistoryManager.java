@@ -13,7 +13,7 @@ import java.util.List;
 class NameChoosingHistoryManager {
 
     interface Delegate {
-        ListInfo getListInfo();
+        ListInfo getChoosingStateListInfo();
     }
 
     private Delegate delegate;
@@ -27,7 +27,7 @@ class NameChoosingHistoryManager {
                 .neutralText(R.string.clear)
                 .negativeText(R.string.copy_text)
                 .onNeutral((dialog, which) -> {
-                    delegate.getListInfo().clearNameHistory();
+                    delegate.getChoosingStateListInfo().clearNameHistory();
                     UIUtils.showShortToast(R.string.name_history_cleared, dialog.getContext());
                 })
                 .onNegative((dialog, which) -> NameUtils.copyNamesToClipboard(
@@ -49,7 +49,7 @@ class NameChoosingHistoryManager {
     }
 
     private String getFormattedNameHistory() {
-        List<String> nameHistory = delegate.getListInfo().getNameHistory();
+        List<String> nameHistory = delegate.getChoosingStateListInfo().getNameHistory();
         StringBuilder namesHistory = new StringBuilder();
         for (int i = 0; i < nameHistory.size(); i++) {
             if (i != 0) {
