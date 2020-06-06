@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Shows the chosen names and their corresponding options in a dialog */
@@ -24,17 +23,17 @@ public class ChoicesDisplayDialog {
         void copyNamesToClipboard(String chosenNames, int numNames);
     }
 
-    private List<String> chosenNames;
+    private List<NameDO> chosenNames;
     private ChoosingSettings settings;
     private int listId;
     private MaterialDialog dialog;
     private ChooseNameDialogAdapter chooseNameDialogAdapter;
 
     ChoicesDisplayDialog(
-            Listener listener, Context context, int listId, ListInfo listInfo, ChoosingSettings settings) {
+            Listener listener, Context context, int listId, ChoosingSettings settings) {
         this.listId = listId;
         this.settings = settings;
-        chooseNameDialogAdapter = new ChooseNameDialogAdapter(new ArrayList<>(), listInfo);
+        chooseNameDialogAdapter = new ChooseNameDialogAdapter();
 
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
@@ -45,10 +44,10 @@ public class ChoicesDisplayDialog {
                 .neutralText(R.string.say_name)
                 .onPositive((dialog, which) -> dialog.dismiss())
                 .onNegative((dialog, which) -> listener.copyNamesToClipboard(
-                        NameUtils.flattenListToString(chosenNames, settings),
+                        NameUtils.convertNameListToString(chosenNames, settings),
                         chosenNames.size()))
                 .onNeutral((dialog, which) -> listener.sayNames(
-                        NameUtils.flattenListToString(chosenNames, settings)))
+                        NameUtils.convertNameListToString(chosenNames, settings)))
                 .autoDismiss(false)
                 .build();
 
@@ -58,13 +57,12 @@ public class ChoicesDisplayDialog {
         dialog.getRecyclerView().addItemDecoration(itemDecorator);
     }
 
-    void showChoices(List<String> chosenNames) {
+    void showChoices(List<NameDO> chosenNames) {
         this.chosenNames = chosenNames;
         int numNames = chosenNames.size();
 
         dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
-        chooseNameDialogAdapter.setChosenNames(chosenNames);
-        chooseNameDialogAdapter.setShowAsList(settings.getShowAsList());
+        chooseNameDialogAdapter.setChosenNames(chosenNames, settings.getShowAsList());
         dialog.getActionButton(DialogAction.NEUTRAL)
                 .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);

@@ -23,6 +23,7 @@ import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.speech.TextToSpeechManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
@@ -114,8 +115,7 @@ public class NameChoosingActivity extends AppCompatActivity
 
         settings = dataSource.getChoosingSettings(listId);
         settingsHolder = new ChoosingSettingsViewHolder(settingsDialog.getCustomView(), settings);
-        ListInfo listInfo = dataSource.getListInfo(listId);
-        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, listInfo, settings);
+        choicesDisplayDialog = new ChoicesDisplayDialog(this, this, listId, settings);
     }
 
     @Override
@@ -166,14 +166,14 @@ public class NameChoosingActivity extends AppCompatActivity
             if (choicesDisplayDialog.isShowing()) {
                 return;
             }
-            List<String> chosenNames = choosingStateListInfo.chooseNames(settings);
+            List<NameDO> chosenNames = choosingStateListInfo.chooseNames(settings);
             if (!settings.getWithReplacement()) {
                 nameChoosingAdapter.notifyDataSetChanged();
                 setViews();
             }
             choicesDisplayDialog.showChoices(chosenNames);
             if (settings.getAutomaticTts()) {
-                sayNames(NameUtils.flattenListToString(chosenNames, settings));
+                sayNames(NameUtils.convertNameListToString(chosenNames, settings));
             }
         }
     }
