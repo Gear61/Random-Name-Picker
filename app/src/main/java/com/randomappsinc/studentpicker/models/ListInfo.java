@@ -89,7 +89,7 @@ public class ListInfo {
         removeNames(name, amount);
     }
 
-    public List<String> chooseNames(ChoosingSettings settings) {
+    public List<String> chooseNamesLegacy(ChoosingSettings settings) {
         List<String> allNames = settings.getPreventDuplicates() ? new ArrayList<>(uniqueNames) : getLongList();
         Collections.shuffle(allNames);
         List<String> chosenNames = new ArrayList<>();
@@ -98,6 +98,23 @@ public class ListInfo {
         for (int i = 0; i < namesToAdd; i++) {
             String chosenName = allNames.get(i);
             chosenNames.add(chosenName);
+            nameHistory.add(chosenName);
+            if (!settings.getWithReplacement()) {
+                removeNames(chosenName, 1);
+            }
+        }
+        return chosenNames;
+    }
+
+    public List<NameDO> chooseNames(ChoosingSettings settings) {
+        List<String> allNames = settings.getPreventDuplicates() ? new ArrayList<>(uniqueNames) : getLongList();
+        Collections.shuffle(allNames);
+        List<NameDO> chosenNames = new ArrayList<>();
+
+        int namesToAdd = Math.min(settings.getNumNamesToChoose(), allNames.size());
+        for (int i = 0; i < namesToAdd; i++) {
+            String chosenName = allNames.get(i);
+            chosenNames.add(nameMap.get(chosenName));
             nameHistory.add(chosenName);
             if (!settings.getWithReplacement()) {
                 removeNames(chosenName, 1);

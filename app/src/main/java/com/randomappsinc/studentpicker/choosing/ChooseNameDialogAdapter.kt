@@ -8,24 +8,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.randomappsinc.studentpicker.databinding.ChooseNameDialogCellBinding
-import com.randomappsinc.studentpicker.models.ListInfo
 import com.randomappsinc.studentpicker.models.NameDO
 import com.randomappsinc.studentpicker.utils.NameUtils
 import com.squareup.picasso.Picasso
 
-class ChooseNameDialogAdapter(
-        chosenNames: MutableList<String>,
-        private val currentState: ListInfo
-) : RecyclerView.Adapter<ChooseNameDialogAdapter.ViewHolder>() {
+class ChooseNameDialogAdapter : RecyclerView.Adapter<ChooseNameDialogAdapter.ViewHolder>() {
 
-    var chosenNames: MutableList<String> = chosenNames
-        set(chosenNames) {
-            field.clear()
-            field.addAll(chosenNames)
-            notifyDataSetChanged()
-        }
-
+    var chosenNames = ArrayList<NameDO>()
     var showAsList = false
+
+    fun setChosenNames(chosenNames: List<NameDO>, showAsList: Boolean) {
+        this.showAsList = showAsList
+        this.chosenNames.clear()
+        this.chosenNames.addAll(chosenNames)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -48,18 +45,17 @@ class ChooseNameDialogAdapter(
         private val name: TextView = itemBinding.personName
 
         fun loadName(position: Int) {
-            val nameDO: NameDO = currentState.getNameDO(chosenNames[position])
+            val nameDO: NameDO = chosenNames[position]
             if (showAsList) {
                 nameNumber.visibility = View.VISIBLE
                 nameNumber.text = NameUtils.getPrefix(position)
-                name.text = NameUtils.getDisplayTextForName(nameDO)
             } else {
                 nameNumber.visibility = View.GONE
-                name.text = NameUtils.getDisplayTextForName(nameDO)
+                nameNumber.text = ""
             }
+            name.text = nameDO.name
             val photoUri = nameDO.photoUri
             val nameHasPhoto = !TextUtils.isEmpty(photoUri)
-            personImageView.visibility = if (nameHasPhoto) View.VISIBLE else View.GONE
             if (nameHasPhoto) {
                 Picasso.get()
                         .load(photoUri)
@@ -67,6 +63,7 @@ class ChooseNameDialogAdapter(
                         .centerCrop()
                         .into(personImageView)
             }
+            personImageView.visibility = if (nameHasPhoto) View.VISIBLE else View.GONE
         }
     }
 }

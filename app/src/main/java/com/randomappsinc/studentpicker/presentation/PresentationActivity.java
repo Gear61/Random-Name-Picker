@@ -126,7 +126,7 @@ public class PresentationActivity extends AppCompatActivity
         names.clearAnimation();
         textToSpeechManager.stopSpeaking();
         if (listState.getNumNames() > 0) {
-            List<String> chosenNames = listState.chooseNames(settings);
+            List<String> chosenNames = listState.chooseNamesLegacy(settings);
             chosenNamesText = NameUtils.flattenListToString(chosenNames, settings);
 
             names.setAlpha(0.0f);

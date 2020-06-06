@@ -90,6 +90,8 @@ public class NameUtils {
         return groups;
     }
 
+    /** Use convertNameListToString() instead */
+    @Deprecated
     public static String flattenListToString(List<String> names, ChoosingSettings settings) {
         StringBuilder namesText = new StringBuilder();
         for (int i = 0; i < names.size(); i++) {
@@ -104,6 +106,21 @@ public class NameUtils {
         return namesText.toString();
     }
 
+    public static String convertNameListToString(List<NameDO> names, ChoosingSettings settings) {
+        StringBuilder namesText = new StringBuilder();
+        for (int i = 0; i < names.size(); i++) {
+            if (namesText.length() > 0) {
+                namesText.append("\n");
+            }
+            if (settings.getShowAsList()) {
+                namesText.append(NameUtils.getPrefix(i));
+            }
+            namesText.append(names.get(i).getName());
+        }
+        return namesText.toString();
+    }
+
+    /** Gets the name display for names NON-CHOOSING scenarios */
     public static String getDisplayTextForName(NameDO nameDO) {
         String name = nameDO.getName();
         int amount = nameDO.getAmount();
