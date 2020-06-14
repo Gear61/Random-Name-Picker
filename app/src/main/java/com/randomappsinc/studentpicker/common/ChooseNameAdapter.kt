@@ -1,4 +1,4 @@
-package com.randomappsinc.studentpicker.choosing
+package com.randomappsinc.studentpicker.common
 
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.randomappsinc.studentpicker.models.NameDO
 import com.randomappsinc.studentpicker.utils.NameUtils
 import com.squareup.picasso.Picasso
 
-class ChooseNameDialogAdapter : RecyclerView.Adapter<ChooseNameDialogAdapter.ViewHolder>() {
+class ChooseNameAdapter : RecyclerView.Adapter<ChooseNameAdapter.ViewHolder>() {
 
     var chosenNames = ArrayList<NameDO>()
     var showAsList = false

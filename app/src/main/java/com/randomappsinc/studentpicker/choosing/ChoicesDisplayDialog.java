@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.common.ChooseNameAdapter;
 import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 
@@ -27,18 +28,18 @@ public class ChoicesDisplayDialog {
     private ChoosingSettings settings;
     private int listId;
     private MaterialDialog dialog;
-    private ChooseNameDialogAdapter chooseNameDialogAdapter;
+    private ChooseNameAdapter chooseNameAdapter;
 
     ChoicesDisplayDialog(
             Listener listener, Context context, int listId, ChoosingSettings settings) {
         this.listId = listId;
         this.settings = settings;
-        chooseNameDialogAdapter = new ChooseNameDialogAdapter();
+        chooseNameAdapter = new ChooseNameAdapter();
 
         dialog = new MaterialDialog.Builder(context)
                 // Placeholder because otherwise, the view doesn't exist
                 .title(R.string.name_chosen)
-                .adapter(chooseNameDialogAdapter, new LinearLayoutManager(context))
+                .adapter(chooseNameAdapter, new LinearLayoutManager(context))
                 .positiveText(android.R.string.yes)
                 .negativeText(R.string.copy_text)
                 .neutralText(R.string.say_name)
@@ -62,7 +63,7 @@ public class ChoicesDisplayDialog {
         int numNames = chosenNames.size();
 
         dialog.setTitle(NameUtils.getChoosingMessage(dialog.getContext(), listId, numNames));
-        chooseNameDialogAdapter.setChosenNames(chosenNames, settings.getShowAsList());
+        chooseNameAdapter.setChosenNames(chosenNames, settings.getShowAsList());
         dialog.getActionButton(DialogAction.NEUTRAL)
                 .setText(numNames == 1 ? R.string.say_name : R.string.say_names);
         dialog.getActionButton(DialogAction.NEUTRAL).setText(numNames == 1 ? R.string.say_name : R.string.say_names);
