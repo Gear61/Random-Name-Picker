@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -17,7 +16,6 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.common.ChooseNameAdapter;
 import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
@@ -59,7 +57,7 @@ public class PresentationActivity extends AppCompatActivity
     private SetTextSizeViewHolder setTextViewHolder;
     private TextToSpeechManager textToSpeechManager;
     private PresentationManager presentationManager;
-    private ChooseNameAdapter chooseNameAdapter;
+    private PresentationAdapter presentationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +76,12 @@ public class PresentationActivity extends AppCompatActivity
         listState = dataSource.getChoosingStateListInfo(listId);
         settings = dataSource.getChoosingSettings(listId);
         textToSpeechManager = new TextToSpeechManager(this, this);
-
         presentationManager = new PresentationManager(this, namesList);
-        DividerItemDecoration itemDecorator =
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        itemDecorator.setDrawable(lineDivider);
-        namesList.addItemDecoration(itemDecorator);
-        chooseNameAdapter = new ChooseNameAdapter();
-        namesList.setAdapter(chooseNameAdapter);
+
+        presentationAdapter = new PresentationAdapter();
+        presentationAdapter.setTextSize(preferencesManager.getPresentationTextSize() * 8);
+        presentationAdapter.setTextColor(preferencesManager.getPresentationTextColor(textNormalColor));
+        namesList.setAdapter(presentationAdapter);
 
         int numNames = settings.getNumNamesToChoose();
         header.setText(NameUtils.getChoosingMessage(this, listId, numNames));
@@ -98,10 +94,11 @@ public class PresentationActivity extends AppCompatActivity
                 .onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
                     int newTextSize = setTextViewHolder.textSizeSlider.getProgress() + 1;
                     preferencesManager.setPresentationTextSize(newTextSize);
+                    presentationAdapter.setTextSize(newTextSize * 8);
                 })
-                .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
-                    setTextViewHolder.revertSetting();
-                })
+                .onNegative((@NonNull MaterialDialog dialog, @NonNull DialogAction which) ->
+                        setTextViewHolder.revertSetting()
+                )
                 .build();
         setTextViewHolder = new SetTextSizeViewHolder(setTextSizeDialog.getCustomView());
 
@@ -118,9 +115,8 @@ public class PresentationActivity extends AppCompatActivity
         if (listState.getNumNames() > 0) {
             List<NameDO> chosenNames = listState.chooseNames(settings);
             chosenNamesText = NameUtils.convertNameListToString(chosenNames, settings);
-
-            chooseNameAdapter.setChosenNames(chosenNames, settings.getShowAsList());
-            presentationManager.playSoundOrAnimations();
+            presentationAdapter.setChosenNames(chosenNames, settings.getShowAsList());
+            presentationManager.presentChosenName();
         } else {
             UIUtils.showLongToast(R.string.no_names_left, this);
         }
@@ -159,6 +155,7 @@ public class PresentationActivity extends AppCompatActivity
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, int selectedColor) {
         preferencesManager.setPresentationTextColor(selectedColor);
+        presentationAdapter.setTextColor(selectedColor);
     }
 
     @Override
