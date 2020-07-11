@@ -176,7 +176,7 @@ public class PresentationActivity extends AppCompatActivity
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_from_top);
-        presentationManager.stopPlayer();
+        presentationManager.stopPresentation();
         textToSpeechManager.shutdown();
     }
 

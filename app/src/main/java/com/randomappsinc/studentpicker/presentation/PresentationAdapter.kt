@@ -3,6 +3,7 @@ package com.randomappsinc.studentpicker.presentation
 import android.graphics.Color
 import android.text.TextUtils
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,9 +64,11 @@ class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>
             if (showAsList) {
                 nameNumber.visibility = View.VISIBLE
                 nameNumber.text = NameUtils.getPrefix(position)
+                name.gravity = Gravity.START
             } else {
                 nameNumber.visibility = View.GONE
                 nameNumber.text = ""
+                name.gravity = Gravity.CENTER_HORIZONTAL
             }
             nameNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
             nameNumber.setTextColor(textColor)
