@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.randomappsinc.studentpicker.databinding.ChooseNameDialogCellBinding
@@ -55,6 +56,7 @@ class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>
 
     inner class ViewHolder(itemBinding: ChooseNameDialogCellBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
+        private val parent: LinearLayout = itemBinding.root
         private val nameNumber: TextView = itemBinding.personNumber
         private val personImageView: ImageView = itemBinding.personImage
         private val name: TextView = itemBinding.personName
@@ -64,11 +66,11 @@ class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>
             if (showAsList) {
                 nameNumber.visibility = View.VISIBLE
                 nameNumber.text = NameUtils.getPrefix(position)
-                name.gravity = Gravity.START
+                parent.gravity = Gravity.START or Gravity.CENTER_VERTICAL
             } else {
                 nameNumber.visibility = View.GONE
                 nameNumber.text = ""
-                name.gravity = Gravity.CENTER_HORIZONTAL
+                parent.gravity = Gravity.CENTER
             }
             nameNumber.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
             nameNumber.setTextColor(textColor)
