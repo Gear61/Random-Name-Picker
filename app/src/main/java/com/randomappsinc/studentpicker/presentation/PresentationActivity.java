@@ -5,10 +5,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.studentpicker.R;
@@ -29,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PresentationActivity extends AppCompatActivity
-        implements PresentationColorChooserDialog.Listener, TextToSpeechManager.Listener,
+        implements ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener,
         PresentationManager.Listener, PresentationTextSizeDialog.Listener {
 
     public static final String LIST_ID_KEY = "listId";
@@ -79,7 +81,7 @@ public class PresentationActivity extends AppCompatActivity
         header.setText(NameUtils.getChoosingMessage(this, listId, numNames));
 
         setTextSizeDialog = new PresentationTextSizeDialog(this, this);
-        colorChooserDialog = new PresentationColorChooserDialog(this, this, preferencesManager);
+        colorChooserDialog = new PresentationColorChooserDialog(this, preferencesManager);
 
         chooseNames();
     }
@@ -129,9 +131,13 @@ public class PresentationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onChooseTextColor(int selectedColor) {
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, int selectedColor) {
+        preferencesManager.setPresentationTextColor(selectedColor);
         presentationAdapter.setTextColor(selectedColor);
     }
+
+    @Override
+    public void onColorChooserDismissed(@NonNull ColorChooserDialog dialog) {}
 
     @Override
     public void onTextToSpeechFailure() {
@@ -156,7 +162,7 @@ public class PresentationActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.presentation_menu, menu);
         UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
-        UIUtils.loadMenuIcon(menu, R.id.say_names, IoniconsIcons.ion_android_microphone, this);
+        UIUtils.loadMenuIcon(menu, R.id.say_names, IoniconsIcons.ion_android_volume_up, this);
         if (settings.getNumNamesToChoose() > 1) {
             menu.findItem(R.id.say_names).setTitle(R.string.say_names);
         }
