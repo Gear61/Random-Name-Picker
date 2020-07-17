@@ -14,12 +14,14 @@ import android.view.animation.DecelerateInterpolator
 import com.randomappsinc.studentpicker.R
 import com.randomappsinc.studentpicker.utils.UIUtils
 
-/** The amount of time you need to wait for the drumroll crash to happen*/
+/** The amount of time you need to wait for the drumroll crash to happen */
 private const val ANIMATION_DELAY_MS = 2600L
 
 class PresentationManager(
         private val listener: Listener,
-        private val view: View) {
+        private val view: View,
+        private val isAutomaticTts: Boolean
+) {
 
     interface Listener {
         fun speakNames()
@@ -83,7 +85,9 @@ class PresentationManager(
         fullSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animator: Animator) {}
             override fun onAnimationEnd(animator: Animator) {
-                listener.speakNames()
+                if (isAutomaticTts) {
+                    listener.speakNames()
+                }
             }
 
             override fun onAnimationCancel(animator: Animator) {}
