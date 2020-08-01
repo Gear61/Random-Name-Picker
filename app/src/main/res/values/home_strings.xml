@@ -30,6 +30,4 @@
         We detected that you purchased Random Name Picker Premium on another device.
         You can restart the app to immediately see all the upgrades.
     </string>
-
-    <string name="speech_microphone_permission_denied">Speech search requires the use of the microphone.</string>
 </resources>

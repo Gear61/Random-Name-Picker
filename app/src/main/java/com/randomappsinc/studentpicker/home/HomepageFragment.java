@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -140,12 +139,11 @@ public class HomepageFragment extends Fragment implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == RECORD_AUDIO_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 speechToTextManager.startSpeechToTextFlow();
             } else {
-                Toast.makeText(getContext(), R.string.speech_microphone_permission_denied, Toast.LENGTH_LONG).show();
+                UIUtils.showLongToast(R.string.speech_to_text_permission_denied, getContext());
             }
         }
     }
