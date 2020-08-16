@@ -259,7 +259,7 @@ public class EditNameListActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
+        switch (requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     UIUtils.showShortToast(R.string.processing_your_photo, this);
@@ -287,18 +287,27 @@ public class EditNameListActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         switch (requestCode) {
             case CAMERA_PERMISSION_CODE:
-                startCameraPage();
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startCameraPage();
+                } else {
+                    UIUtils.showLongToast(R.string.camera_permission_denied, this);
+                }
                 break;
             case GALLERY_PERMISSION_CODE:
-                openFilePicker();
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openFilePicker();
+                } else {
+                    UIUtils.showLongToast(R.string.gallery_permission_denied, this);
+                }
                 break;
             case RECORD_AUDIO_PERMISSION_CODE:
-                speechToTextManager.startSpeechToTextFlow();
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    speechToTextManager.startSpeechToTextFlow();
+                } else {
+                    UIUtils.showLongToast(R.string.speech_to_text_permission_denied, this);
+                }
                 break;
         }
     }
