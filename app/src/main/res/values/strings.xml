@@ -59,4 +59,8 @@
     <string name="premium_back_door_triggered">
         Hello friend of Alex. Enjoy your free Random Name Picker Premium.
     </string>
+
+    <string name="speech_to_text_permission_denied">To convert your speech to text, we need access to your microphone.</string>
+    <string name="camera_permission_denied">To take a picture with camera, we need access to your camera.</string>
+    <string name="gallery_permission_denied">To import a picture from gallery, we need access to your storage.</string>
 </resources>

@@ -2,6 +2,7 @@ package com.randomappsinc.studentpicker.home;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -105,7 +106,7 @@ public class HomepageFragment extends Fragment implements
         speechToTextManager = new SpeechToTextManager(getContext(), this);
         speechToTextManager.setListeningPrompt(R.string.search_with_speech_message);
 
-        preferencesManager = new PreferencesManager(getContext());
+        preferencesManager = new PreferencesManager(requireContext());
         if (preferencesManager.isOnFreeVersion() &&
                 (!preferencesManager.hasSeenPremiumTooltip()
                         || preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_PREMIUM_TOOLTIP == 0)) {
@@ -133,6 +134,17 @@ public class HomepageFragment extends Fragment implements
         } else {
             PermissionUtils.requestPermission(
                     this, Manifest.permission.RECORD_AUDIO, RECORD_AUDIO_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == RECORD_AUDIO_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                speechToTextManager.startSpeechToTextFlow();
+            } else {
+                UIUtils.showLongToast(R.string.speech_to_text_permission_denied, getContext());
+            }
         }
     }
 
