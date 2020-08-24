@@ -32,7 +32,7 @@ public class ListTabsAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return PremiumOptionsFragment.getInstance(listId);
             default:
-                throw new IllegalArgumentException("There should only be 2 tabs!");
+                throw new IllegalArgumentException("There should only be 3 tabs!");
         }
     }
 

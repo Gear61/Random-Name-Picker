@@ -27,7 +27,7 @@ import butterknife.OnClick;
 
 public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.SettingViewHolder> {
 
-    private static final int NUM_SETTINGS_OPTIONS = 7;
+    private static final int NUM_SETTINGS_OPTIONS = 8;
 
     public interface ItemSelectionListener {
         void onItemClick(int position);
