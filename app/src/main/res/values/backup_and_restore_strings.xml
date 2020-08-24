@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="backup_and_restore_title">Back Up And Restore Data</string>
+
+    <string-array name="backup_and_restore_tabs">
+        <item>Backup</item>
+        <item>Restore</item>
+    </string-array>
+
+    <string name="backup_data">Backup Data</string>
+    <string name="change_backup_folder">Change Backup Folder</string>
+    <string name="export_data">Export Data</string>
+
+    <string name="restore_data">Restore Data</string>
+    <string name="restore_data_explanation">
+        Click \"Restore Data\" to tell Random Name Picker where your data
+        backup file is and have it restore your name list!
+    </string>
+</resources>

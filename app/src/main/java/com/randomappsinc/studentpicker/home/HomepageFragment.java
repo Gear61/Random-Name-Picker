@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.backupandrestore.BackupAndRestoreActivity;
 import com.randomappsinc.studentpicker.choosing.NameChoosingActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
@@ -179,6 +180,11 @@ public class HomepageFragment extends Fragment implements
     @OnClick(R.id.import_from_csv_button)
     void importFromCsvFile() {
         ((HomeActivity) requireActivity()).importFromCsvFile();
+    }
+
+    @OnClick(R.id.restore_sets_button)
+    public void restoreSets() {
+        ((HomeActivity) requireActivity()).restoreFromBackup();
     }
 
     @Override

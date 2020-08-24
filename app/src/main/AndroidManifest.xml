@@ -75,6 +75,13 @@
             />
 
         <activity
+            android:name=".backupandrestore.BackupAndRestoreActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/backup_and_restore_title"
+            android:configChanges="orientation|screenSize"
+            />
+
+        <activity
             android:name=".listpage.ListLandingPageActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.randomappsinc.studentpicker.R;
+import com.randomappsinc.studentpicker.backupandrestore.BackupAndRestoreActivity;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
@@ -182,6 +183,17 @@ public class HomeActivity extends AppCompatActivity implements
             csvIntent.setType("*/*");
             csvIntent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.CSV_MIME_TYPES);
             startActivityForResult(csvIntent, IMPORT_CSV_REQUEST_CODE);
+        });
+    }
+
+    @OnClick(R.id.sheet_restore_from_backup)
+    public void restoreFromBackup() {
+        hideBottomSheet();
+        PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, this, () -> {
+            Intent intent = new Intent(this, BackupAndRestoreActivity.class)
+                    .putExtra(Constants.GO_TO_RESTORE_IMMEDIATELY_KEY, true);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
         });
     }
 
