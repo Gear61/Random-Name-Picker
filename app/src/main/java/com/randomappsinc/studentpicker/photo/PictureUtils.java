@@ -79,7 +79,7 @@ class PictureUtils {
                 }
                 Uri targetUri = FileProvider.getUriForFile(context, Constants.FILE_PROVIDER_AUTHORITY, photoFile);
                 PictureUtils.copyFromUriIntoFile(contentResolver, takenPhotoUri, targetUri);
-                return takenPhotoUri;
+                return targetUri;
         }
 
         // If rotation was necessary, write rotated bitmap into a new file and return the URI for that file
