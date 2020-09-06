@@ -134,6 +134,38 @@ public class DataSource {
         close();
     }
 
+    public Map<ListDO, List<NameDO>> getAllListSet() {
+        Map<ListDO, List<NameDO>> allListMap = new HashMap<>();
+        ListDO listDO = new ListDO(-1, "");
+        List<NameDO> nameDOList = new ArrayList<>();
+
+        open();
+        String query = "SELECT Lists.id, Lists.list_name, Names.name, Names.name_count, Names.photo_uri " +
+                "FROM Lists " +
+                "LEFT JOIN Names ON Lists.id = Names.list_id " +
+                "ORDER BY Lists.id";
+        Cursor cursor = database.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            int listId = cursor.getInt(0);
+            String listName = cursor.getString(1);
+            if (listDO.getId() != listId){
+                listDO = new ListDO(listId, listName);
+                nameDOList = new ArrayList<>();
+            }
+            NameDO nameDO = new NameDO();
+            String name = cursor.getString(2);
+            nameDO.setName(name);
+            int nameAmount = cursor.getInt(3);
+            nameDO.setAmount(nameAmount);
+            nameDO.setPhotoUri(cursor.getString(4));
+            nameDOList.add(nameDO);
+            allListMap.put(listDO, nameDOList);
+        }
+        cursor.close();
+        close();
+        return allListMap;
+    }
+
     public List<NameDO> getNamesInList(int listId) {
         List<NameDO> nameDOs = new ArrayList<>();
         open();
@@ -550,6 +582,7 @@ public class DataSource {
 
         close();
     }
+
     public void updateNamePhoto(int nameId, String photoUri) {
         open();
 
