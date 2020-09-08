@@ -38,10 +38,10 @@ class BackupDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        backupDataClicked()
+        setUpBackupButtonOnClickListener()
         setBackupSubtitle()
         changeBackupFolder()
-        BackupDataManager.listener = backupDataListener
+        BackupDataManager.setListener(backupDataListener)
     }
 
     fun setBackupSubtitle() {
@@ -50,13 +50,11 @@ class BackupDataFragment : Fragment() {
         } else {
             val lastBackupUnixTime: Long = preferencesManager.lastBackupTime
             val lastBackupTime: String = TimeUtils.getLastBackupTime(lastBackupUnixTime)
-            binding.backupSubtitle.text = requireContext().getString(
-                    R.string.backup_subtitle_with_backup,
-                    lastBackupTime)
+            binding.backupSubtitle.text = getString(R.string.backup_subtitle_with_backup, lastBackupTime)
         }
     }
 
-    private fun backupDataClicked() {
+    private fun setUpBackupButtonOnClickListener() {
         binding.backupData.setOnClickListener {
             if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, context)) {
                 backupData()
@@ -87,7 +85,7 @@ class BackupDataFragment : Fragment() {
         startActivityForResult(intent, WRITE_BACKUP_FILE_CODE)
     }
 
-   private fun changeBackupFolder() {
+    private fun changeBackupFolder() {
         binding.changeBackupFolder.setOnClickListener {
             if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, context)) {
                 chooseBackupLocation()
@@ -113,9 +111,9 @@ class BackupDataFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (requestCode == WRITE_BACKUP_FILE_CODE && resultCode == Activity.RESULT_OK && resultData != null) {
-            val context = context
+            val context = requireContext()
             val uri = resultData.data
-            if (uri == null || context == null) {
+            if (uri == null) {
                 backupDataListener.onBackupFailed()
             } else {
                 // Persist ability to read/write to this file
