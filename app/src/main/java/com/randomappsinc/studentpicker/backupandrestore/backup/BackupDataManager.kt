@@ -18,12 +18,16 @@ object BackupDataManager {
 
     private val backgroundHandler: Handler
     private val uiHandler = Handler(Looper.getMainLooper())
-    var listener: Listener? = null
+    private var listener: Listener? = null
 
     init {
         val handlerThread = HandlerThread("Backup Data")
         handlerThread.start()
         backgroundHandler = Handler(handlerThread.looper)
+    }
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
     }
 
     fun setBackupUri(context: Context?, backupUri: String) {
@@ -48,8 +52,8 @@ object BackupDataManager {
                         }
                         return@post
                     }
-                    val namesListMap = dataSource.allListSet
-                    //TODO: serialize the namesListMap after the review
+                    val allNamesSet = dataSource.allNamesSet
+                    //TODO: serialize the allNamesSet after the review
                     preferencesManager.updateLastBackupTime()
                     if (userTriggered) {
                         alertListenerOfBackupComplete()
@@ -68,14 +72,10 @@ object BackupDataManager {
     }
 
     private fun alertListenerOfBackupComplete() {
-        if (listener != null) {
-            uiHandler.post { listener!!.onBackupComplete() }
-        }
+        uiHandler.post { listener?.onBackupComplete() }
     }
 
     private fun alertListenerOfBackupFail() {
-        if (listener != null) {
-            uiHandler.post { listener!!.onBackupFailed() }
-        }
+        uiHandler.post { listener?.onBackupFailed() }
     }
 }

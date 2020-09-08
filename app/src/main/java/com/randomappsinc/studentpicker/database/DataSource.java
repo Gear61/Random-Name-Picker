@@ -20,8 +20,10 @@ import com.randomappsinc.studentpicker.utils.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DataSource {
 
@@ -134,13 +136,13 @@ public class DataSource {
         close();
     }
 
-    public Map<ListDO, List<NameDO>> getAllListSet() {
-        Map<ListDO, List<NameDO>> allListMap = new HashMap<>();
-        ListDO listDO = new ListDO(-1, "");
+    public Set<ListDO> getAllNamesSet() {
+        Set<ListDO> allNamesSet = new HashSet<>();
         List<NameDO> nameDOList = new ArrayList<>();
+        ListDO listDO = null;
 
         open();
-        String query = "SELECT Lists.id, Lists.list_name, Names.name, Names.name_count, Names.photo_uri " +
+        String query = "SELECT Lists.id, Lists.list_name, Names.name, Names.name_count " +
                 "FROM Lists " +
                 "LEFT JOIN Names ON Lists.id = Names.list_id " +
                 "ORDER BY Lists.id";
@@ -148,7 +150,7 @@ public class DataSource {
         while (cursor.moveToNext()) {
             int listId = cursor.getInt(0);
             String listName = cursor.getString(1);
-            if (listDO.getId() != listId){
+            if (listDO == null || listDO.getId() != listId) {
                 listDO = new ListDO(listId, listName);
                 nameDOList = new ArrayList<>();
             }
@@ -157,13 +159,15 @@ public class DataSource {
             nameDO.setName(name);
             int nameAmount = cursor.getInt(3);
             nameDO.setAmount(nameAmount);
-            nameDO.setPhotoUri(cursor.getString(4));
-            nameDOList.add(nameDO);
-            allListMap.put(listDO, nameDOList);
+            if (name != null){
+                nameDOList.add(nameDO);
+            }
+            listDO.setNameDOList(nameDOList);
+            allNamesSet.add(listDO);
         }
         cursor.close();
         close();
-        return allListMap;
+        return allNamesSet;
     }
 
     public List<NameDO> getNamesInList(int listId) {
