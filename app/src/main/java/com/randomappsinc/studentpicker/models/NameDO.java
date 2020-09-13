@@ -2,7 +2,9 @@ package com.randomappsinc.studentpicker.models;
 
 import androidx.annotation.Nullable;
 
-public class NameDO {
+import java.io.Serializable;
+
+public class NameDO implements Serializable {
 
     private int id;
     private String name;

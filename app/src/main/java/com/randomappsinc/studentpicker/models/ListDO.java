@@ -1,8 +1,9 @@
 package com.randomappsinc.studentpicker.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ListDO {
+public class ListDO implements Serializable {
 
     private int id;
     private String name;
