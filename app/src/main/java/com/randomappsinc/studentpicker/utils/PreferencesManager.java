@@ -3,6 +3,8 @@ package com.randomappsinc.studentpicker.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.Nullable;
+
 import com.randomappsinc.studentpicker.theme.ThemeMode;
 
 public class PreferencesManager {
@@ -14,6 +16,8 @@ public class PreferencesManager {
     private static final String PRESENTATION_TEXT_SIZE_KEY = "presentationTextSize";
     private static final String PRESENTATION_TEXT_COLOR_KEY = "presentationTextColor";
     private static final String SHAKE_ENABLED = "shakeEnabled";
+    private static final String BACKUP_URI = "backupUri";
+    private static final String LAST_BACKUP_TIME = "lastBackupTime";
     private static final String THEME_MODE = "themeMode";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
     private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
@@ -53,6 +57,23 @@ public class PreferencesManager {
 
     public boolean isShakeEnabled() {
         return prefs.getBoolean(SHAKE_ENABLED, false);
+    }
+
+    @Nullable
+    public String getBackupUri() {
+        return prefs.getString(BACKUP_URI, null);
+    }
+
+    public void setBackupUri(@Nullable String uriString) {
+        prefs.edit().putString(BACKUP_URI, uriString).apply();
+    }
+
+    public long getLastBackupTime() {
+        return prefs.getLong(LAST_BACKUP_TIME, 0);
+    }
+
+    public void updateLastBackupTime() {
+        prefs.edit().putLong(LAST_BACKUP_TIME, System.currentTimeMillis()).apply();
     }
 
     public void setThemeMode(@ThemeMode int themeMode) {
