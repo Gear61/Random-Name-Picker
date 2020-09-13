@@ -6,7 +6,9 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import com.randomappsinc.studentpicker.database.DataSource
+import com.randomappsinc.studentpicker.utils.ObjectSerializer
 import com.randomappsinc.studentpicker.utils.PreferencesManager
+import java.io.FileOutputStream
 
 object BackupDataManager {
     const val BACKUP_FILE_NAME = "random-name-picker-backup.txt"
@@ -52,8 +54,10 @@ object BackupDataManager {
                         }
                         return@post
                     }
-                    val allNamesSet = dataSource.allNamesSet
-                    //TODO: serialize the allNamesSet after the review
+                    val fileOutputStream = FileOutputStream(fileDescriptor.fileDescriptor)
+                    fileOutputStream.write(ObjectSerializer.serialize(dataSource.allNamesSet as HashSet).toByteArray())
+                    fileOutputStream.close()
+                    fileDescriptor.close()
                     preferencesManager.updateLastBackupTime()
                     if (userTriggered) {
                         alertListenerOfBackupComplete()

@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.backupandrestore.BackupAndRestoreActivity;
-import com.randomappsinc.studentpicker.common.Constants;
-import com.randomappsinc.studentpicker.home.HomeActivity;
 import com.randomappsinc.studentpicker.premium.BuyPremiumActivity;
 import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.theme.ThemeManager;
@@ -134,6 +132,8 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                     requireActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
                 });
                 return;
+
+            default: return;
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
