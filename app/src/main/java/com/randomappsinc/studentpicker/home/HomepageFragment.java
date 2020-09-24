@@ -181,6 +181,11 @@ public class HomepageFragment extends Fragment implements
         ((HomeActivity) requireActivity()).importFromCsvFile();
     }
 
+    @OnClick(R.id.restore_sets_button)
+    public void restoreSets() {
+        ((HomeActivity) requireActivity()).restoreFromBackup();
+    }
+
     @Override
     public void onResume() {
         super.onResume();

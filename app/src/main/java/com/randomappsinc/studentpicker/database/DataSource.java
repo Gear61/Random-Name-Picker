@@ -20,8 +20,10 @@ import com.randomappsinc.studentpicker.utils.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DataSource {
 
@@ -132,6 +134,40 @@ public class DataSource {
         String whereStatement = DatabaseColumns.ID + " = ?";
         database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
         close();
+    }
+
+    public Set<ListDO> getAllNamesSet() {
+        Set<ListDO> allNamesSet = new HashSet<>();
+        List<NameDO> nameDOList = new ArrayList<>();
+        ListDO listDO = null;
+
+        open();
+        String query = "SELECT Lists.id, Lists.list_name, Names.name, Names.name_count " +
+                "FROM Lists " +
+                "LEFT JOIN Names ON Lists.id = Names.list_id " +
+                "ORDER BY Lists.id";
+        Cursor cursor = database.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            int listId = cursor.getInt(0);
+            String listName = cursor.getString(1);
+            if (listDO == null || listDO.getId() != listId) {
+                listDO = new ListDO(listId, listName);
+                nameDOList = new ArrayList<>();
+            }
+            NameDO nameDO = new NameDO();
+            String name = cursor.getString(2);
+            nameDO.setName(name);
+            int nameAmount = cursor.getInt(3);
+            nameDO.setAmount(nameAmount);
+            if (name != null){
+                nameDOList.add(nameDO);
+            }
+            listDO.setNameDOList(nameDOList);
+            allNamesSet.add(listDO);
+        }
+        cursor.close();
+        close();
+        return allNamesSet;
     }
 
     public List<NameDO> getNamesInList(int listId) {
@@ -550,6 +586,7 @@ public class DataSource {
 
         close();
     }
+
     public void updateNamePhoto(int nameId, String photoUri) {
         open();
 

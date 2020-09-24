@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="backup_and_restore_title">Back Up And Restore Data</string>
+    <string name="backup_data_explanation">
+        Click \"Backup Data\" to tell Random Name Picker where you want it
+        to back up your data and have it start doing regular backups!
+    </string>
+    <string name="backup_subtitle_with_backup">Last backed up on: %s</string>
+
+    <string-array name="backup_and_restore_tabs">
+        <item>Backup</item>
+        <item>Restore</item>
+    </string-array>
+
+    <string name="backup_data">Backup Data</string>
+    <string name="backup_permission_denied">To backup your name list, we need access to your storage.</string>
+    <string name="choose_backup_folder">
+        Navigate to the folder where you want Random Name Picker to backup your data.
+    </string>
+    <string name="backup_successful">Backup successful!</string>
+    <string name="backup_failed">We failed to back up your data.</string>
+    <string name="change_backup_folder">Change Backup Folder</string>
+    <string name="export_data">Export Data</string>
+
+    <string name="restore_data">Restore Data</string>
+    <string name="restore_data_explanation">
+        Click \"Restore Data\" to tell Random Name Picker where your data
+        backup file is and have it restore your name list!
+    </string>
+</resources>

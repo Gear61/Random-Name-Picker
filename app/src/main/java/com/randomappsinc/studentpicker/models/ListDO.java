@@ -1,9 +1,13 @@
 package com.randomappsinc.studentpicker.models;
 
-public class ListDO {
+import java.io.Serializable;
+import java.util.List;
+
+public class ListDO implements Serializable {
 
     private int id;
     private String name;
+    private List<NameDO> nameDOList;
 
     public ListDO(int id, String name) {
         this.id = id;
@@ -24,5 +28,13 @@ public class ListDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<NameDO> getNameDOList() {
+        return nameDOList;
+    }
+
+    public void setNameDOList(List<NameDO> nameDOList) {
+        this.nameDOList = nameDOList;
     }
 }

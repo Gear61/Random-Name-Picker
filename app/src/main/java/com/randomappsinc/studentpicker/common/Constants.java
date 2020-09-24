@@ -9,6 +9,8 @@ public class Constants {
 
     public static final int LIST_UPDATED_RESULT_CODE = 2;
 
+    public static final String GO_TO_RESTORE_IMMEDIATELY_KEY = "goToRestoreImmediately";
+
     public static final String[] CSV_MIME_TYPES =
             {"text/comma-separated-values",
                     "text/csv",

@@ -16,6 +16,7 @@
         <item>@string/my_other_apps</item>
         <item>@string/rate_this_app</item>
         <item>@string/source_code</item>
+        <item>@string/backup_and_restore_title</item>
     </array>
     <string name="play_store_error">Unable to open the Play Store.</string>
     <string name="feedback_subject">Random Name Picker Feedback</string>
@@ -30,6 +31,7 @@
     <string name="android_icon">{ion-social-android}</string>
     <string name="rate_icon">{ion-thumbsup}</string>
     <string name="github_icon">{ion-social-github}</string>
+    <string name="backup_icon">{ion-android-upload}</string>
     <array name="settings_icons">
         <item>@string/money_icon</item>
         <item>@string/shake_icon</item>
@@ -38,5 +40,6 @@
         <item>@string/android_icon</item>
         <item>@string/rate_icon</item>
         <item>@string/github_icon</item>
+        <item>@string/backup_icon</item>
     </array>
 </resources>
