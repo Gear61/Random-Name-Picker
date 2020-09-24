@@ -39,6 +39,10 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="rounded_button" parent="button">
+        <item name="android:background">@drawable/rounded_blue_rectangle</item>
+    </style>
+
     <style name="tabs">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

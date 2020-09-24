@@ -20,6 +20,7 @@
     <string name="trash_icon">{ion-android-delete}</string>
     <string name="delete_icon">{ion-android-remove-circle}</string>
     <string name="voice_icon">{ion-android-microphone}</string>
+    <string name="download_icon">{ion-android-download}</string>
     <string name="image_icon">{ion-image}</string>
     <string name="speech_to_text_listening_mic_icon">{ion-android-microphone 40dp #FFFFFF}</string>
     <string name="speech_to_text_retry_mic_icon">{ion-android-microphone 40dp #1976D2}</string>

@@ -87,91 +87,118 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
-    <LinearLayout
-        android:id="@+id/no_content"
+    <ScrollView
+        android:id="@+id/no_sets"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+        android:layout_height="match_parent"
         >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/no_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/homepage_empty_text"
-            android:textColor="@color/text_normal"
-            android:textSize="23sp"
-            />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/create_name_list_button"
-            android:layout_marginBottom="8dp"
-            style="@style/no_lists_option_card"
+            android:layout_margin="40dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             >
 
-            <LinearLayout style="@style/home_empty_state_option_container">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/homepage_empty_text"
+                android:textColor="@color/text_normal"
+                android:textSize="23sp"
+                />
 
-                <com.joanzapata.iconify.widget.IconTextView
-                    android:text="@string/add_circle_icon"
-                    style="@style/home_empty_state_icon"
-                    />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/create_name_list_button"
+                android:layout_marginBottom="8dp"
+                style="@style/no_lists_option_card"
+                >
 
-                <TextView
-                    android:text="@string/create_name_list"
-                    style="@style/home_empty_state_text"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                <LinearLayout style="@style/home_empty_state_option_container">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/import_from_txt_button"
-            android:layout_marginBottom="8dp"
-            style="@style/no_lists_option_card"
-            >
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:text="@string/add_circle_icon"
+                        style="@style/home_empty_state_icon"
+                        />
 
-            <LinearLayout style="@style/home_empty_state_option_container">
+                    <TextView
+                        android:text="@string/create_name_list"
+                        style="@style/home_empty_state_text"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <com.joanzapata.iconify.widget.IconTextView
-                    android:text="@string/document_icon"
-                    style="@style/home_empty_state_icon"
-                    />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/import_from_txt_button"
+                android:layout_marginBottom="8dp"
+                style="@style/no_lists_option_card"
+                >
 
-                <TextView
-                    android:text="@string/import_from_txt_file"
-                    style="@style/home_empty_state_text"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                <LinearLayout style="@style/home_empty_state_option_container">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/import_from_csv_button"
-            android:layout_marginBottom="8dp"
-            style="@style/no_lists_option_card"
-            >
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:text="@string/document_icon"
+                        style="@style/home_empty_state_icon"
+                        />
 
-            <LinearLayout style="@style/home_empty_state_option_container">
+                    <TextView
+                        android:text="@string/import_from_txt_file"
+                        style="@style/home_empty_state_text"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <com.joanzapata.iconify.widget.IconTextView
-                    android:text="@string/document_icon"
-                    style="@style/home_empty_state_icon"
-                    />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/import_from_csv_button"
+                android:layout_marginBottom="8dp"
+                style="@style/no_lists_option_card"
+                >
 
-                <TextView
-                    android:id="@+id/import_from_csv_empty_state_text"
-                    style="@style/home_empty_state_text"
-                    />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                <LinearLayout style="@style/home_empty_state_option_container">
 
-        <com.joanzapata.iconify.widget.IconTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/home_add_options_info_text"
-            android:textColor="@color/text_normal"
-            android:textSize="15sp"
-            />
-    </LinearLayout>
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:text="@string/document_icon"
+                        style="@style/home_empty_state_icon"
+                        />
+
+                    <TextView
+                        android:id="@+id/import_from_csv_empty_state_text"
+                        style="@style/home_empty_state_text"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/restore_sets_button"
+                android:layout_marginBottom="8dp"
+                style="@style/no_lists_option_card"
+                >
+
+                <LinearLayout style="@style/home_empty_state_option_container">
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:text="@string/document_icon"
+                        style="@style/home_empty_state_icon"
+                        />
+
+                    <TextView
+                        android:text="@string/restore_name_list_from_backup"
+                        style="@style/home_empty_state_text"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/home_add_options_info_text"
+                android:textColor="@color/text_normal"
+                android:textSize="15sp"
+                />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
