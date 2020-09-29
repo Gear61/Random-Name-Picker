@@ -20,10 +20,8 @@ import com.randomappsinc.studentpicker.utils.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class DataSource {
 
@@ -136,11 +134,8 @@ public class DataSource {
         close();
     }
 
-    public Set<ListDO> getAllNamesSet() {
-        Set<ListDO> allNamesSet = new HashSet<>();
-        List<NameDO> nameDOList = new ArrayList<>();
-        ListDO listDO = null;
-
+    public List<ListDO> getAllNameList() {
+        Map<Integer, ListDO> allNamesMap = new HashMap<>();
         open();
         String query = "SELECT Lists.id, Lists.list_name, Names.name, Names.name_count " +
                 "FROM Lists " +
@@ -150,24 +145,27 @@ public class DataSource {
         while (cursor.moveToNext()) {
             int listId = cursor.getInt(0);
             String listName = cursor.getString(1);
-            if (listDO == null || listDO.getId() != listId) {
-                listDO = new ListDO(listId, listName);
-                nameDOList = new ArrayList<>();
-            }
             NameDO nameDO = new NameDO();
             String name = cursor.getString(2);
             nameDO.setName(name);
             int nameAmount = cursor.getInt(3);
             nameDO.setAmount(nameAmount);
-            if (name != null){
-                nameDOList.add(nameDO);
+            if (allNamesMap.get(listId) == null) {
+                ListDO listDO = new ListDO(listId, listName);
+                List<NameDO> nameDOs = new ArrayList<>();
+                if (name != null) {
+                    nameDOs.add(nameDO);
+                }
+                listDO.setNamesInList(nameDOs);
+                allNamesMap.put(listId, listDO);
+            } else {
+                ListDO listDO = allNamesMap.get(listId);
+                listDO.getNamesInList().add(nameDO);
             }
-            listDO.setNameDOList(nameDOList);
-            allNamesSet.add(listDO);
         }
         cursor.close();
         close();
-        return allNamesSet;
+        return new ArrayList<>(allNamesMap.values());
     }
 
     public List<NameDO> getNamesInList(int listId) {
