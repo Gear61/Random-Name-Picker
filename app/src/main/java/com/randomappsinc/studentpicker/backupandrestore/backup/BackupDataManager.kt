@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import com.randomappsinc.studentpicker.database.DataSource
-import com.randomappsinc.studentpicker.utils.ObjectSerializer
+import com.randomappsinc.studentpicker.utils.JSONUtils
 import com.randomappsinc.studentpicker.utils.PreferencesManager
 import java.io.FileOutputStream
 
@@ -55,7 +55,7 @@ object BackupDataManager {
                         return@post
                     }
                     val fileOutputStream = FileOutputStream(fileDescriptor.fileDescriptor)
-                    fileOutputStream.write(ObjectSerializer.serialize(dataSource.allNamesSet as HashSet).toByteArray())
+                    fileOutputStream.write(JSONUtils.serializeNameList(dataSource.allNameList).toByteArray())
                     fileOutputStream.close()
                     fileDescriptor.close()
                     preferencesManager.updateLastBackupTime()
