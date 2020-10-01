@@ -124,7 +124,6 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
             case 6:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
-
             case 7:
                 PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, requireActivity(), () -> {
                     Intent backupRestoreIntent = new Intent(getActivity(), BackupAndRestoreActivity.class);

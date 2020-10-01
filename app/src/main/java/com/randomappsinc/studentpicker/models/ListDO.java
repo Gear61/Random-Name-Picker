@@ -7,7 +7,7 @@ public class ListDO implements Serializable {
 
     private int id;
     private String name;
-    private List<NameDO> nameDOList;
+    private List<NameDO> nameDOs;
 
     public ListDO(int id, String name) {
         this.id = id;
@@ -30,11 +30,11 @@ public class ListDO implements Serializable {
         this.name = name;
     }
 
-    public List<NameDO> getNameDOList() {
-        return nameDOList;
+    public List<NameDO> getNamesInList() {
+        return nameDOs;
     }
 
-    public void setNameDOList(List<NameDO> nameDOList) {
-        this.nameDOList = nameDOList;
+    public void setNamesInList(List<NameDO> nameDOs) {
+        this.nameDOs = nameDOs;
     }
 }
