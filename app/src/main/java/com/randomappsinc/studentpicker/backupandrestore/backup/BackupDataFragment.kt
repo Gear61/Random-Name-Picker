@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,8 @@ class BackupDataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpBackupButtonOnClickListener()
         setBackupSubtitle()
-        changeBackupFolder()
+        changeBackupFolderOnClickListener()
+        exportDataOnClickListener()
         BackupDataManager.setListener(backupDataListener)
     }
 
@@ -78,16 +80,18 @@ class BackupDataFragment : Fragment() {
 
     private fun chooseBackupLocation() {
         UIUtils.showLongToast(R.string.choose_backup_folder, context)
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TITLE, BackupDataManager.BACKUP_FILE_NAME)
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TITLE, BackupDataManager.BACKUP_FILE_NAME)
+        }
         startActivityForResult(intent, WRITE_BACKUP_FILE_CODE)
     }
 
-    private fun changeBackupFolder() {
+    private fun changeBackupFolderOnClickListener() {
         binding.changeBackupFolder.setOnClickListener {
-            if (PermissionUtils.isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, context)) {
+            if (PermissionUtils.isPermissionGranted(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, context)) {
                 chooseBackupLocation()
             } else {
                 PermissionUtils.requestPermission(
@@ -95,6 +99,22 @@ class BackupDataFragment : Fragment() {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         WRITE_EXTERNAL_STORAGE_CODE)
             }
+        }
+    }
+
+   private fun exportDataOnClickListener() {
+        binding.exportData.setOnClickListener {
+            val backupUri: Uri? = BackupDataManager.getBackupUriForExporting(context)
+            if (backupUri == null) {
+                UIUtils.showLongToast(R.string.cannot_export_nothing, context)
+                return@setOnClickListener
+            }
+            val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/*"
+                putExtra(Intent.EXTRA_STREAM, backupUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(sharingIntent, getString(R.string.export_data_with)))
         }
     }
 
