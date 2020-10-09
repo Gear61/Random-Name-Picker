@@ -40,6 +40,14 @@ object BackupDataManager {
         return PreferencesManager(context).backupUri
     }
 
+    fun getBackupUriForExporting(context: Context?): Uri? {
+        val preferencesManager = PreferencesManager(context)
+        val backupUri = preferencesManager.backupUri
+        return if (backupUri != null) {
+            Uri.parse(backupUri)
+        } else null
+    }
+
     fun backupData(context: Context, userTriggered: Boolean) {
         val dataSource = DataSource(context)
         val preferencesManager = PreferencesManager(context)
@@ -47,16 +55,18 @@ object BackupDataManager {
         if (backupUri != null) {
             backgroundHandler.post {
                 try {
-                    val fileDescriptor = context.contentResolver.openFileDescriptor(Uri.parse(backupUri), "w")
+                    val fileDescriptor =
+                        context.contentResolver.openFileDescriptor(Uri.parse(backupUri), "w")
                     if (fileDescriptor == null) {
                         if (userTriggered) {
                             alertListenerOfBackupFail()
                         }
                         return@post
                     }
-                    val fileOutputStream = FileOutputStream(fileDescriptor.fileDescriptor)
-                    fileOutputStream.write(JSONUtils.serializeNameList(dataSource.allNameList).toByteArray())
-                    fileOutputStream.close()
+                    FileOutputStream(fileDescriptor.fileDescriptor).run {
+                        write(JSONUtils.serializeNameList(dataSource.allNameList).toByteArray())
+                        close()
+                    }
                     fileDescriptor.close()
                     preferencesManager.updateLastBackupTime()
                     if (userTriggered) {
