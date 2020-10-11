@@ -138,11 +138,11 @@ class BackupDataFragment : Fragment() {
             } else {
                 // Persist ability to read/write to this file
                 val takeFlags = (resultData.flags
-                        and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION))
+                    and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION))
                 context.contentResolver.takePersistableUriPermission(uri, takeFlags)
 
-                BackupDataManager.setBackupUri(requireContext(), uri.toString())
-                BackupDataManager.backupData(requireContext(), true)
+                BackupDataManager.setBackupUri(context, uri.toString())
+                BackupDataManager.backupData(context, true)
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.randomappsinc.studentpicker.backupandrestore.backup.BackupDataFragment
+import com.randomappsinc.studentpicker.backupandrestore.restore.RestoreDataFragment
 
 class BackupAndRestoreTabsAdapter(
         fragmentManager: FragmentManager,
