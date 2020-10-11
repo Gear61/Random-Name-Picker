@@ -1,13 +1,14 @@
 package com.randomappsinc.studentpicker.models;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class ListDO implements Serializable {
+public class ListDO {
 
     private int id;
     private String name;
     private List<NameDO> nameDOs;
+
+    public ListDO() {}
 
     public ListDO(int id, String name) {
         this.id = id;
