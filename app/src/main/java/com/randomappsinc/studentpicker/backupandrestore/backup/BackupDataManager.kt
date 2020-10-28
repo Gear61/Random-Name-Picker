@@ -15,6 +15,7 @@ object BackupDataManager {
 
     interface Listener {
         fun onBackupComplete()
+
         fun onBackupFailed()
     }
 
