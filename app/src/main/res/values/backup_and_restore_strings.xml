@@ -34,6 +34,15 @@
         backup file is and have it restore your name list!
     </string>
     <string name="restore_permission_denied">
-        To restore your name list, we need access to your storage.
+        To restore your name lists, we need access to your storage.
+    </string>
+    <string name="restoring_your_data">Restoring your name lists&#8230;</string>
+    <string name="data_restoration_successful">Restore successful!</string>
+    <string name="data_restoration_failed">
+        We failed to restore your name lists from the file you provided.
+    </string>
+    <string name="backup_file_not_found">
+        We were unable to find \"random-name-picker-backup.txt\"
+        in your specified folder.
     </string>
 </resources>

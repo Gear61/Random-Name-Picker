@@ -2,10 +2,11 @@ package com.randomappsinc.studentpicker.utils
 
 import android.text.TextUtils
 import com.randomappsinc.studentpicker.models.ListDO
+import com.randomappsinc.studentpicker.models.NameDO
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.*
+import java.util.ArrayList
 
 object JSONUtils {
 
@@ -70,5 +71,38 @@ object JSONUtils {
         } catch (e: JSONException) {
             return null
         }
+    }
+
+    fun deserializeNameListsJson(nameListsJson: String?): List<ListDO> {
+        val listDOs = ArrayList<ListDO>()
+        try {
+            val nameListsArray = JSONArray(nameListsJson)
+            for (i in 0 until nameListsArray.length()) {
+                val nameListJson = nameListsArray.getJSONObject(i)
+                listDOs.add(getNameListFromJson(nameListJson))
+            }
+        } catch (ignored: JSONException) {}
+        return listDOs
+    }
+
+    private fun getNameListFromJson(nameListJson: JSONObject): ListDO {
+        val listDO = ListDO()
+        try {
+            listDO.name = nameListJson.getString(LIST_NAME)
+
+            val nameDOs = ArrayList<NameDO>()
+            val nameList = nameListJson.getJSONArray(NAME_LIST)
+            for (i in 0 until nameList.length()) {
+                val nameJson = nameList.getJSONObject(i)
+                val nameDo = NameDO().apply {
+                    name = nameJson.getString(NAME)
+                    amount = nameJson.getInt(AMOUNT)
+                }
+                nameDOs.add(nameDo)
+            }
+            listDO.namesInList = nameDOs
+        }
+        catch (ignored: JSONException) {}
+        return listDO
     }
 }
