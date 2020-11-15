@@ -1,0 +1,2032 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="5" by="lint 4.1">
+
+    <issue
+        id="GradleCompatible"
+        message="The compileSdkVersion (29) should not be lower than the targetSdkVersion (30)">
+        <location
+            file="build.gradle"/>
+    </issue>
+
+    <issue
+        id="ScopedStorage"
+        message="WRITE_EXTERNAL_STORAGE no longer provides write access when targeting Android 10+">
+        <location
+            file="src/main/AndroidManifest.xml"
+            line="13"/>
+    </issue>
+
+    <issue
+        id="MissingDefaultResource"
+        message="The dimen &quot;activity_horizontal_margin&quot; in values-w820dp has no declaration in the base `values` folder; this can lead to crashes when the resource is queried in a configuration that does not match this qualifier">
+        <location
+            file="src/main/res/values-w820dp/dimens.xml"
+            line="5"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `android:foreground` has no effect on API levels lower than 23 (current min is 19)">
+        <location
+            file="src/main/res/layout/edit_person_name_cell.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `android:foreground` has no effect on API levels lower than 23 (current min is 19)">
+        <location
+            file="src/main/res/layout/homepage_fragment.xml"
+            line="20"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `android:foreground` has no effect on API levels lower than 23 (current min is 19)">
+        <location
+            file="src/main/res/layout/list_option_cell.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `android:foreground` has no effect on API levels lower than 23 (current min is 19)">
+        <location
+            file="src/main/res/layout/names_list_item.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Attribute `android:foreground` has no effect on API levels lower than 23 (current min is 19)">
+        <location
+            file="src/main/res/layout/settings_list_item.xml"
+            line="9"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="29"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="30"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="31"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="33"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="34"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="73"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="85"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/views/BottomNavigationView.java"
+            line="111"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="21"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="22"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="23"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="24"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="25"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/premium/BuyPremiumActivity.java"
+            line="79"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="53"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="54"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="55"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="56"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="57"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="59"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="116"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="137"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListActivity.java"
+            line="337"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="108"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="109"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="110"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="134"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="140"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/editing/EditNameListAdapter.java"
+            line="146"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="45"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="46"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="47"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="142"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="145"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="161"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="167"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="176"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="189"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="50"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="51"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="52"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="53"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="54"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="55"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="56"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="57"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="58"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="59"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="61"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="117"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="125"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="130"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="156"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="164"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="169"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="174"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="179"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragment.java"
+            line="184"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragmentController.java"
+            line="29"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragmentController.java"
+            line="32"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragmentController.java"
+            line="39"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomepageFragmentController.java"
+            line="42"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/importdata/ImportFromFileActivity.java"
+            line="24"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/importdata/ImportFromFileActivity.java"
+            line="25"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/importdata/ImportFromFileActivity.java"
+            line="64"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="49"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="50"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="51"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="53"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="151"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="268"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="271"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="277"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingActivity.java"
+            line="280"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingAdapter.java"
+            line="62"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingAdapter.java"
+            line="63"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/choosing/NameChoosingAdapter.java"
+            line="86"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/NameListsAdapter.java"
+            line="71"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/NameListsAdapter.java"
+            line="82"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/NameListsAdapter.java"
+            line="87"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="40"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="41"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="42"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="89"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="179"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="182"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/PresentationActivity.java"
+            line="185"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/SetTextSizeViewHolder.java"
+            line="16"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/presentation/SetTextSizeViewHolder.java"
+            line="17"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="79"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="80"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="81"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="115"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="126"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="42"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="43"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="44"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="45"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="47"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/speech/SpeechToTextManager.java"
+            line="33"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/speech/SpeechToTextManager.java"
+            line="34"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/speech/SpeechToTextManager.java"
+            line="35"/>
+    </issue>
+
+    <issue
+        id="NonConstantResourceId"
+        message="Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them as annotation attributes">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/speech/SpeechToTextManager.java"
+            line="148"/>
+    </issue>
+
+    <issue
+        id="QueryPermissionsNeeded"
+        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this \&#xA;method; see https://g.co/dev/packagevisibility for details">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/home/HomeActivity.java"
+            line="126"/>
+    </issue>
+
+    <issue
+        id="QueryPermissionsNeeded"
+        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this \&#xA;method; see https://g.co/dev/packagevisibility for details">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/photo/PhotoImportManager.java"
+            line="47"/>
+    </issue>
+
+    <issue
+        id="QueryPermissionsNeeded"
+        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this \&#xA;method; see https://g.co/dev/packagevisibility for details">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/photo/PhotoImportManager.java"
+            line="59"/>
+    </issue>
+
+    <issue
+        id="QueryPermissionsNeeded"
+        message="Consider adding a `&lt;queries>` declaration to your manifest when calling this \&#xA;method; see https://g.co/dev/packagevisibility for details">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="119"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsAdapter.java"
+            line="81"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="89"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialCode"
+        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/settings/SettingsFragment.java"
+            line="97"/>
+    </issue>
+
+    <issue
+        id="UseSwitchCompatOrMaterialXml"
+        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library">
+        <location
+            file="src/main/res/layout/settings_list_item.xml"
+            line="23"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.android.billingclient:billing than 2.2.0 is available: 3.0.1">
+        <location
+            file="build.gradle"/>
+    </issue>
+
+    <issue
+        id="GradleDependency"
+        message="A newer version of com.google.android.material:material than 1.2.0-alpha05 is available: 1.3.0-alpha03">
+        <location
+            file="build.gradle"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/choosing_settings_styles.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/choosing_settings_styles.xml"
+            line="23"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/choosing_settings_styles.xml"
+            line="31"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/layout/group_list_item.xml"
+            line="22"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/layout/group_list_item.xml"
+            line="37"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/home_styles.xml"
+            line="8"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/home_styles.xml"
+            line="29"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/home_styles.xml"
+            line="36"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/home_styles.xml"
+            line="67"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/home_styles.xml"
+            line="75"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/layout/names_list_item.xml"
+            line="31"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="8"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="26"/>
+    </issue>
+
+    <issue
+        id="SpUsage"
+        message="Should use &quot;`sp`&quot; instead of &quot;`dp`&quot; for text sizes">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="93"/>
+    </issue>
+
+    <issue
+        id="SwitchIntDef"
+        message="Switch statement on an `int` with known associated constant missing case `Language.DEFAULT`">
+        <location
+            file="src/main/java/com/randomappsinc/studentpicker/speech/TextToSpeechManager.java"
+            line="69"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;copies&quot;): This should probably be a plural rather than a string">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="52"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;instances&quot;): This should probably be a plural rather than a string">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="57"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;copies&quot;): This should probably be a plural rather than a string">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="58"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;names&quot;): This should probably be a plural rather than a string">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="9"/>
+    </issue>
+
+    <issue
+        id="PluralsCandidate"
+        message="Formatting %d followed by words (&quot;names&quot;): This should probably be a plural rather than a string">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="30"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/buy_premium_activity.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/edit_name_list.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/group_maker.xml"
+            line="5"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/dialog_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/homepage_fragment.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/import_name_list.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/name_choosing.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/dialog_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/name_choosing_settings.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/name_suggestion_cell.xml"
+            line="6"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/presentation_activity.xml"
+            line="8"/>
+    </issue>
+
+    <issue
+        id="Overdraw"
+        message="Possible overdraw: Root element paints background `@color/screen_background` with a theme that also paints a background (inferred theme is `@style/AppTheme`)">
+        <location
+            file="src/main/res/layout/settings.xml"
+            line="6"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.backup_and_restore` appears to be unused">
+        <location
+            file="src/main/res/layout/backup_and_restore.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.backup_and_restore_tabs` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.restore_data` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="31"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.restore_data_explanation` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="32"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.restore_permission_denied` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="36"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.restoring_your_data` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="39"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.data_restoration_successful` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="40"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.data_restoration_failed` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="41"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.backup_file_not_found` appears to be unused">
+        <location
+            file="src/main/res/values/backup_and_restore_strings.xml"
+            line="44"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.half_white` appears to be unused">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="4"/>
+        <location
+            file="src/main/res/values-night/colors.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.color.accent_green` appears to be unused">
+        <location
+            file="src/main/res/values/colors.xml"
+            line="23"/>
+        <location
+            file="src/main/res/values-night/colors.xml"
+            line="23"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.dimen.default_margin` appears to be unused">
+        <location
+            file="src/main/res/values/dimens.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.dimen.activity_horizontal_margin` appears to be unused">
+        <location
+            file="src/main/res/values-w820dp/dimens.xml"
+            line="5"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.rename_list` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.cross_list_import` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="5"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.edit_list_options` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="6"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.upload_icon` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.edit_list_icons` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.edit` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="19"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.list_deleted` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="67"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.list_renamed` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="68"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.list_import_success` appears to be unused">
+        <location
+            file="src/main/res/values/edit_name_list_strings.xml"
+            line="77"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.export_csv_failed` appears to be unused">
+        <location
+            file="src/main/res/values/export_strings.xml"
+            line="3"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.export_txt_failed` appears to be unused">
+        <location
+            file="src/main/res/values/export_strings.xml"
+            line="7"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.export_file_title` appears to be unused">
+        <location
+            file="src/main/res/values/export_strings.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.export_file_with` appears to be unused">
+        <location
+            file="src/main/res/values/export_strings.xml"
+            line="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.group_list_item` appears to be unused">
+        <location
+            file="src/main/res/layout/group_list_item.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.group_maker` appears to be unused">
+        <location
+            file="src/main/res/layout/group_maker.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.group_making_settings` appears to be unused">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.make_groups_button_text` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="3"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_groups_created_message` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.group_settings_dialog_title` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="8"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.grouping_settings_number_of_names_in_list` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="9"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.default_number_of_names_per_group` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.default_number_of_groups` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.num_of_names_in_group` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.num_of_groups` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.group_number` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="14"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.group_no_names_error_message` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="15"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.groups_autocomplete_settings` appears to be unused">
+        <location
+            file="src/main/res/values/grouping_strings.xml"
+            line="16"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.menu.groups_menu` appears to be unused">
+        <location
+            file="src/main/res/menu/groups_menu.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.restore_name_list_from_backup_premium` appears to be unused">
+        <location
+            file="src/main/res/values/home_strings.xml"
+            line="18"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.mipmap.ic_launcher_round` appears to be unused">
+        <location
+            file="src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+            line="2"/>
+        <location
+            file="src/main/res/mipmap-hdpi/ic_launcher_round.png"/>
+        <location
+            file="src/main/res/mipmap-mdpi/ic_launcher_round.png"/>
+        <location
+            file="src/main/res/mipmap-xhdpi/ic_launcher_round.png"/>
+        <location
+            file="src/main/res/mipmap-xxhdpi/ic_launcher_round.png"/>
+        <location
+            file="src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.add_name_list` appears to be unused">
+        <location
+            file="src/main/res/values/import_file_strings.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.integer.shorter_anim_length` appears to be unused">
+        <location
+            file="src/main/res/values/integers.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.list_landing_page` appears to be unused">
+        <location
+            file="src/main/res/layout/list_landing_page.xml"
+            line="1"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.list_option_cell` appears to be unused">
+        <location
+            file="src/main/res/layout/list_option_cell.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.menu.list_page_menu` appears to be unused">
+        <location
+            file="src/main/res/menu/list_page_menu.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.make_groups` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.choosing_options` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="5"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.groups_icon` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.choosing_options_icons` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="12"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.chosen_names_history` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="49"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.clear` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="51"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.empty_names_history` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="52"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.name_history_cleared` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="53"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.choosing_message_updated` appears to be unused">
+        <location
+            file="src/main/res/values/name_choosing_strings.xml"
+            line="63"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.share_list_as_txt_file_name` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="8"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.share_list_as_csv_sheet_name` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="9"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.customize_choosing_message_name` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.set_speech_language_name` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.share_list_as_txt_file` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="14"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.share_list_as_csv_sheet` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="15"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.customize_choosing_message` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="16"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.set_speech_language` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="17"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.premium_options` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="18"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.message_icon` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="25"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.microphone_icon` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="26"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.premium_options_icons` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="27"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.speech_language_set` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="38"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.got_it` appears to be unused">
+        <location
+            file="src/main/res/values/premium_feature_strings.xml"
+            line="69"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.restore_data` appears to be unused">
+        <location
+            file="src/main/res/layout/restore_data.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.layout.simple_vertical_recyclerview` appears to be unused">
+        <location
+            file="src/main/res/layout/simple_vertical_recyclerview.xml"
+            line="2"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.no_lists_message` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="4"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.groups` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="9"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.premium` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="10"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.array.list_options` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.options_for` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="16"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.edit_icon` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="19"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.trash_icon` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="20"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.delete_list` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="38"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.list_name_speech_input_prompt` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="41"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.speech_not_supported` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="42"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.speech_unrecognized` appears to be unused">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="45"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.style.item_name` appears to be unused">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.style.tabs` appears to be unused">
+        <location
+            file="src/main/res/values/styles.xml"
+            line="46"/>
+    </issue>
+
+    <issue
+        id="TextFields"
+        message="This text field does not specify an `inputType`">
+        <location
+            file="src/main/res/layout/search_bar.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="36"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="55"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute">
+        <location
+            file="src/main/res/layout/name_choosing_settings.xml"
+            line="62"/>
+    </issue>
+
+    <issue
+        id="Autofill"
+        message="Missing `autofillHints` attribute">
+        <location
+            file="src/main/res/layout/search_bar.xml"
+            line="11"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image">
+        <location
+            file="src/main/res/layout/choose_name_cell.xml"
+            line="13"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image">
+        <location
+            file="src/main/res/layout/choose_name_dialog_cell.xml"
+            line="24"/>
+    </issue>
+
+    <issue
+        id="ContentDescription"
+        message="Missing `contentDescription` attribute on image">
+        <location
+            file="src/main/res/layout/edit_person_name_cell.xml"
+            line="15"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="36"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`">
+        <location
+            file="src/main/res/layout/group_making_settings.xml"
+            line="55"/>
+    </issue>
+
+    <issue
+        id="LabelFor"
+        message="Missing accessibility label: provide either a view with an `android:labelFor` that references this view or provide an `android:hint`">
+        <location
+            file="src/main/res/layout/name_choosing_settings.xml"
+            line="62"/>
+    </issue>
+
+    <issue
+        id="RtlSymmetry"
+        message="When you define `paddingLeft` you should probably also define `paddingRight` for right-to-left symmetry">
+        <location
+            file="src/main/res/layout/names_list_item.xml"
+            line="18"/>
+    </issue>
+
+    <issue
+        id="RtlHardcoded"
+        message="Consider replacing `android:paddingLeft` with `android:paddingStart=&quot;8dp&quot;` to better support right-to-left layouts">
+        <location
+            file="src/main/res/layout/names_list_item.xml"
+            line="18"/>
+    </issue>
+
+    <issue
+        id="RtlEnabled"
+        message="The project references RTL attributes, but does not explicitly enable or disable RTL support with `android:supportsRtl` in the manifest">
+        <location
+            file="src/main/AndroidManifest.xml"/>
+    </issue>
+
+</issues>
