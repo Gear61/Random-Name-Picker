@@ -9,3 +9,4 @@ app/release/
 Random-Name-Picker.iml
 *PremiumBackDoor.java
 *app.iml
+app/lint-baseline.xml
