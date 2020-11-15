@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity implements
     @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigation;
     @BindView(R.id.bottom_sheet) View bottomSheet;
     @BindView(R.id.title_import_from_csv) TextView importFromCsv;
+    @BindView(R.id.title_restore_from_backup) TextView restoreFromBackupOption;
 
     private HomepageFragmentController navigationController;
     private PreferencesManager preferencesManager;
@@ -226,6 +227,9 @@ public class HomeActivity extends AppCompatActivity implements
         importFromCsv.setText(preferencesManager.isOnFreeVersion()
                 ? R.string.import_from_csv_file_premium
                 : R.string.import_from_csv_file);
+        restoreFromBackupOption.setText(preferencesManager.isOnFreeVersion()
+                ? R.string.restore_name_list_from_backup_premium
+                : R.string.restore_name_list_from_backup);
     }
 
     @Override

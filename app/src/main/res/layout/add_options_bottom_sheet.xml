@@ -86,7 +86,7 @@
             />
 
         <TextView
-            android:text="@string/restore_name_list_from_backup"
+            android:id="@+id/title_restore_from_backup"
             style="@style/add_bottom_sheet_text"
             />
     </LinearLayout>
