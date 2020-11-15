@@ -20,13 +20,12 @@
         as .txt files or .csv spreadsheets. Send them to your other devices or to your friends.
         \n\n{ion-checkmark-circled #4CAF50} <b>Extra import methods</b> - Import name lists
         from .csv spreadsheets on top of .txt files.
-        \n\n{ion-checkmark-circled #4CAF50} <b>Extra customization</b> - Personalize your choosing
+        \n\n{ion-checkmark-circled #4CAF50} <b>Powerful customization</b> - Personalize your choosing
         message and have the app speak in foreign languages.
-        \n\n{ion-checkmark-circled #4CAF50} <b>Premium support</b>
-        - Your feedback will become the most important and is guaranteed a response.
-        If you\'re running into a bug, I will squash it ASAP.
-        If you have a feature request, it will be at the top of the list
-        among the dozens of feature requests this app always has.
+        \n\n{ion-checkmark-circled #4CAF50} <b>Backup your data</b>
+        - Backup your lists to Google Drive and other sources,
+        so you can restore them later on. Rest easy knowing that your
+        data will never be lost.
     </string>
 
     <string name="post_payment_thank_you">{ion-checkmark-circled 120dp #4CAF50}\n\nThank You</string>
