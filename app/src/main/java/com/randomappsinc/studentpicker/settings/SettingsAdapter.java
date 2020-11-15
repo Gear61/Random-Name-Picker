@@ -33,10 +33,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         void onItemClick(int position);
     }
 
-    private ItemSelectionListener itemSelectionListener;
-    private List<String> options;
-    private List<String> icons;
-    private PreferencesManager preferencesManager;
+    private final ItemSelectionListener itemSelectionListener;
+    private final List<String> options;
+    private final List<String> icons;
+    private final PreferencesManager preferencesManager;
 
     SettingsAdapter(Context context, ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
@@ -85,8 +85,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
             ButterKnife.bind(this, view);
         }
 
-        int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
         int darkModePosition = preferencesManager.isOnFreeVersion() ? 2 : 1;
+        int shakePosition = preferencesManager.isOnFreeVersion() ? 3 : 2;
 
         void loadSetting(int position) {
             option.setText(options.get(position));
@@ -104,11 +104,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
                 } else {
                     UIUtils.setCheckedImmediately(toggle, false);
                 }
-
                 toggle.setVisibility(View.VISIBLE);
             } else {
                 toggle.setVisibility(View.GONE);
-
             }
         }
 

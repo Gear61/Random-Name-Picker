@@ -84,12 +84,11 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
                 break;
             case 1:
-                int shakePosition = preferencesManager.isOnFreeVersion() ? 1 : 0;
-                View firstCell = settingsOptions.getChildAt(shakePosition);
-                Switch shakeToggle = firstCell.findViewById(R.id.toggle);
-                boolean currentState = shakeToggle.isChecked();
-                shakeToggle.setChecked(!currentState);
-                preferencesManager.setShakeEnabled(!currentState);
+                PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, requireActivity(), () -> {
+                    Intent backupRestoreIntent = new Intent(getActivity(), BackupAndRestoreActivity.class);
+                    startActivity(backupRestoreIntent);
+                    requireActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+                });
                 return;
             case 2:
                 int darkModePosition = preferencesManager.isOnFreeVersion() ? 2 : 1;
@@ -101,6 +100,14 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 ThemeManager.applyTheme(themeMode);
                 return;
             case 3:
+                int shakePosition = preferencesManager.isOnFreeVersion() ? 3 : 2;
+                View firstCell = settingsOptions.getChildAt(shakePosition);
+                Switch shakeToggle = firstCell.findViewById(R.id.toggle);
+                boolean currentState = shakeToggle.isChecked();
+                shakeToggle.setChecked(!currentState);
+                preferencesManager.setShakeEnabled(!currentState);
+                return;
+            case 4:
                 String uriText = "mailto:" + SUPPORT_EMAIL
                         + "?subject=" + Uri.encode(preferencesManager.isOnFreeVersion()
                         ? feedbackSubject
@@ -110,10 +117,10 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 sendIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 4:
+            case 5:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 5:
+            case 6:
                 Uri uri = Uri.parse("market://details?id=" + getContext().getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getContext().getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -121,18 +128,9 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                     return;
                 }
                 break;
-            case 6:
+            case 7:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
-            case 7:
-                PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, requireActivity(), () -> {
-                    Intent backupRestoreIntent = new Intent(getActivity(), BackupAndRestoreActivity.class);
-                    startActivity(backupRestoreIntent);
-                    requireActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
-                });
-                return;
-
-            default: return;
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
