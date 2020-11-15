@@ -25,10 +25,9 @@ class RestoreDataFragment : Fragment(), RestoreDataManager.Listener {
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?): View? {
         _binding = RestoreDataBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,14 +42,14 @@ class RestoreDataFragment : Fragment(), RestoreDataManager.Listener {
     private fun restoreDataOnClickListener() {
         binding.restoreData.setOnClickListener {
             if (PermissionUtils.isPermissionGranted(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    requireContext())) {
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            requireContext())) {
                 chooseBackupLocation()
             } else {
                 PermissionUtils.requestPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    READ_EXTERNAL_STORAGE_CODE)
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        READ_EXTERNAL_STORAGE_CODE)
             }
         }
     }
@@ -93,13 +92,12 @@ class RestoreDataFragment : Fragment(), RestoreDataManager.Listener {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
+            requestCode: Int,
+            permissions: Array<String?>,
+            grantResults: IntArray) {
         if (requestCode == READ_EXTERNAL_STORAGE_CODE &&
-            grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             chooseBackupLocation()
         } else {
             UIUtils.showLongToast(R.string.restore_permission_denied, requireContext())

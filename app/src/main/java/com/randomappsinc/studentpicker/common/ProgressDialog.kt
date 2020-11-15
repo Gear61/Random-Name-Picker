@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.afollestad.materialdialogs.MaterialDialog
 
-class ProgressDialog(context: Context, @StringRes title: Int) {
+class ProgressDialog(context: Context, @StringRes dialogTextResId: Int) {
 
     private val materialDialog: MaterialDialog = MaterialDialog.Builder(context)
-        .title(title)
+        .content(dialogTextResId)
         .progress(true, 0)
         .cancelable(false)
         .build()
