@@ -57,6 +57,7 @@ public class HomepageFragment extends Fragment implements
     @BindView(R.id.user_lists) RecyclerView lists;
     @BindView(R.id.no_content) View noListsAtAll;
     @BindView(R.id.import_from_csv_empty_state_text) TextView importFromCsvEmptyStateText;
+    @BindView(R.id.restore_from_backup_empty_state_text) TextView restoreFromBackupText;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
 
@@ -192,6 +193,9 @@ public class HomepageFragment extends Fragment implements
         importFromCsvEmptyStateText.setText(preferencesManager.isOnFreeVersion()
                 ? R.string.import_from_csv_file_premium
                 : R.string.import_from_csv_file);
+        restoreFromBackupText.setText(preferencesManager.isOnFreeVersion()
+                ? R.string.restore_name_list_from_backup_premium
+                : R.string.restore_name_list_from_backup);
         if (!preferencesManager.isOnFreeVersion() && buyPremiumTooltip.getVisibility() == View.VISIBLE) {
             buyPremiumTooltip.setVisibility(View.GONE);
         }

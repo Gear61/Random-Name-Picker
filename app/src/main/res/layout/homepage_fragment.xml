@@ -180,12 +180,12 @@
                 <LinearLayout style="@style/home_empty_state_option_container">
 
                     <com.joanzapata.iconify.widget.IconTextView
-                        android:text="@string/document_icon"
+                        android:text="@string/download_icon"
                         style="@style/home_empty_state_icon"
                         />
 
                     <TextView
-                        android:text="@string/restore_name_list_from_backup"
+                        android:id="@+id/restore_from_backup_empty_state_text"
                         style="@style/home_empty_state_text"
                         />
                 </LinearLayout>

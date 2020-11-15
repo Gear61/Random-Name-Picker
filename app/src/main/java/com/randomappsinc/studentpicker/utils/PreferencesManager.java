@@ -9,7 +9,7 @@ import com.randomappsinc.studentpicker.theme.ThemeMode;
 
 public class PreferencesManager {
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     private static final String PREFS_KEY = "com.randomappsinc.studentpicker";
     private static final String NUM_APP_OPENS = "numAppOpens";
