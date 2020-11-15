@@ -84,7 +84,7 @@ public class SettingsFragment extends Fragment implements SettingsAdapter.ItemSe
                 getActivity().overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.stay);
                 break;
             case 1:
-                PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, requireActivity(), () -> {
+                PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, requireActivity(), () -> {
                     Intent backupRestoreIntent = new Intent(getActivity(), BackupAndRestoreActivity.class);
                     startActivity(backupRestoreIntent);
                     requireActivity().overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
