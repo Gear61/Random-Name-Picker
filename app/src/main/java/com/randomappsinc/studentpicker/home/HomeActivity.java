@@ -190,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements
     @OnClick(R.id.sheet_restore_from_backup)
     public void restoreFromBackup() {
         hideBottomSheet();
-        PremiumFeatureOpener.openFeature(R.string.restore_name_list_from_backup, this, () -> {
+        PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, this, () -> {
             Intent intent = new Intent(this, BackupAndRestoreActivity.class)
                     .putExtra(Constants.GO_TO_RESTORE_IMMEDIATELY_KEY, true);
             startActivity(intent);
