@@ -17,6 +17,8 @@ class ProgressDialog(context: Context, @StringRes dialogTextResId: Int) {
     }
 
     fun dismiss() {
-        materialDialog.dismiss()
+        if (materialDialog.isShowing) {
+            materialDialog.dismiss()
+        }
     }
 }
