@@ -6,9 +6,9 @@ import android.widget.EditText;
 
 import androidx.annotation.StringRes;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
+import com.randomappsinc.studentpicker.common.ProgressDialog;
 import com.randomappsinc.studentpicker.common.StandardActivity;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -25,7 +25,7 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
     @BindView(R.id.names) EditText namesInput;
 
     private FileImportManager fileImportManager;
-    private MaterialDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +33,7 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
         setContentView(R.layout.import_name_list);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        progressDialog = new MaterialDialog.Builder(this)
-                .title(R.string.creating_your_name_list)
-                .progress(true, 0)
-                .cancelable(false)
-                .build();
-
+        progressDialog = new ProgressDialog(this, R.string.creating_your_name_list);
         fileImportManager = new FileImportManager(
                 this,
                 this,
@@ -79,9 +74,7 @@ public class ImportFromFileActivity extends StandardActivity implements FileImpo
     @Override
     public void onNameListCreated() {
         runOnUiThread(() -> {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
+            progressDialog.dismiss();
             UIUtils.showShortToast(R.string.import_success, this);
             finish();
         });

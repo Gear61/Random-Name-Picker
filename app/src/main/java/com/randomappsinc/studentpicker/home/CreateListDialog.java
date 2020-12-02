@@ -16,8 +16,8 @@ public class CreateListDialog {
         void onCreateNewListConfirmed(String newListName);
     }
 
-    private PreferencesManager preferencesManager;
-    private MaterialDialog adderDialog;
+    private final PreferencesManager preferencesManager;
+    private final MaterialDialog adderDialog;
 
     CreateListDialog(Context context, Listener listener) {
         preferencesManager = new PreferencesManager(context);
