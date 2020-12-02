@@ -27,7 +27,7 @@ public class DataSource {
 
     // Database fields
     private SQLiteDatabase database;
-    private MySQLiteHelper dbHelper;
+    private final MySQLiteHelper dbHelper;
 
     public DataSource(Context context) {
         dbHelper = new MySQLiteHelper(context);
@@ -53,12 +53,13 @@ public class DataSource {
         String[] whereArgs = {String.valueOf(listId)};
         Cursor cursor = database.query(DatabaseTables.LISTS, columns, selection,
                 whereArgs, null, null, null);
-        if (cursor.moveToNext()) {
-            return cursor.getString(0);
+        String listName = "";
+        if (cursor.moveToFirst()) {
+            listName = cursor.getString(0);
         }
         cursor.close();
         close();
-        return "";
+        return listName;
     }
 
     public long getNumLists() {
