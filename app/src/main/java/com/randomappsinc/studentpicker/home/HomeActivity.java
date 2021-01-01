@@ -30,6 +30,8 @@ import com.randomappsinc.studentpicker.views.BottomNavigationView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
@@ -38,6 +40,7 @@ public class HomeActivity extends AppCompatActivity implements
 
     private static final String PREVIOUSLY_SELECTED_PAGE_ID = "previouslySelectedPageId";
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
+    private static final int NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP = 7;
 
     private static final int IMPORT_TXT_REQUEST_CODE = 1;
     private static final int IMPORT_CSV_REQUEST_CODE = 2;
@@ -95,6 +98,11 @@ public class HomeActivity extends AppCompatActivity implements
             showPleaseRateDialog();
         }
 
+        if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
+                !preferencesManager.hasSeenBackupAndRestore()){
+            showBackupAndDialogFeature();
+        }
+
         createListDialog = new CreateListDialog(this, this);
         dataSource = new DataSource(this);
         paymentManager = new PaymentManager(this, this);
@@ -131,6 +139,17 @@ public class HomeActivity extends AppCompatActivity implements
                     startActivity(intent);
                 })
                 .show();
+    }
+
+    private void showBackupAndDialogFeature() {
+        new BackupAndRestoreDialog(this, () -> {
+            PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, this, () -> {
+                Intent intent = new Intent(this, BackupAndRestoreActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+            });
+            return null;
+        });
     }
 
     @Override
