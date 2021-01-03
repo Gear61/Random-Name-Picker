@@ -17,6 +17,7 @@
         <item>@string/take_picture_with_camera</item>
     </string-array>
 
+    <string name="image_load_fail">Failed to load image.</string>
     <string name="take_photo_with_camera_failed">
         Sorry, we are unable to work with your device\'s camera.
     </string>
