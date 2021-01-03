@@ -23,11 +23,13 @@ import butterknife.OnClick;
 public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapter.NameViewHolder> {
 
     public interface Listener {
+        void onNameImageClicked(NameDO nameDO);
+
         void onNameRemoved();
     }
 
     private ListInfo currentState;
-    private Listener listener;
+    private final Listener listener;
 
     NameChoosingAdapter(ListInfo listInfo, Listener listener) {
         this.currentState = listInfo;
@@ -81,6 +83,11 @@ public class NameChoosingAdapter extends RecyclerView.Adapter<NameChoosingAdapte
                         .centerCrop()
                         .into(personImageView);
             }
+        }
+
+        @OnClick(R.id.person_image)
+        void onImageClicked() {
+            listener.onNameImageClicked(currentState.getNameDO(getAdapterPosition()));
         }
 
         @OnClick(R.id.delete_icon)

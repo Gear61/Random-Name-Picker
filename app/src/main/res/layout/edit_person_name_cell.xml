@@ -9,23 +9,23 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:foreground="?android:attr/selectableItemBackground"
-    tools:ignore="SpUsage"
+    tools:ignore="SpUsage, ContentDescription"
     >
 
     <ImageView
         android:id="@+id/person_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:visibility="gone"
         />
 
     <com.joanzapata.iconify.widget.IconTextView
         android:id="@+id/no_image_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:text="@string/image_icon"
         android:textColor="@color/text_normal"
-        android:textSize="44dp"
+        android:textSize="56dp"
         android:visibility="gone"
         android:gravity="center"
         />
