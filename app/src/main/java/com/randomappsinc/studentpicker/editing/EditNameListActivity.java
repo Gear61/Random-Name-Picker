@@ -204,6 +204,11 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void viewImage(NameDO nameDO) {
+
+    }
+
+    @Override
     public void addWithCamera() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.CAMERA, this)) {
             startCameraPage();
@@ -317,6 +322,7 @@ public class EditNameListActivity extends AppCompatActivity implements
         if (listHasChanged) {
             setResult(Constants.LIST_UPDATED_RESULT_CODE);
         }
+        photoOptionsDialog.cleanUp();
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_from_top);
     }

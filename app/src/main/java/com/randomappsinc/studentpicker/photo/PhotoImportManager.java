@@ -44,9 +44,6 @@ public class PhotoImportManager {
     @Nullable
     public Intent getPhotoTakingIntent(Context context) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(context.getPackageManager()) == null) {
-            return null;
-        }
         File currentPhotoFile = PictureUtils.createImageFile(context);
         if (currentPhotoFile != null) {
             currentPhotoUri = FileProvider.getUriForFile(
