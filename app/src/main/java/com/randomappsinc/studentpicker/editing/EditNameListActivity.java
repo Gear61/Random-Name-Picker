@@ -196,11 +196,11 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void showPhotoOptions() {
+    public void showPhotoOptions(NameDO nameDO) {
         PremiumFeatureOpener.openFeature(
                 R.string.attaching_image_to_names,
                 this,
-                () -> photoOptionsDialog.showPhotoOptions());
+                () -> photoOptionsDialog.showPhotoOptions(nameDO));
     }
 
     @Override
