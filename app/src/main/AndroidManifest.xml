@@ -111,5 +111,11 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
+
+        <activity
+            android:name=".photo.PictureFullViewActivity"
+            android:theme="@style/AppTheme.PictureFullView"
+            android:configChanges="orientation|screenSize"
+            />
     </application>
 </manifest>
