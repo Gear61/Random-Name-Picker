@@ -26,6 +26,7 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.photo.PhotoImportManager;
 import com.randomappsinc.studentpicker.photo.PhotoImportOptionsDialog;
+import com.randomappsinc.studentpicker.photo.PictureFullViewActivity;
 import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
 import com.randomappsinc.studentpicker.speech.SpeechToTextManager;
 import com.randomappsinc.studentpicker.utils.PermissionUtils;
@@ -205,7 +206,11 @@ public class EditNameListActivity extends AppCompatActivity implements
 
     @Override
     public void viewImage(NameDO nameDO) {
-
+        Intent intent = new Intent(this, PictureFullViewActivity.class)
+                .putExtra(PictureFullViewActivity.IMAGE_URL_KEY, nameDO.getPhotoUri())
+                .putExtra(PictureFullViewActivity.CAPTION_KEY, nameDO.getName());
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, 0);
     }
 
     @Override
