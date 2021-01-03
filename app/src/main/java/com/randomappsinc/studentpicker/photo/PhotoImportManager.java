@@ -30,8 +30,8 @@ public class PhotoImportManager {
         void onAddPhotoSuccess(Uri takenPhotoUri);
     }
 
-    private Listener listener;
-    private Handler backgroundHandler;
+    private final Listener listener;
+    private final Handler backgroundHandler;
     private @Nullable Uri currentPhotoUri;
 
     public PhotoImportManager(Listener listener) {
