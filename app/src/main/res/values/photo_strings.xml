@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="photo_import_dialog_title">Photo Adding Options</string>
-    <string-array name="photo_import_options">
-        <item>Import from gallery</item>
-        <item>Take picture with camera</item>
+    <string name="photo_options_dialog_title">Photo Options</string>
+
+    <string name="import_from_gallery">Import from gallery</string>
+    <string name="take_picture_with_camera">Take picture with camera</string>
+    <string name="view_image">View image</string>
+    <string name="delete_image">Delete image</string>
+
+    <string-array name="photo_import_options_without_upload">
+        <item>@string/import_from_gallery</item>
+        <item>@string/take_picture_with_camera</item>
     </string-array>
+
+    <string-array name="photo_import_options_with_upload">
+        <item>@string/view_image</item>
+        <item>@string/import_from_gallery</item>
+        <item>@string/take_picture_with_camera</item>
+        <item>@string/delete_image</item>
+    </string-array>
+
     <string name="take_photo_with_camera_failed">
         Sorry, we are unable to work with your device\'s camera.
     </string>
