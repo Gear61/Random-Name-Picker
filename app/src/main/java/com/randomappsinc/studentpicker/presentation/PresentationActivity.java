@@ -1,5 +1,6 @@
 package com.randomappsinc.studentpicker.presentation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +19,13 @@ import com.randomappsinc.studentpicker.choosing.ChoosingSettings;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.photo.PictureFullViewActivity;
 import com.randomappsinc.studentpicker.speech.TextToSpeechManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,7 +36,8 @@ import butterknife.OnClick;
 
 public class PresentationActivity extends AppCompatActivity
         implements ColorChooserDialog.ColorCallback, TextToSpeechManager.Listener,
-        PresentationManager.Listener, PresentationTextSizeDialog.Listener {
+        PresentationManager.Listener, PresentationTextSizeDialog.Listener,
+        PresentationAdapter.Listener {
 
     public static final String LIST_ID_KEY = "listId";
     public static final String DRUMROLL_FILE_NAME = "drumroll.mp3";
@@ -72,7 +77,7 @@ public class PresentationActivity extends AppCompatActivity
         textToSpeechManager = new TextToSpeechManager(this, this);
         presentationManager = new PresentationManager(this, namesList, settings.getAutomaticTts());
 
-        presentationAdapter = new PresentationAdapter();
+        presentationAdapter = new PresentationAdapter(this);
         presentationAdapter.setTextSize(preferencesManager.getPresentationTextSize() * 8);
         presentationAdapter.setTextColor(preferencesManager.getPresentationTextColor(textNormalColor));
         namesList.setAdapter(presentationAdapter);
@@ -142,6 +147,15 @@ public class PresentationActivity extends AppCompatActivity
     @Override
     public void onTextToSpeechFailure() {
         UIUtils.showLongToast(R.string.text_to_speech_fail, this);
+    }
+
+    @Override
+    public void onNameImageClicked(@NotNull NameDO nameDO) {
+        Intent intent = new Intent(this, PictureFullViewActivity.class)
+                .putExtra(PictureFullViewActivity.IMAGE_URL_KEY, nameDO.getPhotoUri())
+                .putExtra(PictureFullViewActivity.CAPTION_KEY, nameDO.getName());
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, 0);
     }
 
     @Override
