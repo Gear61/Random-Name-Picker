@@ -16,7 +16,11 @@ import com.randomappsinc.studentpicker.models.NameDO
 import com.randomappsinc.studentpicker.utils.NameUtils
 import com.squareup.picasso.Picasso
 
-class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>() {
+class PresentationAdapter(private val listener: Listener) : RecyclerView.Adapter<PresentationAdapter.ViewHolder>() {
+
+    interface Listener {
+        fun onNameImageClicked(nameDO: NameDO)
+    }
 
     var chosenNames = ArrayList<NameDO>()
     var showAsList = false
@@ -62,7 +66,7 @@ class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>
         private val name: TextView = itemBinding.personName
 
         fun loadName(position: Int) {
-            val nameDO: NameDO = chosenNames[position]
+            val nameDO = chosenNames[position]
             if (showAsList) {
                 nameNumber.visibility = View.VISIBLE
                 nameNumber.text = NameUtils.getPrefix(position)
@@ -85,8 +89,14 @@ class PresentationAdapter : RecyclerView.Adapter<PresentationAdapter.ViewHolder>
                         .fit()
                         .centerCrop()
                         .into(personImageView)
+                personImageView.setOnClickListener {
+                    listener.onNameImageClicked(nameDO)
+                }
+                personImageView.visibility = View.VISIBLE
+            } else {
+                personImageView.visibility = View.GONE
+                personImageView.setOnClickListener(null);
             }
-            personImageView.visibility = if (nameHasPhoto) View.VISIBLE else View.GONE
         }
     }
 }
