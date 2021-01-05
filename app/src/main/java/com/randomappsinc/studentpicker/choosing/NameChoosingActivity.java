@@ -24,6 +24,7 @@ import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.editing.EditNameListActivity;
 import com.randomappsinc.studentpicker.models.ListInfo;
 import com.randomappsinc.studentpicker.models.NameDO;
+import com.randomappsinc.studentpicker.photo.PictureFullViewActivity;
 import com.randomappsinc.studentpicker.presentation.PresentationActivity;
 import com.randomappsinc.studentpicker.speech.TextToSpeechManager;
 import com.randomappsinc.studentpicker.utils.NameUtils;
@@ -51,6 +52,7 @@ public class NameChoosingActivity extends AppCompatActivity
     @BindView(R.id.names_list) RecyclerView namesList;
 
     @BindDrawable(R.drawable.line_divider) Drawable lineDivider;
+
     private NameChoosingAdapter nameChoosingAdapter;
     private ChoosingSettings settings;
     private ChoosingSettingsViewHolder settingsHolder;
@@ -121,6 +123,15 @@ public class NameChoosingActivity extends AppCompatActivity
     @Override
     public ListInfo getChoosingStateListInfo() {
         return choosingStateListInfo;
+    }
+
+    @Override
+    public void onNameImageClicked(NameDO nameDO) {
+        Intent intent = new Intent(this, PictureFullViewActivity.class)
+                .putExtra(PictureFullViewActivity.IMAGE_URL_KEY, nameDO.getPhotoUri())
+                .putExtra(PictureFullViewActivity.CAPTION_KEY, nameDO.getName());
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, 0);
     }
 
     @Override

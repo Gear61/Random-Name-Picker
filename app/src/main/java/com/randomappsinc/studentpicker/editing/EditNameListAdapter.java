@@ -28,13 +28,13 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
     public interface Listener {
         void showNameOptions(NameDO nameDO);
 
-        void showPhotoOptions();
+        void showPhotoOptions(NameDO nameDO);
     }
 
     private List<NameDO> names;
-    private TextView noContent;
-    private TextView numNames;
-    private Listener listener;
+    private final TextView noContent;
+    private final TextView numNames;
+    private final Listener listener;
     private int lastClickedPosition;
 
     EditNameListAdapter(TextView noContent, TextView numNames, List<NameDO> nameList, Listener listener) {
@@ -134,13 +134,13 @@ public class EditNameListAdapter extends RecyclerView.Adapter<EditNameListAdapte
         @OnClick(R.id.person_image)
         void onImageClick() {
             lastClickedPosition = getAdapterPosition();
-            listener.showPhotoOptions();
+            listener.showPhotoOptions(names.get(lastClickedPosition));
         }
 
         @OnClick(R.id.no_image_icon)
         void onNoImageClick() {
             lastClickedPosition = getAdapterPosition();
-            listener.showPhotoOptions();
+            listener.showPhotoOptions(names.get(lastClickedPosition));
         }
 
         @OnClick(R.id.parent)
