@@ -6,8 +6,8 @@ android {
     compileSdkVersion 30
 
     def versionMajor = 4
-    def versionMinor = 4
-    def versionPatch = 0
+    def versionMinor = 3
+    def versionPatch = 12
 
     defaultConfig {
         applicationId "com.randomappsinc.studentpicker"

@@ -99,9 +99,11 @@ public class PreferencesManager {
         return hasSeenTooltip;
     }
 
+    public void onBackupAndRestoreSeen(boolean onSeen) {
+        prefs.edit().putBoolean(HAS_SEEN_BACKUP_AND_RESTORE, onSeen).apply();
+    }
+
     public boolean hasSeenBackupAndRestore() {
-        boolean hasSeenBackupAndRestore = prefs.getBoolean(HAS_SEEN_BACKUP_AND_RESTORE, false);
-        prefs.edit().putBoolean(HAS_SEEN_BACKUP_AND_RESTORE, true).apply();
-        return hasSeenBackupAndRestore;
+        return prefs.getBoolean(HAS_SEEN_BACKUP_AND_RESTORE, false);
     }
 }

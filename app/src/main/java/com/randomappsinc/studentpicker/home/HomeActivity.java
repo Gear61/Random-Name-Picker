@@ -23,6 +23,7 @@ import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.premium.PaymentManager;
 import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
+import com.randomappsinc.studentpicker.utils.DialogUtil;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -30,8 +31,6 @@ import com.randomappsinc.studentpicker.views.BottomNavigationView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 import static com.randomappsinc.studentpicker.importdata.ImportFromFileActivity.FILE_TYPE;
 
@@ -96,11 +95,10 @@ public class HomeActivity extends AppCompatActivity implements
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
-        }
-
-        if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
+        }else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
                 !preferencesManager.hasSeenBackupAndRestore()){
-            showBackupAndDialogFeature();
+            preferencesManager.onBackupAndRestoreSeen(true);
+            showBackupAndRestoreDialog();
         }
 
         createListDialog = new CreateListDialog(this, this);
@@ -141,8 +139,8 @@ public class HomeActivity extends AppCompatActivity implements
                 .show();
     }
 
-    private void showBackupAndDialogFeature() {
-        new BackupAndRestoreDialog(this, () -> {
+    private void showBackupAndRestoreDialog() {
+        DialogUtil.INSTANCE.showBackupAndRestoreUpsell(this, () -> {
             PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, this, () -> {
                 Intent intent = new Intent(this, BackupAndRestoreActivity.class);
                 startActivity(intent);
