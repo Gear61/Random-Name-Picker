@@ -30,8 +30,8 @@ public class PhotoImportManager {
         void onAddPhotoSuccess(Uri takenPhotoUri);
     }
 
-    private Listener listener;
-    private Handler backgroundHandler;
+    private final Listener listener;
+    private final Handler backgroundHandler;
     private @Nullable Uri currentPhotoUri;
 
     public PhotoImportManager(Listener listener) {
@@ -44,9 +44,6 @@ public class PhotoImportManager {
     @Nullable
     public Intent getPhotoTakingIntent(Context context) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(context.getPackageManager()) == null) {
-            return null;
-        }
         File currentPhotoFile = PictureUtils.createImageFile(context);
         if (currentPhotoFile != null) {
             currentPhotoUri = FileProvider.getUriForFile(
