@@ -5,6 +5,7 @@ import com.randomappsinc.studentpicker.R
 import com.randomappsinc.studentpicker.common.Constants
 import com.randomappsinc.studentpicker.common.StandardActivity
 import com.randomappsinc.studentpicker.databinding.BackupAndRestoreBinding
+import com.randomappsinc.studentpicker.utils.PreferencesManager
 
 class BackupAndRestoreActivity : StandardActivity() {
 
@@ -17,6 +18,9 @@ class BackupAndRestoreActivity : StandardActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        val preferencesManager = PreferencesManager(this)
+        preferencesManager.onBackupAndRestoreSeen(true)
 
         val viewPager = binding.backupAndRestorePager
         viewPager.adapter = BackupAndRestoreTabsAdapter(

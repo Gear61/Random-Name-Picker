@@ -6,7 +6,7 @@ import com.randomappsinc.studentpicker.R
 
 object DialogUtil {
 
-    fun showBackupAndRestoreUpsell(context: Context, onPositiveClick: () -> Unit){
+    fun showBackupAndRestoreUpsell(context: Context, onPositiveClick: () -> Unit) {
         MaterialDialog.Builder(context)
                 .title(R.string.backup_and_restore_dialog_title)
                 .content(R.string.backup_and_restore_dialog_body)
