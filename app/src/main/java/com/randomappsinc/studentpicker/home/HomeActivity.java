@@ -95,8 +95,10 @@ public class HomeActivity extends AppCompatActivity implements
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
-        }else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
-                !preferencesManager.hasSeenBackupAndRestore()){
+        } else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
+                       !preferencesManager.hasSeenBackupAndRestore() &&
+                            (preferencesManager.getBackupUri() == null
+                                    || preferencesManager.getBackupUri().isEmpty())) {
             preferencesManager.onBackupAndRestoreSeen(true);
             showBackupAndRestoreDialog();
         }
