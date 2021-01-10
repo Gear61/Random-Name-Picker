@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -92,14 +93,12 @@ public class HomeActivity extends AppCompatActivity implements
         bottomNavigation.setListener(this);
 
         preferencesManager = new PreferencesManager(this);
-        preferencesManager.increaseNumAppOpens();
+        preferencesManager.rememberNewAppOpen();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
-        } else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
-                       !preferencesManager.hasSeenBackupAndRestore() &&
-                            (preferencesManager.getBackupUri() == null
-                                    || preferencesManager.getBackupUri().isEmpty())) {
-            preferencesManager.onBackupAndRestoreSeen(true);
+        } else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0
+                && !preferencesManager.hasSeenBackupAndRestore()
+                && TextUtils.isEmpty(preferencesManager.getBackupUri())) {
             showBackupAndRestoreDialog();
         }
 
@@ -142,6 +141,7 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     private void showBackupAndRestoreDialog() {
+        preferencesManager.onBackupAndRestoreSeen(true);
         DialogUtil.INSTANCE.showBackupAndRestoreUpsell(this, () -> {
             PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, this, () -> {
                 Intent intent = new Intent(this, BackupAndRestoreActivity.class);
