@@ -1,8 +1,11 @@
 package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -12,15 +15,18 @@ import com.randomappsinc.studentpicker.models.NameDO;
 
 public class RenameDialog {
 
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250L;
+
     public interface Listener {
         void onRenameSubmitted(int nameId, String previousName, String newName, int amountToRename);
     }
 
     private MaterialDialog renameAmountDialog;
-    private MaterialDialog renamingDialog;
+    private final MaterialDialog renamingDialog;
     private NameDO currentName = new NameDO();
     private int currentMaxAmount;
     private int amountToRename;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     RenameDialog(Context context, final Listener listener) {
         renameAmountDialog = new MaterialDialog.Builder(context)
@@ -63,10 +69,29 @@ public class RenameDialog {
                         String newName = dialog.getInputEditText().getText().toString().trim();
                         listener.onRenameSubmitted(currentName.getId(), currentName.getName(), newName, amountToRename);
                     } else if (which == DialogAction.NEUTRAL) {
-                        renameAmountDialog.show();
+                        showRenameAmountDialog();
                     }
                 })
                 .build();
+    }
+
+    private void showRenamingDialog() {
+        renamingDialog.show();
+        maybeRunShowKeyboardHack(renamingDialog);
+    }
+
+    private void showRenameAmountDialog() {
+        renameAmountDialog.show();
+        maybeRunShowKeyboardHack(renameAmountDialog);
+    }
+
+    private void maybeRunShowKeyboardHack(MaterialDialog dialog) {
+        handler.postDelayed(() -> {
+            if (dialog.getInputEditText().requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) dialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, MILLIS_DELAY_FOR_KEYBOARD);
     }
 
     void startRenamingProcess(NameDO nameDO) {
@@ -83,16 +108,16 @@ public class RenameDialog {
                 input.setFilters(new InputFilter[]
                         {new InputFilter.LengthFilter(String.valueOf(currentMaxAmount).length())});
             }
-            renameAmountDialog.show();
+            showRenameAmountDialog();
         } else {
             amountToRename = 1;
             renamingDialog.setActionButton(DialogAction.NEUTRAL, null);
-            renamingDialog.show();
+            showRenamingDialog();
         }
     }
 
     private void goIntoRenamingDialogFromAmountChoice() {
         renamingDialog.setActionButton(DialogAction.NEUTRAL, R.string.back);
-        renamingDialog.show();
+        showRenamingDialog();
     }
 }

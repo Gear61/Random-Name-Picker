@@ -1,8 +1,11 @@
 package com.randomappsinc.studentpicker.editing;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -12,16 +15,19 @@ import com.randomappsinc.studentpicker.models.NameDO;
 
 public class DeleteNameDialog {
 
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250L;
+
     public interface Listener {
         void onDeletionSubmitted(String name, int amountToDelete);
     }
 
-    private MaterialDialog deleteManyDialog;
-    private MaterialDialog confirmSingleDeletionDialog;
+    private final MaterialDialog deleteManyDialog;
+    private final MaterialDialog confirmSingleDeletionDialog;
     private NameDO currentName;
     private int currentMaxAmount;
     private int amountToDelete;
-    private String confirmTemplate;
+    private final String confirmTemplate;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     DeleteNameDialog(Context context, final Listener listener) {
         confirmTemplate = context.getString(R.string.confirm_name_delete);
@@ -57,6 +63,15 @@ public class DeleteNameDialog {
                 .build();
     }
 
+    private void maybeRunShowKeyboardHack() {
+        handler.postDelayed(() -> {
+            if (deleteManyDialog.getInputEditText().requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) deleteManyDialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(deleteManyDialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, MILLIS_DELAY_FOR_KEYBOARD);
+    }
+
     void startDeletionProcess(NameDO nameDO) {
         currentName = nameDO;
         currentMaxAmount = currentName.getAmount();
@@ -71,6 +86,7 @@ public class DeleteNameDialog {
                         {new InputFilter.LengthFilter(String.valueOf(currentMaxAmount).length())});
             }
             deleteManyDialog.show();
+            maybeRunShowKeyboardHack();
         } else {
             amountToDelete = 1;
             confirmSingleDeletionDialog.setContent(String.format(confirmTemplate, currentName.getName()));

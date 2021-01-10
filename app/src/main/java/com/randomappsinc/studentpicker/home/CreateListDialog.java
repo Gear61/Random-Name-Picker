@@ -1,7 +1,10 @@
 package com.randomappsinc.studentpicker.home;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
+import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -12,12 +15,15 @@ import com.randomappsinc.studentpicker.utils.UIUtils;
 
 public class CreateListDialog {
 
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250L;
+
     public interface Listener {
         void onCreateNewListConfirmed(String newListName);
     }
 
     private final PreferencesManager preferencesManager;
     private final MaterialDialog adderDialog;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     CreateListDialog(Context context, Listener listener) {
         preferencesManager = new PreferencesManager(context);
@@ -50,8 +56,18 @@ public class CreateListDialog {
                 .build();
     }
 
+    private void maybeRunShowKeyboardHack() {
+        handler.postDelayed(() -> {
+            if (adderDialog.getInputEditText().requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) adderDialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(adderDialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, MILLIS_DELAY_FOR_KEYBOARD);
+    }
+
     public void show() {
         adderDialog.getInputEditText().setText("");
         adderDialog.show();
+        maybeRunShowKeyboardHack();
     }
 }
