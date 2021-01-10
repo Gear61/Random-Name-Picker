@@ -21,6 +21,7 @@ public class PreferencesManager {
     private static final String THEME_MODE = "themeMode";
     private static final String SHOULD_SHOW_ADS_KEY = "shouldShowAds";
     private static final String HAS_SEEN_PREMIUM_TOOLTIP = "hasSeenPremiumTooltip";
+    private static final String HAS_SEEN_BACKUP_AND_RESTORE = "hasSeenBackupAndRestore";
 
     public PreferencesManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
@@ -96,5 +97,13 @@ public class PreferencesManager {
         boolean hasSeenTooltip = prefs.getBoolean(HAS_SEEN_PREMIUM_TOOLTIP, false);
         prefs.edit().putBoolean(HAS_SEEN_PREMIUM_TOOLTIP, true).apply();
         return hasSeenTooltip;
+    }
+
+    public void onBackupAndRestoreSeen(boolean onSeen) {
+        prefs.edit().putBoolean(HAS_SEEN_BACKUP_AND_RESTORE, onSeen).apply();
+    }
+
+    public boolean hasSeenBackupAndRestore() {
+        return prefs.getBoolean(HAS_SEEN_BACKUP_AND_RESTORE, false);
     }
 }
