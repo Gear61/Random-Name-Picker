@@ -15,6 +15,7 @@ object DialogUtil {
                 .onPositive { _, _ ->
                     onPositiveClick.invoke()
                 }
+                .cancelable(false)
                 .show()
     }
 }

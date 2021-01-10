@@ -38,10 +38,9 @@
     <string name="backup_and_restore_dialog_title">Never Lose Your Data!</string>
     <string name="backup_and_restore_dialog_body">
         With Random Name Picker\'s Backup and Restore feature,
-        you can back up all your name lists to the data source of your choice,
-        including Google Drive, external SD cards,and much more!
-        This means you can easily transfer your data in between devices and
-        feel secure knowing that your data will never be lost.
+        you can back up all your lists to Google Drive, external SD cards, and other data sources.
+        This means you can easily transfer your data between devices and
+        feel secure knowing that it will never be lost.
         If you don\'t want to turn on this feature now,
         you can find it later in the settings menu.
     </string>
