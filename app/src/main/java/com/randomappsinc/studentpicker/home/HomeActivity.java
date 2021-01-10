@@ -23,6 +23,7 @@ import com.randomappsinc.studentpicker.importdata.ImportFromFileActivity;
 import com.randomappsinc.studentpicker.models.ListDO;
 import com.randomappsinc.studentpicker.premium.PaymentManager;
 import com.randomappsinc.studentpicker.premium.PremiumFeatureOpener;
+import com.randomappsinc.studentpicker.utils.DialogUtil;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 import com.randomappsinc.studentpicker.views.BottomNavigationView;
@@ -38,6 +39,7 @@ public class HomeActivity extends AppCompatActivity implements
 
     private static final String PREVIOUSLY_SELECTED_PAGE_ID = "previouslySelectedPageId";
     private static final int NUM_APP_OPENS_FOR_RATING_ASK = 5;
+    private static final int NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP = 7;
 
     private static final int IMPORT_TXT_REQUEST_CODE = 1;
     private static final int IMPORT_CSV_REQUEST_CODE = 2;
@@ -93,6 +95,12 @@ public class HomeActivity extends AppCompatActivity implements
         preferencesManager.increaseNumAppOpens();
         if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_FOR_RATING_ASK) {
             showPleaseRateDialog();
+        } else if (preferencesManager.getNumAppOpens() % NUM_APP_OPENS_FOR_RESTORE_AND_BACKUP == 0 &&
+                       !preferencesManager.hasSeenBackupAndRestore() &&
+                            (preferencesManager.getBackupUri() == null
+                                    || preferencesManager.getBackupUri().isEmpty())) {
+            preferencesManager.onBackupAndRestoreSeen(true);
+            showBackupAndRestoreDialog();
         }
 
         createListDialog = new CreateListDialog(this, this);
@@ -131,6 +139,17 @@ public class HomeActivity extends AppCompatActivity implements
                     startActivity(intent);
                 })
                 .show();
+    }
+
+    private void showBackupAndRestoreDialog() {
+        DialogUtil.INSTANCE.showBackupAndRestoreUpsell(this, () -> {
+            PremiumFeatureOpener.openFeature(R.string.backup_and_restore_feature_name, this, () -> {
+                Intent intent = new Intent(this, BackupAndRestoreActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_left_out, R.anim.slide_left_in);
+            });
+            return null;
+        });
     }
 
     @Override

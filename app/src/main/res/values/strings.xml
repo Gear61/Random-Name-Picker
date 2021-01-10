@@ -35,6 +35,19 @@
     </string>
     <string name="will_rate">Sure, I\'ll help</string>
 
+    <string name="backup_and_restore_dialog_title">Never Lose Your Data!</string>
+    <string name="backup_and_restore_dialog_body">
+        With Random Name Picker\'s Backup and Restore feature,
+        you can back up all your name lists to the data source of your choice,
+        including Google Drive, external SD cards,and much more!
+        This means you can easily transfer your data in between devices and
+        feel secure knowing that your data will never be lost.
+        If you don\'t want to turn on this feature now,
+        you can find it later in the settings menu.
+    </string>
+    <string name="backup_and_restore_dialog_positive_button">Let\'s try it!</string>
+    <string name="backup_and_restore_dialog_negative_button">Maybe later</string>
+
     <string name="rename_list_dialog_title">Rename List</string>
     <string name="delete_list">Delete list</string>
 
