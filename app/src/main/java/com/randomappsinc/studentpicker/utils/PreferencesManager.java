@@ -27,7 +27,7 @@ public class PreferencesManager {
         prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
     }
 
-    public void increaseNumAppOpens() {
+    public void rememberNewAppOpen() {
         int numAppOpens = prefs.getInt(NUM_APP_OPENS, 0);
         prefs.edit().putInt(NUM_APP_OPENS, numAppOpens + 1).apply();
     }
