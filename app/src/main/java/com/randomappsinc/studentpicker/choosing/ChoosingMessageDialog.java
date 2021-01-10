@@ -1,7 +1,10 @@
 package com.randomappsinc.studentpicker.choosing;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
+import android.view.inputmethod.InputMethodManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -10,15 +13,18 @@ import com.randomappsinc.studentpicker.utils.NameUtils;
 
 public class ChoosingMessageDialog {
 
+    private static final long MILLIS_DELAY_FOR_KEYBOARD = 250L;
+
     public interface Listener {
         void onNewChoosingMessageConfirmed(String newMessage);
     }
 
-    private MaterialDialog adderDialog;
+    private final MaterialDialog dialog;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public ChoosingMessageDialog(Context context, Listener listener, int listId) {
         String prefill = NameUtils.getChoosingMessage(context, listId, 1);
-        adderDialog = new MaterialDialog.Builder(context)
+        dialog = new MaterialDialog.Builder(context)
                 .title(R.string.customize_choosing_message_dialog_title)
                 .alwaysCallInputCallback()
                 .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
@@ -38,7 +44,17 @@ public class ChoosingMessageDialog {
                 .build();
     }
 
+    private void maybeRunShowKeyboardHack() {
+        handler.postDelayed(() -> {
+            if (dialog.getInputEditText().requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) dialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(dialog.getInputEditText(), InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, MILLIS_DELAY_FOR_KEYBOARD);
+    }
+
     public void show() {
-        adderDialog.show();
+        dialog.show();
+        maybeRunShowKeyboardHack();
     }
 }
