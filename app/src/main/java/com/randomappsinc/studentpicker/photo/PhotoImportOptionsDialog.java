@@ -15,6 +15,8 @@ public class PhotoImportOptionsDialog {
         void addWithGallery();
 
         void addWithCamera();
+
+        void removeImage(NameDO nameDO);
     }
 
     private Context context;
@@ -41,6 +43,9 @@ public class PhotoImportOptionsDialog {
                                 break;
                             case 2:
                                 delegate.addWithCamera();
+                                break;
+                            case 3:
+                                delegate.removeImage(nameDO);
                                 break;
                         }
                     })
