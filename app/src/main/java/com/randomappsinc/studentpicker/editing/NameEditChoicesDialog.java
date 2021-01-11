@@ -14,7 +14,7 @@ public class NameEditChoicesDialog {
 
         void onDeleteChosen(NameDO nameDO);
 
-        void onDuplicationChosen(NameDO nameDO);
+        void onNameAdjustmentChosen(NameDO nameDO);
     }
 
     private NameDO currentName;
@@ -25,7 +25,7 @@ public class NameEditChoicesDialog {
         optionTemplates = new String[]{
                 context.getString(R.string.rename_person),
                 context.getString(R.string.delete_name),
-                context.getString(R.string.duplicate)
+                context.getString(R.string.adjust_name_amount)
         };
         dialog = new MaterialDialog.Builder(context)
                 // Need to set this here, because otherwise, we can't set it dynamically later on
@@ -39,7 +39,7 @@ public class NameEditChoicesDialog {
                             listener.onDeleteChosen(currentName);
                             break;
                         case 2:
-                            listener.onDuplicationChosen(currentName);
+                            listener.onNameAdjustmentChosen(currentName);
                             break;
                     }
                 })

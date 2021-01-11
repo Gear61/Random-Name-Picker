@@ -80,8 +80,8 @@ public class DataSource {
                     null, null, null, null);
         } else {
             cursor = database.rawQuery("SELECT * FROM " + DatabaseTables.LISTS + " WHERE " +
-                    DatabaseColumns.LIST_NAME + " like ? COLLATE NOCASE",
-                    new String[] {searchTerm + "%"});
+                            DatabaseColumns.LIST_NAME + " like ? COLLATE NOCASE",
+                    new String[]{searchTerm + "%"});
         }
         while (cursor.moveToNext()) {
             lists.add(new ListDO(cursor.getInt(0), cursor.getString(1)));
@@ -129,7 +129,7 @@ public class DataSource {
         open();
         ContentValues newValues = new ContentValues();
         newValues.put(DatabaseColumns.LIST_NAME, newName);
-        String[] whereArgs = new String[] {String.valueOf(listId)};
+        String[] whereArgs = new String[]{String.valueOf(listId)};
         String whereStatement = DatabaseColumns.ID + " = ?";
         database.update(DatabaseTables.LISTS, newValues, whereStatement, whereArgs);
         close();
@@ -276,6 +276,14 @@ public class DataSource {
         addNamesInternal(name, amount, listId, DatabaseTables.NAMES_IN_LIST);
     }
 
+    public void setNameAmount(String name, int newAmount, int listId, int currentAmount) {
+        if (newAmount > currentAmount) {
+            addNames(name, (newAmount - currentAmount), listId);
+        } else {
+            removeNames(name, (currentAmount - newAmount), listId);
+        }
+    }
+
     private void addNamesInternal(String name, int amount, int listId, String tableName) {
         int currentAmount = getAmountOfName(name, listId, tableName);
 
@@ -348,7 +356,7 @@ public class DataSource {
         Cursor cursor = database.rawQuery("SELECT DISTINCT " + DatabaseColumns.NAME +
                 " FROM " + DatabaseTables.NAMES + " WHERE " +
                 DatabaseColumns.NAME + " like ? COLLATE NOCASE " +
-                "ORDER BY " + DatabaseColumns.NAME + " ASC", new String[] {prefix + "%"});
+                "ORDER BY " + DatabaseColumns.NAME + " ASC", new String[]{prefix + "%"});
         while (cursor.moveToNext()) {
             matchingNames.add(cursor.getString(0));
         }

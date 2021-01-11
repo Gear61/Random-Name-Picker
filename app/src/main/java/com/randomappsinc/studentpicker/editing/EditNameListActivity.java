@@ -41,8 +41,8 @@ import butterknife.OnClick;
 
 public class EditNameListActivity extends AppCompatActivity implements
         NameEditChoicesDialog.Listener, RenameDialog.Listener, DeleteNameDialog.Listener,
-        DuplicationDialog.Listener, SpeechToTextManager.Listener, EditNameListAdapter.Listener,
-        PhotoImportOptionsDialog.Delegate, PhotoImportManager.Listener {
+        SpeechToTextManager.Listener, EditNameListAdapter.Listener,
+        PhotoImportOptionsDialog.Delegate, PhotoImportManager.Listener, NameAmountAdjustmentDialog.Listener {
 
     private static final int RECORD_AUDIO_PERMISSION_CODE = 1;
     private static final int CAMERA_PERMISSION_CODE = 2;
@@ -65,7 +65,7 @@ public class EditNameListActivity extends AppCompatActivity implements
     private NameEditChoicesDialog nameEditChoicesDialog;
     private RenameDialog renameDialog;
     private DeleteNameDialog deleteNameDialog;
-    private DuplicationDialog duplicationDialog;
+    private NameAmountAdjustmentDialog nameAmountAdjustmentDialog;
     private SpeechToTextManager speechToTextManager;
     private boolean listHasChanged = false;
     private PhotoImportOptionsDialog photoOptionsDialog;
@@ -109,7 +109,7 @@ public class EditNameListActivity extends AppCompatActivity implements
         nameEditChoicesDialog = new NameEditChoicesDialog(this, this);
         renameDialog = new RenameDialog(this, this);
         deleteNameDialog = new DeleteNameDialog(this, this);
-        duplicationDialog = new DuplicationDialog(this, this);
+        nameAmountAdjustmentDialog = new NameAmountAdjustmentDialog(this, this);
         photoOptionsDialog = new PhotoImportOptionsDialog(this, this);
         photoImportManager = new PhotoImportManager(this);
     }
@@ -156,8 +156,9 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDuplicationChosen(NameDO nameDO) {
-        duplicationDialog.show(nameDO);
+    public void onNameAdjustmentChosen(NameDO nameDO) {
+        int currentAmount = namesAdapter.getCurrentlySelectedName().getAmount();
+        nameAmountAdjustmentDialog.show(nameDO, currentAmount);
     }
 
     @Override
@@ -179,15 +180,6 @@ public class EditNameListActivity extends AppCompatActivity implements
         } else {
             UIUtils.showLongToast(getString(R.string.names_deleted, amountToDelete, name), this);
         }
-    }
-
-    @Override
-    public void onDuplicationSubmitted(int nameId, String name, int amountToAdd) {
-        listHasChanged = true;
-        dataSource.addNames(name, amountToAdd, listId);
-        List<NameDO> names = dataSource.getNamesInList(listId);
-        namesAdapter.setNameList(names);
-        UIUtils.showLongToast(R.string.clones_added, this);
     }
 
     @Override
@@ -360,5 +352,14 @@ public class EditNameListActivity extends AppCompatActivity implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNameAmountAdjustmentSubmitted(NameDO nameDO, int newAmount, int currentAmount) {
+        listHasChanged = true;
+        dataSource.setNameAmount(nameDO.getName(), newAmount, listId, currentAmount);
+        List<NameDO> names = dataSource.getNamesInList(listId);
+        namesAdapter.setNameList(names);
+        UIUtils.showLongToast(R.string.name_amount_adjusted, this);
     }
 }
