@@ -252,6 +252,13 @@ public class EditNameListActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void removeImage(NameDO nameDO) {
+        nameDO.setPhotoUri(null);
+        namesAdapter.refreshSelectedItem();
+        dataSource.updateNamePhoto(nameDO.getId(), null);
+    }
+
+    @Override
     public void onAddPhotoFailure() {
         UIUtils.showLongToast(R.string.photo_processing_failure, this);
     }

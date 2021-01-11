@@ -5,6 +5,7 @@
     <string name="import_from_gallery">Import from gallery</string>
     <string name="take_picture_with_camera">Take picture with camera</string>
     <string name="view_image">View image</string>
+    <string name="remove_image">Remove image</string>
 
     <string-array name="photo_import_options_without_upload">
         <item>@string/import_from_gallery</item>
@@ -15,6 +16,7 @@
         <item>@string/view_image</item>
         <item>@string/import_from_gallery</item>
         <item>@string/take_picture_with_camera</item>
+        <item>@string/remove_image</item>
     </string-array>
 
     <string name="image_load_fail">Failed to load image.</string>
