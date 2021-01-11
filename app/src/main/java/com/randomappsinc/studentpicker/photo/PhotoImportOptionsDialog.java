@@ -3,6 +3,8 @@ package com.randomappsinc.studentpicker.photo;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.models.NameDO;
@@ -20,6 +22,7 @@ public class PhotoImportOptionsDialog {
     }
 
     private Context context;
+    private @Nullable MaterialDialog removeImageDialog;
     private Delegate delegate;
 
     public PhotoImportOptionsDialog(Context context, Delegate delegate) {
@@ -45,7 +48,7 @@ public class PhotoImportOptionsDialog {
                                 delegate.addWithCamera();
                                 break;
                             case 3:
-                                delegate.removeImage(nameDO);
+                                showImageDeletionDialog(nameDO);
                                 break;
                         }
                     })
@@ -68,6 +71,21 @@ public class PhotoImportOptionsDialog {
                     .positiveText(R.string.cancel)
                     .show();
         }
+    }
+
+    public void showImageDeletionDialog(NameDO nameDO) {
+        if (removeImageDialog == null) {
+            removeImageDialog = new MaterialDialog.Builder(context)
+                    .title(R.string.confirm_image_removal_dialog_title)
+                    .content(R.string.confirm_image_removal_dialog_body)
+                    .positiveText(R.string.yes)
+                    .onPositive((dialog, which) -> delegate.removeImage(nameDO))
+                    .negativeText(R.string.no)
+                    .build();
+        }
+        String nameWithQuotes = "\"" + nameDO.getName() + "\"";
+        removeImageDialog.setContent(context.getString(R.string.confirm_image_removal_dialog_body, nameWithQuotes));
+        removeImageDialog.show();
     }
 
     public void cleanUp() {

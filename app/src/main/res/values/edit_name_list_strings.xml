@@ -49,6 +49,11 @@
     <string name="confirm_name_deletion">Confirm Name Deletion</string>
     <string name="confirm_name_delete">Are you sure you want to remove \"%s\" from this name list?</string>
 
+    <string name="confirm_image_removal_dialog_title">Confirm Image Removal</string>
+    <string name="confirm_image_removal_dialog_body">
+        Are you sure you want to remove the image for %s?
+    </string>
+
     <string name="multiple_deletions_title">
           How many copies of %s do you want to delete?
           You currently have %d copies of this name.
