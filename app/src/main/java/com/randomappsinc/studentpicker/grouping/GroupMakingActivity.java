@@ -16,6 +16,7 @@ import com.randomappsinc.studentpicker.R;
 import com.randomappsinc.studentpicker.common.Constants;
 import com.randomappsinc.studentpicker.database.DataSource;
 import com.randomappsinc.studentpicker.models.ListInfo;
+import com.randomappsinc.studentpicker.models.NameDO;
 import com.randomappsinc.studentpicker.utils.NameUtils;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -67,7 +68,7 @@ public class GroupMakingActivity extends AppCompatActivity {
             return;
         }
 
-        List<List<String>> listOfNamesPerGroup = NameUtils.createGroups(
+        List<List<NameDO>> listOfNamesPerGroup = NameUtils.createGroups(
                 listInfo, settings.getNumOfNamesPerGroup(), settings.getNumOfGroups());
         groupsMakingListAdapter.setData(listOfNamesPerGroup);
         noGroups.setVisibility(View.GONE);

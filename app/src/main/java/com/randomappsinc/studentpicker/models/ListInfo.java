@@ -38,6 +38,18 @@ public class ListInfo {
         nameHistory.clear();
     }
 
+    public List<NameDO> getNamesList() {
+        List<NameDO> longList = new ArrayList<>();
+        for (String name : uniqueNames) {
+            NameDO nameDO = nameMap.get(name);
+            int amount = nameMap.get(name).getAmount();
+            for (int i = 0; i < amount; i++) {
+                longList.add(nameDO);
+            }
+        }
+        return longList;
+    }
+
     public List<String> getLongList() {
         List<String> longList = new ArrayList<>();
         for (String name : uniqueNames) {

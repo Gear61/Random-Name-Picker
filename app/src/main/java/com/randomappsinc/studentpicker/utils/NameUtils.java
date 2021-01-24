@@ -56,14 +56,14 @@ public class NameUtils {
         return choosingMessage;
     }
 
-    public static List<List<String>> createGroups(ListInfo listInfo, int namesPerGroup, int numGroups) {
-        List<List<String>> groups = new ArrayList<>();
+    public static List<List<NameDO>> createGroups(ListInfo listInfo, int namesPerGroup, int numGroups) {
+        List<List<NameDO>> groups = new ArrayList<>();
         if (numGroups == 0 || namesPerGroup == 0) {
             return groups;
         }
 
         // Get the "longform" list of all the names, expanding duplicates
-        List<String> allNames = listInfo.getLongList();
+        List<NameDO> allNames = listInfo.getNamesList();
 
         // Add as many names lists to fill as we can.
         // This will be minimum of the number of names or the # of groups desired.
@@ -77,7 +77,7 @@ public class NameUtils {
         Collections.shuffle(allNames);
         while (numNamesAdded < Math.min(allNames.size(), totalNamesToAttemptToAdd)) {
             // Go through every list and add a single name. This will prevent uneven groups.
-            for (List<String> nameList : groups) {
+            for (List<NameDO> nameList : groups) {
                 nameList.add(allNames.get(numNamesAdded));
                 numNamesAdded++;
 
