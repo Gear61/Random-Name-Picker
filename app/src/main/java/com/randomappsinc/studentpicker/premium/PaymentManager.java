@@ -12,6 +12,7 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.QueryPurchasesParams;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
@@ -40,9 +41,9 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
     }
 
     private Activity activity;
-    private BillingClient billingClient;
-    private PreferencesManager preferencesManager;
-    private Listener listener;
+    private final BillingClient billingClient;
+    private final PreferencesManager preferencesManager;
+    private final Listener listener;
     private @Nullable BillingFlowParams billingFlowParams;
 
     public PaymentManager(Activity activity, Listener listener) {
@@ -109,10 +110,12 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
             return;
         }
 
+        QueryPurchasesParams queryPurchasesParams = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build();
+
         // Acknowledge any purchases that haven't been acknowledged already
-        Purchase.PurchasesResult purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
-        List<Purchase> purchasesList = purchases.getPurchasesList();
-        if (purchasesList != null) {
+        billingClient.queryPurchasesAsync(queryPurchasesParams, (billingResult1, purchasesList) -> {
             for (Purchase purchase : purchasesList) {
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
                     if (purchase.isAcknowledged()) {
@@ -125,7 +128,7 @@ public class PaymentManager implements PurchasesUpdatedListener, BillingClientSt
                     listener.onPremiumAlreadyOwned();
                 }
             }
-        }
+        });
 
         List<String> skuList = new ArrayList<>();
         skuList.add(NINETY_NINE_CENT_PREMIUM);
