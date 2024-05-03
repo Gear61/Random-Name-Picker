@@ -66,9 +66,11 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
     }
 
     public void startSpeechToTextFlow() {
-        if (speechRecognizer != null) {
-            speechRecognizer.destroy();
-        }
+        try {
+            if (speechRecognizer != null) {
+                speechRecognizer.destroy();
+            }
+        } catch (IllegalArgumentException ignored) {}
         if (!dialog.isShowing()) {
             dialog.show();
         }
@@ -111,8 +113,12 @@ public class SpeechToTextManager implements RecognitionListener, DialogInterface
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-        speechRecognizer.destroy();
-        speechRecognizer = null;
+        try {
+            if (speechRecognizer != null) {
+                speechRecognizer.destroy();
+                speechRecognizer = null;
+            }
+        } catch (IllegalArgumentException ignored) {}
     }
 
     @Override
