@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.studentpicker.R;
-import com.randomappsinc.studentpicker.ads.PremiumBackDoor;
+import com.randomappsinc.studentpicker.premium.PremiumBackdoor;
 import com.randomappsinc.studentpicker.utils.PreferencesManager;
 import com.randomappsinc.studentpicker.utils.UIUtils;
 
@@ -44,7 +44,7 @@ public class CreateListDialog {
                     String listName = dialog.getInputEditText().getText().toString().trim();
 
                     if (preferencesManager.isOnFreeVersion()
-                            && listName.toLowerCase().equals(PremiumBackDoor.PASSWORD.toLowerCase())) {
+                            && listName.equalsIgnoreCase(PremiumBackdoor.PASSWORD)) {
                         preferencesManager.onPremiumAcquired();
                         UIUtils.showLongToast(
                                 R.string.premium_back_door_triggered, dialog.getContext());
